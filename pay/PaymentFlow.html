@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WMSU KitCycle - PaymentFlow</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="layout-container">
+
+    <header>
+      <div class="header-brand">
+        <div class="icon-box-header">
+          <span class="material-symbols-outlined">recycling</span>
+        </div>
+        <h2>WMSU KitCycle</h2>
+      </div>
+
+      <nav class="nav-links">
+        <a href="#">Home</a>
+        <a href="#">Marketplace</a>
+        <a href="#">How It Works</a>
+        <a href="#">Safety</a>
+        <button class="btn-login">Login</button>
+      </nav>
+    </header>
+
+    <main>
+      <nav class="breadcrumb">
+        Home › Equipment Detail › <strong>Checkout</strong>
+      </nav>
+
+      <div class="hero-text">
+        <h1>Finalize Your Booking</h1>
+        <p>Securely rent high-quality kits from fellow WMSU students.</p>
+      </div>
+
+      <div class="checkout-grid">
+
+        <div class="left-col">
+
+          <div class="card">
+            <h2 class="card-title">Payment Method</h2>
+
+            <div class="payment-options">
+              <label class="payment-label">
+                <input type="radio" name="payment" checked>
+                <span class="custom-radio"></span>
+                GCash
+              </label>
+              <label class="payment-label">
+                <input type="radio" name="payment">
+                <span class="custom-radio"></span>
+                Maya
+              </label>
+              <label class="payment-label">
+                <input type="radio" name="payment">
+                <span class="custom-radio"></span>
+                COD
+              </label>
+            </div>
+
+            <p class="note">
+              <strong>Note:</strong> Transaction fees may apply. COD is only for on-campus meetups.
+            </p>
+          </div>
+
+          <div class="card">
+            <h2 class="card-title">Pickup Instructions</h2>
+            <div class="instruction-item">
+              <strong>Location:</strong> <span>WMSU Open Stage / Social Hall</span>
+            </div>
+            <div class="instruction-item">
+              <strong>Time:</strong> <span>8:00 AM – 5:00 PM (Weekdays)</span>
+            </div>
+            <div class="instruction-item">
+              <strong>Requirement:</strong> <span>Valid WMSU ID</span>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="right-col">
+          <div class="card summary-card">
+            <h2 class="card-title">Booking Summary</h2>
+
+            <div class="item-details">
+              <p class="item-name">Professional DSLR Kit</p>
+              <p class="item-duration">2-day Rental</p>
+              <p class="item-price">₱850 / day</p>
+            </div>
+
+            <div class="price-breakdown">
+              <div class="price-row">
+                <span>Base Fee</span>
+                <span>₱1,700</span>
+              </div>
+              <div class="price-row">
+                <span>Deposit</span>
+                <span>₱500</span>
+              </div>
+              <div class="price-row">
+                <span>Platform Fee</span>
+                <span>₱45</span>
+              </div>
+
+              <div class="summary-total">
+                <strong>Total</strong>
+                <strong>₱2,245</strong>
+              </div>
+            </div>
+
+            <button class="btn-confirm">
+              Confirm & Pay Now
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <p>© 2025 WMSU KitCycle Project</p>
+    </footer>
+
+  </div>
+</body>
+</html>
