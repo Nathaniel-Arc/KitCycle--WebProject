@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WMSU Student Dashboard | RentRack </title>
+  <!-- Tailwind + fonts -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Material Icons - FIXED -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL@20..48,100..700,0..1&display=swap" rel="stylesheet" />
+  <!-- external CSS -->
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body class="bg-background-light text-slate-900 min-h-screen">
+  <div class="flex h-screen overflow-hidden">
+
+    <!-- SIDEBAR -->
+    <aside class="w-72 bg-white border-r border-slate-200 flex flex-col h-full">
+        
+      <div class="p-6 flex items-center gap-3">
+        <div class="size-10 bg-crimson rounded-lg flex items-center justify-center text-black">
+          <span class="material-symbols-outlined font-bold">recycling</span>
+        </div>
+        <div>
+          <h1 class="text-lg font-bold leading-none text-black">Rentrack</h1>
+          <p class="text-xs text-slate-600 font-medium">WMSU Student Portal</p>
+        </div>
+      </div>
+
+      <nav class="flex-1 px-4 space-y-1 mt-4">
+        <a class="flex items-center gap-3 px-3 py-3 rounded-lg bg-crimson/10 text-black font-semibold transition-colors sidebar-active" href="#">
+          <span class="material-symbols-outlined text-[22px]">dashboard</span>
+          <span class="text-sm">Dashboard</span>
+        </a>
+        <a class="flex items-center gap-3 px-3 py-3 rounded-lg text-slate-600 hover:bg-crimson/5 hover:text-black transition-colors" href="#">
+          <span class="material-symbols-outlined text-[22px]">shopping_bag</span>
+          <span class="text-sm">My Rentals</span>
+        </a>
+        <a class="flex items-center gap-3 px-3 py-3 rounded-lg text-slate-600 hover:bg-crimson/5 hover:text-black transition-colors" href="#">
+          <span class="material-symbols-outlined text-[22px]">inventory_2</span>
+          <span class="text-sm">My Listings</span>
+        </a>
+        <a class="flex items-center gap-3 px-3 py-3 rounded-lg text-slate-600 hover:bg-crimson/5 hover:text-black transition-colors" href="#">
+          <span class="material-symbols-outlined text-[22px]">payments</span>
+          <span class="text-sm">Payment History</span>
+        </a>
+        <a class="flex items-center gap-3 px-3 py-3 rounded-lg text-slate-600 hover:bg-crimson/5 hover:text-black transition-colors" href="#">
+          <span class="material-symbols-outlined text-[22px]">forum</span>
+          <span class="text-sm">Messages</span>
+        </a>
+        <div class="pt-4 mt-4 border-t border-slate-200">
+          <a class="flex items-center gap-3 px-3 py-3 rounded-lg text-slate-600 hover:bg-crimson/5 hover:text-black transition-colors" href="#">
+            <span class="material-symbols-outlined text-[22px]">person</span>
+            <span class="text-sm">Profile Settings</span>
+          </a>
+        </div>
+      </nav>
+
+      <div class="p-4">
+        <button class="w-full bg-gold hover:bg-goldDark text-black font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition-all shadow-md">
+          <span class="material-symbols-outlined">add_circle</span>
+          List New Item
+        </button>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 overflow-y-auto p-8">
+      <header class="flex justify-between items-center mb-10">
+        <div>
+          <h2 class="text-3xl font-black tracking-tight text-black">Welcome back, Crimason!</h2>
+          <p class="text-slate-600 mt-1 font-medium">Here's what's happening with your equipment today.</p>
+        </div>
+        <div class="flex items-center gap-4">
+          <button class="size-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-crimson/5 transition">
+            <span class="material-symbols-outlined">notifications</span>
+          </button>
+          <div class="h-10 w-px bg-slate-200 mx-2"></div>
+          <div class="flex items-center gap-3">
+            <div class="text-right">
+              <p class="text-sm font-bold text-black">Crimason Dela Cruz</p>
+              <p class="text-xs text-slate-600">BS Computer Science</p>
+            </div>
+            <img class="size-10 rounded-full border-2 border-crimson object-cover" alt="profile" src="https://pbs.twimg.com/media/F5XJ9f0akAAfxJL.jpg">
+          </div>
+        </div>
+      </header>
+
+      <div class="grid grid-cols-12 gap-8">
+        <!-- left column -->
+        <div class="col-span-8 space-y-8">
+
+          <!-- active rentals -->
+          <section>
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-xl font-bold flex items-center gap-2 text-black">
+                <span class="material-symbols-outlined text-crimson">timer</span>
+                Active Rentals
+              </h3>
+              <a class="text-sm font-semibold text-crimson hover:underline" href="#">View all</a>
+            </div>
+            <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+              <div class="flex items-center gap-6">
+                <div class="w-32 h-32 rounded-xl bg-slate-100 overflow-hidden shrink-0">
+                  <img class="w-full h-full object-cover" alt="camera" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCxwwGrC_lGPiXqgTc5ueDkpAJz9oZb9SUHG2McUWMd7SXAUIakcfWpr0beweGUP6o9d67t16Ahn8gag-BePtagzgFDMJ859AaMSiH33Vif9WlMp6TAGicEk0WecLMafPuU6Xmjr2N1rQSkrv1zSczIBlDdE2qyLZ0FxZT6Lyezt9uanwCVM_H7NjhwK5r5jLyEBqc3RKT9sWTxRMv5ZlOMNI_fkc63Ro_JAHHHDt0VaJhxRjO8PpMBhDRSHilbXzD8qVN3eylPaT0B">
+                </div>
+                <div class="flex-1">
+                  <div class="flex justify-between items-start">
+                    <div>
+                      <span class="px-2 py-1 bg-crimson/10 text-crimsonDark text-[10px] font-bold rounded uppercase tracking-wider">In Progress</span>
+                      <h4 class="text-lg font-bold mt-1 text-black">Canon EOS 90D DSLR</h4>
+                      <p class="text-sm text-slate-600">Lent by: Maria Santos (CED)</p>
+                    </div>
+                    <div class="text-right">
+                      <p class="text-xs font-medium text-slate-500 uppercase">Return Due</p>
+                      <p class="text-sm font-bold text-black">Oct 24, 5:00 PM</p>
+                    </div>
+                  </div>
+                  <div class="mt-4 flex gap-3">
+                    <div class="flex flex-col items-center justify-center bg-slate-100 rounded-lg py-2 px-4 min-w-[64px]">
+                      <span class="text-lg font-black text-crimsonDark">01</span>
+                      <span class="text-[10px] uppercase font-bold text-slate-500">Days</span>
+                    </div>
+                    <div class="flex flex-col items-center justify-center bg-slate-100 rounded-lg py-2 px-4 min-w-[64px]">
+                      <span class="text-lg font-black text-crimsonDark">04</span>
+                      <span class="text-[10px] uppercase font-bold text-slate-500">Hours</span>
+                    </div>
+                    <div class="flex flex-col items-center justify-center bg-slate-100 rounded-lg py-2 px-4 min-w-[64px]">
+                      <span class="text-lg font-black text-crimsonDark">22</span>
+                      <span class="text-[10px] uppercase font-bold text-slate-500">Mins</span>
+                    </div>
+                    <div class="ml-auto self-end">
+                      <button class="px-4 py-2 border border-slate-300 rounded-lg text-sm font-bold text-black hover:border-gold hover:bg-gold/5 transition-colors">
+                        Return Now
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- items i am lending -->
+          <section>
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-xl font-bold flex items-center gap-2 text-black">
+                <span class="material-symbols-outlined text-crimson">handshake</span>
+                Items I am Lending
+              </h3>
+              <button class="text-sm font-semibold text-crimson hover:underline">Manage Listings</button>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div class="bg-white p-4 rounded-2xl border border-slate-200 flex gap-4">
+                <img class="size-20 rounded-lg object-cover" alt="calc" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwrSjJBg05XtL_QsBWsI6abQJjsKngv6NiCB2w9mR0cj4Thu76UhW0_GAZts1rZmm3LoL8yn1YBuK9DLb6jhgYI4ZH3JEqXzwIGGcHARzLMnEYzzPT_qki_iVsi68n72Y_LBlez2FlXoOirl_D4BOJ7u514q5hdLYjr3oEtpI6ZhN63AJ8eqnNpH9E8PLQA-an3xiUWuHWS4AcM-UGxWxVsMktfGYLJupepQYXKDGAylW1vS57hDExgAi_JiFbw8T8tZ3j97a0pnnh">
+                <div>
+                  <h5 class="font-bold text-sm text-black">TI-84 Plus Calculator</h5>
+                  <p class="text-xs text-slate-600">Renter: Paolo Rossi</p>
+                  <p class="text-xs font-bold text-green-700 mt-2">Earned: ₱150.00</p>
+                </div>
+              </div>
+              <div class="bg-white p-4 rounded-2xl border border-slate-200 flex gap-4">
+                <img class="size-20 rounded-lg object-cover" alt="laptop" src="https://www.coes.co.uk/cdn/shop/files/51b6742b9c3d26ad8d04188d19c5cc86.webp?v=1686068230">
+                <div>
+                  <h5 class="font-bold text-sm text-black">Lab Coat (Size L)</h5>
+                  <p class="text-xs text-slate-600">Status: Available</p>
+                  <p class="text-xs font-bold text-crimson mt-2">₱50.00 / day</p>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- right column -->
+        <div class="col-span-4 space-y-8">
+          <!-- recent messages -->
+          <section>
+            <h3 class="text-xl font-bold mb-4 flex items-center gap-2 text-black">
+              <span class="material-symbols-outlined text-crimson">chat_bubble</span>
+              Recent Messages
+            </h3>
+            <div class="bg-white rounded-2xl overflow-hidden border border-slate-200">
+              <div class="p-4 border-b border-slate-100 flex gap-3 hover:bg-crimson/5 cursor-pointer transition-colors">
+                <div class="size-10 rounded-full bg-crimson/10 flex items-center justify-center shrink-0">
+                  <span class="text-sm font-bold text-crimsonDark">MS</span>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex justify-between items-center">
+                    <h6 class="font-bold text-sm text-black">Maria Santos</h6>
+                    <span class="text-[10px] text-slate-500">10m ago</span>
+                  </div>
+                  <p class="text-xs text-slate-600 truncate">Is the DSLR still okay? Please don't forget...</p>
+                </div>
+              </div>
+              <div class="p-4 border-b border-slate-100 flex gap-3 hover:bg-crimson/5 cursor-pointer transition-colors">
+                <div class="size-10 rounded-full bg-crimson/10 flex items-center justify-center shrink-0">
+                  <span class="text-sm font-bold text-crimsonDark">PR</span>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex justify-between items-center">
+                    <h6 class="font-bold text-sm text-black">Paolo Rossi</h6>
+                    <span class="text-[10px] text-slate-500">2h ago</span>
+                  </div>
+                  <p class="text-xs text-slate-600 truncate">I'll return the calculator at the main gate.</p>
+                </div>
+              </div>
+              <button class="w-full py-3 text-xs font-bold text-slate-500 hover:text-gold hover:bg-gold/5 transition-colors uppercase tracking-widest bg-slate-50">
+                View Messenger
+              </button>
+            </div>
+          </section>
+
+          <!-- payment history -->
+          <section>
+            <h3 class="text-xl font-bold mb-4 flex items-center gap-2 text-black">
+              <span class="material-symbols-outlined text-crimson">history</span>
+              Recent Payments
+            </h3>
+            <div class="space-y-3">
+              <div class="bg-white p-4 rounded-xl border border-slate-200 flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                  <div class="size-9 rounded-lg bg-crimson/5 flex items-center justify-center">
+                    <img class="size-6 object-contain" alt="gcash" src="https://images.seeklogo.com/logo-png/38/1/gcash-logo-png_seeklogo-383190.png">
+                  </div>
+                  <div>
+                    <p class="text-sm font-bold text-black">GCash Out</p>
+                    <p class="text-[10px] text-slate-500 uppercase font-medium">Rental Payment</p>
+                  </div>
+                </div>
+                <p class="text-sm font-black text-red-600">- ₱450.00</p>
+              </div>
+              <div class="bg-white p-4 rounded-xl border border-slate-200 flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                  <div class="size-9 rounded-lg bg-gold/10 flex items-center justify-center">
+                    <img class="size-6 object-contain" alt="maya" src="https://i.pinimg.com/564x/b9/37/9a/b9379ad46b7f2d23fc893714558d6f93.jpg">
+                  </div>
+                  <div>
+                    <p class="text-sm font-bold text-black">Maya In</p>
+                    <p class="text-[10px] text-slate-500 uppercase font-medium">Earnings</p>
+                  </div>
+                </div>
+                <p class="text-sm font-black text-green-600">+ ₱150.00</p>
+              </div>
+            </div>
+            <button class="mt-4 w-full py-2 border-2 border-dashed border-slate-300 rounded-xl text-xs font-bold text-slate-500 hover:border-gold hover:text-gold hover:bg-gold/5 transition-all">
+              Full Transaction Report
+            </button>
+          </section>
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
