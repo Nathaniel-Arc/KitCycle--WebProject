@@ -1,0 +1,310 @@
+/* ROOT VARIABLES that corresponds to the colors of WMSU */
+:root {
+  --wmsu-maroon: #800000;    /* This is the primary brand color that we are using */
+  --wmsu-gold: #ffc107;      
+  --bg-light: #f9f9f9;       /* This is to have a light neutral background */
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  
+  --radius-card: 16px;       /* This for the details to have consistent rounded corners */
+  --radius-btn: 6px;         /* for sharper button corners */
+}
+
+/* GLOBAL RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  background-color: var(--bg-light);
+  color: var(--text-main);
+  line-height: 1.6;
+}
+
+/* HEADER / NAV (Matching Style) */
+header {
+  background-color: var(--wmsu-maroon);
+  color: white;
+  padding: 1rem 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.icon-box-header {
+  background: rgba(255,255,255,0.2);
+  padding: 5px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover {
+  color: var(--wmsu-gold);
+}
+
+/* MAIN LAYOUT */
+main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 3rem 5%;
+}
+
+.breadcrumb {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 1.5rem;
+}
+
+.breadcrumb strong {
+  color: var(--wmsu-maroon);
+}
+
+/* VISUAL PROGRESS STEPPER */
+.stepper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 3rem;
+  max-width: 600px; /* This keeps it centered and not too wide */
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+  z-index: 2;
+}
+
+.step-number, .step-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #e2e8f0; /* Default gray */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #64748b;
+  transition: all 0.3s ease;
+}
+
+/* Completed Step (Maroon) */
+.step.completed .step-icon {
+  background: var(--wmsu-maroon);
+  color: white;
+}
+
+/* Active Step (Gold) */
+.step.active .step-number {
+  background: var(--wmsu-gold);
+  color: #1a1a1a;
+  box-shadow: 0 0 0 4px rgba(255, 193, 7, 0.2);
+}
+
+.step-text {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.step.active .step-text {
+  color: var(--text-main);
+}
+
+/* This is for the lines connecting the circles */
+.step-line {
+  flex: 1;
+  height: 2px;
+  background: #e2e8f0;
+  margin: 0 10px;
+  margin-bottom: 24px; /* This aligns the line with the circles */
+}
+
+.step-line.active {
+  background: var(--wmsu-maroon);
+}
+
+.hero-text h1 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+.hero-text p {
+  color: var(--text-muted);
+  margin-bottom: 2.5rem;
+}
+
+.checkout-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 2rem;
+}
+
+/* CARDS & COMPONENTS */
+.card {
+  background: white;
+  border-radius: var(--radius-card);
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+/* Payment Section */
+.payment-options {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.payment-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+input[type="radio"] {
+  accent-color: var(--wmsu-maroon);
+  width: 18px;
+  height: 18px;
+}
+
+.note {
+  font-size: 0.85rem;
+  color: #475569;
+  background: #f8fafc;
+  padding: 0.75rem;
+  border-radius: 8px;
+}
+
+/* Instructions */
+.instruction-item {
+  margin-bottom: 0.75rem;
+}
+
+.instruction-item strong {
+  display: inline-block;
+  width: 100px;
+}
+
+/* Summary Section */
+.item-details {
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+}
+
+.item-name {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.item-duration {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.item-price {
+  color: var(--wmsu-maroon);
+  font-weight: 700;
+  margin-top: 0.25rem;
+}
+
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.summary-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 2px dashed #e2e8f0;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+}
+
+.summary-total strong:last-child {
+  font-size: 1.6rem;
+  color: var(--text-main);
+}
+
+/* BUTTONS */
+.btn-confirm {
+  width: 100%;
+  background-color: var(--wmsu-gold);
+  color: #1a1a1a;
+  border: none;
+  padding: 1rem;
+  border-radius: var(--radius-btn);
+  font-weight: 800;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 1.5rem;
+  transition: transform 0.1s, filter 0.2s;
+}
+
+.btn-confirm:hover {
+  filter: brightness(1.05);
+}
+
+.btn-confirm:active {
+  transform: scale(0.98);
+}
+
+/* FOOTER */
+footer {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .checkout-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .nav-links {
+    display: none; /* Mobile menu needed for real site */
+  }
+}
