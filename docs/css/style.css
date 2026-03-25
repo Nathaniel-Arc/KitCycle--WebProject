@@ -1,0 +1,537 @@
+/* Custom Variables for WMSU Theme */
+:root {
+    --maroon: #800000;
+    --gold: #FFD700;
+    --text-dark: #1a1a1a;
+    --text-muted: #666;
+    --bg-light: #f8f9fa;
+    --white: #ffffff;
+    --border: #ddd;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--bg-light);
+    color: var(--text-dark);
+    line-height: 1.6;
+    padding-top: 80px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 5%;
+    border-bottom: 1px solid #f5f2f2;
+    background: var(--white);
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--maroon);
+}
+
+.logo span { color: var(--text-dark); }
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 25px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: var(--text-dark);
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.nav-links a:hover {
+    color: var(--maroon);
+}
+
+/* Auth Buttons */
+.auth-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+/* Section Separator */
+.section-separator {
+    border: none;
+    border-top: 1px solid #ddd;
+    margin: 40px 5%;
+}
+
+/* Style for the Login button (Outline style) */
+.btn-login {
+    text-decoration: none;
+    color: var(--maroon);
+    padding: 8px 20px;
+    border: 1px solid var(--maroon);
+    border-radius: 6px;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+/* Style for the Register button (Solid Gold style) */
+.btn-register {
+    text-decoration: none;
+    background-color: var(--gold);
+    color: var(--maroon);
+    padding: 8px 20px;
+    border: 1px solid var(--gold);
+    border-radius: 6px;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.btn-register:hover {
+    background-color: #e6c200;
+}
+
+.active { box-shadow: 0 0 0 2px var(--maroon); }
+
+/* Auth Layout */
+.auth-container {
+    max-width: 500px; margin: 60px auto; padding: 0 20px;
+    text-align: center;
+}
+
+.auth-header h1 { color: var(--maroon); margin-bottom: 10px; }
+.auth-header p { color: var(--text-muted); margin-bottom: 30px; }
+
+.auth-card {
+    background: var(--white); padding: 40px; border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05); text-align: left;
+}
+
+.input-group { margin-bottom: 20px;}
+.input-group label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem; }
+
+.input-wrapper {
+    position: relative; display: flex; align-items: center;
+}
+
+.input-wrapper i:first-child {
+    position: absolute; left: 15px; color: var(--text-muted);
+}
+
+.input-wrapper input, .input-group select {
+    width: 100%; padding: 12px 15px 12px 45px;
+    border: 1px solid var(--border); border-radius: 8px; font-size: 1rem;
+}
+
+.toggle-password { position: absolute; right: 15px; cursor: pointer; color: var(--text-muted); }
+
+.input-group small { color: var(--text-muted); font-size: 0.8rem; display: block; margin-top: 5px; }
+
+.form-options {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 25px; font-size: 0.9rem;
+}
+
+.forgot-link { color: var(--maroon); text-decoration: none; font-weight: 600; }
+
+/* Buttons */
+.btn-auth-submit {
+    width: 100%; padding: 14px; background: var(--maroon);
+    color: white; border: none; border-radius: 8px;
+    font-size: 1rem; font-weight: 700; cursor: pointer; transition: 0.3s;
+}
+
+.btn-yellow { background: var(--gold); color: var(--text-dark); }
+.btn-auth-submit:hover { opacity: 0.9; transform: translateY(-1px); }
+
+.auth-divider {
+    text-align: center; margin: 25px 0; position: relative; color: var(--text-muted);
+}
+
+.auth-divider::before, .auth-divider::after {
+    content: ""; position: absolute; top: 50%; width: 42%; height: 1px; background: var(--border);
+}
+.auth-divider::before { left: 0; }
+.auth-divider::after { right: 0; }
+
+.auth-switch { text-align: center; font-size: 0.9rem; }
+.auth-switch a { color: var(--maroon); font-weight: 700; text-decoration: none; }
+
+.secure-note { margin-top: 30px; font-size: 0.85rem; color: var(--text-muted); }
+
+/* Verification Box */
+.verification-box {
+    background: #e3f2fd; padding: 20px; border-radius: 12px;
+    display: flex; align-items: flex-start; gap: 15px; margin-top: 30px;
+    text-align: left; border: 1px solid #90caf9;
+}
+
+.verification-box i { color: #1976d2; font-size: 1.5rem; }
+.verification-box h4 { font-size: 0.95rem; margin-bottom: 5px; }
+.verification-box p { font-size: 0.85rem; color: #444; }
+
+/* Footer */
+.footer { background: var(--maroon); color: white; padding: 60px 7% 20px; margin-top: 80px; }
+.footer-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; }
+.footer-section h3, .footer-section h4 { margin-bottom: 20px; }
+.footer-section p, .footer-section a { color: #eee; text-decoration: none; font-size: 0.9rem; display: block; margin-bottom: 10px; }
+.footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; text-align: center; margin-top: 40px; font-size: 0.8rem; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .nav-right { display: none; } /* Add a hamburger menu in real implementation */
+    .auth-card { padding: 25px; }
+}
+
+/* Hero Section */
+.hero {
+    padding: 60px 5%;
+    background-color: var(--light-bg);
+}
+
+.hero-container {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 40px;
+}
+
+.hero-text { flex: 1; min-width: 300px; }
+
+.hero-text h1 {
+    font-size: 2.8rem;
+    line-height: 1.1;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+.highlight { color: var(--maroon); }
+
+.hero-cta { display: flex; gap: 15px; margin-top: 30px; }
+
+.btn-maroon {
+    background: var(--maroon);
+    color: white;
+    padding: 14px 28px;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.btn-maroon:hover {
+    background: #600000;
+}
+
+.btn-outline {
+    border: 2px solid var(--gold);
+    color: var(--maroon);
+    padding: 12px 28px;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.btn-outline:hover {
+    background: var(--gold);
+    color: var(--maroon);
+}
+
+.hero-image-box { flex: 1; min-width: 300px; text-align: center; position: relative; }
+
+.main-hero-img {
+    width: 100%;
+    max-width: 500px;
+    border-radius: 20px;
+}
+
+.verified-badge {
+    position: absolute;
+    bottom: -10px;
+    left: 10%;
+    transform: translateX(-50%);
+    background: var(--gold);
+    color: var(--maroon);
+    padding: 15px 20px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Categories */
+.section-title { text-align: center; margin: 10px 0 10px; }
+
+.section-title h2 {
+    font-weight: 600;
+    font-size: 2.4rem;
+}
+
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 30px;
+    margin-top: 30px;
+    padding: 0 5%;
+}
+
+.cat-card {
+    padding: 40px 20px;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    text-align: center;
+    transition: 0.3s;
+}
+
+.cat-card:hover { 
+    transform: translateY(-10px); 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05); 
+    border: 2px solid var(--maroon);
+    transition: 0.3s;
+}
+
+.cat-card i { font-size: 2.5rem; color: var(--maroon); margin-bottom: 15px; }
+
+.item-count { color: var(--maroon); font-weight: bold; font-size: 0.9rem; }
+
+/* How It Works */
+.how-it-works {
+    background-color: #fff7f7;
+    color: rgb(8, 7, 7);
+    padding: 60px 5%;
+}
+
+.steps-row {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 30px;
+    padding: 40px 5%;
+}
+
+.step { text-align: center; flex: 1; min-width: 250px; }
+
+.icon-circle {
+    width: 100px;
+    height: 100px;
+    background: var(--maroon);
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 2rem;
+    position: relative;
+}
+
+.badge {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: var(--gold);
+    color: var(--maroon);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    font-size: 1rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Trust Section */
+.trust-section { 
+    background: var(--maroon); 
+    padding: 60px 5%; 
+}
+
+.color { color: rgb(228, 216, 216); }
+
+.trust-grid {  
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+.trust-item { color: rgb(228, 216, 216); text-align: flex-start; padding: 20px; }
+
+.trust-item i { font-size: 2rem; color: var(--maroon); margin-bottom: 15px; }
+
+.icon{
+    background:#FFD700;
+    color:black;
+    width:60px;
+    height:60px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:28px;
+    margin-bottom:20px;
+}
+
+/* Footer */
+footer {    
+    background-color: #913534; 
+    color: white;
+    padding: 60px 5% 20px; 
+    border-top: 1px solid #f80101; 
+}
+
+.footer-top { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 40px; margin-bottom: 40px; }
+
+.footer-info { flex: 2; min-width: 300px; }
+
+.footer-info .logo {
+    color: white;
+}
+
+.footer-info .logo span {
+    color: white;
+}
+
+.footer-column { flex: 1; min-width: 150px; display: flex; flex-direction: column; gap: 10px; }
+
+.footer-column a { text-decoration: none; color: white; }
+
+.footer-bottom { text-align: center; padding-top: 20px; border-top: 1px solid #f8eded; font-size: 0.9rem; }
+
+/* Mobile Menu Fix */
+/* Example: Stack elements vertically when the screen is 768px or smaller */
+@media screen and (max-width: 768px) {
+  .column {
+    display: block;
+    width: 100%;
+  }
+}
+
+/* Featured Items Styling */
+.featured-items {
+    padding: 60px 5%;
+    background-color: #fff;
+}
+
+.items-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.item-card {
+    background: #fff;
+    border-radius: 20px; /* Rounded corners like the image */
+    overflow: hidden;
+    border: 1px solid #eee;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease;
+}
+
+.item-card:hover {
+    transform: translateY(-5px);
+}
+
+.item-img-container img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+}
+
+.item-info {
+    padding: 20px;
+}
+
+.item-info h3 {
+    font-size: 1.15rem;
+    margin-bottom: 8px;
+    color: #1a1a1a;
+}
+
+.location {
+    font-size: 0.9rem;
+    color: #888;
+    margin-bottom: 10px;
+}
+
+.location i {
+    margin-right: 5px;
+    font-size: 0.8rem;
+}
+
+.rating {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.rating i {
+    color: #FFD700; /* Gold Star */
+    margin-right: 4px;
+}
+
+.rating span {
+    color: #999;
+    font-weight: 400;
+}
+
+.item-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #f0f0f0;
+    padding-top: 15px;
+}
+
+.price-tag {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #800000; /* WMSU Maroon */
+}
+
+.price-tag span {
+    font-size: 0.9rem;
+    color: #666;
+    font-weight: 400;
+}
+
+.btn-rent {
+    background-color: #800000;
+    color: #fff;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-rent:hover {
+    background-color: #600000;
+}
+

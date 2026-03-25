@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saved Items | WMSU KitCycle</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/student-dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <header class="dashboard-header">
+        <div class="logo">WMSU <span>KitCycle</span></div>
+        <nav class="top-nav">
+            <a href="student-dashboard.html">Dashboard</a>
+            <a href="#">Marketplace</a>
+            <a href="#">How It Works</a>
+            <a href="#">Safety</a>
+            <div class="user-profile-head">
+                <i class="far fa-user"></i>
+                <span>Maria Santos</span>
+                <a href="index.html" class="btn-logout-head"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="dashboard-wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-user">
+                <div class="avatar">M</div>
+                <div class="user-info">
+                    <h4>Maria Santos</h4>
+                    <p>Student</p>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="student-dashboard.html" class="nav-item"><i class="fas fa-th-large"></i> Dashboard</a>
+                <a href="student-myrentals.html" class="nav-item"><i class="fas fa-box"></i> My Rentals</a>
+                <a href="student-saveditem.html" class="nav-item active"><i class="far fa-heart"></i> Saved Items</a>
+                <a href="student-rating.html" class="nav-item"><i class="far fa-star"></i> My Rating</a>
+                <a href="student-mylisting.html" class="nav-item"><i class="fas fa-list-ul"></i> My Listings</a>
+            </nav>
+            <a href="index.html" class="sidebar-logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </aside>
+
+        <main class="main-content">
+            <div class="container">
+            <div class="page-title-banner saved-banner">
+                <div class="title-icon"><i class="fas fa-heart"></i></div>
+                <div>
+                    <h1>Saved Items</h1>
+                    <p>Your wishlist of items you want to rent</p>
+                </div>
+            </div>
+
+            <div class="saved-summary">
+                <h3>6 Items saved</h3>
+                <button class="btn-yellow-sm">Browse More Items</button>
+            </div>
+
+            <div class="saved-items-grid">
+                <div class="item-card">
+                    <div class="image-container">
+                        <img src="images/microscope.jpeg" alt="Laboratory Microscope">
+                        <button class="heart-btn active"><i class="fas fa-heart"></i></button>
+                    </div>
+                    <div class="item-info">
+                        <span class="category-tag">Lab Equipment</span>
+                        <h4>Laboratory Microscope</h4>
+                        <p class="owner-name">by Dr. Pedro Cruz</p>
+                        <div class="rating-price-row">
+                            <span class="rating">⭐ 4.7 (23)</span>
+                            <span class="price">₱150/day</span>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn-rent">Rent Now</button>
+                            <button class="btn-delete"><i class="far fa-trash-alt"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item-card">
+                    <div class="image-container">
+                        <div class="unavailable-overlay">Currently Unavailable</div>
+                        <img src="images/books.jpeg" alt="Engineering Textbooks">
+                        <button class="heart-btn active"><i class="fas fa-heart"></i></button>
+                    </div>
+                    <div class="item-info">
+                        <span class="category-tag">Textbooks</span>
+                        <h4>Engineering Textbook Bundle</h4>
+                        <p class="owner-name">by Anna Reyes</p>
+                        <div class="rating-price-row">
+                            <span class="rating">⭐ 4.8 (18)</span>
+                            <span class="price">₱100/week</span>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn-rent disabled" disabled>Rent Now</button>
+                            <button class="btn-delete"><i class="far fa-trash-alt"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
