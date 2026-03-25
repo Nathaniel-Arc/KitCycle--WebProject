@@ -1,100 +1,96 @@
-:root {
-    --wmsu-maroon: #8b0000;
-    --wmsu-gold: #ffd700;
-    --bg-white: #ffffff;
-    --light-gray: #f5f5f5;
-    --border-soft: #eeeeee;
+* {
+    box-sizing: border-box;
 }
 
-body { 
-    margin: 0; 
-    font-family: 'Inter', 'Segoe UI', sans-serif; 
-    background-color: var(--bg-white);
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #fff;
 }
 
-/* 1. STICKY HEADER */
-header { 
-    padding: 12px 0; 
-    border-bottom: 1px solid var(--border-soft);
+/* header stays on top while scrolling */
+header {
+    padding: 12px 20px;
+    border-bottom: 1px solid #eee;
     background-color: #fff;
     position: sticky;
     top: 0;
-    z-index: 1100;
+    z-index: 100;
 }
 
-.nav-container, .hero-content, .content-wrapper, .footer-grid {
-    max-width: 1100px; /* This keeps the page from stretching when zoomed */
+.nav-container {
+    max-width: 1100px;
     margin: 0 auto;
-    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.nav-container { 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
+.logo {
+    font-weight: bold;
+    color: #8b0000;
+    font-size: 1.1rem;
 }
 
-.logo { 
-    font-weight: bold; 
-    color: var(--wmsu-maroon); 
-    font-size: 1.1rem; 
+.logo span {
+    color: #333;
 }
 
-.logo span { 
-    color: #333; 
-}
-
-nav a { 
-    margin: 0 12px; 
-    text-decoration: none; 
-    color: #666; 
-    font-size: 0.85rem; 
-}
-
-nav a.active { 
-    color: var(--wmsu-maroon); 
-    font-weight: 600; 
-}
-
-/* For uniform style buttons*/
-.login-btn, .register-btn { 
-    padding: 10px 20px; 
-    border-radius: 6px; 
-    cursor: pointer; 
-    border: none; 
+nav a {
+    margin: 0 12px;
+    text-decoration: none;
+    color: #666;
     font-size: 0.85rem;
-    font-weight: 500;
 }
 
-.login-btn { 
-    background: none; 
-    color: var(--wmsu-maroon); 
-    border: 1px solid var(--wmsu-maroon); 
+nav a.active {
+    color: #8b0000;
+    font-weight: 600;
 }
 
-.register-btn { 
-    background: var(--wmsu-gold); 
-    margin-left: 8px; 
+/* login is just outlined, register has gold background */
+.login-btn {
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    background: none;
+    color: #8b0000;
+    border: 1px solid #8b0000;
 }
 
-/* 2. HERO SECTION */
-.hero { 
-    background: var(--wmsu-maroon); 
-    color: white; 
-    padding: 50px 0; 
+.register-btn {
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    background: #ffd700;
+    border: none;
+    margin-left: 8px;
 }
 
-.hero h1 { 
-    margin: 0; 
-    font-size: 2rem; 
+/* hero / banner */
+.hero {
+    background-color: #8b0000;
+    color: white;
+    padding: 50px 20px;
 }
 
-.hero p { 
-    opacity: 0.85; 
-    margin: 8px 0 25px 0; 
-    font-size: 0.95rem; 
+.hero-content {
+    max-width: 1100px;
+    margin: 0 auto;
 }
 
+.hero h1 {
+    margin: 0;
+    font-size: 2rem;
+}
+
+.hero p {
+    opacity: 0.85;
+    margin: 8px 0 25px 0;
+    font-size: 0.95rem;
+}
 
 .search-container {
     display: flex;
@@ -103,7 +99,6 @@ nav a.active {
     padding: 6px;
     border-radius: 12px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    margin-top: 20px;
 }
 
 .search-input {
@@ -112,44 +107,137 @@ nav a.active {
     padding: 12px 20px;
     font-size: 1rem;
     outline: none;
-    border-radius: 10px 0 0 10px;
+    border-radius: 8px;
 }
 
-/* 3. STICKY FILTER BAR */
+.search-btn {
+    padding: 10px 20px;
+    background-color: #8b0000;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.content-wrapper {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* filter bar also sticks below the header */
 .filter-bar {
     position: sticky;
-    top: 65px; /* Adjust based on header height */
+    top: 57px;
     background-color: #fff;
     padding: 15px 0;
-    z-index: 1000;
+    z-index: 90;
     display: flex;
     gap: 8px;
-    border-bottom: 1px solid var(--border-soft);
+    border-bottom: 1px solid #eee;
+    overflow-x: auto;
 }
 
-.filter-btn { 
-    padding: 8px 16px; 
-    border: none; /* Removed border to match input style */
-    background: var(--light-gray); 
-    border-radius: 6px; 
-    cursor: pointer; 
+.filter-btn {
+    padding: 8px 16px;
+    border: none;
+    background: #f5f5f5;
+    border-radius: 6px;
+    cursor: pointer;
     font-size: 0.8rem;
     color: #555;
-    transition: 0.2s ease;
+    white-space: nowrap;
 }
 
-.filter-btn.active { 
-    background: var(--wmsu-maroon); 
-    color: white; 
+.filter-btn.active {
+    background: #8b0000;
+    color: white;
 }
 
-.results-info { 
-    font-size: 0.8rem; 
-    color: #999; 
-    margin: 20px 0; 
+.results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0;
 }
 
-.availability{
+.results-info {
+    font-size: 0.8rem;
+    color: #999;
+    margin: 0;
+}
+
+.sort-dropdown {
+    font-size: 0.8rem;
+    color: #555;
+}
+
+.sort-dropdown select {
+    margin-left: 5px;
+    font-size: 0.8rem;
+    padding: 4px 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+/* item cards grid */
+.marketplace-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    padding-bottom: 60px;
+}
+
+.item-card {
+    border: 1px solid #eee;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* zoom in image a little on hover */
+.item-card:hover .card-image-wrapper img {
+    transform: scale(1.05);
+}
+
+.card-image-wrapper {
+    position: relative;
+    width: 100%;
+    height: 180px;
+    overflow: hidden;
+    background-color: #f0f0f0;
+}
+
+.card-image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+}
+
+/* colored badge on top-left of image */
+.category-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 4px 8px;
+    font-size: 0.7rem;
+    border-radius: 5px;
+    font-weight: 600;
+    color: white;
+    z-index: 1;
+}
+
+.media-bg { background-color: #e67e22; }
+.academic-bg { background-color: #3498db; }
+.textbooks-bg { background-color: #8e44ad; }
+.lab-bg { background-color: #27ae60; }
+
+/* availability tag on bottom-left */
+.availability {
     position: absolute;
     bottom: 10px;
     left: 10px;
@@ -161,98 +249,48 @@ nav a.active {
     font-weight: 500;
 }
 
-/* 4. MARKETPLACE GRID */
-.marketplace-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
-    padding-bottom: 60px;
-}
-
-.item-card { 
-    display: flex;
-    flex-direction: column;
-    border: 1px solid var(--border-soft); 
-    border-radius: 12px; /* For smooth rounded corners */
-    overflow: hidden; 
-    transition: transform 0.2s ease;
-}
-
-
-.item-card:hover .card-image-wrapper img{ 
-    transform: scale(1.05); 
-}
-
-.card-image-wrapper {
-    position: relative;
-    width: 100%;
-    height: 180px; /* Fixed height for uniformity */
-    overflow: hidden;
-    background-color: #f0f0f0;
-}
-
-.card-image-wrapper img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    transition: transition 0.5s ease;
-}
-
-/* Category Tag Colors */
-.media { 
-    color: #e67e22; 
-}
-
-.academic { 
-    color: #3498db; 
-}
-
-.textbooks { 
-    color: #8e44ad; 
-}
-
-.lab { 
-    color: #27ae60; 
-}
-
-.card-info { 
+.card-info {
     padding: 15px;
     flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
-.card-info h3 { 
-    margin: 0; 
-    font-size: 0.95rem; 
-    font-weight: 600; 
+.card-info h3 {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 600;
 }
 
-.campus { 
-    font-size: 0.8rem; 
-    color: #888; 
-    margin: 6px 0; 
+.campus {
+    font-size: 0.8rem;
+    color: #888;
+    margin: 6px 0;
 }
 
-.stars { 
-    font-size: 0.8rem; 
-    color: #f1c40f; 
-    margin-bottom: 12px; 
+.rating {
+    font-size: 0.8rem;
+    color: #f1c40f;
+    margin-bottom: 12px;
 }
 
-.card-action { 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-    margin-top: auto; 
-    padding-top: 10px; 
-    border-top: 1px solid var(--border-soft);
+.review-count {
+    color: #999;
 }
 
-.price { 
-    font-weight: bold; 
-    font-size: 1.2rem; 
+.card-action {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+}
+
+.price {
+    font-weight: bold;
+    font-size: 1.2rem;
     color: #333;
-    white-space: nowrap;
 }
 
 .price small {
@@ -261,85 +299,78 @@ nav a.active {
     margin-left: 2px;
 }
 
-.price span { 
-    font-size: 0.75rem; 
-    color: #bbb; 
-    font-weight: normal; 
-}
-
-.vertical-divider {
-    width: 1px;
-    height: 24px;
-    background-color: #e0e0e0;
-    margin: 0 12px;
-}
-
-.rent-button { 
-    background-color: #800000; 
-    color: white; 
-    border: none; 
-    padding: 8px 20px; 
-    border-radius: 4px; 
-    cursor: pointer; 
+.rent-button {
+    background-color: #8b0000;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 4px;
+    cursor: pointer;
     font-weight: 600;
     text-decoration: none;
-    display: inline-block
+    font-size: 0.85rem;
 }
 
-/* 5. FOOTER */
-footer { 
-    background: var(--wmsu-maroon); 
-    color: white; 
-    padding: 50px 0 20px; 
+/* footer */
+footer {
+    background-color: #8b0000;
+    color: white;
+    padding: 50px 20px 20px;
     margin-top: 40px;
- }
+}
 
 .footer-grid {
+    max-width: 1100px;
+    margin: 0 auto;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 30px; 
+    gap: 30px;
 }
 
-.footer-grid h4 { 
-    font-size: 0.9rem; 
-    margin-bottom: 15px; 
-    color: var(--wmsu-gold); 
+.footer-grid h4 {
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+    color: #ffd700;
 }
 
-.footer-grid ul { 
-    list-style: none; 
-    padding: 0; 
-    font-size: 0.85rem; 
-    line-height: 2; 
-    opacity: 0.8; 
+.footer-grid h3 {
+    color: #ffd700;
+    margin-top: 0;
 }
 
-.footer-brand p { 
-    font-size: 0.85rem; 
-    line-height: 1.5; 
-    opacity: 0.8; 
+.footer-grid ul {
+    list-style: none;
+    padding: 0;
+    font-size: 0.85rem;
+    line-height: 2;
+    opacity: 0.8;
 }
 
-.footer-contact p { 
-    font-size: 0.85rem; 
-    margin-bottom: 8px; 
-    opacity: 0.8; 
+.footer-brand p {
+    font-size: 0.85rem;
+    line-height: 1.5;
+    opacity: 0.8;
 }
 
-.footer-bottom { 
-    max-width: 1100px; 
-    margin: 30px auto 0; 
-    padding: 20px 0 0; 
-    border-top: 1px solid rgba(255,255,255,0.1); 
-    display: flex; 
-    justify-content: space-between; 
-    font-size: 0.75rem; 
+.footer-contact p {
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+    opacity: 0.8;
+}
+
+.footer-bottom {
+    max-width: 1100px;
+    margin: 30px auto 0;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
     opacity: 0.6;
 }
 
-/* Tablet and Mobile Adjustments */
+/* tablet */
 @media (max-width: 768px) {
-    /* Stack the Nav/Auth buttons */
     .nav-container {
         flex-direction: column;
         gap: 15px;
@@ -350,19 +381,13 @@ footer {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-        gap: 10px;
     }
 
-    nav a {
-        margin: 0 5px;
-    }
-
-    /* Hero section font sizing */
     .hero h1 {
         font-size: 1.5rem;
     }
 
-    /* Make search bar full width */
+    /* stack the search bar on mobile */
     .search-container {
         flex-direction: column;
         background: transparent;
@@ -371,29 +396,15 @@ footer {
     }
 
     .search-input {
-        border-radius: 8px;
         width: 100%;
+        border-radius: 8px;
     }
 
     .search-btn {
         width: 100%;
-        padding: 12px;
         border-radius: 8px;
     }
 
-    /* Make filter buttons scrollable horizontally */
-    .filter-bar {
-        overflow-x: auto;
-        white-space: nowrap;
-        padding-bottom: 10px;
-        -webkit-overflow-scrolling: touch; /* Smooth scroll for iOS */
-    }
-
-    .filter-btn {
-        flex: 0 0 auto;
-    }
-
-    /* Footer Bottom stack */
     .footer-bottom {
         flex-direction: column;
         text-align: center;
@@ -401,15 +412,15 @@ footer {
     }
 }
 
-/* Small Mobile Adjustments */
+/* small phones */
 @media (max-width: 480px) {
+    .marketplace-grid {
+        grid-template-columns: 1fr;
+    }
+
     .results-header {
         flex-direction: column;
         align-items: flex-start;
         gap: 10px;
-    }
-
-    .marketplace-grid {
-        grid-template-columns: 1fr; /* Single column on very small phones */
     }
 }
