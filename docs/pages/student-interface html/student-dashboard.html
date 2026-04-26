@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard | WMSU KitCycle</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/student-interface/student-dashboard.css">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="logo">WMSU <span>KitCycle</span></div>
+        <div class="nav-right">
+            <ul class="nav-links">
+                <li><a href="student-dashboard.html" class="active">Dashboard</a></li>
+                <li><a href="../marketplace.html">Marketplace</a></li>
+                <li><a href="../howitworks.html">How It Works</a></li>
+                <li><a href="../safety.html">Safety</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <span class="user-profile-nav"><i class="fas fa-user-circle"></i> Maria Santos</span>
+                <a href="../login.html" class="btn-login"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="dashboard-layout">
+
+        <aside class="sidebar">
+            <div class="sidebar-profile">
+                <div class="profile-avatar student-bg">M</div>
+                <div class="profile-info">
+                    <h4>Maria Santos</h4>
+                    <span>Student</span>
+                </div>
+            </div>
+
+            <ul class="sidebar-nav">
+                <li class="active"><a href="student-dashboard.html"><i class="fas fa-th-large"></i> Dashboard</a></li>
+                <li><a href="student-rentals.html"><i class="fas fa-box-open"></i> My Rentals</a></li>
+                <li><a href="student-saved.html"><i class="fas fa-heart"></i> Saved Items</a></li>
+                <li><a href="student-ratings.html"><i class="fas fa-star"></i> My Rating</a></li>
+                <li><a href="student-listings.html"><i class="fas fa-list"></i> My Listings</a></li>
+            </ul>
+
+            <a href="../login.html" class="sidebar-logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </aside>
+
+        <main class="dashboard-content">
+
+            <div class="dashboard-banner">
+                <div>
+                    <h2>Welcome back, Maria!</h2>
+                    <p>Here's what's happening with your rentals today.</p>
+                </div>
+            </div>
+
+            <div class="stat-cards-grid four-cols">
+                <div class="stat-card">
+                    <div class="stat-icon blue-light"><i class="fas fa-cubes"></i></div>
+                    <div class="stat-numbers">
+                        <span class="stat-label">Active Rentals</span>
+                        <h3>2</h3>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon red-light"><i class="fas fa-heart"></i></div>
+                    <div class="stat-numbers">
+                        <span class="stat-label">Saved Items</span>
+                        <h3>3</h3>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon yellow-light"><i class="fas fa-star"></i></div>
+                    <div class="stat-numbers">
+                        <span class="stat-label">Your Rating</span>
+                        <h3>4.8</h3>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green-light"><i class="fas fa-chart-line"></i></div>
+                    <div class="stat-numbers">
+                        <span class="stat-label">Total Rentals</span>
+                        <h3>10</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="split-row">
+
+                <div class="main-column">
+                    <div class="content-card">
+                        <div class="card-header">
+                            <h3>Active Rentals</h3>
+                        </div>
+
+                        <div class="active-rental-list">
+                            <div class="compact-rental-item">
+                                <div class="rental-thumb">
+                                    <img src="../../images/camera.jpg" alt="Canon EOS 90D">
+                                </div>
+                                <div class="rental-brief">
+                                    <div class="brief-top">
+                                        <h4>Canon EOS 90D DSLR</h4>
+                                        <span class="cost-tag">₱250/day</span>
+                                    </div>
+                                    <p class="sub-text">Rented from Juan Dela Cruz</p>
+                                    <div class="brief-bottom">
+                                        <span><i class="far fa-calendar-check"></i> Rented: 3/1/2026</span>
+                                        <span><i class="far fa-calendar-times danger-text"></i> Return: 3/8/2026</span>
+                                    </div>
+                                </div>
+                                <button class="btn-action-maroon btn-sm">Extend Rental</button>
+                            </div>
+
+                            <div class="compact-rental-item">
+                                <div class="rental-thumb">
+                                    <img src="images/calculator.jpg" alt="Scientific Calculator">
+                                </div>
+                                <div class="rental-brief">
+                                    <div class="brief-top">
+                                        <h4>Scientific Calculator TI-84</h4>
+                                        <span class="cost-tag">₱50/day</span>
+                                    </div>
+                                    <p class="sub-text">Rented from Maria Santos</p>
+                                    <div class="brief-bottom">
+                                        <span><i class="far fa-calendar-check"></i> Rented: 2/28/2026</span>
+                                        <span><i class="far fa-calendar-times danger-text"></i> Return: 3/7/2026</span>
+                                    </div>
+                                </div>
+                                <button class="btn-action-maroon btn-sm">Extend Rental</button>
+                            </div>
+                        </div>
+                        <a href="#" class="btn-block-outline">View All Rentals</a>
+                    </div>
+                </div>
+
+                <div class="side-column">
+                    <div class="content-card">
+                        <h3>Your Borrower Rating</h3>
+                        
+                        <div class="rating-circle-container">
+                            <div class="rating-circle">
+                                <div class="rating-circle-inner">
+                                    <span>4.8</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="rating-breakdown">
+                            <div class="breakdown-row"><span>On-time Returns</span> <span class="success-text">100%</span></div>
+                            <div class="breakdown-row"><span>Item Condition</span> <span class="success-text">Excellent</span></div>
+                            <div class="breakdown-row"><span>Communication</span> <span class="success-text">5.0</span></div>
+                        </div>
+                        <button class="btn-block-subtle">View Full Rating</button>
+                    </div>
+
+                    <div class="content-card margin-top">
+                        <h3>Quick Actions</h3>
+                        <div class="action-stack">
+                            <button class="btn-act-y">Browse Marketplace</button>
+                            <button class="btn-act-o">List an Item</button>
+                            <button class="btn-act-g">View Saved Items</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="content-card full-width-card margin-top">
+                <div class="card-header">
+                    <h3>Saved Items</h3>
+                    <a href="#" class="view-all-link">View All</a>
+                </div>
+
+                <div class="saved-shelf-grid">
+                    <div class="item-card">
+                        <div class="item-img"><img src="images/microscope.jpeg" alt="Laboratory Microscope"></div>
+                        <div class="item-info">
+                            <h4>Laboratory Microscope</h4>
+                            <div class="item-price">
+                                <span>₱150/day</span>
+                                <span class="rating"><i class="fas fa-star"></i> 4.7</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="item-card">
+                        <div class="item-img"><img src="images/lighting.jpeg" alt="Studio Lighting Kit"></div>
+                        <div class="item-info">
+                            <h4>Studio Lighting Kit</h4>
+                            <div class="item-price">
+                                <span>₱200/day</span>
+                                <span class="rating"><i class="fas fa-star"></i> 4.8</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="item-card">
+                        <div class="item-img"><img src="images/books.jpeg" alt="Engineering Textbook Bundle"></div>
+                        <div class="item-info">
+                            <h4>Engineering Textbook Bundle</h4>
+                            <div class="item-price">
+                                <span>₱100/week</span>
+                                <span class="rating"><i class="fas fa-star"></i> 4.8</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+</body>
+</html>

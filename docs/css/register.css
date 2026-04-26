@@ -1,0 +1,72 @@
+/* Auth Layout for Register */
+.auth-container {
+    max-width: 500px; margin: 60px auto; padding: 0 20px;
+    text-align: center;
+}
+
+.auth-header h1 { color: var(--maroon); margin-bottom: 10px; }
+.auth-header p { color: var(--text-muted); margin-bottom: 30px; }
+
+.auth-card {
+    background: var(--white); padding: 40px; border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05); text-align: left;
+}
+
+.input-group { margin-bottom: 20px;}
+.input-group label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem; }
+
+.input-wrapper {
+    position: relative; display: flex; align-items: center;
+}
+
+.input-wrapper i:first-child {
+    position: absolute; left: 15px; color: var(--text-muted);
+}
+
+.input-wrapper input, .input-group select {
+    width: 100%; padding: 12px 15px 12px 45px;
+    border: 1px solid var(--border); border-radius: 8px; font-size: 1rem;
+}
+
+.toggle-password { position: absolute; right: 15px; cursor: pointer; color: var(--text-muted); }
+
+.input-group small { color: var(--text-muted); font-size: 0.8rem; display: block; margin-top: 5px; }
+
+.form-options {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 25px; font-size: 0.9rem;
+}
+
+/* Buttons */
+.btn-auth-submit {
+    width: 100%; padding: 14px; background: var(--maroon);
+    color: white; border: none; border-radius: 8px;
+    font-size: 1rem; font-weight: 700; cursor: pointer; transition: 0.3s;
+}
+
+.btn-yellow { background: var(--gold); color: var(--text-dark); }
+.btn-auth-submit:hover { opacity: 0.9; transform: translateY(-1px); }
+
+.auth-divider {
+    text-align: center; margin: 25px 0; position: relative; color: var(--text-muted);
+}
+
+.auth-divider::before, .auth-divider::after {
+    content: ""; position: absolute; top: 50%; width: 42%; height: 1px; background: var(--border);
+}
+.auth-divider::before { left: 0; }
+.auth-divider::after { right: 0; }
+
+.auth-switch { text-align: center; font-size: 0.9rem; }
+.auth-switch a { color: var(--maroon); font-weight: 700; text-decoration: none; }
+
+/* Verification Box */
+.verification-box {
+    background: #e3f2fd; padding: 20px; border-radius: 12px;
+    display: flex; align-items: flex-start; gap: 15px; margin-top: 30px;
+    text-align: left; border: 1px solid #90caf9;
+}
+
+.verification-box i { color: #1976d2; font-size: 1.5rem; }
+.verification-box h4 { font-size: 0.95rem; margin-bottom: 5px; }
+.verification-box p { font-size: 0.85rem; color: #444; }

@@ -1,0 +1,304 @@
+/* --- STUDENT PORTAL LAYOUT SCHEME --- */
+
+.student-bg { 
+    background-color: #a51c30 !important; /* Crimson variant */
+    color: #fff; 
+}
+
+/* Sidebar and Workspace Spanning */
+.dashboard-layout {
+    display: flex;
+    min-height: calc(100vh - 70px);
+}
+
+.sidebar {
+    width: 260px;
+    background: #ffffff;
+    border-right: 1px solid #e5e7eb;
+    padding: 2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #f3f4f6;
+    margin-bottom: 1.5rem;
+}
+
+.profile-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+}
+
+.profile-info h4 { font-size: 0.9rem; color: #111827; }
+.profile-info span { font-size: 0.75rem; color: #6b7280; }
+
+.sidebar-nav { list-style: none; flex: 1; }
+.sidebar-nav li { margin-bottom: 8px; }
+
+.sidebar-nav a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: #4b5563;
+    padding: 12px 15px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: 0.2s;
+}
+
+.sidebar-nav li.active a, .sidebar-nav a:hover {
+    background: #800000;
+    color: #fff;
+}
+
+.sidebar-logout {
+    color: #dc3545;
+    text-decoration: none;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 15px;
+    font-weight: 600;
+}
+
+.dashboard-content {
+    flex: 1;
+    padding: 2rem 3rem;
+}
+
+.dashboard-banner {
+    background: #800000;
+    color: #ffffff;
+    padding: 1.5rem 2rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+}
+
+/* Perfect CSS Grid for Metrics Quads */
+.stat-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: #ffffff;
+    padding: 1.5rem;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+    border: 1px solid #f3f4f6;
+}
+
+.stat-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+.blue-light { background-color: #eff6ff; color: #1d4ed8; }
+.green-light { background-color: #f0fdf4; color: #15803d; }
+.purple-light { background-color: #faf5ff; color: #7e22ce; }
+.orange-light { background-color: #fff7ed; color: #c2410c; }
+.red-light { background-color: #fef2f2; color: #b91c1c; }
+.yellow-light { background-color: #fefce8; color: #a16207; }
+
+.stat-numbers h3 { font-size: 1.5rem; margin-top: 5px; font-weight: 700; color: #111827; }
+.stat-label { font-size: 0.8rem; color: #6b7280; }
+
+.success-text { color: #10b981; }
+.danger-text { color: #dc2626; }
+
+/* Dashboard Split Architecture (Left vs Right widgets) */
+.split-row {
+    display: flex;
+    gap: 25px;
+    align-items: flex-start;
+}
+
+.main-column { flex: 2; }
+.side-column { flex: 1; }
+
+.content-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+    border: 1px solid #f3f4f6;
+}
+
+.margin-top { margin-top: 1.5rem; }
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #f3f4f6;
+    padding-bottom: 1rem;
+}
+
+.card-header h3 { font-size: 1.1rem; color: #111827; }
+
+/* Mini Active Item Sliders list context */
+.active-rental-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 1.5rem;
+}
+
+.compact-rental-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 1rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    background: #fff;
+}
+
+.rental-thumb {
+    width: 70px;
+    height: 70px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.rental-thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+.rental-brief { flex: 1; }
+
+.brief-top {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 4px;
+}
+
+.brief-top h4 { font-size: 0.95rem; color: #111827; }
+.cost-tag { font-size: 0.9rem; font-weight: 700; color: #800000; }
+
+.sub-text { font-size: 0.8rem; color: #6b7280; }
+
+.brief-bottom {
+    display: flex;
+    gap: 15px;
+    font-size: 0.75rem;
+    color: #4b5563;
+    margin-top: 8px;
+}
+
+.btn-sm { padding: 8px 12px; font-size: 0.8rem; height: fit-content; border: none; background: #800000; color: #fff; border-radius: 6px; cursor: pointer; }
+
+.btn-block-outline { display: block; text-align: center; padding: 12px; border: 1px solid #d1d5db; border-radius: 8px; text-decoration: none; color: #374151; font-size: 0.85rem; font-weight: 600; }
+
+/* Standard CSS Circular Gauge Widget */
+.rating-circle-container {
+    display: flex;
+    justify-content: center;
+    margin: 1.5rem 0;
+}
+
+.rating-circle {
+    width: 120px;
+    height: 120px;
+    background: conic-gradient(#ffd700 95%, #f3f4f6 0);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.rating-circle-inner {
+    width: 90px;
+    height: 90px;
+    background: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #111827;
+}
+
+.rating-breakdown {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 1.5rem;
+}
+
+.breakdown-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: #4b5563;
+}
+
+.btn-block-subtle { width: 100%; padding: 12px; border-radius: 8px; border: none; font-weight: 600; font-size: 0.85rem; cursor: pointer; background-color: #f3f4f6; }
+
+.action-stack {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.action-stack button { padding: 12px; border-radius: 8px; border: none; font-weight: 600; font-size: 0.85rem; cursor: pointer; }
+.btn-act-y { background: #ffd700; color: #000; }
+.btn-act-o { background: #fff; border: 1px solid #800000; color: #800000; }
+.btn-act-g { background: #f3f4f6; color: #374151; }
+
+/* 🛒 Horizontal Scroller Flex Items for Saved Lists context */
+.saved-shelf-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.item-card {
+    border: 1px solid #eef0f2;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #ffffff;
+}
+
+.item-img { height: 160px; }
+.item-img img { width: 100%; height: 100%; object-fit: cover; }
+
+.item-info { padding: 1rem; }
+.item-info h4 { font-size: 0.95rem; color: #111827; margin-bottom: 8px; }
+
+.item-price {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #800000;
+}
+
+.rating { color: #6b7280; font-weight: 600; }
+.rating i { color: #ffd700; }
+
+.view-all-link { font-size: 0.85rem; text-decoration: none; color: #800000; font-weight: 600; }

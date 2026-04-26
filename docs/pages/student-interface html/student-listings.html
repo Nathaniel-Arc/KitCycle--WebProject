@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Listings | WMSU KitCycle</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/student-interface/student-listings.css">
+    <link rel="stylesheet" href="../../css/student-interface/student-dashboard.css">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="logo">WMSU <span>KitCycle</span></div>
+        <div class="nav-right">
+            <ul class="nav-links">
+                <li><a href="student-dashboard.html">Dashboard</a></li>
+                <li><a href="../marketplace.html">Marketplace</a></li>
+                <li><a href="../howitworks.html">How It Works</a></li>
+                <li><a href="../safety.html">Safety</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <span class="user-profile-nav"><i class="fas fa-user-circle"></i> Maria Santos</span>
+                <a href="../login.html" class="btn-login"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="dashboard-layout">
+
+        <aside class="sidebar">
+            <div class="sidebar-profile">
+                <div class="profile-avatar student-bg">M</div>
+                <div class="profile-info">
+                    <h4>Maria Santos</h4>
+                    <span>Student</span>
+                </div>
+            </div>
+
+            <ul class="sidebar-nav">
+                <li><a href="student-dashboard.html"><i class="fas fa-th-large"></i> Dashboard</a></li>
+                <li><a href="student-rentals.html"><i class="fas fa-box-open"></i> My Rentals</a></li>
+                <li><a href="student-saved.html"><i class="fas fa-heart"></i> Saved Items</a></li>
+                <li><a href="student-rating.html"><i class="fas fa-star"></i> My Rating</a></li>
+                <li class="active"><a href="student-listings.html"><i class="fas fa-list"></i> My Listings</a></li>
+            </ul>
+
+            <a href="../login.html" class="sidebar-logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </aside>
+
+        <main class="dashboard-content">
+
+            <div class="dashboard-banner flex-banner">
+                <div>
+                    <h2><i class="fas fa-list-ul"></i> My Listings</h2>
+                    <p>Manage your rental items and track their performance</p>
+                </div>
+                <button class="btn-new-listing"><i class="fas fa-plus"></i> New Listing</button>
+            </div>
+
+            <div class="stat-cards-grid four-cols">
+                <div class="stat-card">
+                    <div class="stat-icon blue-light"><i class="fas fa-file-alt"></i></div>
+                    <div class="stat-numbers">
+                        <span class="stat-label">Total Listings</span>
+                        <h3>3</h3>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green-light"><i class="fas fa-eye"></i></div>
+                    <div class="stat-numbers">
+                        <span class="stat-label">Total Views</span>
+                        <h3>95</h3>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon purple-light"><i class="fas fa-chart-line"></i></div>
+                    <div class="stat-numbers">
+                        <span class="stat-label">Total Bookings</span>
+                        <h3>12</h3>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon orange-light"><i class="fas fa-check-circle"></i></div>
+                    <div class="stat-numbers">
+                        <span class="stat-label">Active Listings</span>
+                        <h3>2</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-card full-width-card">
+                <div class="card-header">
+                    <h3>All Listings</h3>
+                </div>
+
+                <div class="listings-panel-stack">
+
+                    <div class="listing-item-panel">
+                        <div class="listing-thumbnail">
+                            <img src="../../images/camera.jpg" alt="Nikon D750 DSLR Camera">
+                        </div>
+                        <div class="listing-details">
+                            <div class="listing-top">
+                                <div>
+                                    <h4>Nikon D750 DSLR Camera <span class="status-pill success">Active</span></h4>
+                                    <p class="category-trace">Media Equipment</p>
+                                    <span class="rate-trace">₱300/day</span>
+                                </div>
+                            </div>
+
+                            <div class="listing-mid-stats">
+                                <div class="mid-stat-box"><span>Views</span> <strong>45</strong></div>
+                                <div class="mid-stat-box"><span>Favorites</span> <strong>8</strong></div>
+                                <div class="mid-stat-box"><span>Bookings</span> <strong>3</strong></div>
+                            </div>
+
+                            <div class="listing-actions">
+                                <button class="btn-outline-dark"><i class="far fa-eye"></i> View</button>
+                                <button class="btn-yellow-sm"><i class="far fa-edit"></i> Edit</button>
+                                <button class="btn-outline-dark"><i class="fas fa-eye-slash"></i> Deactivate</button>
+                                <button class="btn-outline-red"><i class="far fa-trash-alt"></i> Delete</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="listing-item-panel">
+                        <div class="listing-thumbnail">
+                            <img src="../../images/calculator.jpg" alt="Graphing Calculator Set">
+                        </div>
+                        <div class="listing-details">
+                            <div class="listing-top">
+                                <div>
+                                    <h4>Graphing Calculator Set <span class="status-pill success">Active</span></h4>
+                                    <p class="category-trace">Academic Tools</p>
+                                    <span class="rate-trace">₱60/day</span>
+                                </div>
+                            </div>
+
+                            <div class="listing-alert-box warning-panel">
+                                <p><i class="fas fa-info-circle"></i> Currently rented to: <strong>Pedro Martinez</strong></p>
+                                <span>Return date: 3/10/2026</span>
+                            </div>
+
+                            <div class="listing-mid-stats">
+                                <div class="mid-stat-box"><span>Views</span> <strong>32</strong></div>
+                                <div class="mid-stat-box"><span>Favorites</span> <strong>5</strong></div>
+                                <div class="mid-stat-box"><span>Bookings</span> <strong>7</strong></div>
+                            </div>
+
+                            <div class="listing-actions">
+                                <button class="btn-outline-dark"><i class="far fa-eye"></i> View</button>
+                                <button class="btn-yellow-sm"><i class="far fa-edit"></i> Edit</button>
+                                <button class="btn-outline-dark"><i class="fas fa-eye-slash"></i> Deactivate</button>
+                                <button class="btn-outline-dark disabled" disabled><i class="far fa-trash-alt"></i> Delete</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="listing-item-panel">
+                        <div class="listing-thumbnail">
+                            <img src="../../images/books.jpeg" alt="Civil Engineering Books Collection">
+                        </div>
+                        <div class="listing-details">
+                            <div class="listing-top">
+                                <div>
+                                    <h4>Civil Engineering Books Collection <span class="status-pill neutral">Inactive</span></h4>
+                                    <p class="category-trace">Textbooks</p>
+                                    <span class="rate-trace">₱80/week</span>
+                                </div>
+                            </div>
+
+                            <div class="listing-mid-stats">
+                                <div class="mid-stat-box"><span>Views</span> <strong>18</strong></div>
+                                <div class="mid-stat-box"><span>Favorites</span> <strong>3</strong></div>
+                                <div class="mid-stat-box"><span>Bookings</span> <strong>2</strong></div>
+                            </div>
+
+                            <div class="listing-actions">
+                                <button class="btn-outline-dark"><i class="far fa-eye"></i> View</button>
+                                <button class="btn-yellow-sm"><i class="far fa-edit"></i> Edit</button>
+                                <button class="btn-outline-dark"><i class="fas fa-eye"></i> Activate</button>
+                                <button class="btn-outline-red"><i class="far fa-trash-alt"></i> Delete</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+</body>
+</html>

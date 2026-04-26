@@ -4,36 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | WMSU KitCycle</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/login.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body>
+<body class="auth-page">
 
     <header>
         <nav class="navbar">
-        <div class="logo">WMSU <span>KitCycle</span></div>
-        <div class="nav-right">
-            <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="#">Marketplace</a></li>
-                <li><a href="#">How It Works</a></li>
-                <li><a href="#">Safety</a></li>
-            </ul>
-            <div class="auth-buttons">
-                <a href="login.html" class="btn-login active">Login</a>
-                <a href="register.html" class="btn-register">Register</a>
+            <div class="logo">
+                <img src="../images/wmsulogo.png" alt="WMSU Logo" class="nav-logo-img">
+                WMSU <span>KitCycle</span>
             </div>
-        </div>
+            <div class="nav-right">
+                <ul class="nav-links">
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="marketplace.html">Marketplace</a></li>
+                    <li><a href="howitworks.html">How It Works</a></li>
+                    <li><a href="safety.html">Safety</a></li>
+                </ul>
+                <div class="auth-buttons">
+                    <a href="login.html" class="btn-login active">Login</a>
+                    <a href="register.html" class="btn-register">Register</a>
+                </div>
+            </div>
         </nav>
     </header>
 
     <main class="auth-container">
-        <div class="auth-header">
-            <h1>WMSU <span style="color: black;">KitCycle</span></h1>
-            <p>Welcome back! Login to your account</p>
-        </div>
-
         <div class="auth-card">
+            <div class="auth-header" style="text-align: center; margin-bottom: 25px;">
+                <h1>WMSU <span style="color: black;">KitCycle</span></h1>
+                <p>Welcome back! Login to your account</p>
+            </div>
             <form id="loginForm">
                 <div class="input-group">
                     <label>Login As</label>
@@ -86,11 +89,11 @@
             e.preventDefault();
             const role = document.getElementById('role').value;
             if (role === 'student') {
-                window.location.href = 'student-dashboard.html';
+                window.location.href = 'student-interface html/student-dashboard.html';
             } else if (role === 'faculty') {
-                window.location.href = 'faculty-dashboard.html';
+                window.location.href = 'faculty-interface html/faculty-dashboard.html';
             } else if (role === 'admin') {
-                window.location.href = 'admin-dashboard.html';
+                window.location.href = 'admin-interface html/admin-dashboard.html';
             }
         });
     </script>

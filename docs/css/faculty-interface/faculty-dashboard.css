@@ -1,0 +1,184 @@
+/* --- CSS Grid and Flex layouts for the Faculty Portal --- */
+
+.dashboard-layout {
+    display: flex;
+    min-height: calc(100vh - 80px); /* Subtracts Navbar Height */
+}
+
+/* Sidebar Columns */
+.sidebar {
+    width: 260px;
+    background: #ffffff;
+    border-right: 1px solid #e9ecef;
+    padding: 2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 2rem;
+}
+
+.profile-avatar {
+    width: 45px;
+    height: 45px;
+    background: #800000; /* Maroon */
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+}
+
+.profile-info h4 { font-size: 0.95rem; color: #333; }
+.profile-info span { font-size: 0.8rem; color: #666; }
+
+.sidebar-nav {
+    list-style: none;
+    flex: 1;
+}
+
+.sidebar-nav li { margin-bottom: 8px; }
+
+.sidebar-nav a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: #555;
+    padding: 12px 15px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: 0.2s;
+}
+
+.sidebar-nav li.active a, .sidebar-nav a:hover {
+    background: #800000;
+    color: #fff;
+}
+
+.sidebar-logout {
+    color: #e63946;
+    text-decoration: none;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 15px;
+}
+
+/* Main Dashboard Sheet */
+.dashboard-content {
+    flex: 1;
+    background: #f4f6f9;
+    padding: 2rem 3rem;
+}
+
+.dashboard-banner {
+    background: #800000;
+    color: #ffffff;
+    padding: 2rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+}
+
+/* Flexbox metrics grid */
+.stat-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: #ffffff;
+    padding: 1.5rem;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+}
+
+.stat-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+.stat-icon.blue { background: #e7f3ff; color: #1877f2; }
+.stat-icon.green { background: #e6fcf5; color: #0ca678; }
+.stat-icon.orange { background: #fff4e6; color: #fd7e14; }
+.stat-icon.purple { background: #f3f0ff; color: #7950f2; }
+
+/* Approval Sheet layout */
+.split-row {
+    display: flex;
+    gap: 25px;
+    align-items: flex-start;
+}
+
+.content-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+}
+
+.approvals-card { flex: 2; }
+.sidebar-actions { flex: 1; }
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+}
+
+.approval-item {
+    border: 1px solid #eee;
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.btn-approve, .btn-reject {
+    flex: 1;
+    padding: 10px;
+    border-radius: 6px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-approve { background: #28a745; color: #fff; }
+.btn-reject { background: #ffffff; border: 1px solid #dc3545; color: #dc3545; }
+
+.btn-action {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-action.yellow { background: #ffd700; color: #000; }
+.btn-action.outline { background: #fff; border: 1px solid #800000; color: #800000; }

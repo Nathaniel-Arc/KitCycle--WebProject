@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faculty Dashboard | WMSU KitCycle</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/faculty-interface/faculty-dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="logo">WMSU <span>KitCycle</span></div>
+        <div class="nav-right">
+            <ul class="nav-links">
+                <li><a href="faculty-dashboard.html" class="active">Dashboard</a></li>
+                <li><a href="marketplace.html">Marketplace</a></li>
+                <li><a href="howitworks.html">How It Works</a></li>
+                <li><a href="safety.html">Safety</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <span class="user-profile-nav"><i class="fas fa-user-circle"></i> Dr. Juan Dela Cruz</span>
+                <a href="../login.html" class="btn-login"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="dashboard-layout">
+
+        <aside class="sidebar">
+            <div class="sidebar-profile">
+                <div class="profile-avatar">D</div>
+                <div class="profile-info">
+                    <h4>Dr. Juan Dela Cruz</h4>
+                    <span>Faculty</span>
+                </div>
+            </div>
+
+            <ul class="sidebar-nav">
+                <li class="active"><a href="faculty-dashboard.html"><i class="fas fa-th-large"></i> Dashboard</a></li>
+                <li><a href="faculty-departmentgear.html"><i class="fas fa-boxes"></i> Departmental Gear</a></li>
+                <li><a href="faculty-approvals.html"><i class="fas fa-clipboard-check"></i> Approval Queue</a></li>
+                <li><a href="faculty-rentals.html"><i class="fas fa-clock"></i> Active Rentals</a></li>
+                <li><a href="faculty-reports.html"><i class="fas fa-chart-pie"></i> Reports</a></li>
+            </ul>
+
+            <a href="../login.html" class="sidebar-logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </aside>
+
+        <main class="dashboard-content">
+
+            <div class="dashboard-banner">
+                <h2>Engineering Department Dashboard</h2>
+                <p>Manage departmental equipment and student requests.</p>
+            </div>
+
+            <div class="stat-cards-grid">
+                <div class="stat-card">
+                    <div class="stat-icon blue"><i class="fas fa-archive"></i></div>
+                    <div class="stat-numbers">
+                        <span class="stat-label">Total Equipment</span>
+                        <h3>18</h3>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green"><i class="fas fa-check-circle"></i></div>
+                    <div class="stat-numbers">
+                        <span class="stat-label">Available Now</span>
+                        <h3>10</h3>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon orange"><i class="fas fa-exclamation-circle"></i></div>
+                    <div class="stat-numbers">
+                        <span class="stat-label">Pending Approvals</span>
+                        <h3>3</h3>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon purple"><i class="fas fa-users"></i></div>
+                    <div class="stat-numbers">
+                        <span class="stat-label">Active Borrowers</span>
+                        <h3>8</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="split-row">
+                
+                <div class="content-card approvals-card">
+                    <div class="card-header">
+                        <h3>Approval Queue</h3>
+                        <span class="badge orange">3 Pending</span>
+                    </div>
+
+                    <div class="approval-item">
+                        <div class="item-header">
+                            <div>
+                                <h4>Maria Santos</h4>
+                                <span class="sub-text">ID: 2024-12345</span>
+                            </div>
+                            <span class="status-badge">Pending</span>
+                        </div>
+                        <p><strong>Item:</strong> Engineering Microscope Set</p>
+                        <p><strong>Duration:</strong> 3 days</p>
+                        <p><strong>Purpose:</strong> Materials Science Lab Project</p>
+                        <div class="action-buttons">
+                            <button class="btn-approve">Approve</button>
+                            <button class="btn-reject">Reject</button>
+                        </div>
+                    </div>
+                    <a href="#" class="btn-view-all">View All Requests</a>
+                </div>
+
+                <div class="sidebar-actions">
+                    <div class="content-card">
+                        <h3>Quick Actions</h3>
+                        <button class="btn-action yellow">Manage Equipment</button>
+                        <button class="btn-action outline">View All Approvals</button>
+                        <button class="btn-action light">Generate Report</button>
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+
+</body>
+</html>

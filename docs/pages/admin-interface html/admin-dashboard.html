@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | WMSU KitCycle</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/admin-interface/admin-dashboard.css">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="logo">WMSU <span>KitCycle</span></div>
+        <div class="nav-right">
+            <ul class="nav-links">
+                <li><a href="admin-dashboard.html" class="active">Dashboard</a></li>
+                <li><a href="marketplace.html">Marketplace</a></li>
+                <li><a href="howitworks.html">How It Works</a></li>
+                <li><a href="safety.html">Safety</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <span class="user-profile-nav"><i class="fas fa-user-shield"></i> Admin User</span>
+                <a href="../login.html" class="btn-login"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="dashboard-layout">
+
+        <aside class="sidebar">
+            <div class="sidebar-profile">
+                <div class="profile-avatar admin-bg">A</div>
+                <div class="profile-info">
+                    <h4>Admin User</h4>
+                    <span>Admin</span>
+                </div>
+            </div>
+
+            <ul class="sidebar-nav">
+                <li class="active"><a href="#"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+                <li><a href="admin-verification.html"><i class="fas fa-user-check"></i> User Verification</a></li>
+                <li><a href="admin-analytics.html"><i class="fas fa-poll"></i> Analytics</a></li>
+                <li><a href="admin-disputes.html"><i class="fas fa-exclamation-triangle"></i> Dispute Management</a></li>
+                <li><a href="admin-approvals.html"><i class="fas fa-clipboard-check"></i> Approvals</a></li>
+                <li><a href="admin-settings.html"><i class="fas fa-cog"></i> Platform Settings</a></li>
+            </ul>
+
+            <a href="login.html" class="sidebar-logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </aside>
+
+        <main class="dashboard-content">
+
+            <div class="dashboard-banner">
+                <h2>Admin Dashboard</h2>
+                <p>Comprehensive platform management and analytics overview.</p>
+            </div>
+
+            <div class="stat-cards-grid">
+                <div class="stat-card">
+                    <div class="stat-icon blue-light"><i class="fas fa-users"></i></div>
+                    <div class="stat-numbers">
+                        <span class="stat-label">Total Users</span>
+                        <h3>1247</h3>
+                        <span class="trend success-text">+47 this month</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green-light"><i class="fas fa-chart-line"></i></div>
+                    <div class="stat-numbers">
+                        <span class="stat-label">Active Rentals</span>
+                        <h3>89</h3>
+                        <span class="trend success-text">+12 this week</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon purple-light"><i class="fas fa-shapes"></i></div>
+                    <div class="stat-numbers">
+                        <span class="stat-label">Items Listed</span>
+                        <h3>456</h3>
+                        <span class="trend success-text">+23 this week</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon orange-light"><i class="fas fa-id-card"></i></div>
+                    <div class="stat-numbers">
+                        <span class="stat-label">Pending Verification</span>
+                        <h3>3</h3>
+                        <span class="trend warning-text">Needs attention</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon red-light"><i class="fas fa-handshake-slash"></i></div>
+                    <div class="stat-numbers">
+                        <span class="stat-label">Active Disputes</span>
+                        <h3>2</h3>
+                        <span class="trend danger-text">Urgent review</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon yellow-light"><i class="fas fa-coins"></i></div>
+                    <div class="stat-numbers">
+                        <span class="stat-label">Total Revenue</span>
+                        <h3>₱45,600</h3>
+                        <span class="trend success-text">+8% this month</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="split-row">
+
+                <div class="main-column">
+                    <div class="content-card">
+                        <div class="card-header">
+                            <h3>User Verification Queue</h3>
+                            <span class="badge orange-bg">3 Pending</span>
+                        </div>
+                        <div class="verifications-stack">
+                            <div class="verify-item">
+                                <div class="verify-top">
+                                    <div class="verify-user">
+                                        <h4>Pedro Martinez</h4>
+                                        <p>pedro.martinez@wmsu.edu.ph</p>
+                                        <span>Student ID: 2024-15678</span>
+                                    </div>
+                                    <span class="status-pill warning">Pending Review</span>
+                                </div>
+                                <div class="verify-bottom">
+                                    <span class="timestamp"><i class="far fa-clock"></i> 3/5/2026 &nbsp; 2 documents submitted</span>
+                                    <div class="verify-actions">
+                                        <button class="btn-subtle">Review Details</button>
+                                        <button class="btn-circle-success"><i class="fas fa-check"></i></button>
+                                        <button class="btn-circle-danger"><i class="fas fa-times"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#" class="btn-block-outline">View All Verification Requests</a>
+                    </div>
+                </div>
+
+                <div class="side-column">
+                    <div class="content-card">
+                        <h3>User Growth</h3>
+                        <div class="bar-chart-container">
+                            <div class="chart-row">
+                                <span class="month-lbl">Oct</span>
+                                <div class="chart-bar-track"><div class="chart-bar-fill" style="width: 65%;"></div></div>
+                                <span class="chart-val">850</span>
+                            </div>
+                            <div class="chart-row">
+                                <span class="month-lbl">Mar</span>
+                                <div class="chart-bar-track"><div class="chart-bar-fill" style="width: 100%; background: #800000;"></div></div>
+                                <span class="chart-val">1247</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+</body>
+</html>

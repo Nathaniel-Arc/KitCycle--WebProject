@@ -4,41 +4,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register | WMSU KitCycle</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/register.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body>
+<body class="auth-page">
     <header>
         <nav class="navbar">
-        <div class="logo">WMSU <span>KitCycle</span></div>
-        <div class="nav-right">
-            <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="#">Marketplace</a></li>
-                <li><a href="#">How It Works</a></li>
-                <li><a href="#">Safety</a></li>
-            </ul>
-            <div class="auth-buttons">
-                <a href="login.html" class="btn-login">Login</a>
-                <a href="register.html" class="btn-register active">Register</a>
+            <div class="logo">
+                <img src="../images/wmsulogo.png" alt="WMSU Logo" class="nav-logo-img">
+                WMSU <span>KitCycle</span>
             </div>
-        </div>
+            <div class="nav-right">
+                <ul class="nav-links">
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="marketplace.html">Marketplace</a></li>
+                    <li><a href="howitworks.html">How It Works</a></li>
+                    <li><a href="safety.html">Safety</a></li>
+                </ul>
+                <div class="auth-buttons">
+                    <a href="login.html" class="btn-login">Login</a>
+                    <a href="register.html" class="btn-register active">Register</a>
+                </div>
+            </div>
         </nav>
     </header>
 
     <main class="auth-container">
-        <div class="auth-header">
-            <h1>Join WMSU KitCycle</h1>
-            <p>Create your account and start renting today</p>
-        </div>
-
         <div class="auth-card">
+            <div class="auth-header" style="text-align: center; margin-bottom: 25px;">
+                <h1>Join WMSU KitCycle</h1>
+                <p>Create your account and start renting today</p>
+            </div>
             <form>
                 <div class="input-group">
                     <label>Full Name</label>
-                    <div class="input-wrapper">
-                        <i class="far fa-user"></i>
-                        <input type="text" placeholder="Juan Dela Cruz" required>
+                    <div class="name-stack">
+                        <div class="input-wrapper">
+                            <i class="far fa-user"></i>
+                            <input type="text" placeholder="First Name" required>
+                        </div>
+                        <div class="input-wrapper">
+                            <i class="far fa-user"></i>
+                            <input type="text" placeholder="Middle Name">
+                        </div>
+                        <div class="input-wrapper">
+                            <i class="far fa-user"></i>
+                            <input type="text" placeholder="Last Name" required>
+                        </div>
                     </div>
                 </div>
 
@@ -86,7 +99,7 @@
                     </label>
                 </div>
 
-                <button type="submit" class="btn-auth-submit btn-yellow">Create Account</button>
+                <button type="submit" href="student-interface html/student-dashboard.html" class="btn-auth-submit btn-yellow">Create Account</button>
             </form>
 
             <div class="auth-divider">OR</div>

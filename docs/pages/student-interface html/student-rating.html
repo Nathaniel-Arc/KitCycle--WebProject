@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Rating | WMSU KitCycle</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/student-interface/student-dashboard.css">
+    <link rel="stylesheet" href="../../css/student-interface/student-rating.css">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="logo">WMSU <span>KitCycle</span></div>
+        <div class="nav-right">
+            <ul class="nav-links">
+                <li><a href="student-dashboard.html">Dashboard</a></li>
+                <li><a href="../marketplace.html">Marketplace</a></li>
+                <li><a href="../howitworks.html">How It Works</a></li>
+                <li><a href="../safety.html">Safety</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <span class="user-profile-nav"><i class="fas fa-user-circle"></i> Maria Santos</span>
+                <a href="../login.html" class="btn-login"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="dashboard-layout">
+
+        <aside class="sidebar">
+            <div class="sidebar-profile">
+                <div class="profile-avatar student-bg">M</div>
+                <div class="profile-info">
+                    <h4>Maria Santos</h4>
+                    <span>Student</span>
+                </div>
+            </div>
+
+            <ul class="sidebar-nav">
+                <li><a href="student-dashboard.html"><i class="fas fa-th-large"></i> Dashboard</a></li>
+                <li><a href="student-rentals.html"><i class="fas fa-box-open"></i> My Rentals</a></li>
+                <li><a href="student-saved.html"><i class="fas fa-heart"></i> Saved Items</a></li>
+                <li class="active"><a href="student-rating.html"><i class="fas fa-star"></i> My Rating</a></li>
+                <li><a href="student-listings.html"><i class="fas fa-list"></i> My Listings</a></li>
+            </ul>
+
+            <a href="../login.html" class="sidebar-logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </aside>
+
+        <main class="dashboard-content">
+
+            <div class="dashboard-banner">
+                <div>
+                    <h2><i class="fas fa-star"></i> My Borrower Rating</h2>
+                    <p>Your reputation and credibility on KitCycle</p>
+                </div>
+            </div>
+
+            <div class="split-triple-row">
+
+                <div class="content-card flex-one text-center">
+                    <div class="big-rating-circle">4.8</div>
+                    <div class="star-row-metric">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="far fa-star"></i>
+                    </div>
+                    <p class="sub-text">Based on 15 reviews</p>
+                </div>
+
+                <div class="content-card flex-one">
+                    <div class="card-header">
+                        <h3>Rating Breakdown</h3>
+                    </div>
+                    <div class="rating-track-list">
+                        <div class="track-item">
+                            <span>5 <i class="fas fa-star"></i></span>
+                            <div class="track-bar"><div class="track-fill" style="width: 80%;"></div></div>
+                            <span>12</span>
+                        </div>
+                        <div class="track-item">
+                            <span>4 <i class="fas fa-star"></i></span>
+                            <div class="track-bar"><div class="track-fill" style="width: 15%;"></div></div>
+                            <span>2</span>
+                        </div>
+                        <div class="track-item">
+                            <span>3 <i class="fas fa-star"></i></span>
+                            <div class="track-bar"><div class="track-fill" style="width: 5%;"></div></div>
+                            <span>1</span>
+                        </div>
+                        <div class="track-item">
+                            <span>2 <i class="fas fa-star"></i></span>
+                            <div class="track-bar"><div class="track-fill" style="width: 0%;"></div></div>
+                            <span>0</span>
+                        </div>
+                        <div class="track-item">
+                            <span>1 <i class="fas fa-star"></i></span>
+                            <div class="track-bar"><div class="track-fill" style="width: 0%;"></div></div>
+                            <span>0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-card flex-one">
+                    <div class="card-header">
+                        <h3>Key Performance</h3>
+                    </div>
+                    <div class="key-perf-list">
+                        <div class="perf-row">
+                            <span class="perf-icon green-light"><i class="fas fa-clock"></i></span>
+                            <div class="perf-text">On-time Returns</div>
+                            <span class="perf-val success-text">100%</span>
+                        </div>
+                        <div class="perf-row">
+                            <span class="perf-icon blue-light"><i class="fas fa-clipboard-check"></i></span>
+                            <div class="perf-text">Item Condition</div>
+                            <span class="perf-val info-text">Excellent</span>
+                        </div>
+                        <div class="perf-row">
+                            <span class="perf-icon purple-light"><i class="fas fa-comment-dots"></i></span>
+                            <div class="perf-text">Communication</div>
+                            <span class="perf-val purple-text">5.0</span>
+                        </div>
+                        <div class="perf-row">
+                            <span class="perf-icon orange-light"><i class="fas fa-boxes"></i></span>
+                            <div class="perf-text">Total Rentals</div>
+                            <span class="perf-val warning-text">15</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="content-card full-width-card margin-top">
+                <div class="card-header">
+                    <h3>Achievements & Badges</h3>
+                </div>
+                <div class="badge-grid">
+                    <div class="achievement-item">
+                        <div class="achievement-icon green-border"><i class="fas fa-check-circle"></i></div>
+                        <h4>Perfect Returns</h4>
+                        <p>100% on-time return rate</p>
+                    </div>
+                    <div class="achievement-item">
+                        <div class="achievement-icon yellow-border"><i class="fas fa-star"></i></div>
+                        <h4>Top Rated</h4>
+                        <p>4.8+ average rating</p>
+                    </div>
+                    <div class="achievement-item">
+                        <div class="achievement-icon blue-border"><i class="fas fa-id-badge"></i></div>
+                        <h4>Verified Renter</h4>
+                        <p>Identity verified</p>
+                    </div>
+                    <div class="achievement-item">
+                        <div class="achievement-icon purple-border"><i class="fas fa-cube"></i></div>
+                        <h4>Active Member</h4>
+                        <p>15+ completed rentals</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-card full-width-card margin-top">
+                <div class="card-header">
+                    <h3>Recent Reviews</h3>
+                </div>
+                <div class="written-reviews-stack">
+
+                    <div class="review-comment-item">
+                        <div class="comment-header">
+                            <div>
+                                <h4>Juan Dela Cruz</h4>
+                                <p>Rented: Canon EOS 90D DSLR</p>
+                            </div>
+                            <div class="comment-stars">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>5.0</span>
+                            </div>
+                        </div>
+                        <p class="comment-text">Excellent renter! Took great care of my camera equipment and returned it on time in perfect condition.</p>
+                        <span class="comment-date">3/1/2026</span>
+                    </div>
+
+                    <div class="review-comment-item">
+                        <div class="comment-header">
+                            <div>
+                                <h4>Maria Santos</h4>
+                                <p>Rented: Scientific Calculator TI-84</p>
+                            </div>
+                            <div class="comment-stars">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>5.0</span>
+                            </div>
+                        </div>
+                        <p class="comment-text">Very professional and responsible. Great communication throughout the rental period.</p>
+                        <span class="comment-date">2/28/2026</span>
+                    </div>
+
+                    <div class="review-comment-item">
+                        <div class="comment-header">
+                            <div>
+                                <h4>Dr. Pedro Cruz</h4>
+                                <p>Rented: Laboratory Microscope</p>
+                            </div>
+                            <div class="comment-stars">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>5.0</span>
+                            </div>
+                        </div>
+                        <p class="comment-text">Reliable student. Returned the microscope in excellent condition. Would rent to again!</p>
+                        <span class="comment-date">2/20/2026</span>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="content-card full-width-card margin-top tips-panel">
+                <h4><i class="far fa-lightbulb"></i> Tips to Maintain Your High Rating</h4>
+                <ul class="tips-list">
+                    <li><i class="fas fa-check-circle"></i> Always return items on time or communicate early if you need an extension</li>
+                    <li><i class="fas fa-check-circle"></i> Handle all borrowed items with care and return them in the same condition</li>
+                    <li><i class="fas fa-check-circle"></i> Maintain clear and timely communication with item owners</li>
+                    <li><i class="fas fa-check-circle"></i> Follow all rental terms and platform guidelines</li>
+                </ul>
+            </div>
+
+        </main>
+    </div>
+
+</body>
+</html>

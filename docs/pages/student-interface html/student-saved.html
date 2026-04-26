@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saved Items | WMSU KitCycle</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/student-interface/student-dashboard.css">
+    <link rel="stylesheet" href="../../css/student-interface/student-saved.css">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="logo">WMSU <span>KitCycle</span></div>
+        <div class="nav-right">
+            <ul class="nav-links">
+                <li><a href="student-dashboard.html">Dashboard</a></li>
+                <li><a href="../marketplace.html">Marketplace</a></li>
+                <li><a href="../howitworks.html">How It Works</a></li>
+                <li><a href="../safety.html">Safety</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <span class="user-profile-nav"><i class="fas fa-user-circle"></i> Maria Santos</span>
+                <a href="../login.html" class="btn-login"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="dashboard-layout">
+
+        <aside class="sidebar">
+            <div class="sidebar-profile">
+                <div class="profile-avatar student-bg">M</div>
+                <div class="profile-info">
+                    <h4>Maria Santos</h4>
+                    <span>Student</span>
+                </div>
+            </div>
+
+            <ul class="sidebar-nav">
+                <li><a href="student-dashboard.html"><i class="fas fa-th-large"></i> Dashboard</a></li>
+                <li><a href="student-rentals.html"><i class="fas fa-box-open"></i> My Rentals</a></li>
+                <li class="active"><a href="student-saved.html"><i class="fas fa-heart"></i> Saved Items</a></li>
+                <li><a href="student-rating.html"><i class="fas fa-star"></i> My Rating</a></li>
+                <li><a href="student-listings.html"><i class="fas fa-list"></i> My Listings</a></li>
+            </ul>
+
+            <a href="../login.html" class="sidebar-logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </aside>
+
+        <main class="dashboard-content">
+
+            <div class="dashboard-banner">
+                <div>
+                    <h2><i class="fas fa-heart"></i> Saved Items</h2>
+                    <p>Your wishlist of items you want to rent</p>
+                </div>
+            </div>
+
+            <div class="content-card full-width-card action-bar-card">
+                <div>
+                    <h3 class="big-num">6</h3>
+                    <p class="sub-text">Items saved</p>
+                </div>
+                <button class="btn-act-y btn-fit-content">Browse More Items</button>
+            </div>
+
+            <div class="wishlist-grid">
+
+                <div class="wish-card">
+                    <div class="wish-image">
+                        <img src="../../images/microscope.jpeg" alt="Laboratory Microscope">
+                        <button class="heart-icon active"><i class="fas fa-heart"></i></button>
+                    </div>
+                    <div class="wish-info">
+                        <span class="tag-label">Lab Equipment</span>
+                        <h4>Laboratory Microscope</h4>
+                        <p class="owner-by">by Dr. Pedro Cruz</p>
+                        <div class="wish-rating">
+                            <i class="fas fa-star"></i> 4.7 <span class="review-count">(23)</span>
+                        </div>
+                        <div class="wish-price">₱150/day</div>
+                        <div class="wish-actions">
+                            <button class="btn-primary-maroon"><i class="fas fa-shopping-cart"></i> Rent Now</button>
+                            <button class="btn-trash"><i class="far fa-trash-alt"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="wish-card">
+                    <div class="wish-image">
+                        <img src="../../images/lighting.jpeg" alt="Studio Lighting Kit">
+                        <button class="heart-icon active"><i class="fas fa-heart"></i></button>
+                    </div>
+                    <div class="wish-info">
+                        <span class="tag-label">Media Equipment</span>
+                        <h4>Studio Lighting Kit</h4>
+                        <p class="owner-by">by Maria Santos</p>
+                        <div class="wish-rating">
+                            <i class="fas fa-star"></i> 4.8 <span class="review-count">(45)</span>
+                        </div>
+                        <div class="wish-price">₱200/day</div>
+                        <div class="wish-actions">
+                            <button class="btn-primary-maroon"><i class="fas fa-shopping-cart"></i> Rent Now</button>
+                            <button class="btn-trash"><i class="far fa-trash-alt"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="wish-card unavailable">
+                    <div class="wish-image">
+                        <img src="../../images/books.jpeg" alt="Engineering Textbook Bundle">
+                        <button class="heart-icon active"><i class="fas fa-heart"></i></button>
+                        <div class="stock-overlay">Currently Unavailable</div>
+                    </div>
+                    <div class="wish-info">
+                        <span class="tag-label">Textbooks</span>
+                        <h4>Engineering Textbook Bundle</h4>
+                        <p class="owner-by">by Anna Reyes</p>
+                        <div class="wish-rating">
+                            <i class="fas fa-star"></i> 4.8 <span class="review-count">(18)</span>
+                        </div>
+                        <div class="wish-price">₱100/week</div>
+                        <div class="wish-actions">
+                            <button class="btn-primary-maroon disabled" disabled><i class="fas fa-shopping-cart"></i> Rent Now</button>
+                            <button class="btn-trash"><i class="far fa-trash-alt"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="wish-card">
+                    <div class="wish-image">
+                        <img src="../../images/camera.jpg" alt="Canon EOS 90D DSLR">
+                        <button class="heart-icon active"><i class="fas fa-heart"></i></button>
+                    </div>
+                    <div class="wish-info">
+                        <span class="tag-label">Media Equipment</span>
+                        <h4>Canon EOS 90D DSLR</h4>
+                        <p class="owner-by">by Juan Dela Cruz</p>
+                        <div class="wish-rating">
+                            <i class="fas fa-star"></i> 4.9 <span class="review-count">(67)</span>
+                        </div>
+                        <div class="wish-price">₱250/day</div>
+                        <div class="wish-actions">
+                            <button class="btn-primary-maroon"><i class="fas fa-shopping-cart"></i> Rent Now</button>
+                            <button class="btn-trash"><i class="far fa-trash-alt"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="wish-card">
+                    <div class="wish-image">
+                        <img src="../../images/calculator.jpg" alt="Scientific Calculator TI-84">
+                        <button class="heart-icon active"><i class="fas fa-heart"></i></button>
+                    </div>
+                    <div class="wish-info">
+                        <span class="tag-label">Academic Tools</span>
+                        <h4>Scientific Calculator TI-84</h4>
+                        <p class="owner-by">by Pedro Garcia</p>
+                        <div class="wish-rating">
+                            <i class="fas fa-star"></i> 4.6 <span class="review-count">(31)</span>
+                        </div>
+                        <div class="wish-price">₱50/day</div>
+                        <div class="wish-actions">
+                            <button class="btn-primary-maroon"><i class="fas fa-shopping-cart"></i> Rent Now</button>
+                            <button class="btn-trash"><i class="far fa-trash-alt"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="wish-card">
+                    <div class="wish-image">
+                        <img src="../../images/tablet.jpeg" alt="Graphic Drawing Tablet">
+                        <button class="heart-icon active"><i class="fas fa-heart"></i></button>
+                    </div>
+                    <div class="wish-info">
+                        <span class="tag-label">Media Equipment</span>
+                        <h4>Graphic Drawing Tablet</h4>
+                        <p class="owner-by">by Lisa Chen</p>
+                        <div class="wish-rating">
+                            <i class="fas fa-star"></i> 4.7 <span class="review-count">(28)</span>
+                        </div>
+                        <div class="wish-price">₱180/day</div>
+                        <div class="wish-actions">
+                            <button class="btn-primary-maroon"><i class="fas fa-shopping-cart"></i> Rent Now</button>
+                            <button class="btn-trash"><i class="far fa-trash-alt"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+
+</body>
+</html>
