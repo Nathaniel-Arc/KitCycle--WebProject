@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports & Analytics | WMSU KitCycle</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/faculty-interface/faculty-dashboard.css">
+    <link rel="stylesheet" href="../../css/faculty-interface/faculty-reports.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="logo">WMSU <span>KitCycle</span></div>
+        <div class="nav-right">
+            <ul class="nav-links">
+                <li><a href="faculty-dashboard.html">Dashboard</a></li>
+                <li><a href="../marketplace.html">Marketplace</a></li>
+                <li><a href="../howitworks.html">How It Works</a></li>
+                <li><a href="../safety.html">Safety</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <span class="user-profile-nav"><i class="fas fa-user-circle"></i> Dr. Juan Dela Cruz</span>
+                <a href="../login.html" class="btn-login"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="dashboard-layout">
+
+        <aside class="sidebar">
+            <div class="sidebar-profile">
+                <div class="profile-avatar">D</div>
+                <div class="profile-info">
+                    <h4>Dr. Juan Dela Cruz</h4>
+                    <span>Faculty</span>
+                </div>
+            </div>
+
+            <ul class="sidebar-nav">
+                <li><a href="faculty-dashboard.html"><i class="fas fa-th-large"></i> Dashboard</a></li>
+                <li><a href="faculty-departmentgear.html"><i class="fas fa-boxes"></i> Departmental Gear</a></li>
+                <li><a href="faculty-approvals.html"><i class="fas fa-clipboard-check"></i> Approval Queue</a></li>
+                <li><a href="faculty-rentals.html"><i class="fas fa-clock"></i> Active Rentals</a></li>
+                <li class="active"><a href="faculty-reports.html"><i class="fas fa-chart-pie"></i> Reports</a></li>
+            </ul>
+
+            <a href="../login.html" class="sidebar-logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </aside>
+
+        <main class="dashboard-content">
+
+            <div class="dashboard-banner">
+                <h2><i class="fas fa-file-alt"></i> Reports & Analytics</h2>
+                <p>Generate and download comprehensive department reports</p>
+            </div>
+
+            <div class="stat-cards-grid">
+                <div class="stat-card">
+                    <div class="stat-numbers-only">
+                        <span class="stat-label">Total Equipment</span>
+                        <h3>48</h3>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-numbers-only">
+                        <span class="stat-label">Active Rentals</span>
+                        <h3 class="info-text">23</h3>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-numbers-only">
+                        <span class="stat-label">Completed (This Month)</span>
+                        <h3 class="success-text">67</h3>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-numbers-only">
+                        <span class="stat-label">Utilization Rate</span>
+                        <h3 class="purple-text">78%</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-card full-width-card">
+                <div class="card-header">
+                    <h3>Generate New Report</h3>
+                </div>
+
+                <div class="report-generator-grid">
+
+                    <div class="report-box">
+                        <div class="report-box-top">
+                            <div class="report-box-icon blue-bg"><i class="fas fa-cube"></i></div>
+                            <div class="report-box-txt">
+                                <h4>Equipment Utilization Report</h4>
+                                <p>Detailed usage statistics for all departmental equipment</p>
+                            </div>
+                        </div>
+                        <div class="report-box-bottom">
+                            <span>Last: 3/1/2026</span>
+                            <button class="btn-gen btn-blue"><i class="fas fa-file-export"></i> Generate</button>
+                        </div>
+                    </div>
+
+                    <div class="report-box">
+                        <div class="report-box-top">
+                            <div class="report-box-icon green-bg"><i class="fas fa-users"></i></div>
+                            <div class="report-box-txt">
+                                <h4>Student Rental Activity</h4>
+                                <p>Overview of student borrowing patterns and frequency</p>
+                            </div>
+                        </div>
+                        <div class="report-box-bottom">
+                            <span>Last: 2/28/2026</span>
+                            <button class="btn-gen btn-green"><i class="fas fa-file-export"></i> Generate</button>
+                        </div>
+                    </div>
+
+                    <div class="report-box">
+                        <div class="report-box-top">
+                            <div class="report-box-icon purple-bg"><i class="fas fa-chart-line"></i></div>
+                            <div class="report-box-txt">
+                                <h4>Monthly Department Summary</h4>
+                                <p>Comprehensive monthly report of all department activities</p>
+                            </div>
+                        </div>
+                        <div class="report-box-bottom">
+                            <span>Last: 2/28/2026</span>
+                            <button class="btn-gen btn-purple"><i class="fas fa-file-export"></i> Generate</button>
+                        </div>
+                    </div>
+
+                    <div class="report-box">
+                        <div class="report-box-top">
+                            <div class="report-box-icon orange-bg"><i class="fas fa-tools"></i></div>
+                            <div class="report-box-txt">
+                                <h4>Maintenance & Inventory Report</h4>
+                                <p>Equipment condition tracking and maintenance schedule</p>
+                            </div>
+                        </div>
+                        <div class="report-box-bottom">
+                            <span>Last: 2/25/2026</span>
+                            <button class="btn-gen btn-orange"><i class="fas fa-file-export"></i> Generate</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="content-card full-width-card margin-top">
+                <div class="card-header">
+                    <h3>Custom Report Generator</h3>
+                </div>
+                <div class="custom-generator-form">
+                    <div class="form-group-row">
+                        <div class="input-field-block">
+                            <label>Report Type</label>
+                            <select class="custom-select">
+                                <option>Equipment Utilization</option>
+                                <option>Student Activity</option>
+                                <option>Maintenance Tracker</option>
+                            </select>
+                        </div>
+                        <div class="input-field-block">
+                            <label>Date Range</label>
+                            <select class="custom-select">
+                                <option>Last 7 Days</option>
+                                <option>Last 30 Days</option>
+                                <option>This Month</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn-primary-maroon btn-wide"><i class="fas fa-file-alt"></i> Generate Custom Report</button>
+                </div>
+            </div>
+
+            <div class="content-card full-width-card margin-top">
+                <div class="card-header">
+                    <h3>Recent Reports</h3>
+                </div>
+                <div class="downloads-stack">
+
+                    <div class="download-item">
+                        <div class="download-left">
+                            <div class="pdf-icon"><i class="fas fa-file-pdf"></i></div>
+                            <div class="pdf-info">
+                                <h4>Equipment_Utilization_March_2026.pdf</h4>
+                                <p><i class="far fa-calendar"></i> 3/1/2026 &nbsp;&nbsp; 2.4 MB</p>
+                            </div>
+                        </div>
+                        <button class="btn-yellow-sm"><i class="fas fa-download"></i> Download</button>
+                    </div>
+
+                    <div class="download-item">
+                        <div class="download-left">
+                            <div class="pdf-icon"><i class="fas fa-file-pdf"></i></div>
+                            <div class="pdf-info">
+                                <h4>Student_Activity_February_2026.pdf</h4>
+                                <p><i class="far fa-calendar"></i> 2/28/2026 &nbsp;&nbsp; 1.8 MB</p>
+                            </div>
+                        </div>
+                        <button class="btn-yellow-sm"><i class="fas fa-download"></i> Download</button>
+                    </div>
+
+                    <div class="download-item">
+                        <div class="download-left">
+                            <div class="pdf-icon"><i class="fas fa-file-pdf"></i></div>
+                            <div class="pdf-info">
+                                <h4>Monthly_Summary_February_2026.pdf</h4>
+                                <p><i class="far fa-calendar"></i> 2/28/2026 &nbsp;&nbsp; 3.2 MB</p>
+                            </div>
+                        </div>
+                        <button class="btn-yellow-sm"><i class="fas fa-download"></i> Download</button>
+                    </div>
+
+                    <div class="download-item">
+                        <div class="download-left">
+                            <div class="pdf-icon"><i class="fas fa-file-pdf"></i></div>
+                            <div class="pdf-info">
+                                <h4>Maintenance_Report_February_2026.pdf</h4>
+                                <p><i class="far fa-calendar"></i> 2/25/2026 &nbsp;&nbsp; 1.5 MB</p>
+                            </div>
+                        </div>
+                        <button class="btn-yellow-sm"><i class="fas fa-download"></i> Download</button>
+                    </div>
+
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Departmental Gear | WMSU KitCycle</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/faculty-interface/faculty-dashboard.css">
+    <link rel="stylesheet" href="../../css/faculty-interface/faculty-departmentgear.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="logo">WMSU <span>KitCycle</span></div>
+        <div class="nav-right">
+            <ul class="nav-links">
+                <li><a href="faculty-dashboard.html">Dashboard</a></li>
+                <li><a href="marketplace.html">Marketplace</a></li>
+                <li><a href="howitworks.html">How It Works</a></li>
+                <li><a href="safety.html">Safety</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <span class="user-profile-nav"><i class="fas fa-user-circle"></i> Dr. Juan Dela Cruz</span>
+                <a href="../login.html" class="btn-login"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="dashboard-layout">
+
+        <aside class="sidebar">
+            <div class="sidebar-profile">
+                <div class="profile-avatar">D</div>
+                <div class="profile-info">
+                    <h4>Dr. Juan Dela Cruz</h4>
+                    <span>Faculty</span>
+                </div>
+            </div>
+
+            <ul class="sidebar-nav">
+                <li><a href="faculty-dashboard.html"><i class="fas fa-th-large"></i> Dashboard</a></li>
+                <li class="active"><a href="faculty-gear.html"><i class="fas fa-boxes"></i> Departmental Gear</a></li>
+                <li><a href="faculty-approvals.html"><i class="fas fa-clipboard-check"></i> Approval Queue</a></li>
+                <li><a href="faculty-rentals.html"><i class="fas fa-clock"></i> Active Rentals</a></li>
+                <li><a href="faculty-reports.html"><i class="fas fa-chart-pie"></i> Reports</a></li>
+            </ul>
+
+            <a href="../login.html" class="sidebar-logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </aside>
+
+        <main class="dashboard-content">
+
+            <div class="dashboard-banner flex-banner">
+                <div>
+                    <h2>Departmental Equipment</h2>
+                    <p>Manage and track all departmental equipment inventory</p>
+                </div>
+                <button class="btn-add-gear"><i class="fas fa-plus"></i> Add Equipment</button>
+            </div>
+
+            <div class="stat-cards-grid">
+                <div class="stat-card">
+                    <div class="stat-icon blue"><i class="fas fa-cubes"></i></div>
+                    <div class="stat-numbers">
+                        <span class="stat-label">Total Equipment</span>
+                        <h3>45</h3>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green"><i class="fas fa-check-circle"></i></div>
+                    <div class="stat-numbers">
+                        <span class="stat-label">Available Now</span>
+                        <h3 class="success-text">29</h3>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon orange"><i class="fas fa-hourglass-half"></i></div>
+                    <div class="stat-numbers">
+                        <span class="stat-label">Currently Borrowed</span>
+                        <h3 class="warning-text">16</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="inventory-grid">
+
+                <div class="gear-card">
+                    <div class="gear-image">
+                        <img src="images/microscope.jpeg" alt="Engineering Microscope Set">
+                        <span class="stock-badge available">Available</span>
+                    </div>
+                    <div class="gear-info">
+                        <div class="gear-top">
+                            <span class="gear-type">Lab Equipment</span>
+                        </div>
+                        <h3>Engineering Microscope Set</h3>
+                        <div class="gear-metrics">
+                            <p>Total Quantity: <span>5</span></p>
+                            <p>Available: <span class="success-text">3</span></p>
+                            <p>Borrowed: <span>2</span></p>
+                            <p>Condition: <span class="success-text">Excellent</span></p>
+                        </div>
+                        <div class="gear-location">
+                            <p><i class="fas fa-map-marker-alt"></i> Location: Engineering Lab Room 301</p>
+                            <p><i class="fas fa-calendar-alt"></i> Last maintained: 2/15/2026</p>
+                        </div>
+                        <div class="gear-actions">
+                            <button class="btn-edit"><i class="fas fa-edit"></i> Edit</button>
+                            <button class="btn-details"><i class="far fa-eye"></i> Details</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gear-card">
+                    <div class="gear-image">
+                        <img src="images/calculator.jpg" alt="Scientific Calculators">
+                        <span class="stock-badge available">Available</span>
+                    </div>
+                    <div class="gear-info">
+                        <div class="gear-top">
+                            <span class="gear-type">Academic Tools</span>
+                        </div>
+                        <h3>Scientific Calculators</h3>
+                        <div class="gear-metrics">
+                            <p>Total Quantity: <span>10</span></p>
+                            <p>Available: <span class="success-text">7</span></p>
+                            <p>Borrowed: <span>3</span></p>
+                            <p>Condition: <span class="info-text">Good</span></p>
+                        </div>
+                        <div class="gear-location">
+                            <p><i class="fas fa-map-marker-alt"></i> Location: Engineering Department Office</p>
+                            <p><i class="fas fa-calendar-alt"></i> Last maintained: 2/20/2026</p>
+                        </div>
+                        <div class="gear-actions">
+                            <button class="btn-edit"><i class="fas fa-edit"></i> Edit</button>
+                            <button class="btn-details"><i class="far fa-eye"></i> Details</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gear-card">
+                    <div class="gear-image">
+                        <img src="images/camera.jpg" alt="Video Recording Equipment">
+                        <span class="stock-badge unavailable">Unavailable</span>
+                        <div class="all-borrowed-overlay">All Borrowed</div>
+                    </div>
+                    <div class="gear-info">
+                        <div class="gear-top">
+                            <span class="gear-type">Media Equipment</span>
+                        </div>
+                        <h3>Video Recording Equipment</h3>
+                        <div class="gear-metrics">
+                            <p>Total Quantity: <span>3</span></p>
+                            <p>Available: <span class="danger-text">0</span></p>
+                            <p>Borrowed: <span>3</span></p>
+                            <p>Condition: <span class="success-text">Excellent</span></p>
+                        </div>
+                        <div class="gear-location">
+                            <p><i class="fas fa-map-marker-alt"></i> Location: Media Lab Room 205</p>
+                            <p><i class="fas fa-calendar-alt"></i> Last maintained: 2/10/2026</p>
+                        </div>
+                        <div class="gear-actions">
+                            <button class="btn-edit"><i class="fas fa-edit"></i> Edit</button>
+                            <button class="btn-details"><i class="far fa-eye"></i> Details</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gear-card">
+                    <div class="gear-image">
+                        <img src="images/multimeters.jpg" alt="Digital Multimeters">
+                        <span class="stock-badge available">Available</span>
+                    </div>
+                    <div class="gear-info">
+                        <div class="gear-top">
+                            <span class="gear-type">Lab Equipment</span>
+                        </div>
+                        <h3>Digital Multimeters</h3>
+                        <div class="gear-metrics">
+                            <p>Total Quantity: <span>8</span></p>
+                            <p>Available: <span class="success-text">5</span></p>
+                            <p>Borrowed: <span>3</span></p>
+                            <p>Condition: <span class="info-text">Good</span></p>
+                        </div>
+                        <div class="gear-location">
+                            <p><i class="fas fa-map-marker-alt"></i> Location: Electronics Lab</p>
+                            <p><i class="fas fa-calendar-alt"></i> Last maintained: 2/25/2026</p>
+                        </div>
+                        <div class="gear-actions">
+                            <button class="btn-edit"><i class="fas fa-edit"></i> Edit</button>
+                            <button class="btn-details"><i class="far fa-eye"></i> Details</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gear-card">
+                    <div class="gear-image">
+                        <img src="images/books.jpeg" alt="Engineering Reference Books">
+                        <span class="stock-badge available">Available</span>
+                    </div>
+                    <div class="gear-info">
+                        <div class="gear-top">
+                            <span class="gear-type">Textbooks</span>
+                        </div>
+                        <h3>Engineering Reference Books</h3>
+                        <div class="gear-metrics">
+                            <p>Total Quantity: <span>15</span></p>
+                            <p>Available: <span class="success-text">12</span></p>
+                            <p>Borrowed: <span>3</span></p>
+                            <p>Condition: <span class="info-text">Good</span></p>
+                        </div>
+                        <div class="gear-location">
+                            <p><i class="fas fa-map-marker-alt"></i> Location: Department Library</p>
+                            <p><i class="fas fa-calendar-alt"></i> Last maintained: 1/15/2026</p>
+                        </div>
+                        <div class="gear-actions">
+                            <button class="btn-edit"><i class="fas fa-edit"></i> Edit</button>
+                            <button class="btn-details"><i class="far fa-eye"></i> Details</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gear-card">
+                    <div class="gear-image">
+                        <img src="images/oscilloscopes.jpg" alt="Oscilloscopes">
+                        <span class="stock-badge available">Available</span>
+                    </div>
+                    <div class="gear-info">
+                        <div class="gear-top">
+                            <span class="gear-type">Lab Equipment</span>
+                        </div>
+                        <h3>Oscilloscopes</h3>
+                        <div class="gear-metrics">
+                            <p>Total Quantity: <span>4</span></p>
+                            <p>Available: <span class="success-text">2</span></p>
+                            <p>Borrowed: <span>2</span></p>
+                            <p>Condition: <span class="success-text">Excellent</span></p>
+                        </div>
+                        <div class="gear-location">
+                            <p><i class="fas fa-map-marker-alt"></i> Location: Advanced Electronics Lab</p>
+                            <p><i class="fas fa-calendar-alt"></i> Last maintained: 3/1/2026</p>
+                        </div>
+                        <div class="gear-actions">
+                            <button class="btn-edit"><i class="fas fa-edit"></i> Edit</button>
+                            <button class="btn-details"><i class="far fa-eye"></i> Details</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+
+</body>
+</html>

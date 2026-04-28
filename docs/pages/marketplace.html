@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Marketplace | WMSU KitCycle</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/marketplace.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <img src="../images/wmsulogo.png" alt="WMSU Logo" class="nav-logo-img">
+                WMSU <span>KitCycle</span>
+            </div>
+            <div class="nav-right">
+                <ul class="nav-links">
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="marketplace.html">Marketplace</a></li>
+                    <li><a href="howitworks.html">How It Works</a></li>
+                    <li><a href="safety.html">Safety</a></li>
+                </ul>
+                <div class="auth-buttons">
+                    <a href="login.html" class="btn-login">Login</a>
+                    <a href="register.html" class="btn-register">Register</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <section class="marketplace-hero">
+        <div style="font-size: 3rem; color: var(--gold); margin-bottom: 15px;"><i class="fas fa-store"></i></div>
+        <h1>Browse Marketplace</h1>
+        <p>Find the perfect academic gear from fellow WMSU students</p>
+        
+        <div class="search-bar-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" placeholder="Search for items..." class="search-input">
+        </div>
+    </section>
+
+    <section class="filter-section">
+        <div class="filter-wrapper">
+            <button class="filter-btn active" data-filter="all"><i class="fas fa-filter"></i> All</button>
+            <button class="filter-btn" data-filter="tools">Academic Tools</button>
+            <button class="filter-btn" data-filter="media">Media Equipment</button>
+            <button class="filter-btn" data-filter="lab">Laboratory Equipment</button>
+            <button class="filter-btn" data-filter="text">Textbooks</button>
+        </div>
+        <span class="results-count" id="item-count">12 items found</span>
+    </section>
+
+    <section class="marketplace-grid-container">
+        <div class="marketplace-grid">
+            <!-- Item 1 -->
+            <div class="market-card" data-category="media">
+                <div class="market-img-container">
+                    <img src="../images/camera.jpg" alt="Canon EOS 90D DSLR">
+                </div>
+                <div class="market-info">
+                    <span class="cat-badge media">Media Equipment</span>
+                    <h4>Canon EOS 90D DSLR</h4>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> WMSU Campus</p>
+                    <div class="rating-row">
+                        <span class="stars">⭐⭐⭐⭐⭐</span>
+                        <span class="rating-text">4.9 (23)</span>
+                    </div>
+                    <div class="card-footer">
+                        <span class="price">₱250<span class="per-day">/day</span></span>
+                        <button class="btn-rent-now">Rent</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 2 -->
+            <div class="market-card" data-category="tools">
+                <div class="market-img-container">
+                    <img src="../images/calculator.jpg" alt="Scientific Calculator TI-84">
+                </div>
+                <div class="market-info">
+                    <span class="cat-badge tools">Academic Tools</span>
+                    <h4>Scientific Calculator TI-84</h4>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> WMSU Campus</p>
+                    <div class="rating-row">
+                        <span class="stars">⭐⭐⭐⭐⭐</span>
+                        <span class="rating-text">5 (45)</span>
+                    </div>
+                    <div class="card-footer">
+                        <span class="price">₱50<span class="per-day">/day</span></span>
+                        <button class="btn-rent-now">Rent</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 3 -->
+            <div class="market-card" data-category="text">
+                <div class="market-img-container">
+                    <img src="../images/books.jpeg" alt="Engineering Textbook Bundle">
+                </div>
+                <div class="market-info">
+                    <span class="cat-badge text">Textbooks</span>
+                    <h4>Engineering Textbook Bundle</h4>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> WMSU Campus</p>
+                    <div class="rating-row">
+                        <span class="stars">⭐⭐⭐⭐⭐</span>
+                        <span class="rating-text">4.8 (18)</span>
+                    </div>
+                    <div class="card-footer">
+                        <span class="price">₱100<span class="per-day">/week</span></span>
+                        <button class="btn-rent-now">Rent</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 4 -->
+            <div class="market-card" data-category="lab">
+                <div class="market-img-container">
+                    <img src="../images/microscope.jpeg" alt="Laboratory Microscope">
+                </div>
+                <div class="market-info">
+                    <span class="cat-badge lab">Laboratory Equipment</span>
+                    <h4>Laboratory Microscope</h4>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> WMSU Campus</p>
+                    <div class="rating-row">
+                        <span class="stars">⭐⭐⭐⭐⭐</span>
+                        <span class="rating-text">4.7 (12)</span>
+                    </div>
+                    <div class="card-footer">
+                        <span class="price">₱150<span class="per-day">/day</span></span>
+                        <button class="btn-rent-now">Rent</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 5 -->
+            <div class="market-card" data-category="media">
+                <div class="market-img-container">
+                    <img src="../images/video-camera.png" alt="Professional Video Camera">
+                </div>
+                <div class="market-info">
+                    <span class="cat-badge media">Media Equipment</span>
+                    <h4>Professional Video Camera</h4>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> WMSU Campus</p>
+                    <div class="rating-row">
+                        <span class="stars">⭐⭐⭐⭐⭐</span>
+                        <span class="rating-text">4.9 (31)</span>
+                    </div>
+                    <div class="card-footer">
+                        <span class="price">₱300<span class="per-day">/day</span></span>
+                        <button class="btn-rent-now">Rent</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 6 -->
+            <div class="market-card" data-category="tools">
+                <div class="market-img-container">
+                    <img src="../images/calc-set.png" alt="Engineering Calculator Set">
+                </div>
+                <div class="market-info">
+                    <span class="cat-badge tools">Academic Tools</span>
+                    <h4>Engineering Calculator Set</h4>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> WMSU Campus</p>
+                    <div class="rating-row">
+                        <span class="stars">⭐⭐⭐⭐⭐</span>
+                        <span class="rating-text">4.6 (28)</span>
+                    </div>
+                    <div class="card-footer">
+                        <span class="price">₱75<span class="per-day">/day</span></span>
+                        <button class="btn-rent-now">Rent</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 7 -->
+            <div class="market-card" data-category="lab">
+                <div class="market-img-container">
+                    <img src="../images/stethoscope.png" alt="Medical Stethoscope">
+                </div>
+                <div class="market-info">
+                    <span class="cat-badge lab">Laboratory Equipment</span>
+                    <h4>Medical Stethoscope</h4>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> WMSU Campus</p>
+                    <div class="rating-row">
+                        <span class="stars">⭐⭐⭐⭐⭐</span>
+                        <span class="rating-text">5 (15)</span>
+                    </div>
+                    <div class="card-footer">
+                        <span class="price">₱80<span class="per-day">/day</span></span>
+                        <button class="btn-rent-now">Rent</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 8 -->
+            <div class="market-card" data-category="media">
+                <div class="market-img-container">
+                    <img src="../images/lighting.jpeg" alt="Studio Lighting Kit">
+                </div>
+                <div class="market-info">
+                    <span class="cat-badge media">Media Equipment</span>
+                    <h4>Studio Lighting Kit</h4>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> WMSU Campus</p>
+                    <div class="rating-row">
+                        <span class="stars">⭐⭐⭐⭐⭐</span>
+                        <span class="rating-text">4.8 (22)</span>
+                    </div>
+                    <div class="card-footer">
+                        <span class="price">₱200<span class="per-day">/day</span></span>
+                        <button class="btn-rent-now">Rent</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 9 -->
+            <div class="market-card" data-category="tools">
+                <div class="market-img-container">
+                    <img src="../images/calc-set.png" alt="Drafting Tools Set">
+                </div>
+                <div class="market-info">
+                    <span class="cat-badge tools">Academic Tools</span>
+                    <h4>Drafting Tools Set</h4>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> WMSU Campus</p>
+                    <div class="rating-row">
+                        <span class="stars">⭐⭐⭐⭐⭐</span>
+                        <span class="rating-text">4.5 (19)</span>
+                    </div>
+                    <div class="card-footer">
+                        <span class="price">₱40<span class="per-day">/day</span></span>
+                        <button class="btn-rent-now">Rent</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 10 -->
+            <div class="market-card" data-category="tools">
+                <div class="market-img-container">
+                    <img src="../images/calc-set.png" alt="Architecture Modeling Kit">
+                </div>
+                <div class="market-info">
+                    <span class="cat-badge tools">Academic Tools</span>
+                    <h4>Architecture Modeling Kit</h4>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> WMSU Campus</p>
+                    <div class="rating-row">
+                        <span class="stars">⭐⭐⭐⭐⭐</span>
+                        <span class="rating-text">4.4 (15)</span>
+                    </div>
+                    <div class="card-footer">
+                        <span class="price">₱60<span class="per-day">/day</span></span>
+                        <button class="btn-rent-now">Rent</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 11 -->
+            <div class="market-card" data-category="media">
+                <div class="market-img-container">
+                    <img src="../images/tablet.jpeg" alt="Digital Drawing Tablet">
+                </div>
+                <div class="market-info">
+                    <span class="cat-badge media">Media Equipment</span>
+                    <h4>Digital Drawing Tablet</h4>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> WMSU Campus</p>
+                    <div class="rating-row">
+                        <span class="stars">⭐⭐⭐⭐⭐</span>
+                        <span class="rating-text">4.9 (38)</span>
+                    </div>
+                    <div class="card-footer">
+                        <span class="price">₱120<span class="per-day">/day</span></span>
+                        <button class="btn-rent-now">Rent</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 12 -->
+            <div class="market-card" data-category="lab">
+                <div class="market-img-container">
+                    <img src="../images/microscope.jpeg" alt="Safety Lab Goggles & Coat">
+                </div>
+                <div class="market-info">
+                    <span class="cat-badge lab">Laboratory Equipment</span>
+                    <h4>Safety Lab Goggles & Coat</h4>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> WMSU Campus</p>
+                    <div class="rating-row">
+                        <span class="stars">⭐⭐⭐⭐⭐</span>
+                        <span class="rating-text">5 (10)</span>
+                    </div>
+                    <div class="card-footer">
+                        <span class="price">₱30<span class="per-day">/day</span></span>
+                        <button class="btn-rent-now">Rent</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-top">
+            <div class="footer-info">
+                <div class="logo">
+                    <img src="../images/wmsulogo.png" alt="WMSU Logo" class="footer-logo-img">
+                    <span style="color: white; margin-left: 10px;">WMSU <strong>KitCycle</strong></span>
+                </div>
+                <p>Empowering Western Mindanao State University students through accessible, academic equipment rental.</p>
+            </div>
+            <div class="footer-column">
+                <h4>EXPLORE KITCYCLE</h4>
+                <a href="#">Browse Gear</a>
+                <a href="#">Category List</a>
+                <a href="howitworks.html">How it Works</a>
+                <a href="#">Verified Sellers</a>
+            </div>
+            <div class="footer-column">
+                <h4>USER RESOURCES</h4>
+                <a href="login.html">Account Login</a>
+                <a href="register.html">Student Registration</a>
+                <a href="#">Secure Meetups</a>
+                <a href="safety.html">Rental Safety</a>
+            </div>
+            <div class="footer-column">
+                <h4>POLICIES</h4>
+                <a href="#">Terms of Service</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Prohibited Items</a>
+                <a href="#">Trust & Safety</a>
+            </div>
+            <div class="footer-column">
+                <h4>SUPPORT</h4>
+                <a href="#">Zamboanga Campus Map</a>
+                <a href="#">Community Guidelines</a>
+                <a href="#">FAQ</a>
+                <a href="#">Lender Help</a>
+                <a href="#">Contact Support</a>
+            </div>
+            <div class="footer-column">
+                <h4>Contact</h4>
+                <p>support@wmsukitcycle.edu.ph</p>
+                <p>(062) 991-8888</p>
+                <p>Normal Road, Zamboanga City</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 WMSU KitCycle. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            const cards = document.querySelectorAll('.market-card');
+            const itemCount = document.getElementById('item-count');
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Update active button
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+
+                    const filterValue = btn.getAttribute('data-filter');
+                    let visibleItems = 0;
+
+                    cards.forEach(card => {
+                        const category = card.getAttribute('data-category');
+                        
+                        if (filterValue === 'all' || category === filterValue) {
+                            card.style.display = 'block';
+                            visibleItems++;
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+
+                    if (itemCount) {
+                        itemCount.textContent = `${visibleItems} items found`;
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | WMSU KitCycle</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/register.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body class="auth-page">
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <img src="../images/wmsulogo.png" alt="WMSU Logo" class="nav-logo-img">
+                WMSU <span>KitCycle</span>
+            </div>
+            <div class="nav-right">
+                <ul class="nav-links">
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="marketplace.html">Marketplace</a></li>
+                    <li><a href="howitworks.html">How It Works</a></li>
+                    <li><a href="safety.html">Safety</a></li>
+                </ul>
+                <div class="auth-buttons">
+                    <a href="login.html" class="btn-login">Login</a>
+                    <a href="register.html" class="btn-register active">Register</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="auth-container">
+        <div class="auth-card">
+            <!-- Registration Header (Dynamic) -->
+            <div id="registration-header" style="text-align: center; margin-bottom: 25px;">
+                <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
+                    <img src="../images/wmsulogo.png" alt="WMSU Logo" style="height: 45px; margin-right: 12px;">
+                    <h1 id="step-title" style="margin: 0; color: #800000; font-size: 1.8rem;">Join WMSU KitCycle</h1>
+                </div>
+                <p id="step-subtitle">Create your account and start renting today.</p>
+            </div>
+
+            <!-- Step Indicator -->
+            <div class="step-indicator">
+                <div class="indicator-step active" data-step="1">
+                    <div class="step-dot">1</div>
+                    <span>Credentials</span>
+                </div>
+                <div class="indicator-line"></div>
+                <div class="indicator-step" data-step="2">
+                    <div class="step-dot">2</div>
+                    <span>Verify</span>
+                </div>
+                <div class="indicator-line"></div>
+                <div class="indicator-step" data-step="3">
+                    <div class="step-dot">3</div>
+                    <span>Identity</span>
+                </div>
+                <div class="indicator-line"></div>
+                <div class="indicator-step" data-step="4">
+                    <div class="step-dot">4</div>
+                    <span>Finish</span>
+                </div>
+            </div>
+
+            <!-- Step 1: Initial Credentials -->
+            <div class="registration-step active" id="step-1">
+                <form id="form-step-1">
+                    <div class="input-group">
+                        <label>Full Name</label>
+                        <div class="name-stack">
+                            <div class="input-wrapper">
+                                <input type="text" placeholder="First Name" required>
+                            </div>
+                            <div class="input-wrapper">
+                                <input type="text" placeholder="Middle Name (Optional)">
+                            </div>
+                            <div class="input-wrapper">
+                                <input type="text" placeholder="Last Name" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>WMSU Student ID</label>
+                        <div class="input-wrapper">
+                            <input type="text" placeholder="202X-XXXXX" required pattern="202[0-9]-[0-9]{5}">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>WMSU Institutional Email</label>
+                        <div class="input-wrapper">
+                            <input type="email" placeholder="student@wmsu.edu.ph" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-continue btn-gold">Continue to Verification</button>
+                </form>
+                <p class="auth-switch">Already have an account? <a href="login.html">Login here</a></p>
+            </div>
+
+            <!-- Step 2: OTP Phase -->
+            <div class="registration-step" id="step-2">
+                <div class="otp-container">
+                    <input type="text" class="otp-input" maxlength="1" pattern="\d">
+                    <input type="text" class="otp-input" maxlength="1" pattern="\d">
+                    <input type="text" class="otp-input" maxlength="1" pattern="\d">
+                    <input type="text" class="otp-input" maxlength="1" pattern="\d">
+                    <input type="text" class="otp-input" maxlength="1" pattern="\d">
+                    <input type="text" class="otp-input" maxlength="1" pattern="\d">
+                </div>
+                <a href="#" class="resend-link" id="btn-resend-code">Resend Code</a>
+                <button type="button" class="btn-continue btn-crimson" id="btn-verify-otp">Verify Email</button>
+            </div>
+
+            <!-- Step 3: Document Handshake -->
+            <div class="registration-step" id="step-3">
+                <div class="document-grid">
+                    <div class="upload-slot" onclick="this.querySelector('.file-input').click()">
+                        <input type="file" class="file-input" accept="image/*" hidden>
+                        <img class="preview-img" alt="Preview">
+                        <i class="far fa-id-card"></i>
+                        <span>Scan WMSU ID (Front)</span>
+                    </div>
+                    <div class="upload-slot" onclick="this.querySelector('.file-input').click()">
+                        <input type="file" class="file-input" accept="image/*" hidden>
+                        <img class="preview-img" alt="Preview">
+                        <i class="far fa-file-alt"></i>
+                        <span>Scan Current COR / Study Load</span>
+                        <p class="instruction">Ensure the School Year and Semester are clearly visible on your COR.</p>
+                    </div>
+                </div>
+                <button type="button" class="btn-continue btn-crimson" id="btn-submit-docs">Submit for Approval</button>
+            </div>
+
+            <!-- Step 4: Success State -->
+            <div class="registration-step" id="step-4">
+                <div class="success-visual">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="success-content">
+                    <h2>Application Submitted!</h2>
+                    <p>Your credentials are being reviewed by the WMSU KitCycle team. You can now browse the
+                        marketplace, but renting and listing will be unlocked once your status is confirmed.</p>
+                    <a href="marketplace.html" class="btn-continue btn-outline-crimson"
+                        style="text-decoration: none; display: block; text-align: center;">Go to Marketplace</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Step Navigation Logic
+        const steps = document.querySelectorAll('.registration-step');
+        const indicatorSteps = document.querySelectorAll('.indicator-step');
+        const indicatorLines = document.querySelectorAll('.indicator-line');
+
+        function showStep(stepId) {
+            const header = document.getElementById('registration-header');
+            const stepTitle = document.getElementById('step-title');
+            const stepSubtitle = document.getElementById('step-subtitle');
+
+            // Update Header Text based on Step
+            if (stepId === 1) {
+                header.style.display = 'block';
+                stepTitle.textContent = "Join WMSU KitCycle";
+                stepSubtitle.textContent = "Create your account and start renting today.";
+            } else if (stepId === 2) {
+                header.style.display = 'block';
+                stepTitle.textContent = "Verify Active Status";
+                stepSubtitle.textContent = "We've sent a 6-digit code to your university email. Please enter it below to prove your account is currently active.";
+            } else if (stepId === 3) {
+                header.style.display = 'block';
+                stepTitle.textContent = "Identity Verification";
+                stepSubtitle.textContent = "To ensure a safe community, please scan your physical credentials.";
+            } else if (stepId === 4) {
+                header.style.display = 'none'; // Hide header for success state
+            }
+
+            // Update steps visibility
+            steps.forEach(step => step.classList.remove('active'));
+            document.getElementById(`step-${stepId}`).classList.add('active');
+
+            // Update indicator states
+            indicatorSteps.forEach((step, index) => {
+                const currentStep = index + 1;
+                step.classList.remove('active', 'completed');
+
+                if (currentStep < stepId) {
+                    step.classList.add('completed');
+                    // Mark dot with checkmark
+                    step.querySelector('.step-dot').innerHTML = '<i class="fas fa-check"></i>';
+                } else if (currentStep === stepId) {
+                    step.classList.add('active');
+                    step.querySelector('.step-dot').textContent = currentStep;
+                } else {
+                    step.querySelector('.step-dot').textContent = currentStep;
+                }
+            });
+
+            // Update line states
+            indicatorLines.forEach((line, index) => {
+                if (index < stepId - 1) {
+                    line.classList.add('active');
+                } else {
+                    line.classList.remove('active');
+                }
+            });
+        }
+
+        // Step 1 to Step 2
+        document.getElementById('form-step-1').addEventListener('submit', (e) => {
+            e.preventDefault();
+            showStep(2);
+        });
+
+        // Step 2 to Step 3
+        document.getElementById('btn-verify-otp').addEventListener('click', () => {
+            showStep(3);
+        });
+
+        // Step 3 to Step 4
+        document.getElementById('btn-submit-docs').addEventListener('click', () => {
+            showStep(4);
+        });
+
+        // OTP Input Auto-focus
+        const otpInputs = document.querySelectorAll('.otp-input');
+        otpInputs.forEach((input, index) => {
+            input.addEventListener('input', (e) => {
+                if (e.target.value && index < otpInputs.length - 1) {
+                    otpInputs[index + 1].focus();
+                }
+            });
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && !e.target.value && index > 0) {
+                    otpInputs[index - 1].focus();
+                }
+            });
+        });
+
+        // Document Scanning Logic
+        const uploadSlots = document.querySelectorAll('.upload-slot');
+        uploadSlots.forEach(slot => {
+            const input = slot.querySelector('.file-input');
+            const preview = slot.querySelector('.preview-img');
+
+            input.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    // Start scanning simulation
+                    slot.classList.add('scanning');
+                    slot.classList.remove('uploaded');
+
+                    // Simulate scanning time
+                    setTimeout(() => {
+                        slot.classList.remove('scanning');
+                        slot.classList.add('uploaded');
+
+                        // Show preview
+                        const reader = new FileReader();
+                        reader.onload = (re) => {
+                            preview.src = re.target.result;
+                        };
+                        reader.readAsDataURL(file);
+                    }, 2000);
+                }
+            });
+        });
+        // Resend Code Cooldown Logic
+        const resendBtn = document.getElementById('btn-resend-code');
+        let cooldownTimer;
+        let secondsRemaining = 60;
+
+        function startResendCooldown() {
+            resendBtn.style.pointerEvents = 'none';
+            resendBtn.style.opacity = '0.6';
+            resendBtn.textContent = `Resend Code (${secondsRemaining}s)`;
+
+            cooldownTimer = setInterval(() => {
+                secondsRemaining--;
+                resendBtn.textContent = `Resend Code (${secondsRemaining}s)`;
+
+                if (secondsRemaining <= 0) {
+                    clearInterval(cooldownTimer);
+                    resendBtn.style.pointerEvents = 'auto';
+                    resendBtn.style.opacity = '1';
+                    resendBtn.textContent = "Resend Code";
+                    secondsRemaining = 60;
+                }
+            }, 1000);
+        }
+
+        resendBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            // Simulation of code sending
+            alert("A new verification code has been sent to your university email.");
+            startResendCooldown();
+        });
+    </script>
+
+
+</body>
+
+</html>
