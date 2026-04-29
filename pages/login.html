@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | WMSU KitCycle</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="auth-page">
+
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <img src="../images/wmsulogo.png" alt="WMSU Logo" class="nav-logo-img">
+                WMSU <span>KitCycle</span>
+            </div>
+            <button class="hamburger-btn" id="hamburger-btn"><i class="fas fa-bars"></i></button>
+            <div class="nav-right">
+                <ul class="nav-links">
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="marketplace.html">Marketplace</a></li>
+                    <li><a href="howitworks.html">How It Works</a></li>
+                    <li><a href="safety.html">Safety</a></li>
+                </ul>
+                <div class="auth-buttons">
+                    <a href="login.html" class="btn-login active">Login</a>
+                    <a href="register.html" class="btn-register">Register</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header" style="text-align: center; margin-bottom: 25px;">
+                <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
+                    <img src="../images/wmsulogo.png" alt="WMSU Logo" style="height: 45px; margin-right: 12px;">
+                    <h1 style="margin: 0;">WMSU <span style="color: black;">KitCycle</span></h1>
+                </div>
+                <p>Welcome back! Login to your account</p>
+            </div>
+            <form id="loginForm">
+                <div class="input-group">
+                    <label>Login As</label>
+                    <select id="role" required>
+                        <option value="student">Student</option>
+                        <option value="faculty">Faculty</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                    <small>Demo: Select your role to see different dashboards</small>
+                </div>
+
+                <div class="input-group">
+                    <label>WMSU Email Address</label>
+                    <div class="input-wrapper">
+                        <i class="far fa-envelope"></i>
+                        <input type="email" placeholder="student@wmsu.edu.ph" required>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Password</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" placeholder="Enter your password" required>
+                        <i class="far fa-eye toggle-password"></i>
+                    </div>
+                </div>
+
+                <div class="form-options">
+                    <label class="checkbox-container">
+                        <input type="checkbox">
+                        <span class="checkmark"></span>
+                        Remember me
+                    </label>
+                    <a href="#" class="forgot-link">Forgot password?</a>
+                </div>
+
+                <button type="submit" class="btn-auth-submit">Login</button>
+            </form>
+
+            <div class="auth-divider">OR</div>
+
+            <p class="auth-switch">Don't have an account? <a href="register.html">Register here</a></p>
+        </div>
+        <p class="secure-note">Only verified WMSU students can access KitCycle. Your data is secure and encrypted.</p>
+    </main>
+
+    <script src="../script/script.js"></script>
+</body>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>WMSU KitCycle</h3>
+                <p>Empowering Western Mindanao State University students through accessible, affordable academic equipment rental.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <a href="#">Browse Marketplace</a>
+                <a href="#">How It Works</a>
+                <a href="#">Categories</a>
+                <a href="#">About Us</a>
+            </div>
+            <div class="footer-section">
+                <h4>Contact</h4>
+                <p><i class="far fa-envelope"></i> support@wmsukitcycle.edu.ph</p>
+                <p><i class="fas fa-phone"></i> (062) 991-8888</p>
+                <p><i class="fas fa-map-marker-alt"></i> Normal Road, Baliwasan, Zamboanga City</p>
+            </div>
+            <div class="footer-section">
+                <h4>Policies</h4>
+                <a href="#">Terms of Service</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Safety Guidelines</a>
+                <a href="#">FAQ</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 WMSU KitCycle. All rights reserved.</p>
+            <p>Built for Western Mindanao State University students</p>
+        </div>
+    </footer>
+</body>
+</html>

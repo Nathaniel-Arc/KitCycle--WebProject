@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Rentals | WMSU KitCycle</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/faculty-interface/faculty-dashboard.css">
+    <link rel="stylesheet" href="../../css/faculty-interface/faculty-rentals.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="logo">WMSU <span>KitCycle</span></div>
+        <div class="nav-right">
+            <ul class="nav-links">
+                <li><a href="faculty-dashboard.html">Dashboard</a></li>
+                <li><a href="marketplace.html">Marketplace</a></li>
+                <li><a href="howitworks.html">How It Works</a></li>
+                <li><a href="safety.html">Safety</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <span class="user-profile-nav"><i class="fas fa-user-circle"></i> Dr. Juan Dela Cruz</span>
+                <a href="../login.html" class="btn-login"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="dashboard-layout">
+
+        <aside class="sidebar">
+            <div class="sidebar-profile">
+                <div class="profile-avatar">D</div>
+                <div class="profile-info">
+                    <h4>Dr. Juan Dela Cruz</h4>
+                    <span>Faculty</span>
+                </div>
+            </div>
+
+            <ul class="sidebar-nav">
+                <li><a href="faculty-dashboard.html"><i class="fas fa-th-large"></i> Dashboard</a></li>
+                <li><a href="faculty-departmentgear.html"><i class="fas fa-boxes"></i> Departmental Gear</a></li>
+                <li><a href="faculty-approvals.html"><i class="fas fa-clipboard-check"></i> Approval Queue</a></li>
+                <li class="active"><a href="faculty-rentals.html"><i class="fas fa-clock"></i> Active Rentals</a></li>
+                <li><a href="faculty-reports.html"><i class="fas fa-chart-pie"></i> Reports</a></li>
+            </ul>
+
+            <a href="../login.html" class="sidebar-logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </aside>
+
+        <main class="dashboard-content">
+
+            <div class="dashboard-banner">
+                <h2><i class="fas fa-cubes"></i> My Rentals</h2>
+                <p>Track and manage all your rental activities</p>
+            </div>
+
+            <div class="stat-cards-grid">
+                <div class="stat-card">
+                    <div class="stat-icon red"><i class="fas fa-shopping-basket"></i></div>
+                    <div class="stat-numbers">
+                        <span class="stat-label">Active Rentals</span>
+                        <h3 class="danger-text">2</h3>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon blue"><i class="fas fa-wallet"></i></div>
+                    <div class="stat-numbers">
+                        <span class="stat-label">Total Spent (This Month)</span>
+                        <h3 class="info-text">₱2,100</h3>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon orange"><i class="fas fa-calendar-alt"></i></div>
+                    <div class="stat-numbers">
+                        <span class="stat-label">Upcoming Returns</span>
+                        <h3 class="warning-text">2</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-card full-width-card">
+                <div class="card-header">
+                    <h3>Active Rentals</h3>
+                    <span class="pill-badge success-bg">2 Active</span>
+                </div>
+
+                <div class="rental-panels-stack">
+
+                    <div class="rental-item-panel">
+                        <div class="rental-thumbnail">
+                            <img src="images/camera.jpg" alt="Canon EOS 90D DSLR">
+                        </div>
+                        <div class="rental-panel-details">
+                            <div class="details-header">
+                                <div>
+                                    <h4>Canon EOS 90D DSLR</h4>
+                                    <p class="owner-trace">Rented from Juan Dela Cruz <i class="fas fa-star gold-text"></i> 4.9</p>
+                                </div>
+                                <span class="status-pill success">Active</span>
+                            </div>
+                            <div class="details-body">
+                                <div class="specs-grid">
+                                    <p><i class="far fa-calendar-check"></i> Rented: 3/1/2026</p>
+                                    <p><i class="fas fa-map-marker-alt"></i> Engineering Building</p>
+                                </div>
+                                <div class="specs-grid">
+                                    <p><i class="far fa-calendar-times danger-text"></i> Return: 3/10/2026</p>
+                                    <p>Total Cost: <strong>₱1750</strong></p>
+                                </div>
+                            </div>
+                            <div class="details-footer">
+                                <button class="btn-primary-maroon">Extend Rental</button>
+                                <button class="btn-outline-dark">View Item Details</button>
+                                <button class="btn-primary-blue"><i class="far fa-comment-alt"></i> Contact Owner</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="rental-item-panel">
+                        <div class="rental-thumbnail">
+                            <img src="images/calculator.jpg" alt="Scientific Calculator TI-84">
+                        </div>
+                        <div class="rental-panel-details">
+                            <div class="details-header">
+                                <div>
+                                    <h4>Scientific Calculator TI-84</h4>
+                                    <p class="owner-trace">Rented from Maria Santos <i class="fas fa-star gold-text"></i> 4.8</p>
+                                </div>
+                                <span class="status-pill success">Active</span>
+                            </div>
+                            <div class="details-body">
+                                <div class="specs-grid">
+                                    <p><i class="far fa-calendar-check"></i> Rented: 2/28/2026</p>
+                                    <p><i class="fas fa-map-marker-alt"></i> Library Lobby</p>
+                                </div>
+                                <div class="specs-grid">
+                                    <p><i class="far fa-calendar-times danger-text"></i> Return: 3/7/2026</p>
+                                    <p>Total Cost: <strong>₱350</strong></p>
+                                </div>
+                            </div>
+                            <div class="details-footer">
+                                <button class="btn-primary-maroon">Extend Rental</button>
+                                <button class="btn-outline-dark">View Item Details</button>
+                                <button class="btn-primary-blue"><i class="far fa-comment-alt"></i> Contact Owner</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="content-card full-width-card margin-top">
+                <div class="card-header">
+                    <h3>Rental History</h3>
+                    <span class="pill-badge neutral-bg">2 Completed</span>
+                </div>
+
+                <div class="history-stack">
+
+                    <div class="history-item">
+                        <div class="history-thumbnail">
+                            <img src="images/microscope.jpeg" alt="Laboratory Microscope">
+                        </div>
+                        <div class="history-info">
+                            <div>
+                                <h4>Laboratory Microscope</h4>
+                                <p class="owner-trace">Rented from Dr. Pedro Cruz</p>
+                                <p class="duration-trace">2/15/2026 - 2/20/2026  •  Total: <strong>₱750</strong></p>
+                                <button class="btn-yellow-sm">Leave Review</button>
+                            </div>
+                            <span class="status-pill neutral">Completed</span>
+                        </div>
+                    </div>
+
+                    <div class="history-item">
+                        <div class="history-thumbnail">
+                            <img src="images/books.jpeg" alt="Engineering Textbook Bundle">
+                        </div>
+                        <div class="history-info">
+                            <div>
+                                <h4>Engineering Textbook Bundle</h4>
+                                <p class="owner-trace">Rented from Anna Reyes</p>
+                                <p class="duration-trace">2/1/2026 - 2/8/2026  •  Total: <strong>₱700</strong></p>
+                                <button class="btn-yellow-sm">Leave Review</button>
+                            </div>
+                            <span class="status-pill neutral">Completed</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script src="../../script/script.js"></script>
+</body>
+</html>

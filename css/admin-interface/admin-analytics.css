@@ -1,0 +1,218 @@
+/* --- PLATFORM ANALYTICS ADAPTATIONS --- */
+
+.six-cols {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+}
+
+.flex-half {
+    flex: 1;
+}
+
+.info-text {
+    color: #1c7ed6;
+}
+
+/* Simulated Horizontal Bar Graph System */
+.graph-box {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 1rem;
+}
+
+.graph-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.graph-lbl {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #4b5563;
+    width: 40px;
+}
+
+.graph-track {
+    flex: 1;
+    height: 14px;
+    background: #f3f4f6;
+    border-radius: 7px;
+    overflow: hidden;
+}
+
+.graph-fill {
+    height: 100%;
+    border-radius: 7px;
+}
+
+.maroon-fill { background: #800000; }
+.gold-fill { background: #ffd700; }
+
+.graph-val {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #111827;
+    width: 80px;
+    text-align: right;
+}
+
+/* Category Metric Sliders and Tiers */
+.category-metrics {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.cat-bar-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.cat-desc {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #374151;
+}
+
+.cat-track {
+    height: 10px;
+    background: #f3f4f6;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.cat-fill {
+    height: 100%;
+    border-radius: 5px;
+}
+
+.blue-bg-fill { background: #1d4ed8; }
+.green-bg-fill { background: #10b981; }
+.purple-bg-fill { background: #7e22ce; }
+.orange-bg-fill { background: #f97316; }
+
+.cat-summary-badges {
+    display: flex;
+    justify-content: space-around;
+    padding-top: 1.5rem;
+}
+
+.summary-badge {
+    text-align: center;
+}
+
+.summary-badge h3 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #111827;
+}
+
+.summary-badge span {
+    font-size: 0.85rem;
+    color: #6b7280;
+}
+
+/* Top Performer List Context */
+.ranking-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.ranking-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 1rem;
+    border: 1px solid #eef0f2;
+    border-radius: 10px;
+    background: #fff;
+    transition: 0.2s;
+}
+
+.rank-badge {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #800000;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+}
+
+.rank-info {
+    flex: 1;
+}
+
+.rank-info h4 {
+    font-size: 0.95rem;
+    color: #111827;
+}
+
+.rank-info span {
+    font-size: 0.75rem;
+    color: #6b7280;
+    display: block;
+    margin-top: 2px;
+}
+
+.rank-info p {
+    font-size: 0.8rem;
+    color: #4b5563;
+    margin-top: 5px;
+}
+
+.rank-earning {
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+/* Analytics Dropdown Context (Analytics Period) */
+.analytics-period {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.analytics-period h3 {
+    font-size: 1.1rem;
+    color: #111827;
+}
+
+.analytics-period p {
+    font-size: 0.85rem;
+    color: #6b7280;
+}
+
+.filter-select-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.filter-select-wrap i {
+    position: absolute;
+    left: 12px;
+    color: #4b5563;
+    pointer-events: none;
+}
+
+.filter-select-wrap .custom-select {
+    padding-left: 35px;
+    padding-right: 25px;
+    height: 40px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    background: #fff;
+    font-size: 0.9rem;
+    cursor: pointer;
+}

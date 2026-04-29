@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Platform Analytics | WMSU KitCycle</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/admin-interface/admin-dashboard.css">
+    <link rel="stylesheet" href="../../css/admin-interface/admin-analytics.css">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="logo">WMSU <span>KitCycle</span></div>
+        <div class="nav-right">
+            <ul class="nav-links">
+                <li><a href="admin-dashboard.html">Dashboard</a></li>
+                <li><a href="../marketplace.html">Marketplace</a></li>
+                <li><a href="../howitworks.html">How It Works</a></li>
+                <li><a href="../safety.html">Safety</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <span class="user-profile-nav"><i class="fas fa-user-shield"></i> Admin User</span>
+                <a href="../login.html" class="btn-login"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="dashboard-layout">
+
+        <aside class="sidebar">
+            <div class="sidebar-profile">
+                <div class="profile-avatar admin-bg">A</div>
+                <div class="profile-info">
+                    <h4>Admin User</h4>
+                    <span>Admin</span>
+                </div>
+            </div>
+
+            <ul class="sidebar-nav">
+                <li><a href="admin-dashboard.html"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+                <li><a href="admin-verification.html"><i class="fas fa-user-check"></i> User Verification</a></li>
+                <li class="active"><a href="admin-analytics.html"><i class="fas fa-poll"></i> Analytics</a></li>
+                <li><a href="admin-disputes.html"><i class="fas fa-exclamation-triangle"></i> Dispute Management</a></li>
+                <li><a href="admin-approvals.html"><i class="fas fa-clipboard-check"></i> Approvals</a></li>
+                <li><a href="admin-settings.html"><i class="fas fa-cog"></i> Platform Settings</a></li>
+            </ul>
+
+            <a href="../login.html" class="sidebar-logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </aside>
+
+        <main class="dashboard-content">
+
+            <div class="dashboard-banner">
+                <h2><i class="fas fa-chart-bar"></i> Platform Analytics</h2>
+                <p>Comprehensive insights into platform performance and trends</p>
+            </div>
+
+            <div class="stat-cards-grid six-cols">
+                <div class="stat-card">
+                    <div class="stat-icon blue-light"><i class="fas fa-users"></i></div>
+                    <div class="stat-numbers">
+                        <span class="stat-label">Total Users</span>
+                        <h3>1247</h3>
+                        <span class="trend success-text">+47 this month</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green-light"><i class="fas fa-chart-line"></i></div>
+                    <div class="stat-numbers">
+                        <span class="stat-label">Active Rentals</span>
+                        <h3>89</h3>
+                        <span class="trend success-text">+12 this week</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon purple-light"><i class="fas fa-shapes"></i></div>
+                    <div class="stat-numbers">
+                        <span class="stat-label">Items Listed</span>
+                        <h3>456</h3>
+                        <span class="trend success-text">+23 this week</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon yellow-light"><i class="fas fa-coins"></i></div>
+                    <div class="stat-numbers">
+                        <span class="stat-label">Total Revenue</span>
+                        <h3>₱45,600</h3>
+                        <span class="trend success-text">+8.2% this month</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon orange-light"><i class="fas fa-chart-pie"></i></div>
+                    <div class="stat-numbers">
+                        <span class="stat-label">Growth Rate</span>
+                        <h3>8.2%</h3>
+                        <span class="trend info-text">Month over month</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon red-light"><i class="fas fa-star"></i></div>
+                    <div class="stat-numbers">
+                        <span class="stat-label">Avg Rating</span>
+                        <h3>4.7</h3>
+                        <span class="trend success-text">Excellent</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="split-row">
+                
+                <div class="content-card flex-half">
+                    <div class="card-header">
+                        <h3><i class="fas fa-users"></i> User Growth Trend</h3>
+                    </div>
+                    <div class="graph-box">
+                        <div class="graph-row">
+                            <span class="graph-lbl">Sep</span>
+                            <div class="graph-track"><div class="graph-fill maroon-fill" style="width: 55%;"></div></div>
+                            <span class="graph-val">750 users</span>
+                        </div>
+                        <div class="graph-row">
+                            <span class="graph-lbl">Oct</span>
+                            <div class="graph-track"><div class="graph-fill maroon-fill" style="width: 65%;"></div></div>
+                            <span class="graph-val">850 users</span>
+                        </div>
+                        <div class="graph-row">
+                            <span class="graph-lbl">Nov</span>
+                            <div class="graph-track"><div class="graph-fill maroon-fill" style="width: 75%;"></div></div>
+                            <span class="graph-val">950 users</span>
+                        </div>
+                        <div class="graph-row">
+                            <span class="graph-lbl">Dec</span>
+                            <div class="graph-track"><div class="graph-fill maroon-fill" style="width: 85%;"></div></div>
+                            <span class="graph-val">1050 users</span>
+                        </div>
+                        <div class="graph-row">
+                            <span class="graph-lbl">Jan</span>
+                            <div class="graph-track"><div class="graph-fill maroon-fill" style="width: 90%;"></div></div>
+                            <span class="graph-val">1150 users</span>
+                        </div>
+                        <div class="graph-row">
+                            <span class="graph-lbl">Feb</span>
+                            <div class="graph-track"><div class="graph-fill maroon-fill" style="width: 95%;"></div></div>
+                            <span class="graph-val">1200 users</span>
+                        </div>
+                        <div class="graph-row">
+                            <span class="graph-lbl">Mar</span>
+                            <div class="graph-track"><div class="graph-fill maroon-fill" style="width: 100%;"></div></div>
+                            <span class="graph-val">1247 users</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-card flex-half">
+                    <div class="card-header">
+                        <h3><i class="fas fa-coins"></i> Revenue Trend</h3>
+                    </div>
+                    <div class="graph-box">
+                        <div class="graph-row">
+                            <span class="graph-lbl">Sep</span>
+                            <div class="graph-track"><div class="graph-fill gold-fill" style="width: 55%;"></div></div>
+                            <span class="graph-val">₱28,500</span>
+                        </div>
+                        <div class="graph-row">
+                            <span class="graph-lbl">Oct</span>
+                            <div class="graph-track"><div class="graph-fill gold-fill" style="width: 65%;"></div></div>
+                            <span class="graph-val">₱32,400</span>
+                        </div>
+                        <div class="graph-row">
+                            <span class="graph-lbl">Nov</span>
+                            <div class="graph-track"><div class="graph-fill gold-fill" style="width: 75%;"></div></div>
+                            <span class="graph-val">₱36,200</span>
+                        </div>
+                        <div class="graph-row">
+                            <span class="graph-lbl">Dec</span>
+                            <div class="graph-track"><div class="graph-fill gold-fill" style="width: 82%;"></div></div>
+                            <span class="graph-val">₱38,900</span>
+                        </div>
+                        <div class="graph-row">
+                            <span class="graph-lbl">Jan</span>
+                            <div class="graph-track"><div class="graph-fill gold-fill" style="width: 88%;"></div></div>
+                            <span class="graph-val">₱41,700</span>
+                        </div>
+                        <div class="graph-row">
+                            <span class="graph-lbl">Feb</span>
+                            <div class="graph-track"><div class="graph-fill gold-fill" style="width: 93%;"></div></div>
+                            <span class="graph-val">₱43,800</span>
+                        </div>
+                        <div class="graph-row">
+                            <span class="graph-lbl">Mar</span>
+                            <div class="graph-track"><div class="graph-fill gold-fill" style="width: 100%;"></div></div>
+                            <span class="graph-val">₱45,600</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="split-row margin-top">
+                
+                <div class="content-card flex-half">
+                    <div class="card-header">
+                        <h3><i class="fas fa-boxes"></i> Items by Category</h3>
+                    </div>
+                    <div class="category-metrics">
+                        <div class="cat-bar-item">
+                            <div class="cat-desc"><span>Academic Tools</span> <span>142 items (31%)</span></div>
+                            <div class="cat-track"><div class="cat-fill blue-bg-fill" style="width: 31%;"></div></div>
+                        </div>
+                        <div class="cat-bar-item">
+                            <div class="cat-desc"><span>Textbooks</span> <span>129 items (29%)</span></div>
+                            <div class="cat-track"><div class="cat-fill green-bg-fill" style="width: 29%;"></div></div>
+                        </div>
+                        <div class="cat-bar-item">
+                            <div class="cat-desc"><span>Media Equipment</span> <span>98 items (21%)</span></div>
+                            <div class="cat-track"><div class="cat-fill purple-bg-fill" style="width: 21%;"></div></div>
+                        </div>
+                        <div class="cat-bar-item">
+                            <div class="cat-desc"><span>Lab Equipment</span> <span>87 items (19%)</span></div>
+                            <div class="cat-track"><div class="cat-fill orange-bg-fill" style="width: 19%;"></div></div>
+                        </div>
+                    </div>
+
+                    <div class="cat-summary-badges">
+                        <div class="summary-badge">
+                            <h3>456</h3>
+                            <span>Total Items</span>
+                        </div>
+                        <div class="summary-badge">
+                            <h3 class="success-text">342</h3>
+                            <span>Available</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-card flex-half">
+                    <div class="card-header">
+                        <h3><i class="fas fa-chart-line"></i> Top Performing Items</h3>
+                    </div>
+                    <div class="ranking-list">
+                        <div class="ranking-item">
+                            <div class="rank-badge">1</div>
+                            <div class="rank-info">
+                                <h4>Canon EOS 90D DSLR</h4>
+                                <span>Media Equipment</span>
+                                <p>45 rentals</p>
+                            </div>
+                            <div class="rank-earning success-text">₱11,250</div>
+                        </div>
+                        <div class="ranking-item">
+                            <div class="rank-badge">2</div>
+                            <div class="rank-info">
+                                <h4>Scientific Calculator TI-84</h4>
+                                <span>Academic Tools</span>
+                                <p>67 rentals</p>
+                            </div>
+                            <div class="rank-earning success-text">₱3,350</div>
+                        </div>
+                        <div class="ranking-item">
+                            <div class="rank-badge">3</div>
+                            <div class="rank-info">
+                                <h4>Engineering Textbook Bundle</h4>
+                                <span>Textbooks</span>
+                                <p>52 rentals</p>
+                            </div>
+                            <div class="rank-earning success-text">₱5,200</div>
+                        </div>
+                        <div class="ranking-item">
+                            <div class="rank-badge">4</div>
+                            <div class="rank-info">
+                                <h4>Laboratory Microscope</h4>
+                                <span>Lab Equipment</span>
+                                <p>38 rentals</p>
+                            </div>
+                            <div class="rank-earning success-text">₱5,700</div>
+                        </div>
+                        <div class="ranking-item">
+                            <div class="rank-badge">5</div>
+                            <div class="rank-info">
+                                <h4>Studio Lighting Kit</h4>
+                                <span>Media Equipment</span>
+                                <p>29 rentals</p>
+                            </div>
+                            <div class="rank-earning success-text">₱5,800</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="content-card full-width-card margin-top">
+                <div class="analytics-period">
+                    <div>
+                        <h3>Analytics Period</h3>
+                        <p>Select time range for detailed analysis</p>
+                    </div>
+                    <div class="filter-select-wrap">
+                        <i class="far fa-calendar-alt"></i>
+                        <select class="custom-select">
+                            <option>Last 6 Months</option>
+                            <option>Last Month</option>
+                            <option>This Year</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script src="../../script/script.js"></script>
+</body>
+</html>

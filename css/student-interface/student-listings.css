@@ -1,0 +1,147 @@
+/* --- STUDENT LISTINGS ADAPTATIONS --- */
+
+.flex-banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.btn-new-listing {
+    background: #ffffff;
+    color: #111827;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.listings-panel-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.listing-item-panel {
+    display: flex;
+    border: 1px solid #eef0f2;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #ffffff;
+}
+
+.listing-thumbnail {
+    width: 220px;
+    min-height: 100%;
+}
+
+.listing-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.listing-details {
+    flex: 1;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.listing-top h4 {
+    font-size: 1.1rem;
+    color: #1a1a1a;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.category-trace {
+    font-size: 0.85rem;
+    color: #6b7280;
+    margin-top: 5px;
+}
+
+.rate-trace {
+    display: block;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #800000;
+    margin-top: 10px;
+}
+
+.listing-alert-box {
+    padding: 12px;
+    border-radius: 8px;
+    margin: 15px 0;
+    font-size: 0.85rem;
+}
+
+.warning-panel {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    color: #92400e;
+}
+
+.warning-panel p {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 5px;
+}
+
+.listing-mid-stats {
+    display: flex;
+    gap: 40px;
+    margin: 1rem 0;
+}
+
+.mid-stat-box {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.mid-stat-box span {
+    font-size: 0.8rem;
+    color: #6b7280;
+}
+
+.mid-stat-box strong {
+    font-size: 1.1rem;
+    color: #111827;
+}
+
+.listing-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.listing-actions button {
+    padding: 10px 15px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-outline-red {
+    background: #fff;
+    border: 1px solid #dc2626;
+    color: #dc2626;
+}
+
+.btn-outline-dark.disabled {
+    background: #f3f4f6;
+    color: #9ca3af;
+    cursor: not-allowed;
+    border: 1px solid #e5e7eb;
+}
