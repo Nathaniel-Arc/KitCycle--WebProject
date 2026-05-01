@@ -71,7 +71,7 @@ body {
     position: fixed;
     height: calc(100vh - 60px);
     top: 60px;
-    transition: width 0.3s ease, padding 0.3s ease;
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     overflow: hidden;
     z-index: 1500;
 }
@@ -129,7 +129,7 @@ body {
 .profile-info h4 { font-size: 1rem; color: #111827; font-weight: 800; margin-bottom: 2px; }
 .profile-info span { font-size: 0.85rem; color: #6b7280; font-weight: 500; }
 
-.sidebar-nav { list-style: none; flex: 1; }
+.sidebar-nav { list-style: none; }
 .sidebar-nav li { margin-bottom: 8px; }
 
 .sidebar-nav a {
@@ -152,6 +152,7 @@ body {
 }
 
 .sidebar-logout {
+    margin-top: auto; /* Pin to bottom */
     color: #dc3545;
     text-decoration: none;
     font-size: 0.9rem;
@@ -164,10 +165,12 @@ body {
 
 .dashboard-content {
     flex: 1;
+    width: 0; /* Important for flex-grow to work correctly with margins */
+    min-width: 0;
     padding: 2rem 3rem;
     margin-left: 260px;
     min-height: calc(100vh - 60px);
-    transition: margin-left 0.3s ease;
+    transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .dashboard-content.expanded {
@@ -568,6 +571,37 @@ body {
     border: 1.5px solid #fff;
     border-radius: 50%;
     display: none; /* Shown dynamically */
+}
+
+/* --- MODAL SYSTEM --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: none; /* Hidden by default */
+    align-items: center;
+    justify-content: center;
+    z-index: 5000;
+    backdrop-filter: blur(4px);
+}
+
+.modal-card {
+    background: #fff;
+    padding: 2.5rem;
+    border-radius: 20px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+    animation: modalSlideUp 0.3s ease-out;
+}
+
+@keyframes modalSlideUp {
+    from { transform: translateY(30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
 }
 
 .notif-dropdown {

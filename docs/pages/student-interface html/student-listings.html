@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="../../css/student-interface/student-dashboard.css">
     <link rel="stylesheet" href="../../css/student-interface/student-listings.css">
+    <script src="../../script/auth.js" defer></script>
 
     <!-- Instant Sidebar State Check -->
     <script>
@@ -27,6 +28,8 @@
         .sidebar-is-minimized .sidebar-nav a { justify-content: center !important; padding: 12px 0 !important; }
         .sidebar-is-minimized .sidebar-nav i { font-size: 1.2rem !important; margin: 0 !important; }
         .sidebar-is-minimized .sidebar-profile { justify-content: center !important; padding-bottom: 1.5rem !important; }
+        
+        footer { display: none !important; } /* Specifically remove footer for this page */
     </style>
 </head>
 
@@ -37,9 +40,9 @@
             <div class="sidebar-toggle" onclick="toggleSidebar()">
                 <i class="fas fa-bars"></i>
             </div>
-            <div class="logo" style="display: flex; align-items: center;">
-                <img src="../../images/wmsulogo.png" alt="Logo" style="height: 35px; margin-right: 10px;">
-                WMSU<span style="margin-left: 5px;">KitCycle</span>
+            <div class="logo">
+                <img src="../../images/wmsulogo.png" alt="WMSU Logo" class="nav-logo-img">
+                <div class="logo-text">WMSU<span>KitCycle</span></div>
             </div>
         </div>
         <div class="nav-right" style="display: flex; align-items: center; gap: 30px;">
@@ -49,32 +52,8 @@
                 <li><a href="../howitworks.html">How It Works</a></li>
                 <li><a href="../safety.html">Safety</a></li>
             </ul>
-            <div class="auth-buttons" style="display: flex; align-items: center; gap: 15px;">
-                <!-- Notifications -->
-                <div class="nav-notification-container">
-                    <button class="nav-notification-btn" onclick="toggleNotifs()">
-                        <i class="far fa-bell"></i>
-                        <div class="notif-badge" id="navNotifBadge" style="display: block;"></div>
-                    </button>
-                    <div class="notif-dropdown" id="notifDropdown">
-                        <div class="notif-header">Notifications</div>
-                        <div class="notif-item">
-                            <p><strong>Juan Dela Cruz</strong> sent you a message about the Canon DSLR.</p>
-                            <span>2 mins ago</span>
-                        </div>
-                        <div class="notif-item">
-                            <p>Your rental for <strong>TI-84 Calculator</strong> was approved!</p>
-                            <span>1 hour ago</span>
-                        </div>
-                        <div class="notif-view-all">View All Notifications</div>
-                    </div>
-                </div>
-
-                <span class="user-profile-nav" style="display: flex; align-items: center; font-weight: 600; color: #111827;">
-                    <img src="../../images/nash_profile.png" alt="Nash" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; margin-right: 10px; border: 1.5px solid #800000;"> 
-                    Nash Arciaga
-                </span>
-                <a href="../login.html" class="btn-login" style="padding: 6px 15px; font-size: 0.85rem;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            <div class="auth-buttons">
+                <!-- Injected by auth.js -->
             </div>
         </div>
     </header>
@@ -83,10 +62,10 @@
 
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-profile">
-                <div class="profile-avatar"><img src="../../images/nash_profile.png" alt="Nash Arciaga"></div>
+                <div class="profile-avatar"><img id="sidebarProfileImg" src="../../images/nash_profile.png" alt="Profile"></div>
                 <div class="profile-info">
-                    <h4>Nash Arciaga</h4>
-                    <span>Student</span>
+                    <h4 id="sidebarUserName">Nash Arciaga</h4>
+                    <span id="sidebarUserRole">Student</span>
                 </div>
             </div>
 
@@ -99,25 +78,424 @@
                 <li class="active"><a href="student-listings.html"><i class="fas fa-list"></i> <span>My Listings</span></a></li>
             </ul>
 
-            <a href="../login.html" class="sidebar-logout"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
+            <a href="javascript:void(0)" onclick="AuthSystem.confirmLogout(); return false;" class="sidebar-logout"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
         </aside>
 
         <main class="dashboard-content" id="mainContent">
 
-            <div class="dashboard-banner">
+            <div class="dashboard-banner" style="margin-bottom: 1.5rem;">
                 <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
                     <div>
-                        <h2><i class="fas fa-list"></i> My Gear Listings</h2>
-                        <p>Manage the items you're lending out to other students</p>
+                        <h2><i class="fas fa-list"></i> Lender Hub</h2>
+                        <p>Manage your gear, track earnings, and respond to requests</p>
                     </div>
-                    <button class="btn-yellow" style="padding: 12px 25px; border-radius: 8px; font-weight: 700; border: none; cursor: pointer; background: #ffd700;">+ List New Item</button>
+                    <div style="display: flex; gap: 15px;">
+                        <div class="earnings-widget" style="background: #fff; padding: 10px 20px; border-radius: 12px; border: 1.5px solid #ffd700; text-align: right;">
+                            <span style="font-size: 0.75rem; color: #64748b; font-weight: 700; text-transform: uppercase;">Semester Earnings</span>
+                            <h3 style="margin: 0; color: #111827;">₱1,250.00</h3>
+                        </div>
+                        <button class="btn-yellow" onclick="openAddModal()" style="padding: 12px 25px; border-radius: 12px; font-weight: 700; border: none; cursor: pointer; background: #ffd700; box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);">+ List New Item</button>
+                    </div>
                 </div>
+            </div>
+
+            <!-- Pending Requests Section -->
+            <div class="requests-section" style="margin-bottom: 2rem;">
+                <div class="section-header" style="display: flex; align-items: center; gap: 10px; margin-bottom: 1rem;">
+                    <h3 style="font-size: 1.1rem; color: #111827;">Pending Requests</h3>
+                    <span class="request-count-badge" id="requestCount" style="background: #ef4444; color: #fff; padding: 2px 8px; border-radius: 20px; font-size: 0.75rem; font-weight: 700;">2</span>
+                </div>
+                <div class="requests-stack" id="requestsStack" style="display: flex; flex-direction: column; gap: 10px;">
+                    <!-- Requests loaded here -->
+                </div>
+            </div>
+
+            <div class="section-header" style="margin-bottom: 1rem;">
+                <h3 style="font-size: 1.1rem; color: #111827;">My Active Listings</h3>
+            </div>
+            <div class="listings-panel-stack" id="listingsGrid">
+                <!-- Listings will be loaded here dynamically -->
             </div>
 
         </main>
     </div>
 
+    <!-- Add/Edit Modal (Aesthetic Premium Design) -->
+    <div class="modal-overlay" id="listingModal" style="display: none;">
+        <div class="modal-card" style="max-width: 800px; width: 95%; padding: 0; overflow: hidden; border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.3); border: 1px solid rgba(128,0,0,0.1);">
+            <!-- Header with WMSU Campus Background and 50% Red Opacity -->
+            <div style="background: linear-gradient(rgba(128, 0, 0, 0.5), rgba(128, 0, 0, 0.5)), url('../../images/wmsu_campus.png'); background-size: cover; background-position: center; padding: 40px 30px; color: white; display: flex; justify-content: space-between; align-items: center; position: relative;">
+                <div style="position: relative; z-index: 2;">
+                    <h3 id="modalTitle" style="margin: 0; font-size: 1.6rem; display: flex; align-items: center; gap: 12px; font-weight: 800; text-shadow: 0 2px 4px rgba(0,0,0,0.3);"><i class="fas fa-box-open"></i> List New Gear</h3>
+                    <p style="margin: 5px 0 0 0; opacity: 0.9; font-size: 0.9rem; font-weight: 500;">Share your academic equipment with fellow students</p>
+                </div>
+                <i class="fas fa-times" onclick="closeModal()" style="cursor: pointer; font-size: 1.5rem; opacity: 0.8; transition: 0.2s; position: relative; z-index: 2;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'"></i>
+            </div>
+            <form id="listingForm" style="padding: 30px; text-align: left; background: #fff; max-height: 75vh; overflow-y: auto;">
+                <input type="hidden" id="listingId">
+                
+                <div style="display: flex; gap: 30px; flex-wrap: wrap;">
+                    <!-- Left: Media & Description -->
+                    <div style="flex: 1; min-width: 280px; display: flex; flex-direction: column; gap: 20px;">
+                        <div>
+                            <label style="display: block; font-weight: 700; color: #1e293b; margin-bottom: 8px;">Item Photos</label>
+                            <input type="file" id="itemImageInput" accept="image/*" style="display: none;">
+                            <div id="imageUploadArea" style="border: 2px dashed #cbd5e1; border-radius: 15px; height: 160px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #f8fafc; cursor: pointer; transition: 0.2s; overflow: hidden; position: relative;" onmouseover="this.style.borderColor='#800000'; this.style.background='#fef2f2'" onmouseout="this.style.borderColor='#cbd5e1'; this.style.background='#f8fafc'">
+                                <div id="uploadPlaceholder" style="text-align: center;">
+                                    <i class="fas fa-cloud-upload-alt" style="font-size: 2.2rem; color: #94a3b8; margin-bottom: 10px;"></i>
+                                    <br>
+                                    <span style="font-size: 0.85rem; color: #64748b; font-weight: 600;">Drag & drop or <span style="color: #800000;">browse</span></span>
+                                </div>
+                                <img id="imagePreview" src="" style="display: none; width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0;">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label style="display: block; font-weight: 700; color: #1e293b; margin-bottom: 8px;">Description</label>
+                            <textarea id="itemDescription" required placeholder="Describe your gear, key features, and any details borrowers should know..." style="width: 100%; height: 120px; padding: 12px 15px; border: 1.5px solid #e2e8f0; border-radius: 12px; font-size: 0.95rem; outline: none; transition: 0.2s; resize: none; font-family: inherit;" onfocus="this.style.borderColor='#800000'"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label style="display: block; font-weight: 700; color: #1e293b; margin-bottom: 8px;">Pickup Location</label>
+                            <div style="position: relative;">
+                                <i class="fas fa-map-marker-alt" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #94a3b8;"></i>
+                                <input type="text" id="itemLocation" required placeholder="e.g. CET Lobby, WMSU Library" style="width: 100%; padding: 12px 15px 12px 40px; border: 1.5px solid #e2e8f0; border-radius: 12px; font-size: 0.95rem; outline: none; transition: 0.2s;" onfocus="this.style.borderColor='#800000'">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Right: Specs & Pricing -->
+                    <div style="flex: 1.2; min-width: 300px; display: flex; flex-direction: column; gap: 20px;">
+                        <div class="form-group">
+                            <label style="display: block; font-weight: 700; color: #1e293b; margin-bottom: 8px;">Item Name</label>
+                            <input type="text" id="itemName" required placeholder="Full name of the gear" style="width: 100%; padding: 12px 15px; border: 1.5px solid #e2e8f0; border-radius: 12px; font-size: 0.95rem; outline: none; transition: 0.2s;" onfocus="this.style.borderColor='#800000'">
+                        </div>
+                        
+                        <div style="display: flex; gap: 15px;">
+                            <div class="form-group" style="flex: 1;">
+                                <label style="display: block; font-weight: 700; color: #1e293b; margin-bottom: 8px;">Category</label>
+                                <div style="position: relative;">
+                                    <select id="itemCategory" style="width: 100%; padding: 12px 15px; border: 1.5px solid #e2e8f0; border-radius: 12px; font-size: 0.95rem; appearance: none; outline: none; background: #fff; cursor: pointer;" onfocus="this.style.borderColor='#800000'">
+                                        <option>Media Equipment</option>
+                                        <option>Academic Tools</option>
+                                        <option>Textbooks</option>
+                                        <option>Laboratory Equipment</option>
+                                    </select>
+                                    <i class="fas fa-chevron-down" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #94a3b8; pointer-events: none;"></i>
+                                </div>
+                            </div>
+                            <div class="form-group" style="flex: 1;">
+                                <label style="display: block; font-weight: 700; color: #1e293b; margin-bottom: 8px;">Condition</label>
+                                <div style="position: relative;">
+                                    <select id="itemCondition" style="width: 100%; padding: 12px 15px; border: 1.5px solid #e2e8f0; border-radius: 12px; font-size: 0.95rem; appearance: none; outline: none; background: #fff; cursor: pointer;" onfocus="this.style.borderColor='#800000'">
+                                        <option>Brand New</option>
+                                        <option>Excellent</option>
+                                        <option>Good</option>
+                                        <option>Fair</option>
+                                    </select>
+                                    <i class="fas fa-chevron-down" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #94a3b8; pointer-events: none;"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="background: #f8fafc; padding: 20px; border-radius: 15px; border: 1px solid #e2e8f0;">
+                            <label style="display: block; font-weight: 800; color: #1e293b; margin-bottom: 15px; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px;">Flexible Pricing (₱)</label>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                                <div class="form-group">
+                                    <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #64748b; margin-bottom: 5px;">Hourly</label>
+                                    <input type="number" id="itemPriceHourly" placeholder="0" style="width: 100%; padding: 10px; border: 1.5px solid #e2e8f0; border-radius: 8px; font-size: 0.9rem; outline: none;" onfocus="this.style.borderColor='#800000'">
+                                </div>
+                                <div class="form-group">
+                                    <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #64748b; margin-bottom: 5px;">Daily</label>
+                                    <input type="number" id="itemPrice" required placeholder="0" style="width: 100%; padding: 10px; border: 1.5px solid #e2e8f0; border-radius: 8px; font-size: 0.9rem; outline: none; border-color: #800000;" onfocus="this.style.borderColor='#800000'">
+                                </div>
+                                <div class="form-group">
+                                    <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #64748b; margin-bottom: 5px;">Weekly</label>
+                                    <input type="number" id="itemPriceWeekly" placeholder="0" style="width: 100%; padding: 10px; border: 1.5px solid #e2e8f0; border-radius: 8px; font-size: 0.9rem; outline: none;" onfocus="this.style.borderColor='#800000'">
+                                </div>
+                                <div class="form-group">
+                                    <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #64748b; margin-bottom: 5px;">Monthly</label>
+                                    <input type="number" id="itemPriceMonthly" placeholder="0" style="width: 100%; padding: 10px; border: 1.5px solid #e2e8f0; border-radius: 8px; font-size: 0.9rem; outline: none;" onfocus="this.style.borderColor='#800000'">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 15px; justify-content: flex-end; margin-top: 30px;">
+                    <button type="button" onclick="closeModal()" style="padding: 12px 25px; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; background: #f1f5f9; color: #4b5563; transition: 0.2s;">Cancel</button>
+                    <button type="submit" style="padding: 12px 35px; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; background: #800000; color: #fff; box-shadow: 0 4px 12px rgba(128,0,0,0.25); transition: 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">Publish Gear</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../../script/student-data.js"></script>
+    <style>
+        .status-badge {
+            position: absolute; top: 10px; left: 10px; padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .status-badge.active { background: #10b981; color: #fff; }
+        .status-badge.rented { background: #f59e0b; color: #fff; }
+        .status-badge.hidden { background: #64748b; color: #fff; }
+        
+        .listing-thumbnail { position: relative; width: 180px; height: 180px; flex-shrink: 0; }
+        .listing-thumbnail img { width: 100%; height: 100%; object-fit: cover; }
+        
+        /* Toggle Switch */
+        .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e1; transition: .4s; border-radius: 24px; }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: #10b981; }
+        input:checked + .slider:before { transform: translateX(20px); }
+
+        /* Request Card */
+        .request-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
+        .btn-accept { background: #10b981; color: #fff; border: none; padding: 8px 15px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem; }
+        .btn-decline { background: #fff; color: #ef4444; border: 1px solid #ef4444; padding: 8px 15px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem; }
+    </style>
     <script>
+        function renderRequests() {
+            const stack = document.getElementById('requestsStack');
+            const requests = getPendingRequests();
+            document.getElementById('requestCount').innerText = requests.length;
+
+            if (requests.length === 0) {
+                document.querySelector('.requests-section').style.display = 'none';
+                return;
+            }
+
+            stack.innerHTML = requests.map(req => `
+                <div class="request-card">
+                    <div style="display: flex; gap: 15px; align-items: center;">
+                        <img src="${req.avatar}" style="width: 40px; height: 40px; border-radius: 50%;">
+                        <div>
+                            <h4 style="font-size: 0.9rem; margin: 0;">${req.user} <span style="font-weight: 400; color: #64748b;">wants to rent</span> ${req.item}</h4>
+                            <span style="font-size: 0.75rem; color: #94a3b8;">${req.date}</span>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn-decline" onclick="handleRequest('${req.id}', 'decline')">Decline</button>
+                        <button class="btn-accept" onclick="handleRequest('${req.id}', 'accept')">Accept</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function handleRequest(id, action) {
+            let requests = getPendingRequests();
+            requests = requests.filter(r => r.id !== id);
+            saveRequests(requests);
+            renderRequests();
+            if (action === 'accept') {
+                if(typeof UIUtils !== 'undefined' && UIUtils.showModal) {
+                    UIUtils.showModal({
+                        title: "Request Accepted",
+                        message: "Request accepted! Go to Messages to arrange the handover.",
+                        type: "success"
+                    });
+                } else {
+                    alert('Request accepted! Go to Messages to arrange handover.');
+                }
+            }
+        }
+
+        function renderListings() {
+            const grid = document.getElementById('listingsGrid');
+            const listings = getMyListings();
+
+            if (listings.length === 0) {
+                grid.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 4rem; color: #64748b; background: #fff; border-radius: 15px; border: 1px dashed #cbd5e1;">
+                        <i class="fas fa-box-open" style="font-size: 4rem; margin-bottom: 1rem; opacity: 0.2;"></i>
+                        <h3>No listings found</h3>
+                        <p>You haven't listed any gear for rent yet.</p>
+                        <button class="btn-yellow" onclick="openAddModal()" style="margin-top: 1.5rem; padding: 10px 20px; border-radius: 8px; border: none; font-weight: 700; cursor: pointer; background: #ffd700;">List Your First Item</button>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = listings.map(item => `
+                <div class="listing-item-panel" data-id="${item.id}" style="${!item.visibility ? 'opacity: 0.7; filter: grayscale(0.5);' : ''}">
+                    <div class="listing-thumbnail">
+                        <img src="${item.image}" alt="${item.name}">
+                        <span class="status-badge ${!item.visibility ? 'hidden' : item.status.toLowerCase()}">${!item.visibility ? 'Hidden' : item.status}</span>
+                    </div>
+                    <div class="listing-details">
+                        <div class="listing-top">
+                            <div>
+                                <h4 style="font-size: 1.1rem; color: #111827;">${item.name}</h4>
+                                <p class="category-trace" style="margin: 4px 0;">Category: ${item.category}</p>
+                                <div style="display: flex; align-items: center; gap: 10px; margin-top: 10px;">
+                                    <label class="switch">
+                                        <input type="checkbox" ${item.visibility ? 'checked' : ''} onchange="toggleVisibility('${item.id}')">
+                                        <span class="slider"></span>
+                                    </label>
+                                    <span style="font-size: 0.8rem; font-weight: 700; color: ${item.visibility ? '#10b981' : '#64748b'};">
+                                        ${item.visibility ? 'Listing Visible' : 'Listing Hidden'}
+                                    </span>
+                                </div>
+                            </div>
+                            <span class="rate-trace" style="font-size: 1.25rem; font-weight: 800;">₱${item.price}/day</span>
+                        </div>
+                        <div class="listing-actions">
+                            <button style="background: #111827; color: #fff; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer;" onclick="openEditModal('${item.id}')"><i class="fas fa-edit"></i> Edit</button>
+                            <button class="btn-outline-red" style="padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer;" onclick="deleteListing('${item.id}')"><i class="fas fa-trash-alt"></i> Delete</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function toggleVisibility(id) {
+            let listings = getMyListings();
+            const index = listings.findIndex(l => l.id === id);
+            if (index !== -1) {
+                listings[index].visibility = !listings[index].visibility;
+                saveListings(listings);
+                renderListings();
+            }
+        }
+
+        function openAddModal() {
+            document.getElementById('modalTitle').innerText = 'List New Gear';
+            document.getElementById('listingForm').reset();
+            document.getElementById('listingId').value = '';
+            
+            // Reset image preview
+            document.getElementById('imagePreview').style.display = 'none';
+            document.getElementById('uploadPlaceholder').style.display = 'block';
+            uploadedImageDataUrl = '';
+
+            document.getElementById('listingModal').style.display = 'flex';
+        }
+
+        function openEditModal(id) {
+            const listings = getMyListings();
+            const item = listings.find(i => i.id === id);
+            if (!item) return;
+
+            document.getElementById('modalTitle').innerText = 'Edit Listing';
+            document.getElementById('listingId').value = item.id;
+            document.getElementById('itemName').value = item.name;
+            document.getElementById('itemPrice').value = item.price;
+            document.getElementById('itemCategory').value = item.category;
+            document.getElementById('itemDescription').value = item.description || '';
+            document.getElementById('itemCondition').value = item.condition || 'Good';
+            document.getElementById('itemLocation').value = item.location || '';
+            document.getElementById('itemPriceHourly').value = item.priceHourly || '';
+            document.getElementById('itemPriceWeekly').value = item.priceWeekly || '';
+            document.getElementById('itemPriceMonthly').value = item.priceMonthly || '';
+
+            // Handle image preview for edit
+            if(item.image) {
+                document.getElementById('imagePreview').src = item.image;
+                document.getElementById('imagePreview').style.display = 'block';
+                document.getElementById('uploadPlaceholder').style.display = 'none';
+                uploadedImageDataUrl = item.image;
+            } else {
+                document.getElementById('imagePreview').style.display = 'none';
+                document.getElementById('uploadPlaceholder').style.display = 'block';
+                uploadedImageDataUrl = '';
+            }
+
+            document.getElementById('listingModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('listingModal').style.display = 'none';
+        }
+
+        document.getElementById('listingForm').onsubmit = function(e) {
+            e.preventDefault();
+            const id = document.getElementById('listingId').value;
+            const name = document.getElementById('itemName').value;
+            const price = document.getElementById('itemPrice').value;
+            const category = document.getElementById('itemCategory').value;
+            const description = document.getElementById('itemDescription').value;
+            const condition = document.getElementById('itemCondition').value;
+            const location = document.getElementById('itemLocation').value;
+            const priceHourly = document.getElementById('itemPriceHourly').value;
+            const priceWeekly = document.getElementById('itemPriceWeekly').value;
+            const priceMonthly = document.getElementById('itemPriceMonthly').value;
+            
+            let listings = getMyListings();
+
+            const itemData = {
+                name,
+                price,
+                category,
+                description,
+                condition,
+                location,
+                priceHourly,
+                priceWeekly,
+                priceMonthly,
+                image: uploadedImageDataUrl || '../../images/wmsulogo.png'
+            };
+
+            if (id) {
+                // Update
+                const index = listings.findIndex(i => i.id === id);
+                if (index !== -1) {
+                    listings[index] = { ...listings[index], ...itemData };
+                }
+            } else {
+                // Add
+                const newItem = {
+                    id: 'l' + Date.now(),
+                    ...itemData,
+                    status: 'Active',
+                    visibility: true
+                };
+                listings.push(newItem);
+            }
+
+            saveListings(listings);
+            renderListings();
+            closeModal();
+            
+            // Success Modal replacement
+            if(typeof UIUtils !== 'undefined' && UIUtils.showModal) {
+                UIUtils.showModal({
+                    title: "Listing Published!",
+                    message: `Your ${name} is now live on the marketplace.`,
+                    type: "success"
+                });
+            } else {
+                UIUtils.showToast("Listing saved successfully!", "success");
+            }
+        };
+
+        function deleteListing(id) {
+            if(typeof UIUtils !== 'undefined' && UIUtils.showModal) {
+                UIUtils.showModal({
+                    title: "Delete Listing",
+                    message: "Are you sure you want to delete this listing permanently?",
+                    type: "confirm",
+                    onConfirm: (val) => {
+                        if (val) {
+                            let listings = getMyListings();
+                            listings = listings.filter(i => i.id !== id);
+                            saveListings(listings);
+                            renderListings();
+                            UIUtils.showToast("Listing deleted successfully.", "success");
+                        }
+                    }
+                });
+            } else {
+                if (confirm('Are you sure you want to delete this listing?')) {
+                    let listings = getMyListings();
+                    listings = listings.filter(i => i.id !== id);
+                    saveListings(listings);
+                    renderListings();
+                }
+            }
+        }
+
         function toggleSidebar() {
             document.documentElement.classList.remove('sidebar-is-minimized');
             const sidebar = document.getElementById('sidebar');
@@ -128,23 +506,42 @@
         }
 
         function toggleNotifs() {
-            const dd = document.getElementById('notifDropdown');
-            dd.style.display = dd.style.display === 'block' ? 'none' : 'block';
+            // Handled by auth.js
         }
 
-        window.onclick = function(event) {
-            if (!event.target.closest('.nav-notification-btn')) {
-                const dd = document.getElementById('notifDropdown');
-                if (dd) dd.style.display = 'none';
+        // Image Upload Logic
+        let uploadedImageDataUrl = '';
+        const imageUploadArea = document.getElementById('imageUploadArea');
+        const itemImageInput = document.getElementById('itemImageInput');
+        const imagePreview = document.getElementById('imagePreview');
+        const uploadPlaceholder = document.getElementById('uploadPlaceholder');
+
+        imageUploadArea.addEventListener('click', () => itemImageInput.click());
+
+        itemImageInput.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    uploadedImageDataUrl = e.target.result;
+                    imagePreview.src = uploadedImageDataUrl;
+                    imagePreview.style.display = 'block';
+                    uploadPlaceholder.style.display = 'none';
+                };
+                reader.readAsDataURL(file);
             }
-        }
+        });
 
         window.onload = function() {
             const isMinimized = localStorage.getItem('sidebarMinimized') === 'true';
             if (isMinimized) {
-                document.getElementById('sidebar').classList.add('minimized');
-                document.getElementById('mainContent').classList.add('expanded');
+                const sidebar = document.getElementById('sidebar');
+                const mainContent = document.getElementById('mainContent');
+                if (sidebar) sidebar.classList.add('minimized');
+                if (mainContent) mainContent.classList.add('expanded');
             }
+            renderListings();
+            renderRequests();
         };
     </script>
 

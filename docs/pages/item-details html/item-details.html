@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canon EOS 90D DSLR | WMSU KitCycle</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/item-details/item-details.css">
+    <script src="../../script/items-data.js"></script>
+    <script src="../../script/ui-utils.js"></script>
+    <script src="../../script/auth.js" defer></script>
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="nav-left-group">
+            <div class="logo">
+                <img src="../../images/wmsulogo.png" alt="WMSU Logo" class="nav-logo-img">
+                <div class="logo-text">WMSU<span>KitCycle</span></div>
+            </div>
+        </div>
+        <div class="nav-right">
+            <ul class="nav-links">
+                <li><a href="../../index.html">Home</a></li>
+                <li><a href="../marketplace.html">Marketplace</a></li>
+                <li><a href="../howitworks.html">How It Works</a></li>
+                <li><a href="../safety.html">Safety</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <!-- Injected by auth.js -->
+            </div>
+        </div>
+    </header>
+
+    <div class="details-container">
+        <!-- Left Content -->
+        <main>
+            <a href="../marketplace.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Back to Marketplace
+            </a>
+
+            <div class="item-gallery">
+                <img src="" alt="" class="main-img" id="itemMainImg">
+            </div>
+
+            <div class="item-main-info">
+                <span class="category-badge" id="itemCategory">Category</span>
+                <h1 class="item-title" id="itemTitle">Item Name</h1>
+                
+                <div class="item-meta">
+                    <span><i class="fas fa-map-marker-alt"></i> <span id="itemLocation">Location</span></span>
+                    <span class="rating-score"><i class="fas fa-star"></i> <span id="itemRating">0.0</span> <span style="color: var(--text-muted); font-weight: 500;">(<span id="itemRentals">0</span> reviews)</span></span>
+                </div>
+
+                <div class="section-title">Description</div>
+                <p class="description-text" id="itemDescription">
+                    Loading description...
+                </p>
+
+                <div class="section-title">What's Included</div>
+                <div class="included-list" id="itemIncluded">
+                    <!-- Dynamic -->
+                </div>
+
+                <div class="spec-grid">
+                    <div class="spec-item">
+                        <span class="spec-label">Condition</span>
+                        <span class="spec-value" id="itemCondition">Condition</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Category</span>
+                        <span class="spec-value" id="itemCategorySpec">Category</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Availability</span>
+                        <span class="spec-value available" id="itemAvailability">Available</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lender Info -->
+            <div class="lender-card">
+                <img src="" alt="Lender" class="lender-avatar" id="lenderPic" onerror="this.src='../../images/nash_profile.png'">
+                <div class="lender-info">
+                    <h4><span id="lenderName">Lender Name</span> <i class="fas fa-check-circle" style="color: var(--maroon); font-size: 0.8rem;"></i></h4>
+                    <p><span id="lenderRating">0.0</span> Rating • Verified WMSU Student</p>
+                </div>
+            </div>
+
+            <!-- Q&A Section -->
+            <div class="qa-section" id="itemQASection">
+                <div class="section-title" style="margin-top: 0;">Questions & Answers</div>
+                <div id="qaContainer">
+                    <!-- Dynamic Q&A will be injected here -->
+                </div>
+            </div>
+        </main>
+
+        <!-- Sidebar (Right Content) -->
+        <aside>
+            <div class="rental-sidebar">
+                <div class="rate-grid">
+                    <div class="rate-card" data-rate="hourly">
+                        <span class="rate-label">Per Hour</span>
+                        <span class="rate-price" id="rateHourly">₱0</span>
+                    </div>
+                    <div class="rate-card active" data-rate="daily">
+                        <span class="rate-label">Per Day</span>
+                        <span class="rate-price" id="rateDaily">₱0</span>
+                    </div>
+                    <div class="rate-card" data-rate="weekly">
+                        <span class="rate-label">Per Week</span>
+                        <span class="rate-price" id="rateWeekly">₱0</span>
+                    </div>
+                    <div class="rate-card" data-rate="monthly">
+                        <span class="rate-label">Per Month</span>
+                        <span class="rate-price" id="rateMonthly">₱0</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Select Rental Period</label>
+                    <select class="form-control" id="rentalPeriod">
+                        <!-- Dynamic -->
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" id="durationLabel">How many Day?</label>
+                    <input type="number" class="form-control" value="1" min="1" id="rentalDuration">
+                </div>
+
+                <div class="total-display">
+                    <div class="total-calc" id="totalCalcText">₱250 × 1 Day</div>
+                    <div class="total-amount">₱<span id="totalValue">250</span></div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Select Pick-up Date</label>
+                    <input type="date" class="form-control" id="rentalDate">
+                    <p style="font-size: 0.7rem; color: var(--text-muted); margin-top: 5px;"><i class="fas fa-info-circle"></i> Occupied dates are automatically greyed out.</p>
+                </div>
+
+                <!-- Pickup Time & Location (Request 3: Lender Controlled) -->
+                <div class="form-group">
+                    <label class="form-label">Available Meetup Slots</label>
+                    <select class="form-control" id="meetupSlots">
+                        <!-- Dynamic -->
+                    </select>
+                    <p style="font-size: 0.7rem; color: #10b981; margin-top: 5px; font-weight: 600;">
+                        <i class="fas fa-qrcode"></i> Digital Handshake: A unique QR code will be generated for verification.
+                    </p>
+                </div>
+
+                <div class="agreement-box">
+                    <input type="checkbox" id="termsCheck">
+                    <label for="termsCheck">I agree to the WMSU KitCycle Rental Agreement and will be responsible for any damages or loss.</label>
+                </div>
+
+                <button class="btn-rent-main" id="btnRentRequest">Request to Rent</button>
+                <button class="btn-message-outline"><i class="far fa-comments"></i> Message Owner</button>
+
+                <div class="trust-badge-mini">
+                    <i class="fas fa-shield-alt"></i>
+                    <span><strong>Safe Campus Meetup:</strong> All exchanges happen on WMSU campus at designated safe locations.</span>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <footer>
+        <div class="footer-top">
+            <div class="footer-info">
+                <div class="logo">
+                    <img src="../../images/wmsulogo.png" alt="WMSU Logo" class="footer-logo-img">
+                    <span style="color: white; margin-left: 10px;">WMSU <strong>KitCycle</strong></span>
+                </div>
+                <p>Empowering Western Mindanao State University students through accessible, academic equipment rental.</p>
+            </div>
+            <div class="footer-column">
+                <h4>EXPLORE KITCYCLE</h4>
+                <a href="../marketplace.html">Browse Gear</a>
+                <a href="#">Category List</a>
+                <a href="../howitworks.html">How it Works</a>
+                <a href="#">Verified Sellers</a>
+            </div>
+            <div class="footer-column">
+                <h4>USER RESOURCES</h4>
+                <a href="../login.html">Account Login</a>
+                <a href="../register.html">Student Registration</a>
+                <a href="#">Secure Meetups</a>
+                <a href="../safety.html">Rental Safety</a>
+            </div>
+            <div class="footer-column">
+                <h4>POLICIES</h4>
+                <a href="../terms-of-service.html">Terms of Service</a>
+                <a href="../privacy-policy.html">Privacy Policy</a>
+                <a href="../prohibited-items.html">Prohibited Items</a>
+                <a href="#">Trust & Safety</a>
+            </div>
+            <div class="footer-column">
+                <h4>SUPPORT</h4>
+                <a href="#">Zamboanga Campus Map</a>
+                <a href="#">Community Guidelines</a>
+                <a href="#">FAQ</a>
+                <a href="#">Lender Help</a>
+                <a href="#">Contact Support</a>
+            </div>
+            <div class="footer-column">
+                <h4>Contact</h4>
+                <p>support@wmsukitcycle.edu.ph</p>
+                <p>(062) 991-8888</p>
+                <p>Normal Road, Zamboanga City</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 WMSU KitCycle. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- 1. Template Injection Logic ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const itemId = urlParams.get('id') || 'camera'; // Fallback to camera
+            const item = KitCycleData.getItemById(itemId);
+
+            if (!item) {
+                alert("Item not found!");
+                window.location.href = '../marketplace.html';
+                return;
+            }
+
+            // Inject basic info
+            document.getElementById('itemMainImg').src = item.image;
+            document.getElementById('itemMainImg').alt = item.name;
+            document.getElementById('itemTitle').textContent = item.name;
+            document.getElementById('itemCategory').textContent = item.category;
+            document.getElementById('itemCategorySpec').textContent = item.category;
+            document.getElementById('itemLocation').textContent = item.location;
+            document.getElementById('itemRating').textContent = item.rating;
+            document.getElementById('itemRentals').textContent = item.rentals;
+            document.getElementById('itemDescription').textContent = item.description;
+            document.getElementById('itemCondition').textContent = item.condition;
+            document.getElementById('itemAvailability').textContent = item.availability;
+
+            // Inject included items
+            const includedList = document.getElementById('itemIncluded');
+            item.included.forEach(inc => {
+                const div = document.createElement('div');
+                div.className = 'included-item';
+                div.innerHTML = `<i class="fas fa-check-circle"></i> ${inc}`;
+                includedList.appendChild(div);
+            });
+
+            // Inject Lender
+            document.getElementById('lenderName').textContent = item.lender;
+            document.getElementById('lenderPic').src = item.lenderPic;
+            document.getElementById('lenderRating').textContent = item.rating;
+
+            // Inject Rates
+            document.getElementById('rateHourly').textContent = `₱${item.hourlyPrice || 0}`;
+            document.getElementById('rateDaily').textContent = `₱${item.price || 0}`;
+            document.getElementById('rateWeekly').textContent = `₱${(item.weeklyPrice || 0).toLocaleString()}`;
+            document.getElementById('rateMonthly').textContent = `₱${(item.monthlyPrice || 0).toLocaleString()}`;
+
+            // Populate Select Dropdown
+            const periodSelect = document.getElementById('rentalPeriod');
+            const options = [
+                { val: item.hourlyPrice || 0, text: `Per Hour - ₱${item.hourlyPrice || 0}` },
+                { val: item.price || 0, text: `Per Day - ₱${item.price || 0}` },
+                { val: item.weeklyPrice || 0, text: `Per Week - ₱${(item.weeklyPrice || 0).toLocaleString()}` },
+                { val: item.monthlyPrice || 0, text: `Per Month - ₱${(item.monthlyPrice || 0).toLocaleString()}` }
+            ];
+            options.forEach((opt, idx) => {
+                const el = document.createElement('option');
+                el.value = opt.val;
+                el.textContent = opt.text;
+                if (idx === 1) el.selected = true; // Default to Daily
+                periodSelect.appendChild(el);
+            });
+
+            // Inject Meetup Slots
+            const slotsSelect = document.getElementById('meetupSlots');
+            item.meetupSlots.forEach(slot => {
+                const el = document.createElement('option');
+                el.textContent = slot;
+                slotsSelect.appendChild(el);
+            });
+
+            // Inject Q&A
+            const qaContainer = document.getElementById('qaContainer');
+            if (item.qa && item.qa.length > 0) {
+                qaContainer.innerHTML = item.qa.map(q => `
+                    <div class="qa-item">
+                        <div class="question">
+                            <span class="question-mark">Q</span>
+                            ${q.q}
+                        </div>
+                        <div class="answer">
+                            ${q.a}
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                qaContainer.innerHTML = '<p style="color: #64748b; font-size: 0.9rem;">No questions asked yet.</p>';
+            }
+
+            // Initial Price Update
+            updatePrice();
+        });
+
+        // --- 2. Price Calculation Logic ---
+        const periodSelect = document.getElementById('rentalPeriod');
+        const durationInput = document.getElementById('rentalDuration');
+        const durationLabel = document.getElementById('durationLabel');
+        const totalCalcText = document.getElementById('totalCalcText');
+        const totalValue = document.getElementById('totalValue');
+        const btnRent = document.getElementById('btnRentRequest');
+        const termsCheck = document.getElementById('termsCheck');
+
+        function updatePrice() {
+            const price = parseInt(periodSelect.value);
+            const duration = parseInt(durationInput.value) || 1;
+            const total = price * duration;
+            
+            const selectedText = periodSelect.options[periodSelect.selectedIndex].text.split(' - ')[0];
+            const unitName = selectedText.replace('Per ', '');
+            
+            durationLabel.textContent = `How many ${unitName}?`;
+            totalCalcText.textContent = `₱${price} × ${duration} ${unitName}${duration > 1 ? 's' : ''}`;
+            totalValue.textContent = total.toLocaleString();
+        }
+
+        periodSelect.addEventListener('change', updatePrice);
+        durationInput.addEventListener('input', updatePrice);
+
+        btnRent.addEventListener('click', () => {
+            if (btnRent.classList.contains('sent')) return;
+
+            if (!termsCheck.checked) {
+                UIUtils.showToast("Please agree to the Rental Agreement", "info");
+                return;
+            }
+            
+            // Status Transition Logic
+            btnRent.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+            btnRent.style.pointerEvents = 'none';
+
+            setTimeout(() => {
+                btnRent.innerHTML = '<i class="fas fa-check"></i> Request Sent';
+                btnRent.classList.add('sent');
+                UIUtils.showToast("Rental request sent! Lender will be notified.");
+                
+                // Trigger "Real" Notification for Lender (Simulated)
+                const itemName = document.getElementById('itemTitle').textContent;
+                AuthSystem.addNotification("New Rental Request", `Someone wants to rent your '${itemName}'.`);
+                
+                // Optional: Store in local storage to persist the "Sent" state for this item
+                const itemId = new URLSearchParams(window.location.search).get('id') || 'camera';
+                localStorage.setItem(`request_sent_${itemId}`, 'true');
+            }, 1200);
+        });
+
+        // Restore "Sent" state on load
+        document.addEventListener('DOMContentLoaded', () => {
+            const itemId = new URLSearchParams(window.location.search).get('id') || 'camera';
+            if (localStorage.getItem(`request_sent_${itemId}`) === 'true') {
+                btnRent.innerHTML = '<i class="fas fa-check"></i> Request Sent';
+                btnRent.classList.add('sent');
+            }
+        });
+
+        // Map selection from cards to dropdown
+        document.querySelectorAll('.rate-card').forEach(card => {
+            card.addEventListener('click', () => {
+                document.querySelectorAll('.rate-card').forEach(c => c.classList.remove('active'));
+                card.classList.add('active');
+                
+                const rateType = card.dataset.rate;
+                const mapping = { hourly: 0, daily: 1, weekly: 2, monthly: 3 };
+                periodSelect.selectedIndex = mapping[rateType];
+                updatePrice();
+            });
+        });
+    </script>
+</body>
+</html>

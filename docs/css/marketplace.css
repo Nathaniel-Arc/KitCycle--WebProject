@@ -110,30 +110,90 @@
 
 .market-card {
     background: var(--white);
-    border: 1px solid var(--border);
+    border: 1px solid #f1f5f9;
     border-radius: 12px;
     overflow: hidden;
-    transition: transform 0.2s;
+    /* Multi-layered Elevation Shadow */
+    box-shadow: 
+        0 1px 3px 0 rgba(0, 0, 0, 0.1), 
+        0 1px 2px -1px rgba(0, 0, 0, 0.1),
+        0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Perfectly identical height */
 }
 
 .market-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+    transform: translateY(-8px);
+    box-shadow: 
+        0 20px 25px -5px rgba(0, 0, 0, 0.1), 
+        0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    border-color: #e2e8f0;
 }
 
 .market-img-container {
-    height: 180px;
+    position: relative;
     width: 100%;
+    aspect-ratio: 16 / 10; /* Fixed aspect ratio */
+    overflow: hidden;
 }
 
 .market-img-container img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: cover; /* No distortion */
+    transition: transform 0.5s ease;
+}
+
+.market-card:hover .market-img-container img {
+    transform: scale(1.05);
+}
+
+/* New Component Styles */
+.status-pill {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #10b981;
+    color: white;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    z-index: 5; /* Ensure visibility on hover */
+}
+
+.save-heart {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #ef4444;
+    cursor: pointer;
+    z-index: 2;
+    transition: 0.2s;
+}
+
+.save-heart:hover {
+    transform: scale(1.1);
+    background: #fff;
 }
 
 .market-info {
-    padding: 15px;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Content pushes footer down */
 }
 
 /* Individual Category Color Badges */
@@ -153,8 +213,32 @@
 
 .market-info h4 {
     font-size: 1.05rem;
-    margin-bottom: 5px;
+    margin-bottom: 4px;
+    font-weight: 800;
+    color: #111827;
+}
+
+.lender-info {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 10px;
+}
+
+.lender-name {
+    font-size: 0.8rem;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.verified-badge-small {
+    background: #f0fdf4;
+    color: #16a34a;
+    font-size: 0.65rem;
     font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 6px;
+    text-transform: uppercase;
 }
 
 .location {
@@ -166,37 +250,72 @@
 .rating-row {
     display: flex;
     align-items: center;
-    gap: 5px;
-    margin-bottom: 15px;
+    gap: 4px;
+    margin-bottom: 20px;
+    margin-top: auto; /* Push to bottom */
 }
 
 .stars {
-    font-size: 0.85rem;
+    color: #FFD700; /* Vibrant Gold */
+    font-size: 0.9rem;
+    filter: drop-shadow(0 0 2px rgba(255, 215, 0, 0.3));
 }
 
 .rating-text {
     font-size: 0.85rem;
-    color: var(--text-muted);
+    color: #64748b;
+    font-weight: 500;
 }
 
 .card-footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-top: 1px solid #f3f4f6;
-    padding-top: 15px;
+    border-top: 1px solid #f1f5f9;
+    padding-top: 18px;
+    margin-top: auto;
 }
 
 .price {
     font-size: 1.25rem;
     font-weight: 800;
     color: var(--maroon);
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
 }
 
 .per-day {
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    font-weight: 400;
+    font-size: 0.75rem;
+    color: #64748b;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.item-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.btn-save-mini {
+    background: #f8fafc;
+    color: #94a3b8;
+    border: 1px solid #e2e8f0;
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-save-mini:hover {
+    background: #fff1f2;
+    color: #f43f5e;
+    border-color: #fecaca;
 }
 
 .btn-rent-now {
@@ -204,14 +323,17 @@
     color: var(--white);
     border: none;
     padding: 8px 18px;
-    border-radius: 6px;
-    font-weight: 600;
+    border-radius: 8px;
+    font-weight: 700;
     cursor: pointer;
-    transition: 0.2s;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px -1px rgba(128, 0, 0, 0.2);
 }
 
 .btn-rent-now:hover {
     background: #600000;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(128, 0, 0, 0.3);
 }
 
 @media (max-width: 768px) {

@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="script/ui-utils.js"></script>
+    <script src="script/auth.js" defer></script>
 </head>
 
 <body>
@@ -16,7 +18,7 @@
         <nav class="navbar">
             <div class="logo">
                 <img src="images/wmsulogo.png" alt="WMSU Logo" class="nav-logo-img">
-                WMSU<span>KitCycle</span>
+                <div class="logo-text">WMSU<span>KitCycle</span></div>
             </div>
             <div class="nav-right">
                 <ul class="nav-links">
@@ -43,7 +45,7 @@
                     students succeed.</p>
                 <div class="hero-cta">
                     <a href="pages/marketplace.html" class="btn-gold-cta">Explore Marketplace</a>
-                    <a href="pages/login.html" class="btn-outline">+ List an Item</a>
+                    <a href="#" class="btn-outline" id="btnListItem">+ List an Item</a>
                 </div>
             </div>
             <div class="hero-image-box">
@@ -71,30 +73,30 @@
             <p>Find exactly what you need for your academic success</p>
         </div>
         <div class="category-grid">
-            <div class="cat-card">
+            <a href="pages/marketplace.html?cat=tools" class="cat-card" style="text-decoration:none;color:inherit;">
                 <i class="fas fa-calculator"></i>
                 <h3>Academic Tools</h3>
                 <p>Calculators, rulers, drafting tools</p>
                 <span class="item-count">45 - Items</span>
-            </div>
-            <div class="cat-card">
+            </a>
+            <a href="pages/marketplace.html?cat=lab" class="cat-card" style="text-decoration:none;color:inherit;">
                 <i class="fas fa-microscope"></i>
                 <h3>Laboratory Equipment</h3>
                 <p>Microscopes, lab instruments</p>
                 <span class="item-count">28 - Items</span>
-            </div>
-            <div class="cat-card">
+            </a>
+            <a href="pages/marketplace.html?cat=text" class="cat-card" style="text-decoration:none;color:inherit;">
                 <i class="fas fa-book"></i>
                 <h3>Textbooks</h3>
                 <p>Course materials, references</p>
                 <span class="item-count">120+ Items</span>
-            </div>
-            <div class="cat-card">
+            </a>
+            <a href="pages/marketplace.html?cat=media" class="cat-card" style="text-decoration:none;color:inherit;">
                 <i class="fas fa-camera"></i>
                 <h3>Media Equipment</h3>
                 <p>Cameras, lighting, audio gear</p>
                 <span class="item-count">32+ Items</span>
-            </div>
+            </a>
         </div>
     </section>
     <hr class="section-separator">
@@ -105,53 +107,86 @@
         </div>
 
         <div class="items-grid">
-            <div class="item-card">
+            <div class="item-card" data-id="camera">
                 <div class="item-img-container">
+                    <span class="status-pill">Available</span>
                     <img src="images/camera.jpg" alt="Canon EOS 90D">
                 </div>
                 <div class="item-info">
-                    <h3>Canon EOS 90D DSLR</h3>
-                    <p class="location"><i class="fas fa-map-marker-alt"></i> WMSU Campus</p>
+                    <a href="pages/item-details html/item-details.html?id=camera" style="text-decoration: none; color: inherit;"><h3>Canon EOS 90D DSLR</h3></a>
+                    <div class="lender-info">
+                        <span class="lender-name">Maria Santos</span>
+                        <span class="verified-badge-small"><i class="fas fa-check"></i> Verified Student</span>
+                    </div>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> Engineering Lobby</p>
                     <div class="rating">
-                        <i class="fas fa-star"></i> 4.9 <span>(23 reviews)</span>
+                        <i class="fas fa-star"></i> 4.9 <span>| 12 Rentals</span>
                     </div>
                     <div class="item-footer">
-                        <div class="price-tag">₱250<span>/day</span></div>
-                        <button class="btn-rent">Rent</button>
+                        <div class="price-tag">
+                            ₱250
+                            <span>per day</span>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn-save-mini" title="Save for later"><i class="far fa-heart"></i></button>
+                            <button class="btn-rent">Rent Now</button>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="item-card">
+            <div class="item-card" data-id="calculator">
                 <div class="item-img-container">
+                    <span class="status-pill">Available</span>
                     <img src="images/calculator.jpg" alt="Scientific Calculator">
                 </div>
                 <div class="item-info">
-                    <h3>Scientific Calculator TI-84</h3>
-                    <p class="location"><i class="fas fa-map-marker-alt"></i> WMSU Campus</p>
+                    <a href="pages/item-details html/item-details.html?id=calculator" style="text-decoration: none; color: inherit;"><h3>Scientific Calculator TI-84</h3></a>
+                    <div class="lender-info">
+                        <span class="lender-name">Juan Dela Cruz</span>
+                        <span class="verified-badge-small"><i class="fas fa-check"></i> Verified Student</span>
+                    </div>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> Science Building 2F</p>
                     <div class="rating">
-                        <i class="fas fa-star"></i> 5 <span>(45 reviews)</span>
+                        <i class="fas fa-star"></i> 5.0 <span>| 45 Rentals</span>
                     </div>
                     <div class="item-footer">
-                        <div class="price-tag">₱50<span>/day</span></div>
-                        <button class="btn-rent">Rent</button>
+                        <div class="price-tag">
+                            ₱50
+                            <span>per day</span>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn-save-mini" title="Save for later"><i class="far fa-heart"></i></button>
+                            <button class="btn-rent">Rent Now</button>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="item-card">
+            <div class="item-card" data-id="textbook">
                 <div class="item-img-container">
+                    <span class="status-pill">Available</span>
                     <img src="images/books.jpeg" alt="Engineering Textbooks">
                 </div>
                 <div class="item-info">
-                    <h3>Engineering Textbook Bundle</h3>
-                    <p class="location"><i class="fas fa-map-marker-alt"></i> WMSU Campus</p>
+                    <a href="pages/item-details html/item-details.html?id=textbook" style="text-decoration: none; color: inherit;"><h3>Engineering Textbook Bundle</h3></a>
+                    <div class="lender-info">
+                        <span class="lender-name">Elena Rodriguez</span>
+                        <span class="verified-badge-small"><i class="fas fa-check"></i> Verified Student</span>
+                    </div>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> Main Library Cafe</p>
                     <div class="rating">
-                        <i class="fas fa-star"></i> 4.8 <span>(18 reviews)</span>
+                        <i class="fas fa-star"></i> 4.8 <span>| 5 Rentals</span>
                     </div>
                     <div class="item-footer">
-                        <div class="price-tag">₱100<span>/week</span></div>
-                        <button class="btn-rent">Rent</button>
+                        <div class="price-tag">
+                            ₱100
+                            <span>per week</span>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn-save-mini" title="Save for later"><i class="far fa-heart"></i></button>
+                            <button class="btn-rent">Rent Now</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -232,21 +267,21 @@
                 <a href="#">Browse Gear</a>
                 <a href="#">Category List</a>
                 <a href="pages/howitworks.html">How it Works</a>
-                <a href="#">Verified Sellers</a>
+                <a href="pages/verified-sellers.html">Verified Sellers</a>
             </div>
             <div class="footer-column">
                 <h4>USER RESOURCES</h4>
                 <a href="pages/login.html">Account Login</a>
                 <a href="pages/register.html">Student Registration</a>
-                <a href="#">Secure Meetups</a>
+                <a href="pages/safety.html">Secure Meetups</a>
                 <a href="pages/safety.html">Rental Safety</a>
             </div>
             <div class="footer-column">
                 <h4>POLICIES</h4>
-                <a href="#">Terms of Service</a>
-                <a href="#">Privacy Policy</a>
-                <a href="#">Prohibited Items</a>
-                <a href="#">Trust & Safety</a>
+                <a href="pages/terms-of-service.html">Terms of Service</a>
+                <a href="pages/privacy-policy.html">Privacy Policy</a>
+                <a href="pages/prohibited-items.html">Prohibited Items</a>
+                <a href="pages/safety.html">Trust & Safety</a>
             </div>
             <div class="footer-column">
                 <h4>SUPPORT</h4>
@@ -268,6 +303,118 @@
         </div>
     </footer>
 
+
+    <!-- Guest Login Modal -->
+    <div id="guestModal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-modal-btn" id="closeGuestModal">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="guest-modal-body">
+                <div class="guest-shield-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h2>Join the Verified <br>WMSU Community</h2>
+                <p>Sign up with your student email to start borrowing gear today. Only verified WMSU students can access the full platform.</p>
+                
+                <div class="guest-benefits-box">
+                    <div class="benefit-line">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Campus-verified transactions only</span>
+                    </div>
+                    <div class="benefit-line">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Secure in-person meetups</span>
+                    </div>
+                    <div class="benefit-line">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Build your student reputation</span>
+                    </div>
+                </div>
+
+                <div class="guest-modal-actions">
+                    <a href="pages/register.html" class="btn-create-account">
+                        Create Account <i class="fas fa-arrow-right"></i>
+                    </a>
+                    <a href="pages/login.html" class="btn-login-existing">
+                        Login to Existing Account
+                    </a>
+                </div>
+                
+                <div class="guest-modal-footer">
+                    Verification takes 24-48 hours. Free for all WMSU students.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const guestModal = document.getElementById('guestModal');
+            const closeGuestModal = document.getElementById('closeGuestModal');
+            const rentButtons = document.querySelectorAll('.btn-rent');
+
+            // Card Click Redirection
+            const itemCards = document.querySelectorAll('.item-card');
+            itemCards.forEach(card => {
+                card.style.cursor = 'pointer';
+                card.addEventListener('click', (e) => {
+                    if (e.target.closest('button') || e.target.closest('a')) return;
+                    const itemId = card.dataset.id;
+                    if (itemId) {
+                        window.location.href = `pages/item-details html/item-details.html?id=${itemId}`;
+                    }
+                });
+            });
+
+            // Open modal on rent click
+            rentButtons.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    
+                    // Check if user is already logged in
+                    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+                    if (isLoggedIn) {
+                        // Redirect to item details with ID
+                        const itemId = btn.closest('.item-card').dataset.id;
+                        if (itemId) {
+                            window.location.href = `pages/item-details html/item-details.html?id=${itemId}`;
+                        }
+                        return;
+                    }
+
+                    guestModal.style.display = 'flex';
+                });
+            });
+
+            // Saved Button Functionality is handled globally by ui-utils.js
+
+            // "+ List an Item" button guest guard
+            const listBtn = document.getElementById('btnListItem');
+            if (listBtn) {
+                listBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (localStorage.getItem('isLoggedIn') === 'true') {
+                        window.location.href = 'pages/student-interface html/student-listings.html';
+                    } else {
+                        guestModal.style.display = 'flex';
+                    }
+                });
+            }
+
+            // Close modal logic
+            closeGuestModal.addEventListener('click', () => {
+                guestModal.style.display = 'none';
+            });
+
+            // Close on outside click
+            window.addEventListener('click', (e) => {
+                if (e.target === guestModal) {
+                    guestModal.style.display = 'none';
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

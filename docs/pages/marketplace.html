@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="../css/marketplace.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="../script/items-data.js"></script>
+    <script src="../script/ui-utils.js"></script>
+    <script src="../script/auth.js" defer></script>
 </head>
 <body>
 
@@ -15,7 +18,7 @@
         <nav class="navbar">
             <div class="logo">
                 <img src="../images/wmsulogo.png" alt="WMSU Logo" class="nav-logo-img">
-                WMSU <span>KitCycle</span>
+                <div class="logo-text">WMSU<span>KitCycle</span></div>
             </div>
             <div class="nav-right">
                 <ul class="nav-links">
@@ -57,241 +60,373 @@
     <section class="marketplace-grid-container">
         <div class="marketplace-grid">
             <!-- Item 1 -->
-            <div class="market-card" data-category="media">
+            <div class="market-card" data-category="media" data-id="camera">
                 <div class="market-img-container">
-                    <img src="../images/camera.jpg" alt="Canon EOS 90D DSLR">
+                    <a href="item-details html/item-details.html?id=camera" style="display: block; width: 100%; height: 100%;">
+                        <span class="status-pill">Available</span>
+                        <img src="../images/canon_dslr_90d.png" alt="Canon EOS 90D DSLR">
+                    </a>
                 </div>
                 <div class="market-info">
                     <span class="cat-badge media">Media Equipment</span>
-                    <h4>Canon EOS 90D DSLR</h4>
-                    <p class="location"><i class="fas fa-map-marker-alt"></i> WMSU Campus</p>
+                    <a href="item-details html/item-details.html?id=camera" style="text-decoration: none; color: inherit;"><h4>Canon EOS 90D DSLR</h4></a>
+                    <div class="lender-info">
+                        <span class="lender-name">Maria Santos</span>
+                        <span class="verified-badge-small"><i class="fas fa-check"></i> Verified Student</span>
+                    </div>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> Engineering Lobby</p>
                     <div class="rating-row">
-                        <span class="stars">⭐⭐⭐⭐⭐</span>
-                        <span class="rating-text">4.9 (23)</span>
+                        <span class="stars">★ 4.9</span>
+                        <span class="rating-text">| 12 Rentals</span>
                     </div>
                     <div class="card-footer">
-                        <span class="price">₱250<span class="per-day">/day</span></span>
-                        <button class="btn-rent-now">Rent</button>
+                        <div class="price">
+                            ₱250
+                            <span class="per-day">per day</span>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn-save-mini" title="Save for later"><i class="far fa-heart"></i></button>
+                            <button class="btn-rent-now">Rent Now</button>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- Item 2 -->
-            <div class="market-card" data-category="tools">
+            <div class="market-card" data-category="tools" data-id="calculator">
                 <div class="market-img-container">
+                    <span class="status-pill">Available</span>
                     <img src="../images/calculator.jpg" alt="Scientific Calculator TI-84">
                 </div>
                 <div class="market-info">
                     <span class="cat-badge tools">Academic Tools</span>
                     <h4>Scientific Calculator TI-84</h4>
-                    <p class="location"><i class="fas fa-map-marker-alt"></i> WMSU Campus</p>
+                    <div class="lender-info">
+                        <span class="lender-name">Juan Dela Cruz</span>
+                        <span class="verified-badge-small"><i class="fas fa-check"></i> Verified Student</span>
+                    </div>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> Science Building 2F</p>
                     <div class="rating-row">
-                        <span class="stars">⭐⭐⭐⭐⭐</span>
-                        <span class="rating-text">5 (45)</span>
+                        <span class="stars">★ 5.0</span>
+                        <span class="rating-text">| 45 Rentals</span>
                     </div>
                     <div class="card-footer">
-                        <span class="price">₱50<span class="per-day">/day</span></span>
-                        <button class="btn-rent-now">Rent</button>
+                        <div class="price">
+                            ₱50
+                            <span class="per-day">per day</span>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn-save-mini" title="Save for later"><i class="far fa-heart"></i></button>
+                            <button class="btn-rent-now">Rent Now</button>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- Item 3 -->
-            <div class="market-card" data-category="text">
+            <div class="market-card" data-category="text" data-id="textbook">
                 <div class="market-img-container">
+                    <span class="status-pill">Available</span>
                     <img src="../images/books.jpeg" alt="Engineering Textbook Bundle">
                 </div>
                 <div class="market-info">
                     <span class="cat-badge text">Textbooks</span>
                     <h4>Engineering Textbook Bundle</h4>
-                    <p class="location"><i class="fas fa-map-marker-alt"></i> WMSU Campus</p>
+                    <div class="lender-info">
+                        <span class="lender-name">Elena Rodriguez</span>
+                        <span class="verified-badge-small"><i class="fas fa-check"></i> Verified Student</span>
+                    </div>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> Main Library Cafe</p>
                     <div class="rating-row">
-                        <span class="stars">⭐⭐⭐⭐⭐</span>
-                        <span class="rating-text">4.8 (18)</span>
+                        <span class="stars">★ 4.8</span>
+                        <span class="rating-text">| 18 Rentals</span>
                     </div>
                     <div class="card-footer">
-                        <span class="price">₱100<span class="per-day">/week</span></span>
-                        <button class="btn-rent-now">Rent</button>
+                        <div class="price">
+                            ₱100
+                            <span class="per-day">per week</span>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn-save-mini" title="Save for later"><i class="far fa-heart"></i></button>
+                            <button class="btn-rent-now">Rent Now</button>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Item 4 -->
-            <div class="market-card" data-category="lab">
+            <div class="market-card" data-category="lab" data-id="microscope">
                 <div class="market-img-container">
+                    <span class="status-pill">Available</span>
                     <img src="../images/microscope.jpeg" alt="Laboratory Microscope">
                 </div>
                 <div class="market-info">
                     <span class="cat-badge lab">Laboratory Equipment</span>
                     <h4>Laboratory Microscope</h4>
-                    <p class="location"><i class="fas fa-map-marker-alt"></i> WMSU Campus</p>
+                    <div class="lender-info">
+                        <span class="lender-name">Professor Gomez</span>
+                        <span class="verified-badge-small"><i class="fas fa-check"></i> Verified Faculty</span>
+                    </div>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> Science Lab A</p>
                     <div class="rating-row">
-                        <span class="stars">⭐⭐⭐⭐⭐</span>
-                        <span class="rating-text">4.7 (12)</span>
+                        <span class="stars">★ 4.7</span>
+                        <span class="rating-text">| 12 Rentals</span>
                     </div>
                     <div class="card-footer">
-                        <span class="price">₱150<span class="per-day">/day</span></span>
-                        <button class="btn-rent-now">Rent</button>
+                        <div class="price">
+                            ₱150
+                            <span class="per-day">per day</span>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn-save-mini" title="Save for later"><i class="far fa-heart"></i></button>
+                            <button class="btn-rent-now">Rent Now</button>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Item 5 -->
-            <div class="market-card" data-category="media">
+            <div class="market-card" data-category="media" data-id="videocamera">
                 <div class="market-img-container">
+                    <span class="status-pill">Available</span>
                     <img src="../images/video-camera.png" alt="Professional Video Camera">
                 </div>
                 <div class="market-info">
                     <span class="cat-badge media">Media Equipment</span>
                     <h4>Professional Video Camera</h4>
-                    <p class="location"><i class="fas fa-map-marker-alt"></i> WMSU Campus</p>
+                    <div class="lender-info">
+                        <span class="lender-name">Mark Tuan</span>
+                        <span class="verified-badge-small"><i class="fas fa-check"></i> Verified Student</span>
+                    </div>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> ICT Center Lobby</p>
                     <div class="rating-row">
-                        <span class="stars">⭐⭐⭐⭐⭐</span>
-                        <span class="rating-text">4.9 (31)</span>
+                        <span class="stars">★ 4.9</span>
+                        <span class="rating-text">| 31 Rentals</span>
                     </div>
                     <div class="card-footer">
-                        <span class="price">₱300<span class="per-day">/day</span></span>
-                        <button class="btn-rent-now">Rent</button>
+                        <div class="price">
+                            ₱300
+                            <span class="per-day">per day</span>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn-save-mini" title="Save for later"><i class="far fa-heart"></i></button>
+                            <button class="btn-rent-now">Rent Now</button>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- Item 6 -->
-            <div class="market-card" data-category="tools">
+            <div class="market-card" data-category="tools" data-id="calcset">
                 <div class="market-img-container">
+                    <span class="status-pill">Available</span>
                     <img src="../images/calc-set.png" alt="Engineering Calculator Set">
                 </div>
                 <div class="market-info">
                     <span class="cat-badge tools">Academic Tools</span>
                     <h4>Engineering Calculator Set</h4>
-                    <p class="location"><i class="fas fa-map-marker-alt"></i> WMSU Campus</p>
+                    <div class="lender-info">
+                        <span class="lender-name">Sarah Jane</span>
+                        <span class="verified-badge-small"><i class="fas fa-check"></i> Verified Student</span>
+                    </div>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> CET Study Area</p>
                     <div class="rating-row">
-                        <span class="stars">⭐⭐⭐⭐⭐</span>
-                        <span class="rating-text">4.6 (28)</span>
+                        <span class="stars">★ 4.6</span>
+                        <span class="rating-text">| 28 Rentals</span>
                     </div>
                     <div class="card-footer">
-                        <span class="price">₱75<span class="per-day">/day</span></span>
-                        <button class="btn-rent-now">Rent</button>
+                        <div class="price">
+                            ₱75
+                            <span class="per-day">per day</span>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn-save-mini" title="Save for later"><i class="far fa-heart"></i></button>
+                            <button class="btn-rent-now">Rent Now</button>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- Item 7 -->
-            <div class="market-card" data-category="lab">
+            <div class="market-card" data-category="lab" data-id="stethoscope">
                 <div class="market-img-container">
+                    <span class="status-pill">Available</span>
                     <img src="../images/stethoscope.png" alt="Medical Stethoscope">
                 </div>
                 <div class="market-info">
                     <span class="cat-badge lab">Laboratory Equipment</span>
                     <h4>Medical Stethoscope</h4>
-                    <p class="location"><i class="fas fa-map-marker-alt"></i> WMSU Campus</p>
+                    <div class="lender-info">
+                        <span class="lender-name">Dr. Lisa Manoban</span>
+                        <span class="verified-badge-small"><i class="fas fa-check"></i> Verified Student</span>
+                    </div>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> College of Nursing</p>
                     <div class="rating-row">
-                        <span class="stars">⭐⭐⭐⭐⭐</span>
-                        <span class="rating-text">5 (15)</span>
+                        <span class="stars">★ 5.0</span>
+                        <span class="rating-text">| 15 Rentals</span>
                     </div>
                     <div class="card-footer">
-                        <span class="price">₱80<span class="per-day">/day</span></span>
-                        <button class="btn-rent-now">Rent</button>
+                        <div class="price">
+                            ₱80
+                            <span class="per-day">per day</span>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn-save-mini" title="Save for later"><i class="far fa-heart"></i></button>
+                            <button class="btn-rent-now">Rent Now</button>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- Item 8 -->
-            <div class="market-card" data-category="media">
+            <div class="market-card" data-category="media" data-id="lighting">
                 <div class="market-img-container">
+                    <span class="status-pill">Available</span>
                     <img src="../images/lighting.jpeg" alt="Studio Lighting Kit">
                 </div>
                 <div class="market-info">
                     <span class="cat-badge media">Media Equipment</span>
                     <h4>Studio Lighting Kit</h4>
-                    <p class="location"><i class="fas fa-map-marker-alt"></i> WMSU Campus</p>
+                    <div class="lender-info">
+                        <span class="lender-name">Jackson Wang</span>
+                        <span class="verified-badge-small"><i class="fas fa-check"></i> Verified Student</span>
+                    </div>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> MassComm Studio</p>
                     <div class="rating-row">
-                        <span class="stars">⭐⭐⭐⭐⭐</span>
-                        <span class="rating-text">4.8 (22)</span>
+                        <span class="stars">★ 4.8</span>
+                        <span class="rating-text">| 22 Rentals</span>
                     </div>
                     <div class="card-footer">
-                        <span class="price">₱200<span class="per-day">/day</span></span>
-                        <button class="btn-rent-now">Rent</button>
+                        <div class="price">
+                            ₱200
+                            <span class="per-day">per day</span>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn-save-mini" title="Save for later"><i class="far fa-heart"></i></button>
+                            <button class="btn-rent-now">Rent Now</button>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- Item 9 -->
-            <div class="market-card" data-category="tools">
+            <div class="market-card" data-category="tools" data-id="drafting">
                 <div class="market-img-container">
+                    <span class="status-pill">Available</span>
                     <img src="../images/calc-set.png" alt="Drafting Tools Set">
                 </div>
                 <div class="market-info">
                     <span class="cat-badge tools">Academic Tools</span>
                     <h4>Drafting Tools Set</h4>
-                    <p class="location"><i class="fas fa-map-marker-alt"></i> WMSU Campus</p>
+                    <div class="lender-info">
+                        <span class="lender-name">Rafael Santiago</span>
+                        <span class="verified-badge-small"><i class="fas fa-check"></i> Verified Student</span>
+                    </div>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> Architecture Building</p>
                     <div class="rating-row">
-                        <span class="stars">⭐⭐⭐⭐⭐</span>
-                        <span class="rating-text">4.5 (19)</span>
+                        <span class="stars">★ 4.5</span>
+                        <span class="rating-text">| 19 Rentals</span>
                     </div>
                     <div class="card-footer">
-                        <span class="price">₱40<span class="per-day">/day</span></span>
-                        <button class="btn-rent-now">Rent</button>
+                        <div class="price">
+                            ₱40
+                            <span class="per-day">per day</span>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn-save-mini" title="Save for later"><i class="far fa-heart"></i></button>
+                            <button class="btn-rent-now">Rent Now</button>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- Item 10 -->
-            <div class="market-card" data-category="tools">
+            <div class="market-card" data-category="tools" data-id="modeling">
                 <div class="market-img-container">
+                    <span class="status-pill">Available</span>
                     <img src="../images/calc-set.png" alt="Architecture Modeling Kit">
                 </div>
                 <div class="market-info">
                     <span class="cat-badge tools">Academic Tools</span>
                     <h4>Architecture Modeling Kit</h4>
-                    <p class="location"><i class="fas fa-map-marker-alt"></i> WMSU Campus</p>
+                    <div class="lender-info">
+                        <span class="lender-name">Isabella Chua</span>
+                        <span class="verified-badge-small"><i class="fas fa-check"></i> Verified Student</span>
+                    </div>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> CET Drafting Lab</p>
                     <div class="rating-row">
-                        <span class="stars">⭐⭐⭐⭐⭐</span>
-                        <span class="rating-text">4.4 (15)</span>
+                        <span class="stars">★ 4.4</span>
+                        <span class="rating-text">| 15 Rentals</span>
                     </div>
                     <div class="card-footer">
-                        <span class="price">₱60<span class="per-day">/day</span></span>
-                        <button class="btn-rent-now">Rent</button>
+                        <div class="price">
+                            ₱60
+                            <span class="per-day">per day</span>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn-save-mini" title="Save for later"><i class="far fa-heart"></i></button>
+                            <button class="btn-rent-now">Rent Now</button>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- Item 11 -->
-            <div class="market-card" data-category="media">
+            <div class="market-card" data-category="media" data-id="tablet">
                 <div class="market-img-container">
+                    <span class="status-pill">Available</span>
                     <img src="../images/tablet.jpeg" alt="Digital Drawing Tablet">
                 </div>
                 <div class="market-info">
                     <span class="cat-badge media">Media Equipment</span>
                     <h4>Digital Drawing Tablet</h4>
-                    <p class="location"><i class="fas fa-map-marker-alt"></i> WMSU Campus</p>
+                    <div class="lender-info">
+                        <span class="lender-name">Gabriel Lopez</span>
+                        <span class="verified-badge-small"><i class="fas fa-check"></i> Verified Student</span>
+                    </div>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> ICT Computer Lab 3</p>
                     <div class="rating-row">
-                        <span class="stars">⭐⭐⭐⭐⭐</span>
-                        <span class="rating-text">4.9 (38)</span>
+                        <span class="stars">★ 4.9</span>
+                        <span class="rating-text">| 38 Rentals</span>
                     </div>
                     <div class="card-footer">
-                        <span class="price">₱120<span class="per-day">/day</span></span>
-                        <button class="btn-rent-now">Rent</button>
+                        <div class="price">
+                            ₱120
+                            <span class="per-day">per day</span>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn-save-mini" title="Save for later"><i class="far fa-heart"></i></button>
+                            <button class="btn-rent-now">Rent Now</button>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- Item 12 -->
-            <div class="market-card" data-category="lab">
+            <div class="market-card" data-category="lab" data-id="labgown">
                 <div class="market-img-container">
+                    <span class="status-pill">Available</span>
                     <img src="../images/microscope.jpeg" alt="Safety Lab Goggles & Coat">
                 </div>
                 <div class="market-info">
                     <span class="cat-badge lab">Laboratory Equipment</span>
                     <h4>Safety Lab Goggles & Coat</h4>
-                    <p class="location"><i class="fas fa-map-marker-alt"></i> WMSU Campus</p>
+                    <div class="lender-info">
+                        <span class="lender-name">Dr. Antonio Luna</span>
+                        <span class="verified-badge-small"><i class="fas fa-check"></i> Verified Faculty</span>
+                    </div>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> Science Building Lab B</p>
                     <div class="rating-row">
-                        <span class="stars">⭐⭐⭐⭐⭐</span>
-                        <span class="rating-text">5 (10)</span>
+                        <span class="stars">★ 5.0</span>
+                        <span class="rating-text">| 10 Rentals</span>
                     </div>
                     <div class="card-footer">
-                        <span class="price">₱30<span class="per-day">/day</span></span>
-                        <button class="btn-rent-now">Rent</button>
+                        <div class="price">
+                            ₱30
+                            <span class="per-day">per day</span>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn-save-mini" title="Save for later"><i class="far fa-heart"></i></button>
+                            <button class="btn-rent-now">Rent Now</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -349,15 +484,60 @@
         </div>
     </footer>
 
+
+    <!-- Guest Login Modal -->
+    <div id="guestModal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-modal-btn" id="closeGuestModal">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="guest-modal-body">
+                <div class="guest-shield-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h2>Join the Verified <br>WMSU Community</h2>
+                <p>Sign up with your student email to start borrowing gear today. Only verified WMSU students can access the full platform.</p>
+                
+                <div class="guest-benefits-box">
+                    <div class="benefit-line">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Campus-verified transactions only</span>
+                    </div>
+                    <div class="benefit-line">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Secure in-person meetups</span>
+                    </div>
+                    <div class="benefit-line">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Build your student reputation</span>
+                    </div>
+                </div>
+
+                <div class="guest-modal-actions">
+                    <a href="register.html" class="btn-create-account">
+                        Create Account <i class="fas fa-arrow-right"></i>
+                    </a>
+                    <a href="login.html" class="btn-login-existing">
+                        Login to Existing Account
+                    </a>
+                </div>
+                
+                <div class="guest-modal-footer">
+                    Verification takes 24-48 hours. Free for all WMSU students.
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Filter logic (existing)
             const filterBtns = document.querySelectorAll('.filter-btn');
             const cards = document.querySelectorAll('.market-card');
             const itemCount = document.getElementById('item-count');
 
             filterBtns.forEach(btn => {
                 btn.addEventListener('click', () => {
-                    // Update active button
                     filterBtns.forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
 
@@ -366,7 +546,6 @@
 
                     cards.forEach(card => {
                         const category = card.getAttribute('data-category');
-                        
                         if (filterValue === 'all' || category === filterValue) {
                             card.style.display = 'block';
                             visibleItems++;
@@ -379,6 +558,67 @@
                         itemCount.textContent = `${visibleItems} items found`;
                     }
                 });
+            });
+
+            // Auto-filter from URL param (e.g. ?cat=tools)
+            const urlCat = new URLSearchParams(window.location.search).get('cat');
+            if (urlCat) {
+                const target = document.querySelector(`.filter-btn[data-filter="${urlCat}"]`);
+                if (target) target.click();
+            }
+
+            // Guest Modal Logic
+            const guestModal = document.getElementById('guestModal');
+            const closeGuestModal = document.getElementById('closeGuestModal');
+            const rentButtons = document.querySelectorAll('.btn-rent-now');
+
+            // Card Click Redirection Fix
+            cards.forEach(card => {
+                card.style.cursor = 'pointer';
+                card.addEventListener('click', (e) => {
+                    // Don't redirect if clicking buttons or links (which might already have href)
+                    if (e.target.closest('button') || e.target.closest('a')) return;
+                    
+                    const itemId = card.dataset.id;
+                    if (itemId) {
+                        window.location.href = `item-details html/item-details.html?id=${itemId}`;
+                    }
+                });
+            });
+
+            // Open modal on rent click
+            rentButtons.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    // Check if user is already logged in
+                    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+                    if (isLoggedIn) {
+                        // Redirect to item details with ID
+                        const itemId = btn.closest('.market-card').dataset.id;
+                        if (itemId) {
+                            window.location.href = `item-details html/item-details.html?id=${itemId}`;
+                        }
+                        return;
+                    }
+
+                    guestModal.style.display = 'flex';
+                });
+            });
+
+            // --- Saved Functionality is now handled globally in ui-utils.js ---
+            
+            // Close modal logic
+            closeGuestModal.addEventListener('click', () => {
+                guestModal.style.display = 'none';
+            });
+
+            // Close on outside click
+            window.addEventListener('click', (e) => {
+                if (e.target === guestModal) {
+                    guestModal.style.display = 'none';
+                }
             });
         });
     </script>

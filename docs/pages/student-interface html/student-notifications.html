@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Notifications | WMSU KitCycle</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/student-dashboard/student-dashboard.css">
+    <script src="../../script/auth.js" defer></script>
+    <script src="../../script/ui-utils.js" defer></script>
+    <style>
+        .notifications-container {
+            max-width: 800px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            padding: 20px;
+        }
+        .notif-header-page {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        .notif-header-page h2 {
+            color: #800000;
+            margin: 0;
+        }
+        .btn-clear-all {
+            background: #f1f5f9;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            color: #64748b;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-clear-all:hover {
+            background: #fef2f2;
+            color: #ef4444;
+        }
+        .notif-list-page {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .notif-card {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 10px;
+            border-left: 4px solid transparent;
+            transition: all 0.2s;
+        }
+        .notif-card.unread {
+            border-left-color: #800000;
+            background: #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .notif-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #fee2e2;
+            color: #800000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        .notif-content h4 {
+            margin: 0 0 5px 0;
+            font-size: 1rem;
+            color: #1f2937;
+        }
+        .notif-content p {
+            margin: 0 0 8px 0;
+            font-size: 0.9rem;
+            color: #4b5563;
+        }
+        .notif-meta {
+            font-size: 0.8rem;
+            color: #9ca3af;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #64748b;
+        }
+        .empty-state i {
+            font-size: 3rem;
+            color: #cbd5e1;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body style="background: #f4f7f6;">
+
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="nav-left-group">
+            <div class="logo" onclick="window.location.href='../../index.html'" style="cursor: pointer;">
+                <img src="../../images/wmsulogo.png" alt="WMSU Logo" class="nav-logo-img">
+                <div class="logo-text">WMSU<span>KitCycle</span></div>
+            </div>
+        </div>
+        <div class="nav-right">
+            <div class="auth-buttons"></div>
+        </div>
+    </header>
+
+    <div class="dashboard-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-profile">
+                <div class="profile-img-container">
+                    <img src="" alt="Profile" id="sidebarProfileImg">
+                </div>
+                <div class="profile-info">
+                    <h3 id="sidebarUserName">Student</h3>
+                    <span id="sidebarUserRole">Student</span>
+                </div>
+            </div>
+
+            <ul class="sidebar-nav">
+                <li><a href="student-dashboard.html"><i class="fas fa-th-large"></i> <span>Dashboard</span></a></li>
+                <li><a href="student-rentals.html"><i class="fas fa-box-open"></i> <span>My Rentals</span></a></li>
+                <li>
+                    <a href="student-messages.html">
+                        <i class="fas fa-comments"></i>
+                        <span style="margin-left: 12px;">Messages</span>
+                    </a>
+                </li>
+                <li><a href="student-saved.html"><i class="fas fa-heart"></i> <span>Saved Items</span></a></li>
+                <li><a href="student-rating.html"><i class="fas fa-star"></i> <span>My Rating</span></a></li>
+                <li><a href="student-listings.html"><i class="fas fa-list"></i> <span>My Listings</span></a></li>
+            </ul>
+
+            <a href="javascript:void(0)" onclick="AuthSystem.confirmLogout(); return false;" class="sidebar-logout"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="dashboard-content">
+            <div class="notifications-container">
+                <div class="notif-header-page">
+                    <h2><i class="fas fa-bell"></i> All Notifications</h2>
+                    <button class="btn-clear-all" onclick="clearNotifications()">Clear All</button>
+                </div>
+                
+                <div class="notif-list-page" id="fullNotifList">
+                    <!-- Loaded dynamically -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            renderNotifications();
+            // Mark all as read when opening page
+            const notifications = JSON.parse(localStorage.getItem('kitcycle_notifications') || '[]');
+            notifications.forEach(n => n.read = true);
+            localStorage.setItem('kitcycle_notifications', JSON.stringify(notifications));
+        });
+
+        function renderNotifications() {
+            const listContainer = document.getElementById('fullNotifList');
+            const notifications = JSON.parse(localStorage.getItem('kitcycle_notifications') || '[]');
+
+            if (notifications.length === 0) {
+                listContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="far fa-bell-slash"></i>
+                        <h3>No Notifications Yet</h3>
+                        <p>When you have rental updates or messages, they will appear here.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            listContainer.innerHTML = notifications.map(n => `
+                <div class="notif-card ${!n.read ? 'unread' : ''}">
+                    <div class="notif-icon">
+                        <i class="fas ${getIconForTitle(n.title)}"></i>
+                    </div>
+                    <div class="notif-content">
+                        <h4>${n.title}</h4>
+                        <p>${n.message}</p>
+                        <div class="notif-meta"><i class="far fa-clock"></i> ${n.time}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function getIconForTitle(title) {
+            title = title.toLowerCase();
+            if (title.includes('rental') || title.includes('request')) return 'fa-box-open';
+            if (title.includes('return') || title.includes('handover')) return 'fa-handshake';
+            if (title.includes('message')) return 'fa-comment-alt';
+            if (title.includes('system') || title.includes('alert')) return 'fa-exclamation-circle';
+            return 'fa-bell';
+        }
+
+        function clearNotifications() {
+            if (confirm("Are you sure you want to clear all notifications?")) {
+                localStorage.setItem('kitcycle_notifications', '[]');
+                renderNotifications();
+                UIUtils.showToast("Notifications cleared", "success");
+            }
+        }
+    </script>
+</body>
+</html>

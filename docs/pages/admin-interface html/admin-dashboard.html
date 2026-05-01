@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="../../css/admin-interface/admin-dashboard.css">
+    <script src="../../script/auth.js" defer></script>
 
     <!-- Instant Sidebar State Check -->
     <script>
@@ -36,9 +37,9 @@
             <div class="sidebar-toggle" onclick="toggleSidebar()">
                 <i class="fas fa-bars"></i>
             </div>
-            <div class="logo" style="display: flex; align-items: center;">
-                <img src="../../images/wmsulogo.png" alt="Logo" style="height: 35px; margin-right: 10px;">
-                WMSU<span style="margin-left: 5px;">KitCycle</span>
+            <div class="logo">
+                <img src="../../images/wmsulogo.png" alt="WMSU Logo" class="nav-logo-img">
+                <div class="logo-text">WMSU<span>KitCycle</span></div>
             </div>
         </div>
         <div class="nav-right" style="display: flex; align-items: center; gap: 30px;">
@@ -48,32 +49,8 @@
                 <li><a href="../howitworks.html">How It Works</a></li>
                 <li><a href="../safety.html">Safety</a></li>
             </ul>
-            <div class="auth-buttons" style="display: flex; align-items: center; gap: 15px;">
-                <!-- Notifications -->
-                <div class="nav-notification-container">
-                    <button class="nav-notification-btn" onclick="toggleNotifs()">
-                        <i class="far fa-bell"></i>
-                        <div class="notif-badge" id="navNotifBadge" style="display: block;"></div>
-                    </button>
-                    <div class="notif-dropdown" id="notifDropdown">
-                        <div class="notif-header">Notifications</div>
-                        <div class="notif-item">
-                            <p>New user registration pending verification.</p>
-                            <span>10 mins ago</span>
-                        </div>
-                        <div class="notif-item">
-                            <p>System update scheduled for 2:00 AM.</p>
-                            <span>4 hours ago</span>
-                        </div>
-                        <div class="notif-view-all">View All Notifications</div>
-                    </div>
-                </div>
-
-                <span class="user-profile-nav" style="display: flex; align-items: center; font-weight: 600; color: #111827;">
-                    <img src="../../images/nash_profile.png" alt="Admin" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; margin-right: 10px; border: 1.5px solid #800000;"> 
-                    Nash Arciaga
-                </span>
-                <a href="../login.html" class="btn-login" style="padding: 6px 15px; font-size: 0.85rem;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            <div class="auth-buttons">
+                <!-- Injected by auth.js -->
             </div>
         </div>
     </header>
@@ -82,10 +59,10 @@
 
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-profile">
-                <div class="profile-avatar"><img src="../../images/nash_profile.png" alt="Nash Arciaga"></div>
+                <div class="profile-avatar"><img id="sidebarProfileImg" src="../../images/nash_profile.png" alt="Profile"></div>
                 <div class="profile-info">
-                    <h4>Nash Arciaga</h4>
-                    <span>Admin</span>
+                    <h4 id="sidebarUserName">Nash Arciaga</h4>
+                    <span id="sidebarUserRole">Admin</span>
                 </div>
             </div>
 
@@ -98,7 +75,7 @@
                 <li><a href="admin-settings.html"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
             </ul>
 
-            <a href="../login.html" class="sidebar-logout"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
+            <a href="javascript:void(0)" onclick="AuthSystem.confirmLogout(); return false;" class="sidebar-logout"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
         </aside>
 
         <main class="dashboard-content" id="mainContent">
@@ -122,14 +99,12 @@
         }
 
         function toggleNotifs() {
-            const dd = document.getElementById('notifDropdown');
-            dd.style.display = dd.style.display === 'block' ? 'none' : 'block';
+            // Handled by auth.js
         }
 
         window.onclick = function(event) {
             if (!event.target.closest('.nav-notification-btn')) {
-                const dd = document.getElementById('notifDropdown');
-                if (dd) dd.style.display = 'none';
+                // Handled by auth.js
             }
         }
 

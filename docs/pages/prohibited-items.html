@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prohibited Items | WMSU KitCycle</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="../script/auth.js" defer></script>
+    <style>
+        .policy-page { padding: 100px 5% 60px; max-width: 900px; margin: 0 auto; }
+        .policy-page h1 { font-size: 2.2rem; font-weight: 800; color: #111827; margin-bottom: 5px; }
+        .policy-page .subtitle { color: #64748b; margin-bottom: 35px; font-size: 0.95rem; }
+        .policy-section { margin-bottom: 35px; }
+        .policy-section h2 { font-size: 1.15rem; font-weight: 700; color: #800000; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+        .policy-section h2 i { font-size: 1rem; }
+        .policy-section p, .policy-section li { line-height: 1.7; color: #374151; font-size: 0.92rem; }
+        .policy-section ul { padding-left: 20px; margin-top: 8px; }
+        .policy-section li { margin-bottom: 8px; }
+        .policy-card { background: white; border-radius: 16px; padding: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .warning-banner { background: linear-gradient(135deg, #fef2f2, #fff1f2); border: 1px solid #fca5a5; border-radius: 14px; padding: 20px 25px; margin-bottom: 30px; display: flex; align-items: center; gap: 15px; }
+        .warning-banner i { color: #dc2626; font-size: 1.5rem; flex-shrink: 0; }
+        .warning-banner p { margin: 0; font-size: 0.9rem; color: #7f1d1d; font-weight: 500; line-height: 1.5; }
+        .prohibited-item { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid #f1f5f9; }
+        .prohibited-item:last-child { border: none; }
+        .prohibited-item i { color: #ef4444; font-size: 0.9rem; flex-shrink: 0; }
+        .prohibited-item span { font-size: 0.92rem; color: #374151; }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <img src="../images/wmsulogo.png" alt="WMSU Logo" class="nav-logo-img">
+                <div class="logo-text">WMSU<span>KitCycle</span></div>
+            </div>
+            <div class="nav-right">
+                <ul class="nav-links">
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="marketplace.html">Marketplace</a></li>
+                    <li><a href="howitworks.html">How It Works</a></li>
+                    <li><a href="safety.html">Safety</a></li>
+                </ul>
+                <div class="auth-buttons"></div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="policy-page">
+        <h1>Prohibited Items</h1>
+        <p class="subtitle">Items that may <strong>not</strong> be listed or rented on WMSU KitCycle.</p>
+
+        <div class="warning-banner">
+            <i class="fas fa-exclamation-triangle"></i>
+            <p>Listing prohibited items will result in immediate account suspension and may be reported to the WMSU Office of Student Affairs. Repeat offenders face permanent ban.</p>
+        </div>
+
+        <div class="policy-card">
+            <div class="policy-section">
+                <h2><i class="fas fa-skull-crossbones"></i> Dangerous & Illegal Items</h2>
+                <div class="prohibited-item"><i class="fas fa-times-circle"></i> <span>Weapons, knives, or any bladed instruments (beyond academic use)</span></div>
+                <div class="prohibited-item"><i class="fas fa-times-circle"></i> <span>Explosives, firecrackers, or flammable materials</span></div>
+                <div class="prohibited-item"><i class="fas fa-times-circle"></i> <span>Controlled substances, drugs, or drug paraphernalia</span></div>
+                <div class="prohibited-item"><i class="fas fa-times-circle"></i> <span>Alcoholic beverages and tobacco products</span></div>
+                <div class="prohibited-item"><i class="fas fa-times-circle"></i> <span>Counterfeit or stolen goods</span></div>
+            </div>
+        </div>
+
+        <div class="policy-card">
+            <div class="policy-section">
+                <h2><i class="fas fa-user-secret"></i> Privacy & Safety Risks</h2>
+                <div class="prohibited-item"><i class="fas fa-times-circle"></i> <span>Hidden cameras, GPS trackers, or surveillance equipment</span></div>
+                <div class="prohibited-item"><i class="fas fa-times-circle"></i> <span>Lock-picking tools or unauthorized access devices</span></div>
+                <div class="prohibited-item"><i class="fas fa-times-circle"></i> <span>Personal documents, IDs, or credential forgery tools</span></div>
+            </div>
+        </div>
+
+        <div class="policy-card">
+            <div class="policy-section">
+                <h2><i class="fas fa-heartbeat"></i> Health & Hygiene</h2>
+                <div class="prohibited-item"><i class="fas fa-times-circle"></i> <span>Used personal hygiene items (toothbrushes, razors, etc.)</span></div>
+                <div class="prohibited-item"><i class="fas fa-times-circle"></i> <span>Prescription medications or medical devices requiring authorization</span></div>
+                <div class="prohibited-item"><i class="fas fa-times-circle"></i> <span>Perishable food items</span></div>
+            </div>
+        </div>
+
+        <div class="policy-card">
+            <div class="policy-section">
+                <h2><i class="fas fa-copyright"></i> Intellectual Property</h2>
+                <div class="prohibited-item"><i class="fas fa-times-circle"></i> <span>Pirated software, movies, or music (physical or digital)</span></div>
+                <div class="prohibited-item"><i class="fas fa-times-circle"></i> <span>Photocopied textbooks violating copyright law</span></div>
+                <div class="prohibited-item"><i class="fas fa-times-circle"></i> <span>Fake or knock-off branded electronics</span></div>
+            </div>
+        </div>
+
+        <div class="policy-card">
+            <div class="policy-section">
+                <h2><i class="fas fa-check-circle" style="color:#10b981;"></i> What <em>IS</em> Allowed</h2>
+                <p>KitCycle is built for legitimate academic and student needs:</p>
+                <ul>
+                    <li>✅ Scientific calculators, drafting tools, rulers</li>
+                    <li>✅ DSLR cameras, tripods, lighting equipment</li>
+                    <li>✅ Laboratory gowns, goggles, and safety equipment</li>
+                    <li>✅ Textbooks and reference materials (original copies)</li>
+                    <li>✅ Laptops, tablets, and portable chargers</li>
+                    <li>✅ Art supplies, easels, and drawing tablets</li>
+                </ul>
+            </div>
+        </div>
+
+        <p style="text-align:center; color:#64748b; font-size:0.85rem; margin-top:30px;">
+            Spotted a prohibited listing? Report it: <a href="mailto:report@wmsukitcycle.edu.ph" style="color:#800000; font-weight:600;">report@wmsukitcycle.edu.ph</a>
+        </p>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-bottom">
+            <p>&copy; 2026 WMSU KitCycle. All rights reserved. | Built for WMSU students</p>
+        </div>
+    </footer>
+</body>
+</html>

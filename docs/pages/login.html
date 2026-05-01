@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,14 +8,16 @@
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/login.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="../script/auth.js" defer></script>
 </head>
+
 <body class="auth-page">
 
     <header>
         <nav class="navbar">
             <div class="logo">
                 <img src="../images/wmsulogo.png" alt="WMSU Logo" class="nav-logo-img">
-                WMSU <span>KitCycle</span>
+                <div class="logo-text">WMSU<span>KitCycle</span></div>
             </div>
             <div class="nav-right">
                 <ul class="nav-links">
@@ -34,38 +37,32 @@
     <main class="auth-container">
         <div class="auth-card">
             <div class="auth-header" style="text-align: center; margin-bottom: 25px;">
-                <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
-                    <img src="../images/wmsulogo.png" alt="WMSU Logo" style="height: 45px; margin-right: 12px;">
-                    <h1 style="margin: 0;">WMSU <span style="color: black;">KitCycle</span></h1>
+                <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 10px;">
+                    <img src="../images/wmsulogo.png" alt="WMSU Logo" style="height: 40px;">
+                    <h1 style="margin: 0; color: #800000;">WMSU<span style="color: #1a1a1a;">KitCycle</span></h1>
                 </div>
                 <p>Welcome back! Login to your account</p>
             </div>
             <form id="loginForm">
-                <div class="input-group">
-                    <label>Login As</label>
-                    <select id="role" required>
-                        <option value="student">Student</option>
-                        <option value="faculty">Faculty</option>
-                        <option value="admin">Admin</option>
-                    </select>
-                    <small>Demo: Select your role to see different dashboards</small>
-                </div>
+                <div id="loginError"></div>
 
                 <div class="input-group">
                     <label>WMSU Email Address</label>
                     <div class="input-wrapper">
                         <i class="far fa-envelope"></i>
-                        <input type="email" placeholder="student@wmsu.edu.ph" required>
+                        <input type="email" id="loginEmail" placeholder="student@wmsu.edu.ph" required>
                     </div>
+                    <small>Demo accounts: student@ / admin@ / faculty@wmsu.edu.ph</small>
                 </div>
 
                 <div class="input-group">
                     <label>Password</label>
                     <div class="input-wrapper">
                         <i class="fas fa-lock"></i>
-                        <input type="password" placeholder="Enter your password" required>
+                        <input type="password" id="loginPassword" placeholder="Enter your password" required>
                         <i class="far fa-eye toggle-password"></i>
                     </div>
+                    <small>Demo passwords match the role (student / admin / faculty)</small>
                 </div>
 
                 <div class="form-options">
@@ -74,7 +71,7 @@
                         <span class="checkmark"></span>
                         Remember me
                     </label>
-                    <a href="#" class="forgot-link">Forgot password?</a>
+                    <a href="#" class="forgot-link" id="openForgotPw">Forgot password?</a>
                 </div>
 
                 <button type="submit" class="btn-auth-submit">Login</button>
@@ -87,16 +84,112 @@
         <p class="secure-note">Only verified WMSU students can access KitCycle. Your data is secure and encrypted.</p>
     </main>
 
+    <!-- Forgot Password Modal -->
+    <div id="forgotPwModal"
+        style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; align-items:center; justify-content:center;">
+        <div
+            style="background:white; border-radius:20px; padding:35px; max-width:420px; width:90%; box-shadow:0 20px 50px rgba(0,0,0,0.15); position:relative;">
+            <button onclick="document.getElementById('forgotPwModal').style.display='none'"
+                style="position:absolute; top:12px; right:16px; background:none; border:none; font-size:1.2rem; cursor:pointer; color:#64748b;"><i
+                    class="fas fa-times"></i></button>
+            <div style="text-align:center; margin-bottom:20px;">
+                <div
+                    style="width:60px; height:60px; background:#fef2f2; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 15px;">
+                    <i class="fas fa-lock" style="font-size:1.5rem; color:#800000;"></i>
+                </div>
+                <h2 style="margin:0; font-size:1.4rem;">Reset Your Password</h2>
+                <p style="color:#64748b; font-size:0.85rem; margin-top:5px;">Enter the WMSU email linked to your account
+                </p>
+            </div>
+            <form id="forgotPwForm">
+                <div class="input-group">
+                    <label>WMSU Email Address</label>
+                    <div class="input-wrapper">
+                        <i class="far fa-envelope"></i>
+                        <input type="email" id="forgotEmail" placeholder="student@wmsu.edu.ph" required>
+                    </div>
+                </div>
+                <div class="input-group" style="margin-top:12px;">
+                    <label>Student ID Number</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-id-card"></i>
+                        <input type="text" id="forgotStudentId" placeholder="e.g. 2023-00123" required>
+                    </div>
+                    <small>Required for identity verification</small>
+                </div>
+                <button type="submit" class="btn-auth-submit" style="margin-top:20px;">Send Reset Link</button>
+            </form>
+            <div id="forgotPwSuccess" style="display:none; text-align:center; padding:20px 0;">
+                <div
+                    style="width:60px; height:60px; background:#ecfdf5; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 15px;">
+                    <i class="fas fa-check" style="font-size:1.5rem; color:#10b981;"></i>
+                </div>
+                <h3 style="margin:0;">Check Your Inbox</h3>
+                <p style="color:#64748b; font-size:0.85rem; margin-top:8px;">A password reset link has been sent to your
+                    WMSU email. The link expires in 30 minutes.</p>
+                <button class="btn-auth-submit" style="margin-top:15px; background:#e2e8f0; color:#334155;"
+                    onclick="document.getElementById('forgotPwModal').style.display='none'">Close</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
+        // Login form handler
+        document.getElementById('loginForm').addEventListener('submit', function (e) {
             e.preventDefault();
-            const role = document.getElementById('role').value;
-            if (role === 'student') {
-                window.location.href = 'student-interface html/student-dashboard.html';
-            } else if (role === 'faculty') {
-                window.location.href = 'faculty-interface html/faculty-dashboard.html';
-            } else if (role === 'admin') {
-                window.location.href = 'admin-interface html/admin-dashboard.html';
+
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const errorDiv = document.getElementById('loginError');
+
+            errorDiv.innerHTML = '';
+
+            const account = AuthSystem.authenticate(email, password);
+
+            if (account) {
+                AuthSystem.loginUser(account);
+            } else {
+                errorDiv.innerHTML = `
+                    <div class="login-error-toast">
+                        <i class="fas fa-exclamation-circle"></i>
+                        Invalid email or password. Please try again.
+                    </div>
+                `;
+            }
+        });
+
+        // Password visibility toggle
+        document.querySelectorAll('.toggle-password').forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                const input = toggle.previousElementSibling;
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    toggle.classList.replace('fa-eye', 'fa-eye-slash');
+                } else {
+                    input.type = 'password';
+                    toggle.classList.replace('fa-eye-slash', 'fa-eye');
+                }
+            });
+        });
+
+        // Forgot Password modal
+        document.getElementById('openForgotPw').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('forgotPwModal').style.display = 'flex';
+            document.getElementById('forgotPwSuccess').style.display = 'none';
+            document.getElementById('forgotPwForm').style.display = 'block';
+        });
+
+        document.getElementById('forgotPwForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            document.getElementById('forgotPwForm').style.display = 'none';
+            document.getElementById('forgotPwSuccess').style.display = 'block';
+        });
+
+        // Close forgot modal on outside click
+        document.getElementById('forgotPwModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('forgotPwModal')) {
+                document.getElementById('forgotPwModal').style.display = 'none';
             }
         });
     </script>
@@ -105,14 +198,15 @@
         <div class="footer-content">
             <div class="footer-section">
                 <h3>WMSU KitCycle</h3>
-                <p>Empowering Western Mindanao State University students through accessible, affordable academic equipment rental.</p>
+                <p>Empowering Western Mindanao State University students through accessible, affordable academic
+                    equipment rental.</p>
             </div>
             <div class="footer-section">
                 <h4>Quick Links</h4>
-                <a href="#">Browse Marketplace</a>
-                <a href="#">How It Works</a>
-                <a href="#">Categories</a>
-                <a href="#">About Us</a>
+                <a href="marketplace.html">Browse Marketplace</a>
+                <a href="howitworks.html">How It Works</a>
+                <a href="marketplace.html">Categories</a>
+                <a href="verified-sellers.html">Verified Sellers</a>
             </div>
             <div class="footer-section">
                 <h4>Contact</h4>
@@ -122,10 +216,10 @@
             </div>
             <div class="footer-section">
                 <h4>Policies</h4>
-                <a href="#">Terms of Service</a>
-                <a href="#">Privacy Policy</a>
-                <a href="#">Safety Guidelines</a>
-                <a href="#">FAQ</a>
+                <a href="terms-of-service.html">Terms of Service</a>
+                <a href="privacy-policy.html">Privacy Policy</a>
+                <a href="safety.html">Safety Guidelines</a>
+                <a href="prohibited-items.html">Prohibited Items</a>
             </div>
         </div>
         <div class="footer-bottom">
@@ -134,4 +228,5 @@
         </div>
     </footer>
 </body>
+
 </html>

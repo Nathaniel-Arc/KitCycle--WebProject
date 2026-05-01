@@ -9,6 +9,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="../../css/student-interface/student-dashboard.css">
+    <script src="../../script/items-data.js"></script>
+    <script src="../../script/ui-utils.js"></script>
+    <script src="../../script/auth.js" defer></script>
+    <script src="../../script/dashboard-actions.js" defer></script>
     
     <!-- Instant Sidebar State Check -->
     <script>
@@ -119,44 +123,20 @@
             <div class="sidebar-toggle" onclick="toggleSidebar()">
                 <i class="fas fa-bars"></i>
             </div>
-            <div class="logo" style="display: flex; align-items: center;">
-                <img src="../../images/wmsulogo.png" alt="Logo" style="height: 35px; margin-right: 10px;">
-                WMSU<span style="margin-left: 5px;">KitCycle</span>
+            <div class="logo">
+                <img src="../../images/wmsulogo.png" alt="WMSU Logo" class="nav-logo-img">
+                <div class="logo-text">WMSU<span>KitCycle</span></div>
             </div>
         </div>
         <div class="nav-right" style="display: flex; align-items: center; gap: 30px;">
             <ul class="nav-links" style="display: flex; list-style: none; gap: 25px; align-items: center; margin: 0;">
-                <li><a href="student-dashboard.html" class="active">Home</a></li>
+                <li><a href="../../index.html">Home</a></li>
                 <li><a href="../marketplace.html">Marketplace</a></li>
                 <li><a href="../howitworks.html">How It Works</a></li>
                 <li><a href="../safety.html">Safety</a></li>
             </ul>
-            <div class="auth-buttons" style="display: flex; align-items: center; gap: 15px;">
-                <!-- Notifications -->
-                <div class="nav-notification-container">
-                    <button class="nav-notification-btn" onclick="toggleNotifs()">
-                        <i class="far fa-bell"></i>
-                        <div class="notif-badge" id="navNotifBadge" style="display: block;"></div>
-                    </button>
-                    <div class="notif-dropdown" id="notifDropdown">
-                        <div class="notif-header">Notifications</div>
-                        <div class="notif-item">
-                            <p><strong>Juan Dela Cruz</strong> sent you a message about the Canon DSLR.</p>
-                            <span>2 mins ago</span>
-                        </div>
-                        <div class="notif-item">
-                            <p>Your rental for <strong>TI-84 Calculator</strong> was approved!</p>
-                            <span>1 hour ago</span>
-                        </div>
-                        <div class="notif-view-all">View All Notifications</div>
-                    </div>
-                </div>
-
-                <span class="user-profile-nav" style="display: flex; align-items: center; font-weight: 600; color: #111827;">
-                    <img src="../../images/nash_profile.png" alt="Nash" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; margin-right: 10px; border: 1.5px solid #800000;"> 
-                    Nash Arciaga
-                </span>
-                <a href="../login.html" class="btn-login" style="padding: 6px 15px; font-size: 0.85rem;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            <div class="auth-buttons">
+                <!-- Injected by auth.js -->
             </div>
         </div>
     </header>
@@ -165,30 +145,38 @@
 
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-profile">
-                <div class="profile-avatar"><img src="../../images/nash_profile.png" alt="Nash Arciaga"></div>
+                <div class="profile-avatar"><img id="sidebarProfileImg" src="../../images/nash_profile.png" alt="Profile"></div>
                 <div class="profile-info">
-                    <h4>Nash Arciaga</h4>
-                    <span>Student</span>
+                    <h4 id="sidebarUserName">Nash Arciaga</h4>
+                    <span id="sidebarUserRole">Student</span>
                 </div>
             </div>
 
             <ul class="sidebar-nav">
                 <li class="active"><a href="student-dashboard.html"><i class="fas fa-th-large"></i> <span>Dashboard</span></a></li>
                 <li><a href="student-rentals.html"><i class="fas fa-box-open"></i> <span>My Rentals</span></a></li>
-                <li><a href="student-messages.html"><i class="fas fa-comments"></i> <span>Messages</span> <span class="nav-badge-v2" style="display: inline-block;">1</span></a></li>
+                <li style="position: relative;">
+                    <a href="student-messages.html">
+                        <div style="position: relative; display: inline-block;">
+                            <i class="fas fa-comments"></i>
+                            <span class="nav-badge-v2" style="display: flex; position: absolute; top: -5px; right: -8px; width: 16px; height: 16px; align-items: center; justify-content: center; border-radius: 50%; font-size: 0.65rem; border: 1.5px solid #fff;">1</span>
+                        </div>
+                        <span style="margin-left: 12px;">Messages</span>
+                    </a>
+                </li>
                 <li><a href="student-saved.html"><i class="fas fa-heart"></i> <span>Saved Items</span></a></li>
                 <li><a href="student-rating.html"><i class="fas fa-star"></i> <span>My Rating</span></a></li>
                 <li><a href="student-listings.html"><i class="fas fa-list"></i> <span>My Listings</span></a></li>
             </ul>
 
-            <a href="../login.html" class="sidebar-logout"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
+            <a href="javascript:void(0)" onclick="AuthSystem.confirmLogout(); return false;" class="sidebar-logout"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
         </aside>
 
         <main class="dashboard-content" id="mainContent">
 
             <div class="dashboard-banner">
                 <div>
-                    <h2>Welcome back, Nash!</h2>
+                    <h2 id="bannerGreeting">Welcome back, Nash!</h2>
                     <p>You have 1 item due in 5 hours. Ready for handover?</p>
                 </div>
             </div>
@@ -200,7 +188,7 @@
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon red-light"><i class="fas fa-heart"></i></div>
-                    <div class="stat-numbers"><span class="stat-label">Saved Gear</span><h3>4</h3></div>
+                    <div class="stat-numbers"><span class="stat-label">Saved Gear</span><h3 id="savedGearCount">0</h3></div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon yellow-light"><i class="fas fa-star"></i></div>
@@ -235,8 +223,8 @@
                                     <div class="progress-bar-container"><div class="progress-bar progress-red"></div></div>
                                 </div>
                                 <div class="rental-actions">
-                                    <button style="background: #800000; color: #fff; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer;">Extend Rental</button>
-                                    <button style="border: 2px solid #800000; color: #800000; padding: 8px; border-radius: 8px; font-weight: 700; cursor: pointer; background: #fff;">Initiate Return</button>
+                                    <button onclick="DashboardActions.extendRental(this)" style="background: #800000; color: #fff; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer;">Extend Rental</button>
+                                    <button onclick="DashboardActions.initiateReturn(this)" style="border: 2px solid #800000; color: #800000; padding: 8px; border-radius: 8px; font-weight: 700; cursor: pointer; background: #fff;">Initiate Return</button>
                                 </div>
                             </div>
 
@@ -253,7 +241,7 @@
                                 </div>
                                 <div class="rental-actions">
                                     <button class="btn-qr" onclick="openQRModal()"><i class="fas fa-qrcode"></i> Generate Pickup QR</button>
-                                    <button style="margin-top: 8px; font-size: 0.8rem; border: none; background: none; color: #64748b; text-decoration: underline; cursor: pointer;">Contact Maria</button>
+                                    <button onclick="DashboardActions.contactStudent('Maria Santos')" style="margin-top: 8px; font-size: 0.8rem; border: none; background: none; color: #64748b; text-decoration: underline; cursor: pointer;">Contact Maria</button>
                                 </div>
                             </div>
                         </div>
@@ -278,8 +266,8 @@
                                     <span style="font-size: 0.8rem; font-weight: 700; color: #10b981;"><i class="fas fa-user-check"></i> Status: With Borrower</span>
                                 </div>
                                 <div class="rental-actions" style="min-width: 140px;">
-                                    <button style="background: #111827; color: #fff; border: none; padding: 8px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer;">Scan Return QR</button>
-                                    <button class="btn-extension" style="margin-top: 5px;">+ Add Rental Hours</button>
+                                    <button onclick="DashboardActions.scanQR(this)" style="background: #111827; color: #fff; border: none; padding: 8px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer;">Scan Return QR</button>
+                                    <button class="btn-extension" onclick="DashboardActions.extendLending(this)" style="margin-top: 5px;">Extend Rental</button>
                                 </div>
                             </div>
                             
@@ -292,7 +280,7 @@
                                     <span style="font-size: 0.8rem; font-weight: 700; color: #800000;"><i class="fas fa-hand-holding"></i> Status: On My Hand</span>
                                 </div>
                                 <div class="rental-actions" style="min-width: 140px; justify-content: center;">
-                                    <button style="background: #800000; color: #fff; border: none; padding: 10px 15px; border-radius: 8px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                                    <button onclick="DashboardActions.confirmHandover(this)" style="background: #800000; color: #fff; border: none; padding: 10px 15px; border-radius: 8px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px;">
                                         <i class="fas fa-handshake"></i> Confirm Handover
                                     </button>
                                 </div>
@@ -310,7 +298,7 @@
                             <div class="rating-circle" style="width: 90px; height: 90px; background: conic-gradient(#ffd700 96%, #f1f5f9 0); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto;">
                                 <div style="width: 70px; height: 70px; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: 800;">4.8</div>
                             </div>
-                            <p style="font-size: 0.8rem; color: #64748b; margin-top: 10px;">Nash Arciaga • <strong>98% Reliability</strong></p>
+                            <p style="font-size: 0.8rem; color: #64748b; margin-top: 10px;"><span id="trustProfileName">Nash Arciaga</span> • <strong>98% Reliability</strong></p>
                         </div>
                         <div style="margin-top: 1.5rem; border-top: 1px solid #f1f5f9; padding-top: 1rem; font-size: 0.85rem; display: flex; flex-direction: column; gap: 8px;">
                             <div style="display: flex; justify-content: space-between;"><span>Member Since</span> <span style="font-weight: 600;">Aug 2024</span></div>
@@ -325,9 +313,9 @@
                         <div class="action-stack" style="display: flex; flex-direction: column; gap: 10px; margin-top: 1rem;">
                             <button class="btn-act-y" onclick="location.href='../marketplace.html'" style="background: #ffd700; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem;">Browse Marketplace</button>
                             <button class="btn-act-o" onclick="location.href='student-listings.html'" style="background: #fff; border: 2px solid #800000; color: #800000; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem;">List a New Item</button>
-                            <button style="background: #111827; color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem;"><i class="fas fa-shield-alt"></i> Verify Student ID</button>
-                            <button style="background: #f1f5f9; color: #4b5563; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem;"><i class="fas fa-users"></i> Refer a Fellow Student</button>
-                            <button style="background: #fff; border: 1.5px solid #cbd5e1; color: #64748b; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem;"><i class="fas fa-life-ring"></i> Contact Campus Safety</button>
+                            <button onclick="DashboardActions.verifyId()" style="background: #111827; color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem;"><i class="fas fa-shield-alt"></i> Verify Student ID</button>
+                            <button onclick="DashboardActions.referStudent()" style="background: #f1f5f9; color: #4b5563; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem;"><i class="fas fa-users"></i> Refer a Fellow Student</button>
+                            <button onclick="DashboardActions.contactSafety()" style="background: #fff; border: 1.5px solid #cbd5e1; color: #64748b; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem;"><i class="fas fa-life-ring"></i> Contact Campus Safety</button>
                         </div>
                     </div>
                 </div>
@@ -384,8 +372,9 @@
                 </div>
             </div>
 
-        </main>
     </div>
+
+
 
     <!-- QR Modal -->
     <div class="modal-overlay" id="qrModal">
@@ -412,7 +401,58 @@
         </div>
     </div>
 
+    <script src="../../script/student-data.js"></script>
     <script>
+        function updateDashboardStats() {
+            // Get data from localStorage
+            const savedNames = JSON.parse(localStorage.getItem('savedItems') || '[]');
+            const listings = getMyListings();
+            
+            // Update Saved Gear count
+            const countEl = document.getElementById('savedGearCount');
+            if (countEl) countEl.innerText = savedNames.length;
+            
+            const headerCount = document.querySelector('.full-width-card .card-header h3');
+            if (headerCount) headerCount.innerText = `Saved Gear (${savedNames.length})`;
+
+            // Update Earnings (simulated sum of listing prices)
+            const earnings = listings.reduce((sum, item) => sum + (item.status === 'Rented' ? parseInt(item.price) : 0), 0);
+            const earningsEl = document.querySelector('.stat-card:nth-child(4) h3');
+            if (earningsEl) earningsEl.innerText = `₱${earnings.toLocaleString()}`;
+
+            // Update Saved Gear Grid
+            const savedGrid = document.querySelector('.saved-grid');
+            if (savedGrid) {
+                if (savedNames.length === 0) {
+                    savedGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #64748b; padding: 40px;">No saved items. Explore the marketplace to add some!</p>';
+                } else {
+                    savedGrid.innerHTML = savedNames.slice(0, 4).reverse().map(name => {
+                        const item = KitCycleData.items.find(i => i.name === name);
+                        if (!item) return '';
+                        
+                        return `
+                            <div class="item-card" style="cursor:pointer;" onclick="window.location.href='../item-details html/item-details.html?id=${item.id}'">
+                                <img src="${item.image}" alt="${item.name}" style="width: 100%; height: 140px; object-fit: cover;">
+                                <div style="padding: 12px;">
+                                    <h4 style="font-size: 0.9rem; margin-bottom: 5px;">${item.name}</h4>
+                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                                        <span style="font-weight: 800; color: #800000;">₱${item.price}/d</span>
+                                        <span style="font-size: 0.8rem; color: #64748b;"><i class="fas fa-star" style="color: #ffd700;"></i> ${item.rating}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                }
+            }
+        }
+
+        // Global Event Listeners for Reactivity
+        window.addEventListener('savedItemsChanged', updateDashboardStats);
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'savedItems') updateDashboardStats();
+        });
+
         function toggleSidebar() {
             document.documentElement.classList.remove('sidebar-is-minimized');
             const sidebar = document.getElementById('sidebar');
@@ -437,8 +477,21 @@
         window.onload = function() {
             const isMinimized = localStorage.getItem('sidebarMinimized') === 'true';
             if (isMinimized) {
-                document.getElementById('sidebar').classList.add('minimized');
-                document.getElementById('mainContent').classList.add('expanded');
+                const sidebar = document.getElementById('sidebar');
+                const mainContent = document.getElementById('mainContent');
+                if (sidebar) sidebar.classList.add('minimized');
+                if (mainContent) mainContent.classList.add('expanded');
+            }
+            updateDashboardStats();
+
+            // Set banner greeting name from localStorage
+            const storedName = localStorage.getItem('userName');
+            if (storedName) {
+                const firstName = storedName.split(' ')[0];
+                const bannerGreeting = document.getElementById('bannerGreeting');
+                if (bannerGreeting) bannerGreeting.textContent = 'Welcome back, ' + firstName + '!';
+                const trustProfileName = document.getElementById('trustProfileName');
+                if (trustProfileName) trustProfileName.textContent = storedName;
             }
         };
 
@@ -451,6 +504,52 @@
         function closeQRModal() { document.getElementById('qrModal').style.display = 'none'; }
     </script>
 
+    <script>
+        function updateSavedWidget() {
+            const savedNames = JSON.parse(localStorage.getItem('savedItems') || '[]');
+            const container = document.getElementById('recentlySavedItems');
+            const countEl = document.getElementById('savedGearCount');
+            
+            if (countEl) countEl.textContent = savedNames.length;
+            if (!container) return;
+
+            if (savedNames.length === 0) {
+                container.innerHTML = '<p style="text-align:center; padding:20px; color:#64748b; font-size:0.9rem;">No saved items yet.</p>';
+                return;
+            }
+
+            // Get last 3 saved items
+            const recent = savedNames.slice(-3).reverse();
+            container.innerHTML = recent.map(name => {
+                // Find item in data store by name (or we could use IDs if we updated the logic)
+                const item = KitCycleData.items.find(i => i.name === name);
+                if (!item) return '';
+                
+                return `
+                    <div class="compact-rental-item" style="margin-bottom:10px; cursor:pointer;" onclick="window.location.href='../item-details html/item-details.html?id=${item.id}'">
+                        <div class="rental-thumb"><img src="${item.image}" alt="${item.name}" style="width:100%; height:100%; object-fit:cover;"></div>
+                        <div class="rental-brief">
+                            <div style="display:flex; justify-content:space-between;">
+                                <h4>${item.name}</h4>
+                                <span style="font-weight:800; color:#800000;">₱${item.price}/day</span>
+                            </div>
+                            <p style="font-size:0.8rem; color:#64748b;">${item.category} • ${item.location}</p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Listen for changes from other pages (Marketplace/Details)
+        window.addEventListener('savedItemsChanged', updateSavedWidget);
+        // Also listen for storage events (if open in multiple tabs)
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'savedItems') updateSavedWidget();
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', updateSavedWidget);
+    </script>
 </body>
 
 </html>
