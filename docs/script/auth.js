@@ -170,10 +170,18 @@ window.AuthSystem = {
             const unreadCount = notifications.filter(n => !n.read).length;
             const hasNotifications = unreadCount > 0;
 
+            // Determine messages link based on role
+            let messagesHref;
+            if (userRole === 'faculty') {
+                messagesHref = pagesPrefix + 'faculty-interface html/faculty-messages.html';
+            } else {
+                messagesHref = pagesPrefix + 'student-interface html/student-messages.html';
+            }
+
             authBtns.innerHTML = `
                 <!-- Messages Icon with Red Badge -->
                 <div class="nav-msg-container">
-                    <button class="nav-msg-btn" onclick="window.location.href='${pagesPrefix}student-interface html/student-messages.html'">
+                    <button class="nav-msg-btn" onclick="window.location.href='${messagesHref}'">
                         <i class="far fa-comments"></i>
                         <div class="msg-badge ${hasNotifications ? 'active' : ''}" id="navMsgBadge"></div>
                     </button>

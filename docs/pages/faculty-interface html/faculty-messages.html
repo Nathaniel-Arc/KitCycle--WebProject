@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messages | WMSU KitCycle</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/faculty-interface/faculty-dashboard.css">
+    <script src="../../script/ui-utils.js"></script>
+    <script src="../../script/auth.js" defer></script>
+    <script src="../../script/faculty-actions.js" defer></script>
+    
+    <!-- Instant Sidebar State Check -->
+    <script>
+        (function() {
+            const isMinimized = localStorage.getItem('sidebarMinimized') === 'true';
+            if (isMinimized) {
+                document.documentElement.classList.add('sidebar-is-minimized');
+            }
+        })();
+    </script>
+    <style>
+        .sidebar-is-minimized .sidebar { width: 80px !important; padding: 2rem 0.5rem !important; transition: none !important; }
+        .sidebar-is-minimized .dashboard-content { margin-left: 0 !important; transition: none !important; }
+        .sidebar-is-minimized .profile-info, .sidebar-is-minimized .sidebar-nav span, .sidebar-is-minimized .sidebar-logout span { display: none !important; }
+        .sidebar-is-minimized .sidebar-nav a { justify-content: center !important; padding: 12px 0 !important; }
+        .sidebar-is-minimized .sidebar-nav i { font-size: 1.2rem !important; margin: 0 !important; }
+        .sidebar-is-minimized .sidebar-profile { justify-content: center !important; padding-bottom: 1.5rem !important; }
+
+        body, html { height: 100%; overflow: hidden; margin: 0; padding: 0; }
+        .dashboard-layout { height: calc(100vh - 60px); display: flex !important; margin-top: 60px !important; padding: 0 !important; width: 100%; }
+        .sidebar { 
+            height: 100% !important; position: relative !important; flex-shrink: 0 !important; top: 0 !important; margin: 0 !important; 
+            border-right: 1.5px solid #cbd5e1 !important; z-index: 1000 !important; display: flex !important; flex-direction: column !important;
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        }
+        .sidebar-logout { margin-top: auto !important; }
+        .dashboard-content { 
+            flex: 1 !important; height: 100% !important; overflow: hidden !important; display: flex !important; flex-direction: column !important; 
+            padding: 0 !important; margin-left: 0 !important; background: #fff; min-width: 0; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        }
+
+        .messenger-wrapper { display: flex; flex: 1; width: 100%; overflow: hidden; background: #fff; }
+        .chat-list-container { width: 360px; display: flex; flex-direction: column; background: #fdfaf5; border-right: 1.5px solid #cbd5e1; height: 100%; flex-shrink: 0; }
+        .chat-view-container { flex: 1; display: flex; flex-direction: column; background: #f8fafc; min-width: 0; }
+
+        .chat-list-header { padding: 1.2rem 1.5rem; border-bottom: 1px solid #e2e8f0; background: #fff; }
+        .chat-search-bar { margin-top: 0.8rem; position: relative; }
+        .chat-search-bar input { width: 100%; padding: 10px 15px 10px 38px; border-radius: 10px; border: 1.5px solid #e2e8f0; font-size: 0.85rem; outline: none; transition: 0.2s; }
+        .chat-search-bar i { position: absolute; left: 14px; top: 12px; color: #9ca3af; }
+
+        .chat-items-scroll { flex: 1; overflow-y: auto; }
+        .chat-item { padding: 1.2rem 1.5rem; border-bottom: 1px solid #f1f5f9; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 15px; background: transparent; }
+        .chat-item:hover { background: rgba(128,0,0,0.02); }
+        .chat-item.active { background: #fffbeb; border-left: 5px solid #800000; }
+        .chat-item.unread .unread-indicator { width: 8px; height: 8px; background: #800000; border-radius: 50%; margin-left: auto; }
+
+        .chat-header-main { padding: 0.8rem 1.5rem; background: #fff; border-bottom: 1.5px solid #cbd5e1; display: flex; justify-content: space-between; align-items: center; }
+        .transaction-context-bar { background: #ffffff; padding: 8px 20px; border-bottom: 1.5px solid #cbd5e1; display: flex; align-items: center; gap: 15px; }
+        .transaction-thumb-msg { width: 45px; height: 45px; border-radius: 8px; object-fit: cover; border: 1.5px solid #e2e8f0; }
+
+        .chat-messages-area { flex: 1; padding: 1.5rem 2rem; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+        .message-row { display: flex; width: 100%; }
+        .message-row.sent { justify-content: flex-end; }
+        .message-bubble-v2 { max-width: 65%; padding: 12px 18px; border-radius: 18px; font-size: 0.95rem; position: relative; line-height: 1.4; word-wrap: break-word; }
+        .msg-inbound { background: #fff; border: 1.5px solid #e2e8f0; border-bottom-left-radius: 4px; }
+        .msg-outbound { background: #800000; color: #fff; border-bottom-right-radius: 4px; box-shadow: 0 4px 15px rgba(128,0,0,0.15); }
+
+        .chat-input-section { padding: 0.8rem 1.5rem; background: #fff; border-top: 1.5px solid #cbd5e1; display: flex; align-items: center; gap: 12px; }
+        .chat-input-box { flex: 1; position: relative; }
+        .chat-input-box input { width: 100%; padding: 10px 20px; border-radius: 25px; border: 1.5px solid #e2e8f0; outline: none; background: #f8fafc; font-size: 0.9rem; transition: 0.2s; }
+        .chat-input-box input:focus { border-color: #800000; background: #fff; }
+
+        .action-icon-btn { width: 38px; height: 38px; border-radius: 50%; border: none; background: #f1f5f9; color: #4b5563; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; font-size: 0.9rem; }
+        .action-icon-btn:hover { background: #e2e8f0; color: #800000; }
+
+        .status-badge-v2 { font-size: 0.75rem; font-weight: 800; padding: 4px 12px; border-radius: 20px; }
+        .status-pending { background: #fff7ed; color: #c2410c; }
+        .status-active { background: #f0fdf4; color: #15803d; }
+        .verified-check { color: #800000; font-size: 0.85rem; margin-left: 6px; }
+    </style>
+</head>
+
+<body>
+
+    <header class="navbar" style="height: 60px;">
+        <div class="nav-left-group">
+            <div class="sidebar-toggle" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </div>
+            <div class="logo">
+                <img src="../../images/wmsulogo.png" alt="WMSU Logo" class="nav-logo-img">
+                <div class="logo-text">WMSU<span>KitCycle</span></div>
+            </div>
+        </div>
+        <div class="nav-right" style="display: flex; align-items: center; gap: 30px;">
+            <ul class="nav-links" style="display: flex; list-style: none; gap: 25px; align-items: center; margin: 0;">
+                <li><a href="faculty-dashboard.html">Home</a></li>
+                <li><a href="../marketplace.html">Marketplace</a></li>
+                <li><a href="../howitworks.html">How It Works</a></li>
+                <li><a href="../safety.html">Safety</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <!-- Injected by auth.js -->
+            </div>
+        </div>
+    </header>
+
+    <div class="dashboard-layout">
+
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-profile">
+                <div class="profile-avatar"><img id="sidebarProfileImg" src="../../images/ace_profile.png" alt="Profile"></div>
+                <div class="profile-info">
+                    <h4 id="sidebarUserName">Ace Lorenz C. Patongan</h4>
+                    <span id="sidebarUserRole">Faculty</span>
+                </div>
+            </div>
+            <ul class="sidebar-nav" style="list-style: none;">
+                <li><a href="faculty-dashboard.html"><i class="fas fa-th-large"></i> <span>Dashboard</span></a></li>
+                <li><a href="faculty-departmentgear.html"><i class="fas fa-boxes"></i> <span>Departmental Gear</span></a></li>
+                <li><a href="faculty-approvals.html"><i class="fas fa-clipboard-check"></i> <span>Approvals</span></a></li>
+                <li class="active"><a href="faculty-messages.html"><i class="fas fa-comments"></i> <span>Messages</span></a></li>
+                <li><a href="faculty-rentals.html"><i class="fas fa-clock"></i> <span>Active Rentals</span></a></li>
+                <li><a href="faculty-reports.html"><i class="fas fa-chart-pie"></i> <span>Reports</span></a></li>
+            </ul>
+            <a href="javascript:void(0)" onclick="AuthSystem.confirmLogout(); return false;" class="sidebar-logout"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
+        </aside>
+
+        <main class="dashboard-content" id="mainContent">
+            <div class="messenger-wrapper">
+                
+                <div class="chat-list-container">
+                    <div class="chat-list-header">
+                        <h3 style="font-size: 1.1rem; color: #111827;">Messages</h3>
+                        <div class="chat-search-bar">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="convoSearch" placeholder="Search conversations..." oninput="handleSearch(this.value)">
+                        </div>
+                    </div>
+                    
+                    <div class="chat-items-scroll">
+                        <div class="chat-item active unread" onclick="switchConvo('maria', this)">
+                            <div style="width: 48px; height: 48px; position: relative;">
+                                <img src="../../images/maria_profile.png" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                                <div style="position: absolute; bottom: 0; right: 0; width: 12px; height: 12px; background: #10b981; border: 2px solid #fff; border-radius: 50%;"></div>
+                            </div>
+                            <div style="flex: 1;">
+                                <div style="display: flex; justify-content: space-between;"><h4 style="font-size: 0.95rem;">Maria Santos <i class="fas fa-shield-alt verified-check"></i></h4><span style="font-size: 0.7rem; color: #9ca3af;">10:30 AM</span></div>
+                                <div style="font-size: 0.75rem; color: #64748b;">Student • Microscope Request</div>
+                            </div>
+                            <div class="unread-indicator"></div>
+                        </div>
+
+                        <div class="chat-item" onclick="switchConvo('juan', this)">
+                            <div style="width: 48px; height: 48px;">
+                                <img src="../../images/juan_profile.png" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                            </div>
+                            <div style="flex: 1;">
+                                <div style="display: flex; justify-content: space-between;"><h4 style="font-size: 0.95rem;">Juan Reyes <i class="fas fa-shield-alt verified-check"></i></h4><span style="font-size: 0.7rem; color: #9ca3af;">Yesterday</span></div>
+                                <div style="font-size: 0.75rem; color: #64748b;">Student • Calculator Rental</div>
+                            </div>
+                        </div>
+
+                        <div class="chat-item" onclick="switchConvo('anna', this)">
+                            <div style="width: 48px; height: 48px;">
+                                <img src="../../images/elena_profile.png" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                            </div>
+                            <div style="flex: 1;">
+                                <div style="display: flex; justify-content: space-between;"><h4 style="font-size: 0.95rem;">Anna Cruz <i class="fas fa-shield-alt verified-check"></i></h4><span style="font-size: 0.7rem; color: #9ca3af;">12:05 PM</span></div>
+                                <div style="font-size: 0.75rem; color: #64748b;">Student • Video Equipment</div>
+                            </div>
+                        </div>
+
+                        <div class="chat-item" onclick="switchConvo('mark', this)">
+                            <div style="width: 48px; height: 48px; background: #3b82f6; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">M</div>
+                            <div style="flex: 1;">
+                                <div style="display: flex; justify-content: space-between;"><h4 style="font-size: 0.95rem;">Mark Tan <i class="fas fa-shield-alt verified-check"></i></h4><span style="font-size: 0.7rem; color: #9ca3af;">Tue</span></div>
+                                <div style="font-size: 0.75rem; color: #64748b;">Student • Multimeters</div>
+                            </div>
+                        </div>
+
+                        <div class="chat-item" onclick="switchConvo('sara', this)">
+                            <div style="width: 48px; height: 48px; background: #ec4899; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">S</div>
+                            <div style="flex: 1;">
+                                <div style="display: flex; justify-content: space-between;"><h4 style="font-size: 0.95rem;">Sara Lim <i class="fas fa-shield-alt verified-check"></i></h4><span style="font-size: 0.7rem; color: #9ca3af;">Mon</span></div>
+                                <div style="font-size: 0.75rem; color: #64748b;">Student • Reference Books</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-view-container">
+                    <div class="chat-header-main">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <img id="activeAvatar" src="../../images/maria_profile.png" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                            <div>
+                                <h4 id="activeName" style="font-size: 1rem; margin: 0;">Maria Santos <i class="fas fa-shield-alt verified-check"></i></h4>
+                                <span id="activeRole" class="role-label" style="font-size:0.75rem;color:#64748b;">Student</span>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="action-icon-btn" onclick="triggerProfile()"><i class="fas fa-user-circle"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="transaction-context-bar" id="txBar">
+                        <img src="../../images/microscope.jpeg" class="transaction-thumb-msg" alt="Item" id="txImg">
+                        <div style="flex: 1;">
+                            <h5 style="margin: 0; font-size: 0.9rem;" id="txTitle">Engineering Microscope Set</h5>
+                            <p style="margin: 2px 0; font-size: 0.75rem; color: #64748b;">₱150/day • Pending Approval</p>
+                        </div>
+                        <div id="txStatus" class="status-badge-v2 status-pending">Pending</div>
+                    </div>
+
+                    <div class="chat-messages-area" id="msgArea"></div>
+
+                    <div class="chat-input-section">
+                        <div style="display: flex; gap: 8px;">
+                            <button class="action-icon-btn" onclick="openMap()" title="Meetup Map" style="color: #1d4ed8;"><i class="fas fa-map-marker-alt"></i></button>
+                        </div>
+                        <div class="chat-input-box">
+                            <input type="text" id="msgInput" placeholder="Type a message..." onkeypress="if(event.key === 'Enter') sendMessage()">
+                        </div>
+                        <button onclick="sendMessage()" style="width: 48px; height: 48px; border-radius: 50%; border: none; background: #800000; color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(128,0,0,0.2);">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        let currentConvoId = 'maria';
+
+        function toggleSidebar() {
+            const isMinimized = document.getElementById('sidebar').classList.toggle('minimized');
+            document.getElementById('mainContent').classList.toggle('expanded');
+            localStorage.setItem('sidebarMinimized', isMinimized);
+        }
+
+        function toggleNotifs() {}
+
+        function triggerProfile() { alert(`Viewing ${chatData[currentConvoId].name}'s profile...\n\nStudent ID: ${chatData[currentConvoId].studentId}\nProgram: ${chatData[currentConvoId].program}\nVerification: Verified`); }
+        function openMap() { alert(`WMSU CAMPUS MAP\n------------------\nDesignated Meetup: ${chatData[currentConvoId].location}\n------------------\nPlease stay in public view.`); }
+
+        const chatData = {
+            maria: { name: "Maria Santos", role: "Student", profileImg: "../../images/maria_profile.png", item: "Engineering Microscope Set", status: "Pending Approval", statusClass: "status-pending", img: "../../images/microscope.jpeg", location: "Engineering Building", studentId: "2024-12345", program: "BS Engineering", messages: [{t: 'in', m: "Good morning Professor! I'd like to request the Engineering Microscope Set for my lab project.", time: "10:30 AM"}, {t: 'out', m: "Hi Maria! I've received your request. Let me check the availability.", time: "10:35 AM"}] },
+            juan: { name: "Juan Reyes", role: "Student", profileImg: "../../images/juan_profile.png", item: "Scientific Calculator TI-84", status: "Active Rental", statusClass: "status-active", img: "../../images/calculator.jpg", location: "Engineering Department", studentId: "2024-12346", program: "BS Mathematics", messages: [{t: 'in', m: "Professor, when can I pick up the calculator?", time: "Yesterday"}] },
+            anna: { name: "Anna Cruz", role: "Student", profileImg: "../../images/elena_profile.png", item: "Video Recording Equipment", status: "Active Rental", statusClass: "status-active", img: "../../images/camera.jpg", location: "Media Lab Room 205", studentId: "2024-12347", program: "BS Communication", messages: [{t: 'in', m: "I'll return the equipment by Friday as promised.", time: "12:05 PM"}] },
+            mark: { name: "Mark Tan", role: "Student", profileImg: "../../images/juan_profile.png", item: "Digital Multimeters", status: "Approved", statusClass: "status-active", img: "../../images/multimeters.jpg", location: "Electronics Lab", studentId: "2024-12348", program: "BS Electrical Engineering", messages: [{t: 'in', m: "Thank you for approving my request!", time: "Tue"}] },
+            sara: { name: "Sara Lim", role: "Student", profileImg: "../../images/maria_profile.png", item: "Engineering Reference Books", status: "Return Initiated", statusClass: "status-pending", img: "../../images/books.jpeg", location: "Department Library", studentId: "2024-12349", program: "BS Civil Engineering", messages: [{t: 'in', m: "I'm ready to return the books. Where should I meet you?", time: "Mon"}] }
+        };
+
+        function switchConvo(id, el) {
+            currentConvoId = id;
+            const data = chatData[id];
+            
+            if(el.classList.contains('unread')) el.classList.remove('unread');
+
+            document.querySelectorAll('.chat-item').forEach(item => item.classList.remove('active'));
+            el.classList.add('active');
+
+            document.getElementById('activeName').innerHTML = data.name + ' <i class="fas fa-shield-alt verified-check"></i>';
+            document.getElementById('activeRole').innerText = data.role;
+            document.getElementById('activeAvatar').src = data.profileImg;
+            
+            document.getElementById('txTitle').innerText = data.item;
+            document.getElementById('txImg').src = data.img;
+            document.getElementById('txStatus').innerText = data.status;
+            document.getElementById('txStatus').className = "status-badge-v2 " + data.statusClass;
+
+            renderMessages();
+        }
+
+        function renderMessages() {
+            const area = document.getElementById('msgArea');
+            area.innerHTML = '';
+            chatData[currentConvoId].messages.forEach(msg => {
+                const row = document.createElement('div');
+                row.className = "message-row" + (msg.t === 'out' ? ' sent' : '');
+                row.innerHTML = `<div class="message-bubble-v2 msg-${msg.t === 'out' ? 'outbound' : 'inbound'}">${msg.m}<div style="font-size: 0.65rem; margin-top: 5px; opacity: 0.7; text-align: right;">${msg.time}</div></div>`;
+                area.appendChild(row);
+            });
+            area.scrollTop = area.scrollHeight;
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('msgInput');
+            const text = input.value.trim();
+            if(!text) return;
+            const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            chatData[currentConvoId].messages.push({ t: 'out', m: text, time: now });
+            renderMessages();
+            input.value = '';
+        }
+
+        function handleSearch(term) {
+            term = term.toLowerCase();
+            document.querySelectorAll('.chat-item').forEach(item => {
+                const name = item.querySelector('h4').innerText.toLowerCase();
+                const context = item.querySelector('div[style*="font-size: 0.75rem"]').innerText.toLowerCase();
+                item.classList.toggle('hidden', !(name.includes(term) || context.includes(term)));
+            });
+        }
+
+        window.onload = function() {
+            const isMinimized = localStorage.getItem('sidebarMinimized') === 'true';
+            if (isMinimized) {
+                document.getElementById('sidebar').classList.add('minimized');
+                document.getElementById('mainContent').classList.add('expanded');
+            }
+            renderMessages();
+        };
+
+        window.onclick = function(event) {
+            if (!event.target.closest('.nav-notification-btn')) {}
+        }
+    </script>
+
+</body>
+
+</html>

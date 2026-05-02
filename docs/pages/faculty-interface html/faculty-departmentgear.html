@@ -8,7 +8,9 @@
     <link rel="stylesheet" href="../../css/faculty-interface/faculty-dashboard.css">
     <link rel="stylesheet" href="../../css/faculty-interface/faculty-departmentgear.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="../../script/ui-utils.js"></script>
     <script src="../../script/auth.js" defer></script>
+    <script src="../../script/faculty-actions.js" defer></script>
     <!-- Instant Sidebar State Check -->
     <script>
         (function() {
@@ -25,6 +27,10 @@
         .sidebar-is-minimized .sidebar-nav a { justify-content: center !important; padding: 12px 0 !important; }
         .sidebar-is-minimized .sidebar-nav i { font-size: 1.2rem !important; margin: 0 !important; }
         .sidebar-is-minimized .sidebar-profile { justify-content: center !important; padding-bottom: 1.5rem !important; }
+
+        .flex-banner { display: flex; justify-content: space-between; align-items: center; }
+        .btn-add-gear { background: #800000; color: #fff; border: none; padding: 12px 24px; border-radius: 10px; font-size: 0.9rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.2s; }
+        .btn-add-gear:hover { background: #a52a2a; transform: translateY(-2px); }
     </style>
 </head>
 <body>
@@ -67,6 +73,7 @@
                 <li><a href="faculty-dashboard.html"><i class="fas fa-th-large"></i> <span>Dashboard</span></a></li>
                 <li class="active"><a href="faculty-departmentgear.html"><i class="fas fa-boxes"></i> <span>Departmental Gear</span></a></li>
                 <li><a href="faculty-approvals.html"><i class="fas fa-clipboard-check"></i> <span>Approvals</span></a></li>
+                <li><a href="faculty-messages.html"><i class="fas fa-comments"></i> <span>Messages</span></a></li>
                 <li><a href="faculty-rentals.html"><i class="fas fa-clock"></i> <span>Active Rentals</span></a></li>
                 <li><a href="faculty-reports.html"><i class="fas fa-chart-pie"></i> <span>Reports</span></a></li>
             </ul>
@@ -81,7 +88,7 @@
                     <h2>Departmental Equipment</h2>
                     <p>Manage and track all departmental equipment inventory</p>
                 </div>
-                <button class="btn-add-gear"><i class="fas fa-plus"></i> Add Equipment</button>
+                <button class="btn-add-gear" onclick="FacultyActions.showTermsModal(() => FacultyActions.showAddEquipmentModal((eq) => { const eqList = FacultyActions._getEquipment(); eqList.push(eq); FacultyActions._saveEquipment(eqList); FacultyActions.renderEquipmentGrid(); if(typeof UIUtils!=='undefined'&&UIUtils.showToast)UIUtils.showToast(eq.name+' added successfully!','success'); }))"><i class="fas fa-plus"></i> Add Equipment</button>
             </div>
 
             <div class="stat-cards-grid">
@@ -89,190 +96,27 @@
                     <div class="stat-icon blue"><i class="fas fa-cubes"></i></div>
                     <div class="stat-numbers">
                         <span class="stat-label">Total Equipment</span>
-                        <h3>45</h3>
+                        <h3 id="totalEquipCount">45</h3>
                     </div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon green"><i class="fas fa-check-circle"></i></div>
                     <div class="stat-numbers">
                         <span class="stat-label">Available Now</span>
-                        <h3 class="success-text">29</h3>
+                        <h3 class="success-text" id="availableCount">29</h3>
                     </div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon orange"><i class="fas fa-hourglass-half"></i></div>
                     <div class="stat-numbers">
                         <span class="stat-label">Currently Borrowed</span>
-                        <h3 class="warning-text">16</h3>
+                        <h3 class="warning-text" id="borrowedCount">16</h3>
                     </div>
                 </div>
             </div>
 
-            <div class="inventory-grid">
-
-                <div class="gear-card">
-                    <div class="gear-image">
-                        <img src="../../images/microscope.jpeg" alt="Engineering Microscope Set">
-                        <span class="stock-badge available">Available</span>
-                    </div>
-                    <div class="gear-info">
-                        <div class="gear-top">
-                            <span class="gear-type">Lab Equipment</span>
-                        </div>
-                        <h3>Engineering Microscope Set</h3>
-                        <div class="gear-metrics">
-                            <p>Total Quantity: <span>5</span></p>
-                            <p>Available: <span class="success-text">3</span></p>
-                            <p>Borrowed: <span>2</span></p>
-                            <p>Condition: <span class="success-text">Excellent</span></p>
-                        </div>
-                        <div class="gear-location">
-                            <p><i class="fas fa-map-marker-alt"></i> Location: Engineering Lab Room 301</p>
-                            <p><i class="fas fa-calendar-alt"></i> Last maintained: 2/15/2026</p>
-                        </div>
-                        <div class="gear-actions">
-                            <button class="btn-edit"><i class="fas fa-edit"></i> Edit</button>
-                            <button class="btn-details"><i class="far fa-eye"></i> Details</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="gear-card">
-                    <div class="gear-image">
-                        <img src="../../images/calculator.jpg" alt="Scientific Calculators">
-                        <span class="stock-badge available">Available</span>
-                    </div>
-                    <div class="gear-info">
-                        <div class="gear-top">
-                            <span class="gear-type">Academic Tools</span>
-                        </div>
-                        <h3>Scientific Calculators</h3>
-                        <div class="gear-metrics">
-                            <p>Total Quantity: <span>10</span></p>
-                            <p>Available: <span class="success-text">7</span></p>
-                            <p>Borrowed: <span>3</span></p>
-                            <p>Condition: <span class="info-text">Good</span></p>
-                        </div>
-                        <div class="gear-location">
-                            <p><i class="fas fa-map-marker-alt"></i> Location: Engineering Department Office</p>
-                            <p><i class="fas fa-calendar-alt"></i> Last maintained: 2/20/2026</p>
-                        </div>
-                        <div class="gear-actions">
-                            <button class="btn-edit"><i class="fas fa-edit"></i> Edit</button>
-                            <button class="btn-details"><i class="far fa-eye"></i> Details</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="gear-card">
-                    <div class="gear-image">
-                        <img src="../../images/camera.jpg" alt="Video Recording Equipment">
-                        <span class="stock-badge unavailable">Unavailable</span>
-                        <div class="all-borrowed-overlay">All Borrowed</div>
-                    </div>
-                    <div class="gear-info">
-                        <div class="gear-top">
-                            <span class="gear-type">Media Equipment</span>
-                        </div>
-                        <h3>Video Recording Equipment</h3>
-                        <div class="gear-metrics">
-                            <p>Total Quantity: <span>3</span></p>
-                            <p>Available: <span class="danger-text">0</span></p>
-                            <p>Borrowed: <span>3</span></p>
-                            <p>Condition: <span class="success-text">Excellent</span></p>
-                        </div>
-                        <div class="gear-location">
-                            <p><i class="fas fa-map-marker-alt"></i> Location: Media Lab Room 205</p>
-                            <p><i class="fas fa-calendar-alt"></i> Last maintained: 2/10/2026</p>
-                        </div>
-                        <div class="gear-actions">
-                            <button class="btn-edit"><i class="fas fa-edit"></i> Edit</button>
-                            <button class="btn-details"><i class="far fa-eye"></i> Details</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="gear-card">
-                    <div class="gear-image">
-                        <img src="../../images/multimeters.jpg" alt="Digital Multimeters">
-                        <span class="stock-badge available">Available</span>
-                    </div>
-                    <div class="gear-info">
-                        <div class="gear-top">
-                            <span class="gear-type">Lab Equipment</span>
-                        </div>
-                        <h3>Digital Multimeters</h3>
-                        <div class="gear-metrics">
-                            <p>Total Quantity: <span>8</span></p>
-                            <p>Available: <span class="success-text">5</span></p>
-                            <p>Borrowed: <span>3</span></p>
-                            <p>Condition: <span class="info-text">Good</span></p>
-                        </div>
-                        <div class="gear-location">
-                            <p><i class="fas fa-map-marker-alt"></i> Location: Electronics Lab</p>
-                            <p><i class="fas fa-calendar-alt"></i> Last maintained: 2/25/2026</p>
-                        </div>
-                        <div class="gear-actions">
-                            <button class="btn-edit"><i class="fas fa-edit"></i> Edit</button>
-                            <button class="btn-details"><i class="far fa-eye"></i> Details</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="gear-card">
-                    <div class="gear-image">
-                        <img src="../../images/books.jpeg" alt="Engineering Reference Books">
-                        <span class="stock-badge available">Available</span>
-                    </div>
-                    <div class="gear-info">
-                        <div class="gear-top">
-                            <span class="gear-type">Textbooks</span>
-                        </div>
-                        <h3>Engineering Reference Books</h3>
-                        <div class="gear-metrics">
-                            <p>Total Quantity: <span>15</span></p>
-                            <p>Available: <span class="success-text">12</span></p>
-                            <p>Borrowed: <span>3</span></p>
-                            <p>Condition: <span class="info-text">Good</span></p>
-                        </div>
-                        <div class="gear-location">
-                            <p><i class="fas fa-map-marker-alt"></i> Location: Department Library</p>
-                            <p><i class="fas fa-calendar-alt"></i> Last maintained: 1/15/2026</p>
-                        </div>
-                        <div class="gear-actions">
-                            <button class="btn-edit"><i class="fas fa-edit"></i> Edit</button>
-                            <button class="btn-details"><i class="far fa-eye"></i> Details</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="gear-card">
-                    <div class="gear-image">
-                        <img src="../../images/oscilloscopes.jpg" alt="Oscilloscopes">
-                        <span class="stock-badge available">Available</span>
-                    </div>
-                    <div class="gear-info">
-                        <div class="gear-top">
-                            <span class="gear-type">Lab Equipment</span>
-                        </div>
-                        <h3>Oscilloscopes</h3>
-                        <div class="gear-metrics">
-                            <p>Total Quantity: <span>4</span></p>
-                            <p>Available: <span class="success-text">2</span></p>
-                            <p>Borrowed: <span>2</span></p>
-                            <p>Condition: <span class="success-text">Excellent</span></p>
-                        </div>
-                        <div class="gear-location">
-                            <p><i class="fas fa-map-marker-alt"></i> Location: Advanced Electronics Lab</p>
-                            <p><i class="fas fa-calendar-alt"></i> Last maintained: 3/1/2026</p>
-                        </div>
-                        <div class="gear-actions">
-                            <button class="btn-edit"><i class="fas fa-edit"></i> Edit</button>
-                            <button class="btn-details"><i class="far fa-eye"></i> Details</button>
-                        </div>
-                    </div>
-                </div>
-
+            <div class="inventory-grid" id="inventoryGrid">
+                <!-- Populated by faculty-actions.js -->
             </div>
 
         </main>
@@ -294,6 +138,15 @@
                 document.getElementById('sidebar').classList.add('minimized');
                 document.getElementById('mainContent').classList.add('expanded');
             }
+            FacultyActions.renderEquipmentGrid();
+            // Update counts
+            const equipment = FacultyActions._getEquipment();
+            const total = equipment.reduce((s, e) => s + e.quantity, 0);
+            const avail = equipment.reduce((s, e) => s + e.available, 0);
+            const borr = equipment.reduce((s, e) => s + e.borrowed, 0);
+            document.getElementById('totalEquipCount').textContent = total;
+            document.getElementById('availableCount').textContent = avail;
+            document.getElementById('borrowedCount').textContent = borr;
         };
     </script>
 
