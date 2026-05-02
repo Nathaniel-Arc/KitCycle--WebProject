@@ -844,7 +844,47 @@ window.FacultyActions = {
         const equipment = this._getEquipment();
         const eq = equipment.find(e => e.id === id);
         if (!eq) return;
-        alert(`${eq.name}\n\nCategory: ${eq.category}\nTotal: ${eq.quantity} | Available: ${eq.available} | Borrowed: ${eq.borrowed}\nCondition: ${eq.condition}\nLocation: ${eq.location}\nPrice: ₱${eq.price}/day\n\n${eq.description || 'No description.'}`);
+
+        const existing = document.getElementById('equipment-details-overlay');
+        if (existing) existing.remove();
+
+        const overlay = document.createElement('div');
+        overlay.id = 'equipment-details-overlay';
+        overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,23,42,0.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:10000;animation:fadeIn 0.2s ease;';
+
+        const imageHtml = eq.image
+            ? '<div style="width:100%;height:160px;border-radius:12px;overflow:hidden;margin-bottom:16px;"><img src="' + eq.image + '" alt="' + eq.name + '" style="width:100%;height:100%;object-fit:cover;"></div>'
+            : '<div style="width:100%;height:160px;border-radius:12px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;color:#9ca3af;margin-bottom:16px;"><i class="fas fa-box" style="font-size:3rem;"></i></div>';
+
+        const extraImagesHtml = eq.images && eq.images.length > 1
+            ? '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;">' + eq.images.slice(1).map(src => '<img src="' + src + '" style="width:60px;height:60px;object-fit:cover;border-radius:8px;border:1.5px solid #e2e8f0;">').join('') + '</div>'
+            : '';
+
+        overlay.innerHTML = '<div style="background:#fff;width:95%;max-width:520px;border-radius:20px;padding:30px;box-shadow:0 25px 50px rgba(0,0,0,0.25);animation:modalPop 0.3s cubic-bezier(0.175,0.885,0.32,1.275);max-height:90vh;overflow-y:auto;">' +
+            '<div style="text-align:center;margin-bottom:20px;">' +
+            '<h3 style="margin:0;color:#1e293b;font-size:1.3rem;">Equipment Details</h3>' +
+            '<p style="color:#64748b;font-size:0.85rem;margin-top:5px;">' + eq.name + '</p>' +
+            '</div>' +
+            imageHtml + extraImagesHtml +
+            '<div style="display:flex;flex-direction:column;gap:12px;font-size:0.9rem;color:#374151;">' +
+            '<div style="display:flex;justify-content:space-between;padding:10px;background:#f8fafc;border-radius:10px;"><span><strong>Category:</strong></span><span>' + eq.category + '</span></div>' +
+            '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">' +
+            '<div style="text-align:center;padding:10px;background:#f8fafc;border-radius:10px;"><strong>' + eq.quantity + '</strong><br><span style="font-size:0.8rem;color:#64748b;">Total</span></div>' +
+            '<div style="text-align:center;padding:10px;background:#f8fafc;border-radius:10px;"><strong style="color:#10b981;">' + eq.available + '</strong><br><span style="font-size:0.8rem;color:#64748b;">Available</span></div>' +
+            '<div style="text-align:center;padding:10px;background:#f8fafc;border-radius:10px;"><strong style="color:#f59e0b;">' + eq.borrowed + '</strong><br><span style="font-size:0.8rem;color:#64748b;">Borrowed</span></div>' +
+            '</div>' +
+            '<div style="display:flex;justify-content:space-between;padding:10px;background:#f8fafc;border-radius:10px;"><span><strong>Condition:</strong></span><span style="color:' + (eq.condition === 'Excellent' ? '#10b981' : eq.condition === 'Good' ? '#3b82f6' : '#f59e0b') + ';font-weight:700;">' + eq.condition + '</span></div>' +
+            '<div style="display:flex;justify-content:space-between;padding:10px;background:#f8fafc;border-radius:10px;"><span><strong>Location:</strong></span><span>' + eq.location + '</span></div>' +
+            '<div style="display:flex;justify-content:space-between;padding:10px;background:#f8fafc;border-radius:10px;"><span><strong>Price/Day:</strong></span><span style="font-weight:700;">₱' + eq.price + '</span></div>' +
+            '<div style="display:flex;justify-content:space-between;padding:10px;background:#f8fafc;border-radius:10px;"><span><strong>Last Maintained:</strong></span><span>' + eq.lastMaintained + '</span></div>' +
+            '</div>' +
+            (eq.description ? '<div style="margin-top:16px;padding:14px;background:#f8fafc;border-radius:12px;"><strong style="font-size:0.9rem;">Description</strong><p style="margin:8px 0 0;font-size:0.88rem;color:#475569;line-height:1.6;">' + eq.description + '</p></div>' : '') +
+            '<button id="closeEquipDetailsBtn" style="margin-top:20px;width:100%;padding:12px;background:#f1f5f9;color:#4b5563;border:none;border-radius:10px;font-weight:700;cursor:pointer;">Close</button>' +
+            '</div>';
+        document.body.appendChild(overlay);
+
+        document.getElementById('closeEquipDetailsBtn').onclick = () => overlay.remove();
+        overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
     },
 
     renderDashboard: function() {
