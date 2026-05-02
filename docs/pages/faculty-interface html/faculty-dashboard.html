@@ -200,7 +200,7 @@
                     <div class="content-card">
                         <h3 style="font-size:1.05rem;margin-bottom:1.2rem;">Quick Actions</h3>
                         <div class="action-stack">
-                            <button style="background:#800000;color:#fff;" onclick="FacultyActions.showTermsModal(() => FacultyActions.showAddEquipmentModal((eq) => { const eqList = FacultyActions._getEquipment(); eqList.push(eq); FacultyActions._saveEquipment(eqList); if(typeof UIUtils!=='undefined'&&UIUtils.showToast)UIUtils.showToast(eq.name+' added successfully!','success'); }))"><i class="fas fa-plus-circle"></i> Add Equipment</button>
+                            <button style="background:#800000;color:#fff;" onclick="FacultyActions.showAddEquipmentModal((eq) => { const eqList = FacultyActions._getEquipment(); eqList.push(eq); FacultyActions._saveEquipment(eqList); if(typeof UIUtils!=='undefined'&&UIUtils.showToast)UIUtils.showToast(eq.name+' added successfully!','success'); })"><i class="fas fa-plus-circle"></i> Add Equipment</button>
                             <button style="background:#fff;border:2px solid #800000;color:#800000;" onclick="location.href='faculty-approvals.html'"><i class="fas fa-clipboard-check"></i> Review Approvals</button>
                             <button style="background:#111827;color:#fff;" onclick="location.href='faculty-departmentgear.html'"><i class="fas fa-boxes"></i> Manage Gear</button>
                             <button style="background:#f1f5f9;color:#4b5563;" onclick="location.href='faculty-reports.html'"><i class="fas fa-chart-pie"></i> View Reports</button>

@@ -88,7 +88,7 @@
                     <h2>Departmental Equipment</h2>
                     <p>Manage and track all departmental equipment inventory</p>
                 </div>
-                <button class="btn-add-gear" onclick="FacultyActions.showTermsModal(() => FacultyActions.showAddEquipmentModal((eq) => { const eqList = FacultyActions._getEquipment(); eqList.push(eq); FacultyActions._saveEquipment(eqList); FacultyActions.renderEquipmentGrid(); if(typeof UIUtils!=='undefined'&&UIUtils.showToast)UIUtils.showToast(eq.name+' added successfully!','success'); }))"><i class="fas fa-plus"></i> Add Equipment</button>
+                <button class="btn-add-gear" onclick="FacultyActions.showAddEquipmentModal((eq) => { const eqList = FacultyActions._getEquipment(); eqList.push(eq); FacultyActions._saveEquipment(eqList); FacultyActions.renderEquipmentGrid(); if(typeof UIUtils!=='undefined'&&UIUtils.showToast)UIUtils.showToast(eq.name+' added successfully!','success'); })"><i class="fas fa-plus"></i> Add Equipment</button>
             </div>
 
             <div class="stat-cards-grid">
