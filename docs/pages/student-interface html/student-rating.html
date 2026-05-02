@@ -89,35 +89,55 @@
             </div>
 
             <div class="rating-hero-section">
-                <div class="content-card rating-overview-card" style="display: flex; gap: 30px; align-items: stretch;">
-                    <!-- Dual Ratings -->
-                    <div style="flex: 1.5; display: flex; gap: 20px;">
-                        <div class="dual-rating-box" style="flex: 1; text-align: center; background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0;">
-                            <span style="font-size: 0.8rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Borrower Rating</span>
-                            <div id="borrowerRating" style="font-size: 2.5rem; font-weight: 800; color: #111827; margin: 5px 0;">4.9</div>
+                <div class="content-card rating-overview-card" style="display: flex; gap: 30px; align-items: stretch; flex-wrap:wrap;">
+                    <!-- Dual KPI Ratings -->
+                    <div style="flex: 1.5; display: flex; gap: 20px; min-width:320px;">
+                        <!-- Borrower KPI -->
+                        <div style="flex: 1; background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0;">
+                            <span style="font-size: 0.8rem; font-weight: 700; color: #1d4ed8; text-transform: uppercase; background:#eff6ff; padding:3px 10px; border-radius:4px;">Borrower KPI</span>
+                            <div id="borrowerRating" style="font-size: 2.5rem; font-weight: 800; color: #111827; margin: 8px 0 4px;">4.9</div>
                             <div class="stars-mini" style="color: #ffd700; font-size: 0.9rem;">
                                 <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
                             </div>
-                            <p style="font-size: 0.75rem; color: #94a3b8; margin-top: 5px;">Reliability & Punctuality</p>
+                            <div style="margin-top:12px; display:flex; flex-direction:column; gap:8px;">
+                                <div><span style="font-size:0.75rem; color:#64748b;">Punctuality</span><div style="height:6px; background:#e2e8f0; border-radius:3px; margin-top:3px;"><div id="kpiBPunctuality" style="height:100%; border-radius:3px; background:#1d4ed8; width:98%;"></div></div></div>
+                                <div><span style="font-size:0.75rem; color:#64748b;">Item Care</span><div style="height:6px; background:#e2e8f0; border-radius:3px; margin-top:3px;"><div id="kpiBItemCare" style="height:100%; border-radius:3px; background:#1d4ed8; width:96%;"></div></div></div>
+                                <div><span style="font-size:0.75rem; color:#64748b;">Payment Reliability</span><div style="height:6px; background:#e2e8f0; border-radius:3px; margin-top:3px;"><div id="kpiBPayment" style="height:100%; border-radius:3px; background:#1d4ed8; width:100%;"></div></div></div>
+                            </div>
                         </div>
-                        <div class="dual-rating-box" style="flex: 1; text-align: center; background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0;">
-                            <span style="font-size: 0.8rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Lender Rating</span>
-                            <div id="lenderRating" style="font-size: 2.5rem; font-weight: 800; color: #111827; margin: 5px 0;">4.7</div>
+                        <!-- Lender KPI -->
+                        <div style="flex: 1; background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0;">
+                            <span style="font-size: 0.8rem; font-weight: 700; color: #be185d; text-transform: uppercase; background:#fdf2f8; padding:3px 10px; border-radius:4px;">Lender KPI</span>
+                            <div id="lenderRating" style="font-size: 2.5rem; font-weight: 800; color: #111827; margin: 8px 0 4px;">4.7</div>
                             <div class="stars-mini" style="color: #ffd700; font-size: 0.9rem;">
                                 <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
                             </div>
-                            <p style="font-size: 0.75rem; color: #94a3b8; margin-top: 5px;">Gear Quality & Condition</p>
+                            <div style="margin-top:12px; display:flex; flex-direction:column; gap:8px;">
+                                <div><span style="font-size:0.75rem; color:#64748b;">Description Accuracy</span><div style="height:6px; background:#e2e8f0; border-radius:3px; margin-top:3px;"><div id="kpiLAccuracy" style="height:100%; border-radius:3px; background:#be185d; width:94%;"></div></div></div>
+                                <div><span style="font-size:0.75rem; color:#64748b;">Response Speed</span><div style="height:6px; background:#e2e8f0; border-radius:3px; margin-top:3px;"><div id="kpiLSpeed" style="height:100%; border-radius:3px; background:#be185d; width:92%;"></div></div></div>
+                                <div><span style="font-size:0.75rem; color:#64748b;">Handover Punctuality</span><div style="height:6px; background:#e2e8f0; border-radius:3px; margin-top:3px;"><div id="kpiLPunctuality" style="height:100%; border-radius:3px; background:#be185d; width:96%;"></div></div></div>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Verification Badges -->
-                    <div style="flex: 1; padding: 10px; border-left: 1px solid #f1f5f9; display: flex; flex-direction: column; justify-content: center; gap: 12px;">
+                    <!-- Verification & Clearance -->
+                    <div style="flex: 1; padding: 10px; border-left: 1px solid #f1f5f9; display: flex; flex-direction: column; justify-content: center; gap: 12px; min-width:200px;">
                         <h4 style="font-size: 0.85rem; color: #64748b;">Verified Credentials</h4>
-                        <div class="verify-badge" style="display: flex; align-items: center; gap: 10px; background: #f0fdf4; color: #15803d; padding: 8px 12px; border-radius: 8px; font-weight: 700; font-size: 0.85rem;">
+                        <div style="display: flex; align-items: center; gap: 10px; background: #f0fdf4; color: #15803d; padding: 8px 12px; border-radius: 8px; font-weight: 700; font-size: 0.85rem;">
                             <i class="fas fa-id-card"></i> WMSU Student ID
                         </div>
-                        <div class="verify-badge" style="display: flex; align-items: center; gap: 10px; background: #f0fdf4; color: #15803d; padding: 8px 12px; border-radius: 8px; font-weight: 700; font-size: 0.85rem;">
+                        <div style="display: flex; align-items: center; gap: 10px; background: #f0fdf4; color: #15803d; padding: 8px 12px; border-radius: 8px; font-weight: 700; font-size: 0.85rem;">
                             <i class="fas fa-envelope"></i> University Email
+                        </div>
+                        <!-- Clearance Status -->
+                        <div id="clearanceWidget" style="margin-top:8px; background:#f0fdf4; padding:10px 12px; border-radius:8px; border:1px solid #bbf7d0;">
+                            <div style="display:flex; align-items:center; gap:8px;">
+                                <i class="fas fa-check-circle" style="color:#15803d; font-size:1.1rem;"></i>
+                                <div>
+                                    <p style="margin:0; font-size:0.85rem; font-weight:700; color:#15803d;">Clearance: Clear</p>
+                                    <p style="margin:0; font-size:0.7rem; color:#4ade80;">No holds or pending fines</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -152,20 +172,33 @@
             const data = getMyRatings();
             document.getElementById('borrowerRating').innerText = data.borrowerRating;
             document.getElementById('lenderRating').innerText = data.lenderRating;
+            // KPI Bars
+            if (data.kpiBorrower) {
+                document.getElementById('kpiBPunctuality').style.width = (data.kpiBorrower.punctuality / 5 * 100) + '%';
+                document.getElementById('kpiBItemCare').style.width = (data.kpiBorrower.itemCare / 5 * 100) + '%';
+                document.getElementById('kpiBPayment').style.width = (data.kpiBorrower.paymentReliability / 5 * 100) + '%';
+            }
+            if (data.kpiLender) {
+                document.getElementById('kpiLAccuracy').style.width = (data.kpiLender.descriptionAccuracy / 5 * 100) + '%';
+                document.getElementById('kpiLSpeed').style.width = (data.kpiLender.responseSpeed / 5 * 100) + '%';
+                document.getElementById('kpiLPunctuality').style.width = (data.kpiLender.handoverPunctuality / 5 * 100) + '%';
+            }
+            // Clearance
+            const clearance = getClearanceStatus();
+            const cw = document.getElementById('clearanceWidget');
+            if (clearance && clearance.status === 'Hold') {
+                cw.style.background = '#fef2f2'; cw.style.borderColor = '#fecaca';
+                cw.innerHTML = '<div style="display:flex;align-items:center;gap:8px;"><i class="fas fa-exclamation-triangle" style="color:#ef4444;font-size:1.1rem;"></i><div><p style="margin:0;font-size:0.85rem;font-weight:700;color:#ef4444;">Clearance: HOLD</p><p style="margin:0;font-size:0.7rem;color:#f87171;">Unresolved KitCycle records will be forwarded to the WMSU Registrar, potentially affecting your semester clearance and enrollment.</p></div></div>';
+            }
         }
 
         function renderReviews(type = 'received') {
             const data = getMyRatings();
             const list = document.getElementById('reviewsList');
-            const reviews = type === 'received' ? data.reviews : [];
+            const reviews = type === 'received' ? (data.reviews || []) : (data.givenReviews || []);
 
             if (reviews.length === 0) {
-                list.innerHTML = `
-                    <div style="text-align: center; padding: 3rem; color: #64748b; background: #fff; border-radius: 12px; border: 1px solid #eef0f2;">
-                        <i class="fas fa-comment-slash" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.2;"></i>
-                        <p>No ${type} reviews found yet.</p>
-                    </div>
-                `;
+                list.innerHTML = '<div style="text-align: center; padding: 3rem; color: #64748b; background: #fff; border-radius: 12px; border: 1px solid #eef0f2;"><i class="fas fa-comment-slash" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.2;"></i><p>No ' + type + ' reviews found yet.</p></div>';
                 return;
             }
 
@@ -175,10 +208,10 @@
                         <div style="display: flex; gap: 12px; align-items: center;">
                             <img src="${rev.avatar}" alt="${rev.user}" style="width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 2px solid #f3f4f6;">
                             <div>
-                                <span class="review-role-badge role-${rev.role.toLowerCase()}">${rev.role} Feedback</span>
+                                <span class="review-role-badge role-${rev.role.toLowerCase()}">${rev.role} ${type === 'received' ? 'Feedback' : 'Review'}</span>
                                 <h4>${rev.user}</h4>
                                 <div class="comment-stars">
-                                    ${Array(5).fill(0).map((_, i) => `<i class="${i < rev.rating ? 'fas' : 'far'} fa-star"></i>`).join('')}
+                                    ${Array(5).fill(0).map((_, i) => '<i class="' + (i < rev.rating ? 'fas' : 'far') + ' fa-star"></i>').join('')}
                                     <span style="font-size: 0.75rem; color: #64748b; margin-left: 8px;">Re: ${rev.item}</span>
                                 </div>
                             </div>

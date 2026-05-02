@@ -137,26 +137,30 @@
                 <div style="display: flex; gap: 30px; flex-wrap: wrap;">
                     <!-- Left: Media & Description -->
                     <div style="flex: 1; min-width: 280px; display: flex; flex-direction: column; gap: 20px;">
+                        <!-- Multi-Photo Upload (5+ photos) -->
                         <div>
-                            <label style="display: block; font-weight: 700; color: #1e293b; margin-bottom: 8px;">Item Photos</label>
-                            <input type="file" id="itemImageInput" accept="image/*" style="display: none;">
-                            <div id="imageUploadArea" style="border: 2px dashed #cbd5e1; border-radius: 15px; height: 160px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #f8fafc; cursor: pointer; transition: 0.2s; overflow: hidden; position: relative;" onmouseover="this.style.borderColor='#800000'; this.style.background='#fef2f2'" onmouseout="this.style.borderColor='#cbd5e1'; this.style.background='#f8fafc'">
+                            <label style="display: block; font-weight: 700; color: #1e293b; margin-bottom: 4px;"><i class="fas fa-camera" style="color:#800000; margin-right:4px;"></i> Item Photos <span style="color:#ef4444;">*</span></label>
+                            <p style="font-size:0.75rem; color:#94a3b8; margin:0 0 8px;">Upload up to 8 high-res photos to document item condition</p>
+                            <input type="file" id="itemImageInput" accept="image/*" multiple style="display: none;">
+                            <div id="imageUploadArea" style="border: 2px dashed #cbd5e1; border-radius: 15px; height: 140px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #f8fafc; cursor: pointer; transition: 0.2s; overflow: hidden; position: relative;" onmouseover="this.style.borderColor='#800000'; this.style.background='#fef2f2'" onmouseout="this.style.borderColor='#cbd5e1'; this.style.background='#f8fafc'">
                                 <div id="uploadPlaceholder" style="text-align: center;">
-                                    <i class="fas fa-cloud-upload-alt" style="font-size: 2.2rem; color: #94a3b8; margin-bottom: 10px;"></i>
+                                    <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: #94a3b8; margin-bottom: 8px;"></i>
                                     <br>
                                     <span style="font-size: 0.85rem; color: #64748b; font-weight: 600;">Drag & drop or <span style="color: #800000;">browse</span></span>
+                                    <br><span style="font-size:0.7rem; color:#94a3b8;">Min 1 photo required • Up to 8 photos</span>
                                 </div>
-                                <img id="imagePreview" src="" style="display: none; width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0;">
                             </div>
+                            <!-- Photo Thumbnails Gallery -->
+                            <div id="photoGallery" style="display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;"></div>
                         </div>
 
                         <div class="form-group">
-                            <label style="display: block; font-weight: 700; color: #1e293b; margin-bottom: 8px;">Description</label>
-                            <textarea id="itemDescription" required placeholder="Describe your gear, key features, and any details borrowers should know..." style="width: 100%; height: 120px; padding: 12px 15px; border: 1.5px solid #e2e8f0; border-radius: 12px; font-size: 0.95rem; outline: none; transition: 0.2s; resize: none; font-family: inherit;" onfocus="this.style.borderColor='#800000'"></textarea>
+                            <label style="display: block; font-weight: 700; color: #1e293b; margin-bottom: 8px;">Description <span style="color:#ef4444;">*</span></label>
+                            <textarea id="itemDescription" required placeholder="Describe your gear, key features, and any details borrowers should know..." style="width: 100%; height: 100px; padding: 12px 15px; border: 1.5px solid #e2e8f0; border-radius: 12px; font-size: 0.95rem; outline: none; transition: 0.2s; resize: none; font-family: inherit;" onfocus="this.style.borderColor='#800000'"></textarea>
                         </div>
 
                         <div class="form-group">
-                            <label style="display: block; font-weight: 700; color: #1e293b; margin-bottom: 8px;">Pickup Location</label>
+                            <label style="display: block; font-weight: 700; color: #1e293b; margin-bottom: 8px;">Pickup Location <span style="color:#ef4444;">*</span></label>
                             <div style="position: relative;">
                                 <i class="fas fa-map-marker-alt" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #94a3b8;"></i>
                                 <input type="text" id="itemLocation" required placeholder="e.g. CET Lobby, WMSU Library" style="width: 100%; padding: 12px 15px 12px 40px; border: 1.5px solid #e2e8f0; border-radius: 12px; font-size: 0.95rem; outline: none; transition: 0.2s;" onfocus="this.style.borderColor='#800000'">
@@ -165,10 +169,17 @@
                     </div>
                     
                     <!-- Right: Specs & Pricing -->
-                    <div style="flex: 1.2; min-width: 300px; display: flex; flex-direction: column; gap: 20px;">
-                        <div class="form-group">
-                            <label style="display: block; font-weight: 700; color: #1e293b; margin-bottom: 8px;">Item Name</label>
-                            <input type="text" id="itemName" required placeholder="Full name of the gear" style="width: 100%; padding: 12px 15px; border: 1.5px solid #e2e8f0; border-radius: 12px; font-size: 0.95rem; outline: none; transition: 0.2s;" onfocus="this.style.borderColor='#800000'">
+                    <div style="flex: 1.2; min-width: 300px; display: flex; flex-direction: column; gap: 18px;">
+                        <div style="display: flex; gap: 15px;">
+                            <div class="form-group" style="flex: 2;">
+                                <label style="display: block; font-weight: 700; color: #1e293b; margin-bottom: 8px;">Item Name <span style="color:#ef4444;">*</span></label>
+                                <input type="text" id="itemName" required placeholder="Full name of the gear" style="width: 100%; padding: 12px 15px; border: 1.5px solid #e2e8f0; border-radius: 12px; font-size: 0.95rem; outline: none; transition: 0.2s;" onfocus="this.style.borderColor='#800000'">
+                            </div>
+                            <!-- Mandatory Quantity Field -->
+                            <div class="form-group" style="flex: 0.8;">
+                                <label style="display: block; font-weight: 700; color: #1e293b; margin-bottom: 8px;">Qty <span style="color:#ef4444;">*</span></label>
+                                <input type="number" id="itemQuantity" required min="1" value="1" placeholder="1" style="width: 100%; padding: 12px 15px; border: 1.5px solid #e2e8f0; border-radius: 12px; font-size: 0.95rem; outline: none; transition: 0.2s; text-align:center;" onfocus="this.style.borderColor='#800000'">
+                            </div>
                         </div>
                         
                         <div style="display: flex; gap: 15px;">
@@ -198,15 +209,16 @@
                             </div>
                         </div>
 
-                        <div style="background: #f8fafc; padding: 20px; border-radius: 15px; border: 1px solid #e2e8f0;">
-                            <label style="display: block; font-weight: 800; color: #1e293b; margin-bottom: 15px; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px;">Flexible Pricing (₱)</label>
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <!-- Pricing -->
+                        <div style="background: #f8fafc; padding: 18px; border-radius: 15px; border: 1px solid #e2e8f0;">
+                            <label style="display: block; font-weight: 800; color: #1e293b; margin-bottom: 12px; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px;">Flexible Pricing (₱)</label>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
                                 <div class="form-group">
                                     <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #64748b; margin-bottom: 5px;">Hourly</label>
                                     <input type="number" id="itemPriceHourly" placeholder="0" style="width: 100%; padding: 10px; border: 1.5px solid #e2e8f0; border-radius: 8px; font-size: 0.9rem; outline: none;" onfocus="this.style.borderColor='#800000'">
                                 </div>
                                 <div class="form-group">
-                                    <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #64748b; margin-bottom: 5px;">Daily</label>
+                                    <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #64748b; margin-bottom: 5px;">Daily <span style="color:#ef4444;">*</span></label>
                                     <input type="number" id="itemPrice" required placeholder="0" style="width: 100%; padding: 10px; border: 1.5px solid #e2e8f0; border-radius: 8px; font-size: 0.9rem; outline: none; border-color: #800000;" onfocus="this.style.borderColor='#800000'">
                                 </div>
                                 <div class="form-group">
@@ -219,12 +231,51 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Lender's Window -->
+                        <div style="background: #fffbeb; padding: 18px; border-radius: 15px; border: 1px solid #fde68a;">
+                            <label style="display: block; font-weight: 800; color: #92400e; margin-bottom: 12px; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px;"><i class="fas fa-calendar-alt" style="margin-right:4px;"></i> Lender's Window</label>
+                            <div style="display: flex; gap: 15px; margin-bottom: 12px;">
+                                <div class="form-group" style="flex:1;">
+                                    <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #92400e; margin-bottom: 5px;">Max Rental Period (Days)</label>
+                                    <input type="number" id="maxRentalDays" min="1" max="90" value="14" style="width: 100%; padding: 10px; border: 1.5px solid #fde68a; border-radius: 8px; font-size: 0.9rem; outline: none; background:#fff;" onfocus="this.style.borderColor='#800000'">
+                                </div>
+                            </div>
+                            <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #92400e; margin-bottom: 8px;">Unavailable for Meetups</label>
+                            <div id="unavailableDays" style="display:flex; flex-wrap:wrap; gap:6px;">
+                                <label style="display:flex; align-items:center; gap:4px; font-size:0.8rem; color:#4b5563; cursor:pointer;"><input type="checkbox" value="Monday" class="day-check" style="accent-color:#800000;"> Mon</label>
+                                <label style="display:flex; align-items:center; gap:4px; font-size:0.8rem; color:#4b5563; cursor:pointer;"><input type="checkbox" value="Tuesday" class="day-check" style="accent-color:#800000;"> Tue</label>
+                                <label style="display:flex; align-items:center; gap:4px; font-size:0.8rem; color:#4b5563; cursor:pointer;"><input type="checkbox" value="Wednesday" class="day-check" style="accent-color:#800000;"> Wed</label>
+                                <label style="display:flex; align-items:center; gap:4px; font-size:0.8rem; color:#4b5563; cursor:pointer;"><input type="checkbox" value="Thursday" class="day-check" style="accent-color:#800000;"> Thu</label>
+                                <label style="display:flex; align-items:center; gap:4px; font-size:0.8rem; color:#4b5563; cursor:pointer;"><input type="checkbox" value="Friday" class="day-check" style="accent-color:#800000;"> Fri</label>
+                                <label style="display:flex; align-items:center; gap:4px; font-size:0.8rem; color:#4b5563; cursor:pointer;"><input type="checkbox" value="Saturday" class="day-check" style="accent-color:#800000;" checked> Sat</label>
+                                <label style="display:flex; align-items:center; gap:4px; font-size:0.8rem; color:#4b5563; cursor:pointer;"><input type="checkbox" value="Sunday" class="day-check" style="accent-color:#800000;" checked> Sun</label>
+                            </div>
+                        </div>
+
+                        <!-- Social Discount -->
+                        <div style="background: #f0fdf4; padding: 14px 18px; border-radius: 12px; border: 1px solid #bbf7d0; display:flex; align-items:center; gap:12px;">
+                            <input type="checkbox" id="socialDiscount" style="width:20px; height:20px; accent-color:#15803d; cursor:pointer;">
+                            <div>
+                                <label for="socialDiscount" style="font-weight: 700; color: #15803d; font-size: 0.9rem; cursor:pointer;"><i class="fas fa-hand-holding-heart" style="margin-right:4px;"></i> WMSU Social Discount</label>
+                                <p style="margin:2px 0 0; font-size:0.75rem; color:#4ade80;">Applies 10–15% price reduction for PWD or working students</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
-                <div style="display: flex; gap: 15px; justify-content: flex-end; margin-top: 30px;">
+                <!-- Faculty Review Notice -->
+                <div style="background:linear-gradient(135deg, #fef2f2, #fff1f2); padding:12px 18px; border-radius:12px; border:1px solid #fecaca; margin-top:20px; display:flex; align-items:center; gap:12px;">
+                    <i class="fas fa-user-shield" style="font-size:1.4rem; color:#991b1b;"></i>
+                    <div>
+                        <p style="margin:0; font-size:0.85rem; font-weight:700; color:#991b1b;">Faculty Approval Required</p>
+                        <p style="margin:2px 0 0; font-size:0.75rem; color:#b91c1c;">Your listing will enter a <strong>'Pending'</strong> state and must be reviewed by Faculty before it goes live. This prevents out-of-context content.</p>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 15px; justify-content: flex-end; margin-top: 20px;">
                     <button type="button" onclick="closeModal()" style="padding: 12px 25px; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; background: #f1f5f9; color: #4b5563; transition: 0.2s;">Cancel</button>
-                    <button type="submit" style="padding: 12px 35px; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; background: #800000; color: #fff; box-shadow: 0 4px 12px rgba(128,0,0,0.25); transition: 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">Publish Gear</button>
+                    <button type="submit" id="submitListingBtn" style="padding: 12px 35px; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; background: #800000; color: #fff; box-shadow: 0 4px 12px rgba(128,0,0,0.25); transition: 0.2s; display:flex; align-items:center; gap:8px;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'"><i class="fas fa-paper-plane"></i> Submit for Faculty Review</button>
                 </div>
             </form>
         </div>
@@ -239,22 +290,24 @@
         .status-badge.active { background: #10b981; color: #fff; }
         .status-badge.rented { background: #f59e0b; color: #fff; }
         .status-badge.hidden { background: #64748b; color: #fff; }
-        
+        .status-badge.pending { background: #800000; color: #fff; animation: pulse-pending 2s infinite; }
+        @keyframes pulse-pending { 0%,100%{opacity:1;} 50%{opacity:0.7;} }
         .listing-thumbnail { position: relative; width: 180px; height: 180px; flex-shrink: 0; }
         .listing-thumbnail img { width: 100%; height: 100%; object-fit: cover; }
-        
-        /* Toggle Switch */
+        .qty-badge { position:absolute; top:10px; right:10px; background:#111827; color:#fff; padding:3px 8px; border-radius:6px; font-size:0.7rem; font-weight:700; }
+        .discount-tag { display:inline-flex; align-items:center; gap:4px; background:#f0fdf4; color:#15803d; padding:2px 8px; border-radius:4px; font-size:0.7rem; font-weight:700; margin-left:8px; }
         .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e1; transition: .4s; border-radius: 24px; }
         .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
         input:checked + .slider { background-color: #10b981; }
         input:checked + .slider:before { transform: translateX(20px); }
-
-        /* Request Card */
         .request-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
         .btn-accept { background: #10b981; color: #fff; border: none; padding: 8px 15px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem; }
         .btn-decline { background: #fff; color: #ef4444; border: 1px solid #ef4444; padding: 8px 15px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem; }
+        .photo-thumb { width:55px; height:55px; border-radius:8px; object-fit:cover; border:2px solid #e2e8f0; position:relative; }
+        .photo-thumb-wrap { position:relative; display:inline-block; }
+        .photo-thumb-wrap .remove-photo { position:absolute; top:-5px; right:-5px; width:18px; height:18px; background:#ef4444; color:#fff; border:none; border-radius:50%; font-size:0.6rem; cursor:pointer; display:flex; align-items:center; justify-content:center; }
     </style>
     <script>
         function renderRequests() {
@@ -318,24 +371,32 @@
                 return;
             }
 
-            grid.innerHTML = listings.map(item => `
+            grid.innerHTML = listings.map(item => {
+                const qty = item.quantity || 1;
+                const isPending = (item.approvalStatus === 'Pending');
+                const statusLabel = !item.visibility ? 'Hidden' : (isPending ? 'Pending Review' : item.status);
+                const statusClass = !item.visibility ? 'hidden' : (isPending ? 'pending' : item.status.toLowerCase());
+                const discountHtml = item.socialDiscount ? '<span class="discount-tag"><i class="fas fa-hand-holding-heart"></i> Social Discount</span>' : '';
+                return `
                 <div class="listing-item-panel" data-id="${item.id}" style="${!item.visibility ? 'opacity: 0.7; filter: grayscale(0.5);' : ''}">
                     <div class="listing-thumbnail">
                         <img src="${item.image}" alt="${item.name}">
-                        <span class="status-badge ${!item.visibility ? 'hidden' : item.status.toLowerCase()}">${!item.visibility ? 'Hidden' : item.status}</span>
+                        <span class="status-badge ${statusClass}">${statusLabel}</span>
+                        ${qty > 1 ? '<span class="qty-badge"><i class="fas fa-layer-group"></i> x' + qty + '</span>' : ''}
                     </div>
                     <div class="listing-details">
                         <div class="listing-top">
                             <div>
-                                <h4 style="font-size: 1.1rem; color: #111827;">${item.name}</h4>
-                                <p class="category-trace" style="margin: 4px 0;">Category: ${item.category}</p>
-                                <div style="display: flex; align-items: center; gap: 10px; margin-top: 10px;">
+                                <h4 style="font-size: 1.1rem; color: #111827;">${item.name}${discountHtml}</h4>
+                                <p class="category-trace" style="margin: 4px 0;">Category: ${item.category} • Condition: ${item.condition || 'Good'}</p>
+                                ${item.lenderWindow ? '<p style="font-size:0.75rem; color:#92400e; margin:2px 0;"><i class="fas fa-calendar-alt"></i> Max ' + item.lenderWindow.maxRentalDays + ' days</p>' : ''}
+                                <div style="display: flex; align-items: center; gap: 10px; margin-top: 8px;">
                                     <label class="switch">
                                         <input type="checkbox" ${item.visibility ? 'checked' : ''} onchange="toggleVisibility('${item.id}')">
                                         <span class="slider"></span>
                                     </label>
                                     <span style="font-size: 0.8rem; font-weight: 700; color: ${item.visibility ? '#10b981' : '#64748b'};">
-                                        ${item.visibility ? 'Listing Visible' : 'Listing Hidden'}
+                                        ${item.visibility ? 'Visible' : 'Hidden'}
                                     </span>
                                 </div>
                             </div>
@@ -344,10 +405,11 @@
                         <div class="listing-actions">
                             <button style="background: #111827; color: #fff; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer;" onclick="openEditModal('${item.id}')"><i class="fas fa-edit"></i> Edit</button>
                             <button class="btn-outline-red" style="padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer;" onclick="deleteListing('${item.id}')"><i class="fas fa-trash-alt"></i> Delete</button>
+                            <button style="background:#f8fafc; color:#64748b; border:1px solid #e2e8f0; padding:10px 15px; border-radius:8px; font-weight:600; cursor:pointer; font-size:0.8rem;" onclick="viewHistory('${item.id}')"><i class="fas fa-history"></i> History</button>
                         </div>
                     </div>
-                </div>
-            `).join('');
+                </div>`;
+            }).join('');
         }
 
         function toggleVisibility(id) {
@@ -361,15 +423,13 @@
         }
 
         function openAddModal() {
-            document.getElementById('modalTitle').innerText = 'List New Gear';
+            document.getElementById('modalTitle').innerHTML = '<i class="fas fa-box-open"></i> List New Gear';
             document.getElementById('listingForm').reset();
             document.getElementById('listingId').value = '';
-            
-            // Reset image preview
-            document.getElementById('imagePreview').style.display = 'none';
+            document.getElementById('itemQuantity').value = 1;
+            uploadedPhotos = [];
+            document.getElementById('photoGallery').innerHTML = '';
             document.getElementById('uploadPlaceholder').style.display = 'block';
-            uploadedImageDataUrl = '';
-
             document.getElementById('listingModal').style.display = 'flex';
         }
 
@@ -377,8 +437,7 @@
             const listings = getMyListings();
             const item = listings.find(i => i.id === id);
             if (!item) return;
-
-            document.getElementById('modalTitle').innerText = 'Edit Listing';
+            document.getElementById('modalTitle').innerHTML = '<i class="fas fa-edit"></i> Edit Listing';
             document.getElementById('listingId').value = item.id;
             document.getElementById('itemName').value = item.name;
             document.getElementById('itemPrice').value = item.price;
@@ -386,22 +445,20 @@
             document.getElementById('itemDescription').value = item.description || '';
             document.getElementById('itemCondition').value = item.condition || 'Good';
             document.getElementById('itemLocation').value = item.location || '';
+            document.getElementById('itemQuantity').value = item.quantity || 1;
             document.getElementById('itemPriceHourly').value = item.priceHourly || '';
             document.getElementById('itemPriceWeekly').value = item.priceWeekly || '';
             document.getElementById('itemPriceMonthly').value = item.priceMonthly || '';
-
-            // Handle image preview for edit
-            if(item.image) {
-                document.getElementById('imagePreview').src = item.image;
-                document.getElementById('imagePreview').style.display = 'block';
-                document.getElementById('uploadPlaceholder').style.display = 'none';
-                uploadedImageDataUrl = item.image;
-            } else {
-                document.getElementById('imagePreview').style.display = 'none';
-                document.getElementById('uploadPlaceholder').style.display = 'block';
-                uploadedImageDataUrl = '';
-            }
-
+            document.getElementById('maxRentalDays').value = (item.lenderWindow && item.lenderWindow.maxRentalDays) || 14;
+            document.getElementById('socialDiscount').checked = item.socialDiscount || false;
+            // Restore unavailable days
+            document.querySelectorAll('.day-check').forEach(cb => {
+                cb.checked = item.lenderWindow && item.lenderWindow.unavailableDays && item.lenderWindow.unavailableDays.includes(cb.value);
+            });
+            // Restore photos
+            uploadedPhotos = item.photos ? [...item.photos] : (item.image ? [item.image] : []);
+            renderPhotoGallery();
+            if(uploadedPhotos.length > 0) document.getElementById('uploadPlaceholder').style.display = 'none';
             document.getElementById('listingModal').style.display = 'flex';
         }
 
@@ -418,55 +475,44 @@
             const description = document.getElementById('itemDescription').value;
             const condition = document.getElementById('itemCondition').value;
             const location = document.getElementById('itemLocation').value;
+            const quantity = parseInt(document.getElementById('itemQuantity').value) || 1;
             const priceHourly = document.getElementById('itemPriceHourly').value;
             const priceWeekly = document.getElementById('itemPriceWeekly').value;
             const priceMonthly = document.getElementById('itemPriceMonthly').value;
-            
+            const maxRentalDays = parseInt(document.getElementById('maxRentalDays').value) || 14;
+            const socialDiscount = document.getElementById('socialDiscount').checked;
+            const unavailableDays = Array.from(document.querySelectorAll('.day-check:checked')).map(cb => cb.value);
+
             let listings = getMyListings();
+            const mainImage = uploadedPhotos.length > 0 ? uploadedPhotos[0] : '../../images/wmsulogo.png';
 
             const itemData = {
-                name,
-                price,
-                category,
-                description,
-                condition,
-                location,
-                priceHourly,
-                priceWeekly,
-                priceMonthly,
-                image: uploadedImageDataUrl || '../../images/wmsulogo.png'
+                name, price, category, description, condition, location, quantity,
+                priceHourly, priceWeekly, priceMonthly, socialDiscount,
+                image: mainImage,
+                photos: uploadedPhotos.length > 0 ? [...uploadedPhotos] : [mainImage],
+                lenderWindow: { maxRentalDays, unavailableDays }
             };
 
             if (id) {
-                // Update
                 const index = listings.findIndex(i => i.id === id);
-                if (index !== -1) {
-                    listings[index] = { ...listings[index], ...itemData };
-                }
+                if (index !== -1) listings[index] = { ...listings[index], ...itemData };
             } else {
-                // Add
-                const newItem = {
-                    id: 'l' + Date.now(),
-                    ...itemData,
-                    status: 'Active',
-                    visibility: true
-                };
-                listings.push(newItem);
+                listings.push({
+                    id: 'l' + Date.now(), ...itemData,
+                    status: 'Pending', approvalStatus: 'Pending',
+                    visibility: true, usageHistory: [], conditionSnapshots: { before: mainImage, after: null }
+                });
             }
 
-            saveListings(listings);
-            renderListings();
-            closeModal();
-            
-            // Success Modal replacement
+            saveListings(listings); renderListings(); closeModal();
+
             if(typeof UIUtils !== 'undefined' && UIUtils.showModal) {
                 UIUtils.showModal({
-                    title: "Listing Published!",
-                    message: `Your ${name} is now live on the marketplace.`,
-                    type: "success"
+                    title: id ? 'Listing Updated!' : 'Submitted for Review',
+                    message: id ? `Your ${name} listing has been updated.` : `"${name}" (x${quantity}) has been submitted for Faculty review. You'll be notified once approved.`,
+                    type: id ? 'success' : 'info'
                 });
-            } else {
-                UIUtils.showToast("Listing saved successfully!", "success");
             }
         };
 
@@ -509,28 +555,53 @@
             // Handled by auth.js
         }
 
-        // Image Upload Logic
-        let uploadedImageDataUrl = '';
+        // Multi-Photo Upload Logic
+        let uploadedPhotos = [];
         const imageUploadArea = document.getElementById('imageUploadArea');
         const itemImageInput = document.getElementById('itemImageInput');
-        const imagePreview = document.getElementById('imagePreview');
-        const uploadPlaceholder = document.getElementById('uploadPlaceholder');
 
         imageUploadArea.addEventListener('click', () => itemImageInput.click());
 
         itemImageInput.addEventListener('change', function() {
-            const file = this.files[0];
-            if (file) {
+            const files = Array.from(this.files);
+            if (uploadedPhotos.length + files.length > 8) {
+                UIUtils.showToast('Maximum 8 photos allowed.', 'error'); return;
+            }
+            files.forEach(file => {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    uploadedImageDataUrl = e.target.result;
-                    imagePreview.src = uploadedImageDataUrl;
-                    imagePreview.style.display = 'block';
-                    uploadPlaceholder.style.display = 'none';
+                    uploadedPhotos.push(e.target.result);
+                    renderPhotoGallery();
+                    document.getElementById('uploadPlaceholder').style.display = 'none';
                 };
                 reader.readAsDataURL(file);
-            }
+            });
         });
+
+        function renderPhotoGallery() {
+            const gallery = document.getElementById('photoGallery');
+            gallery.innerHTML = uploadedPhotos.map((src, i) => `
+                <div class="photo-thumb-wrap">
+                    <img src="${src}" class="photo-thumb">
+                    <button type="button" class="remove-photo" onclick="removePhoto(${i})"><i class="fas fa-times"></i></button>
+                </div>
+            `).join('') + (uploadedPhotos.length < 8 ? '<div style="width:55px;height:55px;border:2px dashed #cbd5e1;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#94a3b8;" onclick="document.getElementById(\'itemImageInput\').click()"><i class="fas fa-plus"></i></div>' : '');
+        }
+        function removePhoto(index) {
+            uploadedPhotos.splice(index, 1);
+            renderPhotoGallery();
+            if (uploadedPhotos.length === 0) document.getElementById('uploadPlaceholder').style.display = 'block';
+        }
+
+        // Usage History Viewer
+        function viewHistory(id) {
+            const item = getMyListings().find(i => i.id === id);
+            if (!item || !item.usageHistory || item.usageHistory.length === 0) {
+                UIUtils.showModal({ title: 'Usage History', message: 'No rental history yet for this item.', type: 'info' }); return;
+            }
+            const rows = item.usageHistory.map(h => `• ${h.borrower} — ${h.date} (${h.conditionBefore} → ${h.conditionAfter}) ★${h.rating}`).join('\n');
+            UIUtils.showModal({ title: 'Usage History: ' + item.name, message: rows, type: 'info' });
+        }
 
         window.onload = function() {
             const isMinimized = localStorage.getItem('sidebarMinimized') === 'true';

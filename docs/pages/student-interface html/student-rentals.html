@@ -224,128 +224,18 @@
                 <button class="filter-btn" onclick="filterRentals('cancelled', this)">Cancelled</button>
             </div>
 
+            <!-- Clearance Widget -->
+            <div id="rentalsClearanceWidget" style="display:none; background:#fef2f2; border:1px solid #fecaca; padding:15px 20px; border-radius:12px; margin-bottom:1.5rem; align-items:center; gap:15px;">
+                <i class="fas fa-exclamation-triangle" style="font-size:1.8rem; color:#ef4444;"></i>
+                <div>
+                    <h4 style="margin:0; color:#991b1b; font-size:1rem;">Clearance Hold</h4>
+                    <p style="margin:2px 0 0; color:#b91c1c; font-size:0.85rem;">You have unresolved rental issues. New rentals are restricted until resolved.</p>
+                </div>
+            </div>
+
             <!-- Rental List -->
             <div class="rentals-container" id="rentalsContainer">
-                
-                <!-- 1. ONGOING: DSLR -->
-                <div class="rental-horizontal-card ongoing">
-                    <img src="../../images/camera.jpg" class="rental-img-fixed" alt="DSLR">
-                    <div class="rental-info-core">
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <h3 style="font-size: 1.1rem;">Canon EOS 90D DSLR</h3>
-                            <span class="verified-badge-inline"><i class="fas fa-shield-alt"></i> Lender Verified</span>
-                        </div>
-                        <p style="font-size: 0.85rem; color: #64748b;">Rented from <strong>Juan Dela Cruz</strong> • Engineering Dept.</p>
-                        <div class="timer-badge urgent" style="margin-top: 3px;"><i class="far fa-clock"></i> Due in: 5h : 12m</div>
-                        <div class="progress-track"><div class="progress-fill" style="width: 85%; background: #ef4444;"></div></div>
-                        <div style="display: flex; gap: 15px; margin-top: 8px; font-size: 0.8rem; color: #4b5563;">
-                            <span><i class="fas fa-map-marker-alt"></i> Engineering Bldg</span>
-                            <span><i class="fas fa-coins"></i> ₱1,750</span>
-                        </div>
-                    </div>
-                    <div class="action-column">
-                        <button class="btn-handover" onclick="DashboardActions.initiateReturn(this)"><i class="fas fa-history"></i> Return</button>
-                        <button onclick="DashboardActions.extendRental(this)" style="border: 1.5px solid #800000; color: #800000; padding: 8px; border-radius: 6px; font-weight: 700; cursor: pointer; background: #fff; font-size: 0.8rem;">Extend</button>
-                    </div>
-                </div>
-
-                <!-- 2. ONGOING: Laptop Stand -->
-                <div class="rental-horizontal-card ongoing">
-                    <img src="../../images/lighting.jpeg" class="rental-img-fixed" alt="Light">
-                    <div class="rental-info-core">
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <h3 style="font-size: 1.1rem;">Adjustable Laptop Stand</h3>
-                            <span class="verified-badge-inline"><i class="fas fa-shield-alt"></i> Lender Verified</span>
-                        </div>
-                        <p style="font-size: 0.85rem; color: #64748b;">Rented from <strong>Kervin Reyes</strong> • CS Dept.</p>
-                        <div class="timer-badge safe" style="margin-top: 3px;"><i class="far fa-clock"></i> Due in: 3 days</div>
-                        <div class="progress-track"><div class="progress-fill" style="width: 30%; background: #10b981;"></div></div>
-                        <div style="display: flex; gap: 15px; margin-top: 8px; font-size: 0.8rem; color: #4b5563;">
-                            <span><i class="fas fa-map-marker-alt"></i> CS Lobby</span>
-                            <span><i class="fas fa-coins"></i> ₱150</span>
-                        </div>
-                    </div>
-                    <div class="action-column">
-                        <button class="btn-handover" onclick="DashboardActions.initiateReturn(this)"><i class="fas fa-history"></i> Return</button>
-                        <button onclick="DashboardActions.extendRental(this)" style="border: 1.5px solid #800000; color: #800000; padding: 8px; border-radius: 6px; font-weight: 700; cursor: pointer; background: #fff; font-size: 0.8rem;">Extend</button>
-                    </div>
-                </div>
-
-                <!-- 3. PENDING: Calculator -->
-                <div class="rental-horizontal-card pending">
-                    <img src="../../images/calculator.jpg" class="rental-img-fixed" alt="Calc">
-                    <div class="rental-info-core">
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <h3 style="font-size: 1.1rem;">Scientific Calculator TI-84</h3>
-                            <span class="verified-badge-inline"><i class="fas fa-shield-alt"></i> Lender Verified</span>
-                        </div>
-                        <p style="font-size: 0.85rem; color: #64748b;">Rented from <strong>Maria Santos</strong> • Library Lobby</p>
-                        <div class="timer-badge safe" style="margin-top: 3px;"><i class="fas fa-info-circle"></i> Handover: 8 AM Tomorrow</div>
-                        <div class="progress-track"><div class="progress-fill" style="width: 0%; background: #10b981;"></div></div>
-                    </div>
-                    <div class="action-column">
-                        <button class="btn-handover" onclick="openQRModal()" style="background: #111827;"><i class="fas fa-qrcode"></i> Pickup QR</button>
-                        <button onclick="DashboardActions.contactStudent('Maria Santos')" style="border: none; background: none; color: #64748b; font-size: 0.75rem; text-decoration: underline; cursor: pointer;">Message Maria</button>
-                    </div>
-                </div>
-
-                <!-- 4. PENDING: Drafting Set -->
-                <div class="rental-horizontal-card pending">
-                    <img src="../../images/books.jpeg" class="rental-img-fixed" alt="Books">
-                    <div class="rental-info-core">
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <h3 style="font-size: 1.1rem;">Drafting Tools Set</h3>
-                            <span class="verified-badge-inline"><i class="fas fa-shield-alt"></i> Lender Verified</span>
-                        </div>
-                        <p style="font-size: 0.85rem; color: #64748b;">Rented from <strong>Arnel Dizon</strong> • Engineering Dept.</p>
-                        <div class="timer-badge safe" style="margin-top: 3px;"><i class="fas fa-info-circle"></i> Handover: 1 PM Today</div>
-                    </div>
-                    <div class="action-column">
-                        <button class="btn-handover" onclick="openQRModal()" style="background: #111827;"><i class="fas fa-qrcode"></i> Pickup QR</button>
-                    </div>
-                </div>
-
-                <!-- 5. COMPLETED: Microscope -->
-                <div class="rental-horizontal-card completed" style="opacity: 0.8;">
-                    <img src="../../images/microscope.jpeg" class="rental-img-fixed" alt="Micro">
-                    <div class="rental-info-core">
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <h3 style="font-size: 1.1rem;">Lab Microscope X-200</h3>
-                        </div>
-                        <p style="font-size: 0.85rem; color: #64748b;">Returned to <strong>Miguel Tan</strong> • Feb 24, 2026</p>
-                        <div style="margin-top: 5px; font-size: 0.8rem; color: #10b981; font-weight: 700;"><i class="fas fa-check-circle"></i> Completed</div>
-                    </div>
-                    <div class="action-column">
-                        <button onclick="DashboardActions.rentAgain('microscope')" style="border: 1.5px solid #800000; color: #800000; padding: 8px; border-radius: 6px; font-weight: 700; cursor: pointer; background: #fff; font-size: 0.8rem;">Rent Again</button>
-                    </div>
-                </div>
-
-                <!-- 6. COMPLETED: Physics Textbook -->
-                <div class="rental-horizontal-card completed" style="opacity: 0.8;">
-                    <img src="../../images/camera.jpg" class="rental-img-fixed" alt="Books">
-                    <div class="rental-info-core">
-                        <h3 style="font-size: 1.1rem;">University Physics Vol 1</h3>
-                        <p style="font-size: 0.85rem; color: #64748b;">Returned to <strong>Sarah Lee</strong> • Jan 12, 2026</p>
-                        <div style="margin-top: 5px; font-size: 0.8rem; color: #10b981; font-weight: 700;"><i class="fas fa-check-circle"></i> Completed</div>
-                    </div>
-                    <div class="action-column">
-                        <button onclick="DashboardActions.rentAgain('textbook')" style="border: 1.5px solid #800000; color: #800000; padding: 8px; border-radius: 6px; font-weight: 700; cursor: pointer; background: #fff; font-size: 0.8rem;">Rent Again</button>
-                    </div>
-                </div>
-
-                <!-- 7. CANCELLED: Tripod -->
-                <div class="rental-horizontal-card cancelled" style="opacity: 0.6; filter: grayscale(1);">
-                    <img src="../../images/lighting.jpeg" class="rental-img-fixed" alt="Tripod">
-                    <div class="rental-info-core">
-                        <h3 style="font-size: 1.1rem;">Professional Tripod Mount</h3>
-                        <p style="font-size: 0.85rem; color: #64748b;">Lender: <strong>Chris P.</strong> • Cancelled by Lender</p>
-                        <div style="margin-top: 5px; font-size: 0.8rem; color: #ef4444; font-weight: 700;"><i class="fas fa-times-circle"></i> Cancelled</div>
-                    </div>
-                    <div class="action-column">
-                        <span style="font-size: 0.75rem; color: #64748b; text-align: center;">Refund Processed</span>
-                    </div>
-                </div>
-
+                <!-- Dynamically populated via JS -->
             </div>
 
         </main>
@@ -361,6 +251,7 @@
         </div>
     </div>
 
+    <script src="../../script/student-data.js"></script>
     <script>
         function toggleSidebar() {
             document.documentElement.classList.remove('sidebar-is-minimized');
@@ -375,12 +266,98 @@
             // Handled by auth.js
         }
 
+        let currentFilter = 'all';
+
+        function renderRentals() {
+            const container = document.getElementById('rentalsContainer');
+            const rentals = getActiveRentals();
+            let html = '';
+
+            const filteredRentals = rentals.filter(r => {
+                if (currentFilter === 'all') return true;
+                if (currentFilter === 'ongoing') return r.status === 'Active' || r.status === 'Return Initiated' || r.status === 'Partial Return';
+                if (currentFilter === 'pending') return r.status === 'Pending Pickup';
+                if (currentFilter === 'completed') return r.status === 'Completed';
+                if (currentFilter === 'cancelled') return r.status === 'Cancelled';
+                return true;
+            });
+
+            if (filteredRentals.length === 0) {
+                container.innerHTML = '<div style="text-align:center; padding:3rem; color:#64748b;"><i class="fas fa-box-open" style="font-size:3rem; opacity:0.3; margin-bottom:1rem;"></i><p>No rentals found for this category.</p></div>';
+                return;
+            }
+
+            filteredRentals.forEach(r => {
+                const prog = calcRentalProgress(r.startDate, r.dueDate);
+                const isPending = r.status === 'Pending Pickup';
+                const isCompleted = r.status === 'Completed';
+                const isCancelled = r.status === 'Cancelled';
+
+                let statusBadgeHtml = '';
+                if (isPending) statusBadgeHtml = '<div class="timer-badge safe" style="margin-top:3px;"><i class="fas fa-info-circle"></i> Handover Pending</div>';
+                else if (isCompleted) statusBadgeHtml = '<div style="margin-top:5px; font-size:0.8rem; color:#10b981; font-weight:700;"><i class="fas fa-check-circle"></i> Completed</div>';
+                else if (isCancelled) statusBadgeHtml = '<div style="margin-top:5px; font-size:0.8rem; color:#ef4444; font-weight:700;"><i class="fas fa-times-circle"></i> Cancelled</div>';
+                else statusBadgeHtml = `<div class="timer-badge ${prog.isOverdue ? 'urgent' : (prog.percent > 75 ? 'urgent' : 'safe')}" style="margin-top:3px;"><i class="far fa-clock"></i> ${prog.isOverdue ? 'OVERDUE' : 'Due in: ' + prog.timeLeft}</div>
+                                        <div class="progress-track"><div class="progress-fill" style="width: ${prog.percent}%; background: ${prog.color};"></div></div>`;
+
+                let actionHtml = '';
+                if (isPending) {
+                    actionHtml = `<button class="btn-handover" onclick="openQRModal()" style="background:#111827;"><i class="fas fa-qrcode"></i> Pickup QR</button>
+                                  <button onclick="DashboardActions.contactStudent('${r.lender}')" style="border:none; background:none; color:#64748b; font-size:0.75rem; text-decoration:underline; cursor:pointer;">Message ${r.lender.split(' ')[0]}</button>`;
+                } else if (isCompleted) {
+                    actionHtml = `<button onclick="DashboardActions.rentAgain('${r.id}')" style="border:1.5px solid #800000; color:#800000; padding:8px; border-radius:6px; font-weight:700; cursor:pointer; background:#fff; font-size:0.8rem;">Rent Again</button>`;
+                } else if (isCancelled) {
+                    actionHtml = `<span style="font-size:0.75rem; color:#64748b; text-align:center;">Refund Processed</span>`;
+                } else {
+                    actionHtml = `<button class="btn-handover" onclick="DashboardActions.initiateReturn(this, '${r.id}')"><i class="fas fa-history"></i> Return Item</button>
+                                  <button onclick="DashboardActions.extendRental(this)" style="border:1.5px solid #800000; color:#800000; padding:8px; border-radius:6px; font-weight:700; cursor:pointer; background:#fff; font-size:0.8rem;">Extend</button>`;
+                }
+
+                const opacity = (isCompleted || isCancelled) ? '0.7' : '1';
+                const filter = isCancelled ? 'grayscale(1)' : 'none';
+
+                html += `
+                <div class="rental-horizontal-card" style="opacity:${opacity}; filter:${filter};" data-id="${r.id}">
+                    <img src="${r.image}" class="rental-img-fixed" alt="${r.item}">
+                    <div class="rental-info-core">
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <h3 style="font-size:1.1rem; margin:0;">${r.item}</h3>
+                            <span class="verified-badge-inline"><i class="fas fa-shield-alt"></i> Lender Verified</span>
+                            ${r.quantityBorrowed > 1 ? `<span style="background:#111827; color:#fff; padding:2px 6px; border-radius:4px; font-size:0.7rem; font-weight:700;">Qty: ${r.quantityBorrowed}</span>` : ''}
+                        </div>
+                        <p style="font-size:0.85rem; color:#64748b; margin:4px 0;">Rented from <strong>${r.lender}</strong> • ${r.location}</p>
+                        ${statusBadgeHtml}
+                        <div style="display:flex; gap:15px; margin-top:8px; font-size:0.8rem; color:#4b5563;">
+                            <span><i class="fas fa-map-marker-alt"></i> ${r.location}</span>
+                            <span><i class="fas fa-coins"></i> ₱${r.totalCost.toLocaleString()}</span>
+                            ${r.status === 'Partial Return' ? `<span style="color:#f59e0b; font-weight:700;"><i class="fas fa-exclamation-circle"></i> Partially Returned (${r.quantityReturned}/${r.quantityBorrowed})</span>` : ''}
+                        </div>
+                    </div>
+                    <div class="action-column">
+                        ${actionHtml}
+                    </div>
+                </div>`;
+            });
+            container.innerHTML = html;
+
+            // Check Clearance
+            const clearance = getClearanceStatus();
+            const widget = document.getElementById('rentalsClearanceWidget');
+            if (clearance && clearance.status === 'Hold') {
+                widget.style.display = 'flex';
+            } else {
+                widget.style.display = 'none';
+            }
+        }
+
         window.onload = function() {
             const isMinimized = localStorage.getItem('sidebarMinimized') === 'true';
             if (isMinimized) {
                 document.getElementById('sidebar').classList.add('minimized');
                 document.getElementById('mainContent').classList.add('expanded');
             }
+            renderRentals();
+            setInterval(renderRentals, 60000); // refresh progress bars every minute
         };
 
         function openQRModal() { DashboardActions.generateQR(); }
@@ -388,25 +365,11 @@
 
         // Filter Logic
         function filterRentals(category, btn) {
-            const cards = document.querySelectorAll('.rental-horizontal-card');
+            currentFilter = category;
             const btns = document.querySelectorAll('.filter-btn');
-            
-            // Update buttons
             btns.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-
-            // Update cards
-            cards.forEach(card => {
-                if (category === 'all') {
-                    card.classList.remove('hidden');
-                } else {
-                    if (card.classList.contains(category)) {
-                        card.classList.remove('hidden');
-                    } else {
-                        card.classList.add('hidden');
-                    }
-                }
-            });
+            renderRentals();
         }
     </script>
 

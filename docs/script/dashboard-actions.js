@@ -116,53 +116,108 @@ window.DashboardActions = {
         document.getElementById('extendCostValue').textContent = '₱' + parseInt(cost).toLocaleString();
     },
 
-    // ── 2. Initiate Return (QR Code + Notification) ──
-    initiateReturn: function(btnElement) {
-        const card = btnElement.closest('.compact-rental-item, .rental-horizontal-card');
-        const itemName = card ? (card.querySelector('h4, h3') || {}).textContent || 'this item' : 'this item';
-        const lenderEl = card ? card.querySelector('p') : null;
-        const lenderText = lenderEl ? lenderEl.textContent : '';
-        const lenderMatch = lenderText.match(/(?:Lender|from):?\s*([A-Z][a-z]+ [A-Z][a-z]+)/i);
-        const lenderName = lenderMatch ? lenderMatch[1] : 'the lender';
-        const locationMatch = lenderText.match(/•\s*(.+?)(?:\s*$)/);
-        const meetLocation = locationMatch ? locationMatch[1].trim() : 'campus meetup point';
+    // ── 2. Initiate Return (Condition Snapshot & Partial Return) ──
+    initiateReturn: function(btnElement, rentalId = null) {
+        const rentals = typeof getActiveRentals === 'function' ? getActiveRentals() : this._getRentals();
+        let rental = null;
+        if (rentalId) {
+            rental = rentals.find(r => r.id === rentalId);
+        } else {
+            const card = btnElement.closest('.compact-rental-item, .rental-horizontal-card');
+            const itemName = card ? (card.querySelector('h4, h3') || {}).textContent || 'this item' : 'this item';
+            rental = rentals.find(r => itemName.includes(r.item.split(' ')[0]));
+        }
 
-        UIUtils.showModal({
-            title: 'Initiate Return',
-            message: `Ready to return "${itemName}"?\n\nA Return QR Code will be generated. Meet ${lenderName} at ${meetLocation} to scan and complete the return.`,
-            type: 'confirm',
-            onConfirm: (val) => {
-                if (val) {
-                    const userName = localStorage.getItem('userName') || 'Student';
-                    const returnCode = 'KC-' + Date.now().toString(36).toUpperCase();
+        if (!rental) return;
 
-                    // Update rental status
-                    const rentals = this._getRentals();
-                    const rental = rentals.find(r => itemName.includes(r.item.split(' ')[0]));
-                    if (rental) { rental.status = 'Return Initiated'; this._saveRentals(rentals); }
+        const maxQty = rental.quantityBorrowed - (rental.quantityReturned || 0);
+        
+        let overlay = document.getElementById('return-flow-overlay');
+        if (overlay) overlay.remove();
 
-                    // Show Return QR modal
-                    this._showReturnQR(itemName, returnCode, lenderName, meetLocation);
+        overlay = document.createElement('div');
+        overlay.id = 'return-flow-overlay';
+        overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,23,42,0.7);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:10000;';
 
-                    btnElement.innerHTML = '<i class="fas fa-check"></i> Return Initiated';
-                    btnElement.style.background = '#10b981';
-                    btnElement.style.color = '#fff';
-                    btnElement.style.borderColor = '#10b981';
-                    btnElement.style.pointerEvents = 'none';
+        const qtyHtml = maxQty > 1 ? `
+            <label style="display:block;font-weight:700;color:#1e293b;margin-bottom:8px;text-align:left;font-size:0.9rem;">Quantity Returning</label>
+            <input type="number" id="returnQtyInput" min="1" max="${maxQty}" value="${maxQty}" style="width:100%;padding:12px;border:2px solid #e2e8f0;border-radius:10px;margin-bottom:15px;font-size:1rem;outline:none;">
+        ` : `<input type="hidden" id="returnQtyInput" value="1">`;
 
-                    // Disable extend button on same card
-                    const extendBtn = card ? card.querySelector('[onclick*="extendRental"]') : null;
-                    if (extendBtn) {
-                        extendBtn.style.opacity = '0.4';
-                        extendBtn.style.pointerEvents = 'none';
-                        extendBtn.textContent = 'Return in Progress';
-                    }
+        overlay.innerHTML = `
+            <div style="background:#fff;width:90%;max-width:420px;border-radius:20px;padding:30px;text-align:center;box-shadow:0 25px 50px rgba(0,0,0,0.25);">
+                <div style="width:60px;height:60px;background:#ecfdf5;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;"><i class="fas fa-camera" style="font-size:1.5rem;color:#10b981;"></i></div>
+                <h3 style="margin:0;color:#1e293b;font-size:1.2rem;">Initiate Return</h3>
+                <p style="color:#64748b;font-size:0.85rem;margin-top:5px;margin-bottom:20px;">${rental.item}</p>
+                
+                ${qtyHtml}
 
-                    AuthSystem.addNotification('Return Initiated', `${userName} is ready to return "${itemName}". Meet at ${meetLocation} to scan the return QR.`);
-                    UIUtils.showToast('Return process initiated. Show the QR to the lender.', 'success');
-                }
+                <div style="text-align:left;margin-bottom:20px;">
+                    <label style="display:block;font-weight:700;color:#1e293b;margin-bottom:8px;font-size:0.9rem;">Condition Snapshot</label>
+                    <p style="font-size:0.75rem;color:#64748b;margin-bottom:10px;">Upload a photo of the item's current condition before returning to prevent damage disputes.</p>
+                    <div id="snapshotUploadBtn" style="border:2px dashed #cbd5e1;border-radius:10px;padding:20px;text-align:center;cursor:pointer;color:#64748b;">
+                        <i class="fas fa-upload" style="font-size:1.5rem;margin-bottom:8px;"></i>
+                        <p style="margin:0;font-size:0.85rem;">Click to upload photo</p>
+                    </div>
+                    <input type="file" id="snapshotInput" accept="image/*" style="display:none;">
+                    <img id="snapshotPreview" style="display:none;width:100%;height:150px;object-fit:cover;border-radius:10px;border:1px solid #e2e8f0;">
+                </div>
+
+                <div style="display:flex;gap:10px;">
+                    <button id="retCancelBtn" style="flex:1;padding:12px;background:#f1f5f9;color:#4b5563;border:none;border-radius:10px;font-weight:700;cursor:pointer;">Cancel</button>
+                    <button id="retProceedBtn" style="flex:1;padding:12px;background:#800000;color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;">Generate QR</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+
+        const uploadBtn = document.getElementById('snapshotUploadBtn');
+        const fileInput = document.getElementById('snapshotInput');
+        const preview = document.getElementById('snapshotPreview');
+
+        uploadBtn.onclick = () => fileInput.click();
+        fileInput.onchange = (e) => {
+            if (e.target.files && e.target.files[0]) {
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    uploadBtn.style.display = 'none';
+                    preview.src = ev.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(e.target.files[0]);
             }
-        });
+        };
+
+        document.getElementById('retCancelBtn').onclick = () => overlay.remove();
+        
+        document.getElementById('retProceedBtn').onclick = () => {
+            if (uploadBtn.style.display !== 'none') {
+                UIUtils.showToast('Please upload a condition snapshot first.', 'error');
+                return;
+            }
+
+            const returningQty = parseInt(document.getElementById('returnQtyInput').value);
+            
+            // Save state to rental
+            if(!rental.conditionSnapshots) rental.conditionSnapshots = {};
+            rental.conditionSnapshots.after = preview.src;
+            rental.returningQtyCache = returningQty;
+            rental.status = 'Return Initiated';
+
+            if(typeof saveActiveRentals === 'function') {
+                saveActiveRentals(rentals);
+            } else {
+                this._saveRentals(rentals);
+            }
+
+            overlay.remove();
+            
+            const returnCode = 'KC-' + Date.now().toString(36).toUpperCase();
+            this._showReturnQR(rental.item, returnCode, rental.lender, rental.location);
+
+            if(typeof renderRentals === 'function') renderRentals();
+            if(typeof renderDashboardRentals === 'function') renderDashboardRentals();
+        };
     },
 
     _showReturnQR: function(itemName, code, lender, location) {
@@ -215,56 +270,42 @@ window.DashboardActions = {
         else { window.location.href = 'student-messages.html'; }
     },
 
-    // ── 5. Scan Return QR (Real-time Status → Returned) ──
+    // ── 5. Scan Return QR (Damage Audit & Status Update) ──
     scanQR: function(btnElement) {
         const card = btnElement.closest('.lending-item-v2');
         const itemName = card ? (card.querySelector('h4') || {}).textContent || 'Item' : 'Item';
 
         UIUtils.showModal({
-            title: 'Scan Return QR',
-            message: `Scanning QR code for "${itemName}"...\n\nPoint your camera at the borrower's QR code to confirm the return.`,
+            title: 'Scan Return QR & Audit',
+            message: `Scanning QR code for "${itemName}"...\n\nBy confirming, you verify that the item's condition matches the snapshot provided by the borrower.`,
             type: 'confirm',
             onConfirm: (val) => {
                 if (val) {
                     UIUtils.showToast('Scanning QR code...', 'info');
                     setTimeout(() => {
-                        // Update lending status to Returned
-                        const lendings = this._getLendings();
-                        const lending = lendings.find(l => itemName.includes(l.item.split(' ')[0]));
-                        if (lending) { lending.status = 'Returned'; this._saveLendings(lendings); }
+                        const rentals = typeof getActiveRentals === 'function' ? getActiveRentals() : this._getLendings();
+                        const rental = rentals.find(l => itemName.includes(l.item.split(' ')[0]));
+                        
+                        if (rental) {
+                            const returningQty = rental.returningQtyCache || 1;
+                            rental.quantityReturned = (rental.quantityReturned || 0) + returningQty;
+                            
+                            if (rental.quantityReturned >= rental.quantityBorrowed) {
+                                rental.status = 'Completed';
+                            } else {
+                                rental.status = 'Partial Return';
+                            }
 
-                        // Update UI: button
-                        btnElement.innerHTML = '<i class="fas fa-check-circle"></i> Returned';
-                        btnElement.style.background = '#10b981';
-                        btnElement.style.pointerEvents = 'none';
-
-                        // Update status text
-                        const statusNode = card.querySelector('[class*="fa-user-check"], [class*="fa-hand-holding"]');
-                        if (statusNode) {
-                            const parent = statusNode.parentNode;
-                            parent.innerHTML = '<i class="fas fa-check-circle"></i> Status: Returned';
-                            parent.style.color = '#64748b';
+                            if(typeof saveActiveRentals === 'function') {
+                                saveActiveRentals(rentals);
+                            } else {
+                                this._saveLendings(rentals);
+                            }
                         }
 
-                        // Logic Lock: disable/hide Extend Rental button
-                        const extendBtn = card.querySelector('.btn-extension, [onclick*="addHours"], [onclick*="extendLending"]');
-                        if (extendBtn) {
-                            extendBtn.disabled = true;
-                            extendBtn.style.opacity = '0.3';
-                            extendBtn.style.pointerEvents = 'none';
-                            extendBtn.style.cursor = 'not-allowed';
-                            extendBtn.textContent = 'Returned';
-                            extendBtn.style.borderColor = '#94a3b8';
-                            extendBtn.style.color = '#94a3b8';
-                        }
-
-                        // Gray out the card
-                        card.style.opacity = '0.7';
-                        card.style.filter = 'grayscale(0.3)';
-
-                        AuthSystem.addNotification('Item Returned', `${itemName} has been successfully returned and verified.`);
-                        UIUtils.showToast(`${itemName} returned and verified!`, 'success');
-                    }, 1500);
+                        UIUtils.showToast(`${itemName} return verified!`, 'success');
+                        if(typeof renderDashboardRentals === 'function') renderDashboardRentals();
+                    }, 1000);
                 }
             }
         });

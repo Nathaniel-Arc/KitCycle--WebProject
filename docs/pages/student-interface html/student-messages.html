@@ -291,6 +291,10 @@
                         </div>
                     </div>
 
+                    <div style="background: #f0fdf4; border-bottom: 1.5px solid #dcfce7; padding: 6px 20px; font-size: 0.75rem; color: #15803d; display: flex; align-items: center; gap: 8px;">
+                        <i class="fas fa-lock"></i> <span>End-to-end encrypted. For your safety, phone numbers and emails are automatically masked. Keep all transactions on-platform.</span>
+                    </div>
+
                     <div class="transaction-context-bar" id="txBar">
                         <img src="../../images/camera.jpg" class="transaction-thumb-msg" alt="Item" id="txImg">
                         <div style="flex: 1;">
@@ -400,7 +404,18 @@
             chatData[currentConvoId].messages.forEach(msg => {
                 const row = document.createElement('div');
                 row.className = "message-row" + (msg.t === 'out' ? ' sent' : '');
-                row.innerHTML = `<div class="message-bubble-v2 msg-${msg.t === 'out' ? 'outbound' : 'inbound'}">${msg.m}<div style="font-size: 0.65rem; margin-top: 5px; opacity: 0.7; text-align: right;">${msg.time}</div></div>`;
+                
+                // Privacy Masking (Display level)
+                let safeText = msg.m;
+                const phoneRegex = /(?:\+63|0)\d{10}/g;
+                const emailRegex = /[\w.-]+@[\w.-]+\.\w+/g;
+                
+                if(phoneRegex.test(safeText) || emailRegex.test(safeText)) {
+                    safeText = safeText.replace(phoneRegex, '<span style="background:rgba(255,255,255,0.2);padding:2px 4px;border-radius:4px;font-style:italic;">[Contact Masked]</span>');
+                    safeText = safeText.replace(emailRegex, '<span style="background:rgba(255,255,255,0.2);padding:2px 4px;border-radius:4px;font-style:italic;">[Email Masked]</span>');
+                }
+
+                row.innerHTML = `<div class="message-bubble-v2 msg-${msg.t === 'out' ? 'outbound' : 'inbound'}">${safeText}<div style="font-size: 0.65rem; margin-top: 5px; opacity: 0.7; text-align: right;">${msg.time}</div></div>`;
                 area.appendChild(row);
             });
             area.scrollTop = area.scrollHeight;
@@ -408,8 +423,9 @@
 
         function sendMessage() {
             const input = document.getElementById('msgInput');
-            const text = input.value.trim();
+            let text = input.value.trim();
             if(!text) return;
+            
             const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             chatData[currentConvoId].messages.push({ t: 'out', m: text, time: now });
             renderMessages();

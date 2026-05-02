@@ -143,25 +143,32 @@ header {
 
 /* Style for the Login button (Outline style) */
 .btn-login {
+    font-size: 0.88rem;
     text-decoration: none;
     color: var(--maroon);
     padding: 5px 16px;
-    border: 1px solid var(--maroon);
-    border-radius: 6px;
+    border: 2px solid var(--maroon);
+    border-radius: 10px;
     font-weight: 500;
     transition: 0.3s;
 }
 
 /* Style for the Register button (Solid Gold style) */
 .btn-register {
+    font-size: 0.88rem;
     text-decoration: none;
     background-color: var(--gold);
     color: var(--maroon);
     padding: 5px 16px;
-    border: 1px solid var(--gold);
-    border-radius: 6px;
+    border: 2px solid var(--gold);
+    border-radius: 10px;
     font-weight: 500;
     transition: 0.3s;
+}
+
+.btn-login:hover {
+    background-color: var(--maroon);
+    color: var(--white);
 }
 
 .btn-register:hover {
@@ -218,10 +225,18 @@ header {
     }
 }
 
+.auth-page {
+    background-image: linear-gradient(rgba(50, 50, 50, 0.4), rgba(255, 255, 255, 0.4)), url('../images/wmsu_campus.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    min-height: 100vh;
+}
+
 .hero {
     padding: 160px 5% 80px;
     /* Increased top padding to push content below fixed header */
-    background-image: linear-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)), url('../images/wmsu_campus.png');
+    background-image: linear-gradient(rgba(50, 50, 50, 0.4), rgba(255, 255, 255, 0.4)), url('../images/wmsu_campus.png');
     background-size: cover;
     background-position: center;
     background-color: var(--bg-light);
@@ -1351,7 +1366,7 @@ footer {
 .auth-page {
     padding-top: 80px;
     /* Keep padding for auth pages to avoid header overlap */
-    background-image: linear-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)), url('../images/wmsu_campus.png') !important;
+    background-image: linear-gradient(rgba(50, 50, 50, 0.4), rgba(255, 255, 255, 0.4)), url('../images/wmsu_campus.png') !important;
     background-size: cover !important;
     background-position: center !important;
     background-attachment: fixed !important;
@@ -1664,66 +1679,203 @@ footer {
 
 /* Tablet */
 @media (max-width: 1024px) {
-    .split-row { flex-direction: column; }
-    .side-column { width: 100%; }
-    .stat-cards-grid { grid-template-columns: repeat(2, 1fr); }
-    .saved-grid { grid-template-columns: repeat(2, 1fr); }
-    .hero-container { flex-direction: column; text-align: center; }
-    .hero-cta { justify-content: center; }
-    .steps-row { flex-direction: column; align-items: center; }
-    .steps-row::before { display: none; }
-    .category-grid { grid-template-columns: repeat(2, 1fr); }
+    .split-row {
+        flex-direction: column;
+    }
+
+    .side-column {
+        width: 100%;
+    }
+
+    .stat-cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .saved-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .hero-container {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .hero-cta {
+        justify-content: center;
+    }
+
+    .steps-row {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .steps-row::before {
+        display: none;
+    }
+
+    .category-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 /* Mobile */
 @media (max-width: 768px) {
-    .navbar { padding: 0 15px !important; }
-    .nav-links { display: none !important; }
-    .nav-right { gap: 10px !important; }
-    .user-meta { display: none !important; }
+    .navbar {
+        padding: 0 15px !important;
+    }
+
+    .nav-links {
+        display: none !important;
+    }
+
+    .nav-right {
+        gap: 10px !important;
+    }
+
+    .user-meta {
+        display: none !important;
+    }
+
     .auth-buttons .nav-msg-container,
-    .auth-buttons .nav-notification-container { margin-right: 0 !important; }
-    
-    .sidebar { display: none !important; }
-    .dashboard-content { margin-left: 0 !important; padding: 1rem !important; }
-    .dashboard-content.expanded { margin-left: 0 !important; }
-    .sidebar-toggle { display: none !important; }
-    
-    .dashboard-banner { padding: 1.5rem 1rem; }
-    .dashboard-banner h2 { font-size: 1.4rem; }
-    
-    .stat-cards-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
-    .stat-card { padding: 1rem; }
-    .stat-numbers h3 { font-size: 1.2rem; }
-    
+    .auth-buttons .nav-notification-container {
+        margin-right: 0 !important;
+    }
+
+    .sidebar {
+        display: none !important;
+    }
+
+    .dashboard-content {
+        margin-left: 0 !important;
+        padding: 1rem !important;
+    }
+
+    .dashboard-content.expanded {
+        margin-left: 0 !important;
+    }
+
+    .sidebar-toggle {
+        display: none !important;
+    }
+
+    .dashboard-banner {
+        padding: 1.5rem 1rem;
+    }
+
+    .dashboard-banner h2 {
+        font-size: 1.4rem;
+    }
+
+    .stat-cards-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .stat-card {
+        padding: 1rem;
+    }
+
+    .stat-numbers h3 {
+        font-size: 1.2rem;
+    }
+
     .compact-rental-item,
-    .rental-horizontal-card { flex-direction: column; align-items: flex-start; gap: 10px; }
-    .rental-thumb, .rental-img-fixed { width: 100% !important; height: 160px !important; }
-    .rental-actions, .action-column { width: 100%; flex-direction: row !important; min-width: unset !important; }
-    .rental-actions button, .action-column button { flex: 1; }
-    
-    .lending-item-v2 { flex-direction: column; align-items: flex-start; }
-    .lending-thumb-v2 { width: 100% !important; height: 120px !important; }
-    
-    .saved-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
-    .items-grid { grid-template-columns: 1fr; }
-    .category-grid { grid-template-columns: 1fr; gap: 15px; }
-    
-    .hero { padding: 100px 5% 50px; min-height: auto; }
-    .hero-text h1 { font-size: 1.8rem; }
-    .hero-cta { flex-direction: column; }
-    
-    .auth-container { margin: 30px auto; }
-    .auth-card { padding: 25px 20px; }
-    
-    .trust-grid { grid-template-columns: 1fr; }
-    .footer-content { grid-template-columns: 1fr; }
+    .rental-horizontal-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .rental-thumb,
+    .rental-img-fixed {
+        width: 100% !important;
+        height: 160px !important;
+    }
+
+    .rental-actions,
+    .action-column {
+        width: 100%;
+        flex-direction: row !important;
+        min-width: unset !important;
+    }
+
+    .rental-actions button,
+    .action-column button {
+        flex: 1;
+    }
+
+    .lending-item-v2 {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .lending-thumb-v2 {
+        width: 100% !important;
+        height: 120px !important;
+    }
+
+    .saved-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .items-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .category-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .hero {
+        padding: 100px 5% 50px;
+        min-height: auto;
+    }
+
+    .hero-text h1 {
+        font-size: 1.8rem;
+    }
+
+    .hero-cta {
+        flex-direction: column;
+    }
+
+    .auth-container {
+        margin: 30px auto;
+    }
+
+    .auth-card {
+        padding: 25px 20px;
+    }
+
+    .trust-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .footer-content {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* Small Mobile */
 @media (max-width: 480px) {
-    .stat-cards-grid { grid-template-columns: 1fr; }
-    .saved-grid { grid-template-columns: 1fr; }
-    .rental-actions, .action-column { flex-direction: column !important; }
-    .form-options { flex-direction: column; gap: 10px; align-items: flex-start; }
+    .stat-cards-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .saved-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .rental-actions,
+    .action-column {
+        flex-direction: column !important;
+    }
+
+    .form-options {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
 }

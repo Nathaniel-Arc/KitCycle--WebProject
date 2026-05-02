@@ -36,10 +36,11 @@
         <div class="auth-card">
             <!-- Registration Header (Dynamic) -->
             <div id="registration-header" style="text-align: center; margin-bottom: 25px;">
-                <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 10px;">
+                <div
+                    style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 10px;">
                     <img src="../images/wmsulogo.png" alt="WMSU Logo" style="height: 40px;">
                     <h1 id="step-title" style="margin: 0; color: #800000; font-size: 1.8rem;">Join WMSU<span
-                            style="color: #1a1a1a;">KitCycle</span></h1>
+                            style="color: #1a1a1a;"> KitCycle</span></h1>
                 </div>
                 <p id="step-subtitle">Create your account and start renting today.</p>
             </div>
@@ -98,6 +99,63 @@
                             <input type="email" placeholder="student@wmsu.edu.ph" required>
                         </div>
                     </div>
+
+                    <div class="input-group">
+                        <label>College / Course <span style="color:#ef4444;">*</span></label>
+                        <div class="input-wrapper">
+                            <select id="regCourse" required
+                                style="width:100%; padding:12px 15px; border:1.5px solid #e2e8f0; border-radius:10px; font-size:0.95rem; outline:none; appearance:none; background:#fff; cursor:pointer;">
+                                <option value="" disabled selected>Select your course</option>
+                                <option>BS Computer Science</option>
+                                <option>BS Information Technology</option>
+                                <option>BS Civil Engineering</option>
+                                <option>BS Electrical Engineering</option>
+                                <option>BS Mechanical Engineering</option>
+                                <option>BS Nursing</option>
+                                <option>BS Medical Technology</option>
+                                <option>BS Accountancy</option>
+                                <option>BS Business Administration</option>
+                                <option>BS Education</option>
+                                <option>BS Criminology</option>
+                                <option>BS Social Work</option>
+                                <option>BA Political Science</option>
+                                <option>BS Biology</option>
+                                <option>BS Marine Biology</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div style="display:flex; gap:15px;">
+                        <div class="input-group" style="flex:1;">
+                            <label>Year Level <span style="color:#ef4444;">*</span></label>
+                            <div class="input-wrapper">
+                                <select id="regYear" required
+                                    style="width:100%; padding:12px 15px; border:1.5px solid #e2e8f0; border-radius:10px; font-size:0.95rem; outline:none; appearance:none; background:#fff; cursor:pointer;">
+                                    <option value="" disabled selected>Year</option>
+                                    <option>1st Year</option>
+                                    <option>2nd Year</option>
+                                    <option>3rd Year</option>
+                                    <option>4th Year</option>
+                                    <option>5th Year</option>
+                                    <option>Irregular</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Terms & Conditions -->
+                    <div
+                        style="display:flex; align-items:flex-start; gap:10px; margin-top:5px; padding:12px; background:#fef2f2; border-radius:10px; border:1px solid #fecaca;">
+                        <input type="checkbox" id="regTerms" required
+                            style="width:18px; height:18px; accent-color:#800000; margin-top:2px; cursor:pointer; flex-shrink:0;">
+                        <label for="regTerms" style="font-size:0.8rem; color:#4b5563; cursor:pointer; line-height:1.4;">
+                            I agree to the <a href="terms-of-service.html" style="color:#800000; font-weight:700;">Terms
+                                of Service</a> and <a href="privacy-policy.html"
+                                style="color:#800000; font-weight:700;">Privacy Policy</a>. I understand that unresolved
+                            KitCycle records may be forwarded to the WMSU Registrar.
+                        </label>
+                    </div><br>
 
                     <button type="submit" class="btn-continue btn-gold">Continue to Verification</button>
                 </form>

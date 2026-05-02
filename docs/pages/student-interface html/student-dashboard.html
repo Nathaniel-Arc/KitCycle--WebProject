@@ -210,40 +210,8 @@
                             <h3>My Active Rentals (Borrowing)</h3>
                         </div>
 
-                        <div class="active-rental-list">
-                            <!-- Item 1: IN USE -->
-                            <div class="compact-rental-item">
-                                <div class="rental-thumb"><img src="../../images/camera.jpg" alt="DSLR" style="width: 100%; height: 100%; object-fit: cover;"></div>
-                                <div class="rental-brief">
-                                    <div style="display: flex; justify-content: space-between;">
-                                        <h4>Canon EOS 90D DSLR</h4>
-                                        <span class="timer-text timer-urgent"><i class="far fa-clock"></i> Returns in: 5h : 12m</span>
-                                    </div>
-                                    <p style="font-size: 0.85rem; color: #64748b;">Lender: Juan Dela Cruz • Engineering Building <i class="fas fa-map-marked-alt map-trigger"></i></p>
-                                    <div class="progress-bar-container"><div class="progress-bar progress-red"></div></div>
-                                </div>
-                                <div class="rental-actions">
-                                    <button onclick="DashboardActions.extendRental(this)" style="background: #800000; color: #fff; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer;">Extend Rental</button>
-                                    <button onclick="DashboardActions.initiateReturn(this)" style="border: 2px solid #800000; color: #800000; padding: 8px; border-radius: 8px; font-weight: 700; cursor: pointer; background: #fff;">Initiate Return</button>
-                                </div>
-                            </div>
-
-                            <!-- Item 2: PICKUP -->
-                            <div class="compact-rental-item">
-                                <div class="rental-thumb"><img src="../../images/calculator.jpg" alt="Calculator" style="width: 100%; height: 100%; object-fit: cover;"></div>
-                                <div class="rental-brief">
-                                    <div style="display: flex; justify-content: space-between;">
-                                        <h4>Scientific Calculator TI-84</h4>
-                                        <span class="timer-text timer-normal"><i class="far fa-clock"></i> Ready for Pickup</span>
-                                    </div>
-                                    <p style="font-size: 0.85rem; color: #64748b;">Lender: Maria Santos • Library Lobby <i class="fas fa-map-marked-alt map-trigger"></i></p>
-                                    <div class="progress-bar-container"><div class="progress-bar progress-green" style="width: 0;"></div></div>
-                                </div>
-                                <div class="rental-actions">
-                                    <button class="btn-qr" onclick="openQRModal()"><i class="fas fa-qrcode"></i> Generate Pickup QR</button>
-                                    <button onclick="DashboardActions.contactStudent('Maria Santos')" style="margin-top: 8px; font-size: 0.8rem; border: none; background: none; color: #64748b; text-decoration: underline; cursor: pointer;">Contact Maria</button>
-                                </div>
-                            </div>
+                        <div class="active-rental-list" id="dashboardBorrowingList">
+                            <!-- Populated by JS -->
                         </div>
                         <div style="text-align: center; margin-top: 15px;">
                             <a href="student-rentals.html" style="font-weight: 700; color: #800000; text-decoration: none; font-size: 0.9rem;">View All My Rentals <i class="fas fa-arrow-right"></i></a>
@@ -253,38 +221,11 @@
                     <!-- Items You're Lending Widget -->
                     <div class="lending-widget">
                         <div class="card-header" style="border: none; margin-bottom: 1.2rem; padding: 0;">
-                            <h3>Items You're Lending (2)</h3>
+                            <h3>Items You're Lending (<span id="lendingCount">0</span>)</h3>
                             <span style="background: #eff6ff; color: #1d4ed8; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 700;">Active</span>
                         </div>
-                        <div class="lending-list">
-                            <!-- Item 1: IN BORROWER'S HAND -->
-                            <div class="lending-item-v2">
-                                <img src="../../images/books.jpeg" class="lending-thumb-v2" alt="Books">
-                                <div style="flex: 1;">
-                                    <h4 style="margin: 0; font-size: 1rem;">Engineering Textbook Bundle</h4>
-                                    <p style="margin: 5px 0; font-size: 0.85rem; color: #64748b;">Borrower: <strong>Miguel Tan</strong> • Level 2 Library</p>
-                                    <span style="font-size: 0.8rem; font-weight: 700; color: #10b981;"><i class="fas fa-user-check"></i> Status: With Borrower</span>
-                                </div>
-                                <div class="rental-actions" style="min-width: 140px;">
-                                    <button onclick="DashboardActions.scanQR(this)" style="background: #111827; color: #fff; border: none; padding: 8px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer;">Scan Return QR</button>
-                                    <button class="btn-extension" onclick="DashboardActions.extendLending(this)" style="margin-top: 5px;">Extend Rental</button>
-                                </div>
-                            </div>
-                            
-                            <!-- Item 2: ON MY HAND (READY TO HANDOVER) -->
-                            <div class="lending-item-v2">
-                                <img src="../../images/microscope.jpeg" class="lending-thumb-v2" alt="Microscope">
-                                <div style="flex: 1;">
-                                    <h4 style="margin: 0; font-size: 1rem;">Laboratory Microscope</h4>
-                                    <p style="margin: 5px 0; font-size: 0.85rem; color: #64748b;">Borrower: <strong>Sarah Lee</strong> • Science Lab A</p>
-                                    <span style="font-size: 0.8rem; font-weight: 700; color: #800000;"><i class="fas fa-hand-holding"></i> Status: On My Hand</span>
-                                </div>
-                                <div class="rental-actions" style="min-width: 140px; justify-content: center;">
-                                    <button onclick="DashboardActions.confirmHandover(this)" style="background: #800000; color: #fff; border: none; padding: 10px 15px; border-radius: 8px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px;">
-                                        <i class="fas fa-handshake"></i> Confirm Handover
-                                    </button>
-                                </div>
-                            </div>
+                        <div class="lending-list" id="dashboardLendingList">
+                            <!-- Populated by JS -->
                         </div>
                     </div>
                 </div>
@@ -445,14 +386,6 @@
                     }).join('');
                 }
             }
-        }
-
-        // Global Event Listeners for Reactivity
-        window.addEventListener('savedItemsChanged', updateDashboardStats);
-        window.addEventListener('storage', (e) => {
-            if (e.key === 'savedItems') updateDashboardStats();
-        });
-
         function toggleSidebar() {
             document.documentElement.classList.remove('sidebar-is-minimized');
             const sidebar = document.getElementById('sidebar');
@@ -463,14 +396,95 @@
         }
 
         function toggleNotifs() {
-            const dd = document.getElementById('notifDropdown');
-            dd.style.display = dd.style.display === 'block' ? 'none' : 'block';
+            // Handled by auth.js
         }
 
-        window.onclick = function(event) {
-            if (!event.target.closest('.nav-notification-btn')) {
-                const dd = document.getElementById('notifDropdown');
-                if (dd) dd.style.display = 'none';
+        function updateDashboardStats() {
+            const savedNames = JSON.parse(localStorage.getItem('savedItems') || '[]');
+            const countEl = document.getElementById('savedGearCount');
+            if (countEl) countEl.textContent = savedNames.length;
+        }
+
+        function renderDashboardRentals() {
+            const borrowingList = document.getElementById('dashboardBorrowingList');
+            const lendingList = document.getElementById('dashboardLendingList');
+            const rentals = getActiveRentals();
+            
+            const myName = localStorage.getItem('userName') || 'Nash Arciaga';
+            const borrowing = rentals.filter(r => r.borrower === myName && (r.status === 'Active' || r.status === 'Return Initiated' || r.status === 'Pending Pickup' || r.status === 'Partial Return'));
+            const lending = rentals.filter(r => r.lender === myName && (r.status === 'Active' || r.status === 'Return Initiated' || r.status === 'Pending Pickup' || r.status === 'Partial Return'));
+
+            // Render Borrowing
+            if (borrowing.length === 0) {
+                borrowingList.innerHTML = '<p style="text-align:center; color:#64748b; padding:1rem;">No active rentals.</p>';
+            } else {
+                borrowingList.innerHTML = borrowing.slice(0, 3).map(r => {
+                    const prog = calcRentalProgress(r.startDate, r.dueDate);
+                    const isPending = r.status === 'Pending Pickup';
+                    let timerHtml = isPending ? `<span class="timer-text timer-normal"><i class="far fa-clock"></i> Ready for Pickup</span>` 
+                                              : `<span class="timer-text ${prog.isOverdue ? 'timer-urgent' : 'timer-normal'}"><i class="far fa-clock"></i> ${prog.isOverdue ? 'OVERDUE' : 'Returns in: ' + prog.timeLeft}</span>`;
+                    let progHtml = isPending ? `<div class="progress-bar-container"><div class="progress-bar progress-green" style="width:0;"></div></div>`
+                                             : `<div class="progress-bar-container"><div class="progress-bar" style="width:${prog.percent}%; background:${prog.color};"></div></div>`;
+                    let actionHtml = isPending ? `<button class="btn-qr" onclick="openQRModal()"><i class="fas fa-qrcode"></i> Generate Pickup QR</button>`
+                                               : `<button onclick="DashboardActions.extendRental(this)" style="background:#800000; color:#fff; border:none; padding:10px; border-radius:8px; font-weight:700; cursor:pointer;">Extend</button>
+                                                  <button onclick="DashboardActions.initiateReturn(this, '${r.id}')" style="border:2px solid #800000; color:#800000; padding:8px; border-radius:8px; font-weight:700; cursor:pointer; background:#fff;">Return</button>`;
+
+                    return `
+                    <div class="compact-rental-item">
+                        <div class="rental-thumb"><img src="${r.image}" alt="${r.item}" style="width:100%; height:100%; object-fit:cover;"></div>
+                        <div class="rental-brief">
+                            <div style="display:flex; justify-content:space-between;">
+                                <h4>${r.item} ${r.quantityBorrowed > 1 ? '(x'+r.quantityBorrowed+')' : ''}</h4>
+                                ${timerHtml}
+                            </div>
+                            <p style="font-size:0.85rem; color:#64748b;">Lender: ${r.lender} • ${r.location} <i class="fas fa-map-marked-alt map-trigger"></i></p>
+                            ${progHtml}
+                        </div>
+                        <div class="rental-actions">${actionHtml}</div>
+                    </div>`;
+                }).join('');
+            }
+
+            // Render Lending
+            document.getElementById('lendingCount').innerText = lending.length;
+            if (lending.length === 0) {
+                lendingList.innerHTML = '<p style="text-align:center; color:#64748b; padding:1rem;">Not currently lending any items.</p>';
+            } else {
+                lendingList.innerHTML = lending.map(r => {
+                    const isReturn = (r.status === 'Return Initiated');
+                    let actionHtml = isReturn ? `<button onclick="DashboardActions.scanQR(this)" style="background:#111827; color:#fff; border:none; padding:8px 12px; border-radius:6px; font-size:0.8rem; font-weight:600; cursor:pointer;">Scan Return QR</button>`
+                                              : `<button class="btn-extension" onclick="DashboardActions.extendLending(this)">Extend</button>`;
+                    return `
+                    <div class="lending-item-v2">
+                        <img src="${r.image}" class="lending-thumb-v2" alt="${r.item}">
+                        <div style="flex:1;">
+                            <h4 style="margin:0; font-size:1rem;">${r.item}</h4>
+                            <p style="margin:5px 0; font-size:0.85rem; color:#64748b;">Borrower: <strong>${r.borrower}</strong> • ${r.location}</p>
+                            <span style="font-size:0.8rem; font-weight:700; color:${isReturn ? '#f59e0b' : '#10b981'};"><i class="fas fa-user-check"></i> Status: ${isReturn ? 'Returning' : 'With Borrower'}</span>
+                        </div>
+                        <div class="rental-actions" style="min-width:140px;">${actionHtml}</div>
+                    </div>`;
+                }).join('');
+            }
+
+            // Banner greeting
+            const firstName = myName.split(' ')[0];
+            const urgentRentals = borrowing.filter(r => {
+                if(r.status === 'Pending Pickup') return false;
+                const p = calcRentalProgress(r.startDate, r.dueDate);
+                return p.isOverdue || p.percent > 75;
+            });
+            const bannerGreeting = document.getElementById('bannerGreeting');
+            if (bannerGreeting) {
+                bannerGreeting.textContent = 'Welcome back, ' + firstName + '!';
+                const p = bannerGreeting.nextElementSibling;
+                if (urgentRentals.length > 0) {
+                    p.innerHTML = `You have <strong style="color:#ef4444;">${urgentRentals.length} item(s) due soon</strong>. Please prepare for handover.`;
+                } else if (borrowing.length > 0) {
+                    p.textContent = `You have ${borrowing.length} active rental(s). Keep up the good work.`;
+                } else {
+                    p.textContent = 'Ready to borrow or lend today? Check out the marketplace.';
+                }
             }
         }
 
@@ -482,17 +496,14 @@
                 if (sidebar) sidebar.classList.add('minimized');
                 if (mainContent) mainContent.classList.add('expanded');
             }
-            updateDashboardStats();
-
-            // Set banner greeting name from localStorage
             const storedName = localStorage.getItem('userName');
             if (storedName) {
-                const firstName = storedName.split(' ')[0];
-                const bannerGreeting = document.getElementById('bannerGreeting');
-                if (bannerGreeting) bannerGreeting.textContent = 'Welcome back, ' + firstName + '!';
                 const trustProfileName = document.getElementById('trustProfileName');
                 if (trustProfileName) trustProfileName.textContent = storedName;
             }
+            updateDashboardStats();
+            renderDashboardRentals();
+            setInterval(renderDashboardRentals, 60000);
         };
 
         function toggleChat() {
@@ -502,53 +513,10 @@
 
         function openQRModal() { document.getElementById('qrModal').style.display = 'flex'; }
         function closeQRModal() { document.getElementById('qrModal').style.display = 'none'; }
-    </script>
-
-    <script>
-        function updateSavedWidget() {
-            const savedNames = JSON.parse(localStorage.getItem('savedItems') || '[]');
-            const container = document.getElementById('recentlySavedItems');
-            const countEl = document.getElementById('savedGearCount');
-            
-            if (countEl) countEl.textContent = savedNames.length;
-            if (!container) return;
-
-            if (savedNames.length === 0) {
-                container.innerHTML = '<p style="text-align:center; padding:20px; color:#64748b; font-size:0.9rem;">No saved items yet.</p>';
-                return;
-            }
-
-            // Get last 3 saved items
-            const recent = savedNames.slice(-3).reverse();
-            container.innerHTML = recent.map(name => {
-                // Find item in data store by name (or we could use IDs if we updated the logic)
-                const item = KitCycleData.items.find(i => i.name === name);
-                if (!item) return '';
-                
-                return `
-                    <div class="compact-rental-item" style="margin-bottom:10px; cursor:pointer;" onclick="window.location.href='../item-details html/item-details.html?id=${item.id}'">
-                        <div class="rental-thumb"><img src="${item.image}" alt="${item.name}" style="width:100%; height:100%; object-fit:cover;"></div>
-                        <div class="rental-brief">
-                            <div style="display:flex; justify-content:space-between;">
-                                <h4>${item.name}</h4>
-                                <span style="font-weight:800; color:#800000;">₱${item.price}/day</span>
-                            </div>
-                            <p style="font-size:0.8rem; color:#64748b;">${item.category} • ${item.location}</p>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        // Listen for changes from other pages (Marketplace/Details)
-        window.addEventListener('savedItemsChanged', updateSavedWidget);
-        // Also listen for storage events (if open in multiple tabs)
+        
         window.addEventListener('storage', (e) => {
-            if (e.key === 'savedItems') updateSavedWidget();
+            if (e.key === 'savedItems') updateDashboardStats();
         });
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', updateSavedWidget);
     </script>
 </body>
 
