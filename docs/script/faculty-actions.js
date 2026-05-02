@@ -12,9 +12,9 @@ window.FacultyActions = {
                 { id: 'eq1', name: 'Engineering Microscope Set', category: 'Laboratory Equipment', quantity: 5, available: 3, borrowed: 2, condition: 'Excellent', location: 'Engineering Lab Room 301', lastMaintained: '2/15/2026', price: 150, image: '../../images/microscope.jpeg', description: 'High-quality binocular microscope suitable for biology and chemistry lab work.' },
                 { id: 'eq2', name: 'Scientific Calculators', category: 'Academic Tools', quantity: 10, available: 7, borrowed: 3, condition: 'Good', location: 'Engineering Department Office', lastMaintained: '2/20/2026', price: 50, image: '../../images/calculator.jpg', description: 'TI-84 Plus scientific calculators for advanced mathematics.' },
                 { id: 'eq3', name: 'Video Recording Equipment', category: 'Media Equipment', quantity: 3, available: 0, borrowed: 3, condition: 'Excellent', location: 'Media Lab Room 205', lastMaintained: '2/10/2026', price: 300, image: '../../images/camera.jpg', description: 'Complete video recording kit with tripod and microphone.' },
-                { id: 'eq4', name: 'Digital Multimeters', category: 'Laboratory Equipment', quantity: 8, available: 5, borrowed: 3, condition: 'Good', location: 'Electronics Lab', lastMaintained: '2/25/2026', price: 80, image: '../../images/multimeters.jpg', description: 'Essential multimeters for electronics and circuit testing.' },
+                { id: 'eq4', name: 'Digital Multimeters', category: 'Laboratory Equipment', quantity: 8, available: 5, borrowed: 3, condition: 'Good', location: 'Electronics Lab', lastMaintained: '2/25/2026', price: 80, image: '../../images/calc-set.png', description: 'Essential multimeters for electronics and circuit testing.' },
                 { id: 'eq5', name: 'Engineering Reference Books', category: 'Textbooks', quantity: 15, available: 12, borrowed: 3, condition: 'Good', location: 'Department Library', lastMaintained: '1/15/2026', price: 70, image: '../../images/books.jpeg', description: 'Reference books for mechanical and civil engineering.' },
-                { id: 'eq6', name: 'Oscilloscopes', category: 'Laboratory Equipment', quantity: 4, available: 2, borrowed: 2, condition: 'Excellent', location: 'Advanced Electronics Lab', lastMaintained: '3/1/2026', price: 200, image: '../../images/oscilloscopes.jpg', description: 'Digital oscilloscopes for signal analysis and testing.' }
+                { id: 'eq6', name: 'Oscilloscopes', category: 'Laboratory Equipment', quantity: 4, available: 2, borrowed: 2, condition: 'Excellent', location: 'Advanced Electronics Lab', lastMaintained: '3/1/2026', price: 200, image: '../../images/stethoscope.png', description: 'Digital oscilloscopes for signal analysis and testing.' }
             ];
             localStorage.setItem('kitcycle_faculty_equipment', JSON.stringify(defaults));
         }
@@ -40,6 +40,9 @@ window.FacultyActions = {
 
     /* ── Terms and Conditions Modal ── */
     showTermsModal: function(onAccept) {
+        const existing = document.getElementById('terms-overlay');
+        if (existing) existing.remove();
+
         const overlay = document.createElement('div');
         overlay.id = 'terms-overlay';
         overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,23,42,0.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:10000;animation:fadeIn 0.2s ease;';
@@ -106,6 +109,9 @@ window.FacultyActions = {
 
     /* ── Rejection Reason Modal ── */
     showRejectModal: function(requestId, onReject) {
+        const existing = document.getElementById('reject-overlay');
+        if (existing) existing.remove();
+
         const overlay = document.createElement('div');
         overlay.id = 'reject-overlay';
         overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,23,42,0.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:10000;animation:fadeIn 0.2s ease;';
@@ -117,24 +123,24 @@ window.FacultyActions = {
                     <h3 style="margin:0;color:#1e293b;font-size:1.2rem;">Reject Request</h3>
                     <p style="color:#64748b;font-size:0.85rem;margin-top:5px;">Select a reason for rejection</p>
                 </div>
-                <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:15px;">
-                    <label style="display:flex;align-items:center;gap:10px;padding:12px;border:1.5px solid #e2e8f0;border-radius:10px;cursor:pointer;transition:0.2s;font-size:0.9rem;" onmouseover="this.style.borderColor='#800000';this.style.background='#fef2f2'" onmouseout="if(!this.querySelector('input').checked){this.style.borderColor='#e2e8f0';this.style.background='#fff'}">
+                <div id="rejectReasonOptions" style="display:flex;flex-direction:column;gap:8px;margin-bottom:15px;">
+                    <label class="reject-reason-option" style="display:flex;align-items:center;gap:10px;padding:12px;border:1.5px solid #e2e8f0;border-radius:10px;cursor:pointer;transition:0.2s;font-size:0.9rem;" data-reason="Equipment unavailable">
                         <input type="radio" name="rejectReason" value="Equipment unavailable" style="accent-color:#800000;">
                         Equipment unavailable for requested dates
                     </label>
-                    <label style="display:flex;align-items:center;gap:10px;padding:12px;border:1.5px solid #e2e8f0;border-radius:10px;cursor:pointer;transition:0.2s;font-size:0.9rem;" onmouseover="this.style.borderColor='#800000';this.style.background='#fef2f2'" onmouseout="if(!this.querySelector('input').checked){this.style.borderColor='#e2e8f0';this.style.background='#fff'}">
+                    <label class="reject-reason-option" style="display:flex;align-items:center;gap:10px;padding:12px;border:1.5px solid #e2e8f0;border-radius:10px;cursor:pointer;transition:0.2s;font-size:0.9rem;" data-reason="Item under maintenance">
                         <input type="radio" name="rejectReason" value="Item under maintenance" style="accent-color:#800000;">
                         Item currently under maintenance
                     </label>
-                    <label style="display:flex;align-items:center;gap:10px;padding:12px;border:1.5px solid #e2e8f0;border-radius:10px;cursor:pointer;transition:0.2s;font-size:0.9rem;" onmouseover="this.style.borderColor='#800000';this.style.background='#fef2f2'" onmouseout="if(!this.querySelector('input').checked){this.style.borderColor='#e2e8f0';this.style.background='#fff'}">
+                    <label class="reject-reason-option" style="display:flex;align-items:center;gap:10px;padding:12px;border:1.5px solid #e2e8f0;border-radius:10px;cursor:pointer;transition:0.2s;font-size:0.9rem;" data-reason="Insufficient student clearance">
                         <input type="radio" name="rejectReason" value="Insufficient student clearance" style="accent-color:#800000;">
                         Insufficient student clearance/verification
                     </label>
-                    <label style="display:flex;align-items:center;gap:10px;padding:12px;border:1.5px solid #e2e8f0;border-radius:10px;cursor:pointer;transition:0.2s;font-size:0.9rem;" onmouseover="this.style.borderColor='#800000';this.style.background='#fef2f2'" onmouseout="if(!this.querySelector('input').checked){this.style.borderColor='#e2e8f0';this.style.background='#fff'}">
+                    <label class="reject-reason-option" style="display:flex;align-items:center;gap:10px;padding:12px;border:1.5px solid #e2e8f0;border-radius:10px;cursor:pointer;transition:0.2s;font-size:0.9rem;" data-reason="Duration too long">
                         <input type="radio" name="rejectReason" value="Duration too long" style="accent-color:#800000;">
                         Rental duration exceeds maximum limit
                     </label>
-                    <label style="display:flex;align-items:center;gap:10px;padding:12px;border:1.5px solid #e2e8f0;border-radius:10px;cursor:pointer;transition:0.2s;font-size:0.9rem;" onmouseover="this.style.borderColor='#800000';this.style.background='#fef2f2'" onmouseout="if(!this.querySelector('input').checked){this.style.borderColor='#e2e8f0';this.style.background='#fff'}">
+                    <label class="reject-reason-option" style="display:flex;align-items:center;gap:10px;padding:12px;border:1.5px solid #e2e8f0;border-radius:10px;cursor:pointer;transition:0.2s;font-size:0.9rem;" data-reason="Conflicting reservation">
                         <input type="radio" name="rejectReason" value="Conflicting reservation" style="accent-color:#800000;">
                         Conflicting reservation
                     </label>
@@ -151,11 +157,31 @@ window.FacultyActions = {
         `;
         document.body.appendChild(overlay);
 
+        const options = overlay.querySelectorAll('.reject-reason-option');
         const radios = overlay.querySelectorAll('input[name="rejectReason"]');
         const confirmBtn = document.getElementById('rejectConfirmBtn');
-        radios.forEach(r => r.onchange = () => {
-            confirmBtn.style.opacity = '1';
-            confirmBtn.style.pointerEvents = 'auto';
+
+        function resetHighlights() {
+            options.forEach(opt => {
+                opt.style.borderColor = '#e2e8f0';
+                opt.style.background = '#fff';
+            });
+        }
+
+        radios.forEach((radio, idx) => {
+            radio.onchange = () => {
+                resetHighlights();
+                options[idx].style.borderColor = '#800000';
+                options[idx].style.background = '#fef2f2';
+                confirmBtn.style.opacity = '1';
+                confirmBtn.style.pointerEvents = 'auto';
+            };
+            options[idx].onclick = (e) => {
+                if (e.target !== radio) {
+                    radio.checked = true;
+                    radio.onchange();
+                }
+            };
         });
 
         document.getElementById('rejectCancelBtn').onclick = () => overlay.remove();
@@ -173,6 +199,9 @@ window.FacultyActions = {
 
     /* ── Add Equipment Modal ── */
     showAddEquipmentModal: function(onSave) {
+        const existing = document.getElementById('add-equipment-overlay');
+        if (existing) existing.remove();
+
         const overlay = document.createElement('div');
         overlay.id = 'add-equipment-overlay';
         overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,23,42,0.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:10000;animation:fadeIn 0.2s ease;';
@@ -186,7 +215,6 @@ window.FacultyActions = {
                 </div>
 
                 <div style="display:flex;flex-direction:column;gap:16px;">
-                    <!-- Photo Upload -->
                     <div>
                         <label style="font-weight:700;color:#1e293b;font-size:0.9rem;display:block;margin-bottom:6px;"><i class="fas fa-camera" style="color:#800000;margin-right:5px;"></i>Equipment Photos</label>
                         <div id="photoPreviewGrid" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px;min-height:40px;"></div>
@@ -197,13 +225,11 @@ window.FacultyActions = {
                         <p style="font-size:0.75rem;color:#9ca3af;margin-top:4px;">Upload 1 or more photos showing the item</p>
                     </div>
 
-                    <!-- Item Name -->
                     <div>
                         <label style="font-weight:700;color:#1e293b;font-size:0.9rem;display:block;margin-bottom:6px;">Item Name *</label>
                         <input type="text" id="eqName" placeholder="e.g. Engineering Microscope Set" style="width:100%;padding:12px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:0.9rem;outline:none;">
                     </div>
 
-                    <!-- Category -->
                     <div>
                         <label style="font-weight:700;color:#1e293b;font-size:0.9rem;display:block;margin-bottom:6px;">Category *</label>
                         <select id="eqCategory" style="width:100%;padding:12px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:0.9rem;outline:none;cursor:pointer;background:#fff;">
@@ -215,7 +241,6 @@ window.FacultyActions = {
                         </select>
                     </div>
 
-                    <!-- Quantity & Price Row -->
                     <div style="display:flex;gap:12px;">
                         <div style="flex:1;">
                             <label style="font-weight:700;color:#1e293b;font-size:0.9rem;display:block;margin-bottom:6px;">Total Quantity *</label>
@@ -227,19 +252,16 @@ window.FacultyActions = {
                         </div>
                     </div>
 
-                    <!-- Location -->
                     <div>
                         <label style="font-weight:700;color:#1e293b;font-size:0.9rem;display:block;margin-bottom:6px;">Storage Location</label>
                         <input type="text" id="eqLocation" placeholder="e.g. Engineering Lab Room 301" style="width:100%;padding:12px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:0.9rem;outline:none;">
                     </div>
 
-                    <!-- Description -->
                     <div>
                         <label style="font-weight:700;color:#1e293b;font-size:0.9rem;display:block;margin-bottom:6px;">Description</label>
                         <textarea id="eqDescription" placeholder="Describe the equipment, included accessories, usage guidelines..." style="width:100%;padding:12px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:0.9rem;resize:vertical;min-height:80px;outline:none;font-family:inherit;"></textarea>
                     </div>
 
-                    <!-- Condition -->
                     <div>
                         <label style="font-weight:700;color:#1e293b;font-size:0.9rem;display:block;margin-bottom:6px;">Condition</label>
                         <select id="eqCondition" style="width:100%;padding:12px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:0.9rem;outline:none;cursor:pointer;background:#fff;">
@@ -315,7 +337,7 @@ window.FacultyActions = {
                 const idx = window._facultyUploadedPhotos.length - 1;
                 const thumb = document.createElement('div');
                 thumb.style.cssText = 'width:80px;height:80px;border-radius:10px;overflow:hidden;position:relative;border:1.5px solid #e2e8f0;';
-                thumb.innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;"><button onclick="FacultyActions._removePhoto(${idx}, this)" style="position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;background:#ef4444;color:#fff;border:none;cursor:pointer;font-size:0.6rem;display:flex;align-items:center;justify-content:center;">×</button>`;
+                thumb.innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;"><button onclick="FacultyActions._removePhoto(${idx}, this)" style="position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;background:#ef4444;color:#fff;border:none;cursor:pointer;font-size:0.6rem;display:flex;align-items:center;justify-content:center;">x</button>`;
                 grid.appendChild(thumb);
             };
             reader.readAsDataURL(files[i]);
@@ -329,7 +351,7 @@ window.FacultyActions = {
     },
 
     /* ── Approve Request ── */
-    approveRequest: function(requestId, btnElement) {
+    approveRequest: function(requestId) {
         const requests = this._getRequests();
         const req = requests.find(r => r.id === requestId);
         if (!req) return;
@@ -344,7 +366,6 @@ window.FacultyActions = {
                         req.status = 'Approved';
                         this._saveRequests(requests);
                         this._refreshApprovals();
-                        AuthSystem.addNotification('Request Approved', `${req.student}'s request for ${req.item} has been approved.`);
                         if (typeof UIUtils !== 'undefined' && UIUtils.showToast) UIUtils.showToast(`${req.item} approved for ${req.student}`, 'success');
                     }
                 }
@@ -354,14 +375,13 @@ window.FacultyActions = {
                 req.status = 'Approved';
                 this._saveRequests(requests);
                 this._refreshApprovals();
-                AuthSystem.addNotification('Request Approved', `${req.student}'s request for ${req.item} has been approved.`);
                 alert('Request approved!');
             }
         }
     },
 
     /* ── Reject Request ── */
-    rejectRequest: function(requestId, btnElement) {
+    rejectRequest: function(requestId) {
         this.showRejectModal(requestId, (reason, notes) => {
             const requests = this._getRequests();
             const req = requests.find(r => r.id === requestId);
@@ -372,8 +392,7 @@ window.FacultyActions = {
             req.rejectNotes = notes;
             this._saveRequests(requests);
             this._refreshApprovals();
-            AuthSystem.addNotification('Request Rejected', `${req.student}'s request for ${req.item} was rejected. Reason: ${reason}`);
-            if (typeof UIUtils !== 'undefined' && UIUtils.showToast) UIUtils.showToast(`Request rejected: ${reason}`, 'error');
+            if (typeof UIUtils !== 'undefined' && UIUtils.showToast) UIUtils.showToast(`${req.item} rejected: ${reason}`, 'error');
         });
     },
 
@@ -384,7 +403,6 @@ window.FacultyActions = {
         const approved = requests.filter(r => r.status === 'Approved');
         const rejected = requests.filter(r => r.status === 'Rejected');
 
-        // Update pending requests section
         const requestsStack = document.querySelector('.requests-stack');
         if (requestsStack) {
             if (pending.length === 0) {
@@ -411,20 +429,18 @@ window.FacultyActions = {
                             </div>
                         </div>
                         <div class="panel-actions">
-                            <button class="btn-action-light"><i class="far fa-eye"></i> View Details</button>
-                            <button class="btn-action-approve" onclick="FacultyActions.approveRequest('${r.id}', this)"><i class="fas fa-check"></i> Approve</button>
-                            <button class="btn-action-reject" onclick="FacultyActions.rejectRequest('${r.id}', this)"><i class="fas fa-times"></i> Reject</button>
+                            <button class="btn-action-light" onclick="FacultyActions.viewEquipmentDetails('${r.id}')"><i class="far fa-eye"></i> View Details</button>
+                            <button class="btn-action-approve" onclick="FacultyActions.approveRequest('${r.id}')"><i class="fas fa-check"></i> Approve</button>
+                            <button class="btn-action-reject" onclick="FacultyActions.rejectRequest('${r.id}')"><i class="fas fa-times"></i> Reject</button>
                         </div>
                     </div>
                 `).join('');
             }
         }
 
-        // Update stats
         const pendingCount = document.querySelector('.stat-cards-grid .stat-card:first-child h3');
         if (pendingCount) pendingCount.textContent = pending.length;
 
-        // Update decisions stack
         const decisionsStack = document.querySelector('.decisions-stack');
         if (decisionsStack) {
             const recent = [...approved, ...rejected].slice(-5).reverse();
@@ -440,6 +456,9 @@ window.FacultyActions = {
                 </div>
             `).join('') || '<p style="text-align:center;color:#9ca3af;padding:20px;">No decisions yet.</p>';
         }
+
+        const badge = document.getElementById('sidebarReqBadge');
+        if (badge) badge.textContent = pending.length;
     },
 
     /* ── Render Equipment Grid ── */
@@ -485,6 +504,9 @@ window.FacultyActions = {
         const eq = equipment.find(e => e.id === id);
         if (!eq) return;
 
+        const existing = document.getElementById('edit-equipment-overlay');
+        if (existing) existing.remove();
+
         const overlay = document.createElement('div');
         overlay.id = 'edit-equipment-overlay';
         overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,23,42,0.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:10000;animation:fadeIn 0.2s ease;';
@@ -498,7 +520,6 @@ window.FacultyActions = {
                 </div>
 
                 <div style="display:flex;flex-direction:column;gap:16px;">
-                    <!-- Photo Upload -->
                     <div>
                         <label style="font-weight:700;color:#1e293b;font-size:0.9rem;display:block;margin-bottom:6px;"><i class="fas fa-camera" style="color:#800000;margin-right:5px;"></i>Equipment Photos</label>
                         <div id="editPhotoPreviewGrid" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px;min-height:40px;"></div>
@@ -509,13 +530,11 @@ window.FacultyActions = {
                         <p style="font-size:0.75rem;color:#9ca3af;margin-top:4px;">Upload 1 or more photos showing the item</p>
                     </div>
 
-                    <!-- Item Name -->
                     <div>
                         <label style="font-weight:700;color:#1e293b;font-size:0.9rem;display:block;margin-bottom:6px;">Item Name *</label>
                         <input type="text" id="editEqName" value="${eq.name}" placeholder="e.g. Engineering Microscope Set" style="width:100%;padding:12px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:0.9rem;outline:none;">
                     </div>
 
-                    <!-- Category -->
                     <div>
                         <label style="font-weight:700;color:#1e293b;font-size:0.9rem;display:block;margin-bottom:6px;">Category *</label>
                         <select id="editEqCategory" style="width:100%;padding:12px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:0.9rem;outline:none;cursor:pointer;background:#fff;">
@@ -526,7 +545,6 @@ window.FacultyActions = {
                         </select>
                     </div>
 
-                    <!-- Quantity & Price Row -->
                     <div style="display:flex;gap:12px;">
                         <div style="flex:1;">
                             <label style="font-weight:700;color:#1e293b;font-size:0.9rem;display:block;margin-bottom:6px;">Total Quantity *</label>
@@ -538,25 +556,21 @@ window.FacultyActions = {
                         </div>
                     </div>
 
-                    <!-- Available -->
                     <div>
                         <label style="font-weight:700;color:#1e293b;font-size:0.9rem;display:block;margin-bottom:6px;">Available Quantity</label>
                         <input type="number" id="editEqAvailable" min="0" max="${eq.quantity}" value="${eq.available}" style="width:100%;padding:12px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:0.9rem;outline:none;">
                     </div>
 
-                    <!-- Location -->
                     <div>
                         <label style="font-weight:700;color:#1e293b;font-size:0.9rem;display:block;margin-bottom:6px;">Storage Location</label>
                         <input type="text" id="editEqLocation" value="${eq.location}" placeholder="e.g. Engineering Lab Room 301" style="width:100%;padding:12px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:0.9rem;outline:none;">
                     </div>
 
-                    <!-- Description -->
                     <div>
                         <label style="font-weight:700;color:#1e293b;font-size:0.9rem;display:block;margin-bottom:6px;">Description</label>
                         <textarea id="editEqDescription" placeholder="Describe the equipment..." style="width:100%;padding:12px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:0.9rem;resize:vertical;min-height:80px;outline:none;font-family:inherit;">${eq.description || ''}</textarea>
                     </div>
 
-                    <!-- Condition -->
                     <div>
                         <label style="font-weight:700;color:#1e293b;font-size:0.9rem;display:block;margin-bottom:6px;">Condition</label>
                         <select id="editEqCondition" style="width:100%;padding:12px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:0.9rem;outline:none;cursor:pointer;background:#fff;">
@@ -579,14 +593,13 @@ window.FacultyActions = {
         window._editEqId = id;
         window._editUploadedPhotos = eq.images ? [...eq.images].filter(Boolean) : [];
 
-        // Render existing photos
         const grid = document.getElementById('editPhotoPreviewGrid');
         if (window._editUploadedPhotos.length > 0) {
             window._editUploadedPhotos.forEach((src, idx) => {
                 if (!src) return;
                 const thumb = document.createElement('div');
                 thumb.style.cssText = 'width:80px;height:80px;border-radius:10px;overflow:hidden;position:relative;border:1.5px solid #e2e8f0;';
-                thumb.innerHTML = `<img src="${src}" style="width:100%;height:100%;object-fit:cover;"><button onclick="FacultyActions._removeEditPhoto(${idx}, this)" style="position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;background:#ef4444;color:#fff;border:none;cursor:pointer;font-size:0.6rem;display:flex;align-items:center;justify-content:center;">×</button>`;
+                thumb.innerHTML = `<img src="${src}" style="width:100%;height:100%;object-fit:cover;"><button onclick="FacultyActions._removeEditPhoto(${idx}, this)" style="position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;background:#ef4444;color:#fff;border:none;cursor:pointer;font-size:0.6rem;display:flex;align-items:center;justify-content:center;">x</button>`;
                 grid.appendChild(thumb);
             });
         }
@@ -648,7 +661,6 @@ window.FacultyActions = {
         };
     },
 
-    /* ── Edit Photo Upload ── */
     _handleEditPhotoUpload: function(input) {
         const files = input.files;
         const grid = document.getElementById('editPhotoPreviewGrid');
@@ -659,7 +671,7 @@ window.FacultyActions = {
                 const idx = window._editUploadedPhotos.length - 1;
                 const thumb = document.createElement('div');
                 thumb.style.cssText = 'width:80px;height:80px;border-radius:10px;overflow:hidden;position:relative;border:1.5px solid #e2e8f0;';
-                thumb.innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;"><button onclick="FacultyActions._removeEditPhoto(${idx}, this)" style="position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;background:#ef4444;color:#fff;border:none;cursor:pointer;font-size:0.6rem;display:flex;align-items:center;justify-content:center;">×</button>`;
+                thumb.innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;"><button onclick="FacultyActions._removeEditPhoto(${idx}, this)" style="position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;background:#ef4444;color:#fff;border:none;cursor:pointer;font-size:0.6rem;display:flex;align-items:center;justify-content:center;">x</button>`;
                 grid.appendChild(thumb);
             };
             reader.readAsDataURL(files[i]);
@@ -672,7 +684,162 @@ window.FacultyActions = {
         btn.parentElement.remove();
     },
 
-    /* ── View Equipment ── */
+    viewEquipmentDetails: function(requestId) {
+        const requests = this._getRequests();
+        const req = requests.find(r => r.id === requestId);
+        if (!req) return;
+
+        const existing = document.getElementById('request-details-overlay');
+        if (existing) existing.remove();
+
+        const overlay = document.createElement('div');
+        overlay.id = 'request-details-overlay';
+        overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,23,42,0.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:10000;animation:fadeIn 0.2s ease;';
+
+        const statusColor = req.status === 'Approved' ? '#10b981' : req.status === 'Rejected' ? '#ef4444' : '#f59e0b';
+        const reasonHtml = req.rejectReason
+            ? '<div style="margin-top:12px;padding:12px;background:#fef2f2;border-radius:10px;"><strong style="color:#ef4444;">Rejection Reason:</strong><p style="margin:4px 0 0;color:#374151;">' + req.rejectReason + (req.rejectNotes ? ' — ' + req.rejectNotes : '') + '</p></div>'
+            : '';
+
+        overlay.innerHTML = '<div style="background:#fff;width:95%;max-width:520px;border-radius:20px;padding:30px;box-shadow:0 25px 50px rgba(0,0,0,0.25);animation:modalPop 0.3s cubic-bezier(0.175,0.885,0.32,1.275);">' +
+            '<div style="text-align:center;margin-bottom:20px;">' +
+            '<div style="width:60px;height:60px;background:' + statusColor + '15;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;"><i class="fas fa-clipboard-list" style="font-size:1.5rem;color:' + statusColor + ';"></i></div>' +
+            '<h3 style="margin:0;color:#1e293b;font-size:1.3rem;">Request Details</h3>' +
+            '<p style="color:#64748b;font-size:0.85rem;margin-top:5px;">' + req.item + '</p>' +
+            '</div>' +
+            '<div style="display:flex;flex-direction:column;gap:12px;font-size:0.9rem;color:#374151;">' +
+            '<div style="display:flex;justify-content:space-between;padding:10px;background:#f8fafc;border-radius:10px;"><span><strong>Student:</strong></span><span>' + req.student + '</span></div>' +
+            '<div style="display:flex;justify-content:space-between;padding:10px;background:#f8fafc;border-radius:10px;"><span><strong>Student ID:</strong></span><span>' + req.studentId + '</span></div>' +
+            '<div style="display:flex;justify-content:space-between;padding:10px;background:#f8fafc;border-radius:10px;"><span><strong>Duration:</strong></span><span>' + req.duration + '</span></div>' +
+            '<div style="display:flex;justify-content:space-between;padding:10px;background:#f8fafc;border-radius:10px;"><span><strong>Purpose:</strong></span><span>' + req.purpose + '</span></div>' +
+            '<div style="display:flex;justify-content:space-between;padding:10px;background:#f8fafc;border-radius:10px;"><span><strong>Priority:</strong></span><span style="color:' + (req.priority === 'HIGH' ? '#ef4444' : req.priority === 'MEDIUM' ? '#f59e0b' : '#10b981') + ';font-weight:700;">' + req.priority + '</span></div>' +
+            '<div style="display:flex;justify-content:space-between;padding:10px;background:#f8fafc;border-radius:10px;"><span><strong>Status:</strong></span><span style="color:' + statusColor + ';font-weight:700;">' + req.status + '</span></div>' +
+            '<div style="display:flex;justify-content:space-between;padding:10px;background:#f8fafc;border-radius:10px;"><span><strong>Requested:</strong></span><span>' + req.date + '</span></div>' +
+            reasonHtml +
+            '</div>' +
+            '<button id="closeDetailsBtn" style="margin-top:20px;width:100%;padding:12px;background:#f1f5f9;color:#4b5563;border:none;border-radius:10px;font-weight:700;cursor:pointer;">Close</button>' +
+            '</div>';
+        document.body.appendChild(overlay);
+
+        document.getElementById('closeDetailsBtn').onclick = () => overlay.remove();
+        overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
+    },
+
+    viewRentalDetails: function(student, item, rented, returnDate, cost) {
+        const existing = document.getElementById('rental-details-overlay');
+        if (existing) existing.remove();
+
+        const overlay = document.createElement('div');
+        overlay.id = 'rental-details-overlay';
+        overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,23,42,0.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:10000;animation:fadeIn 0.2s ease;';
+
+        overlay.innerHTML = '<div style="background:#fff;width:95%;max-width:520px;border-radius:20px;padding:30px;box-shadow:0 25px 50px rgba(0,0,0,0.25);animation:modalPop 0.3s cubic-bezier(0.175,0.885,0.32,1.275);">' +
+            '<div style="text-align:center;margin-bottom:20px;">' +
+            '<div style="width:60px;height:60px;background:#eff6ff;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;"><i class="fas fa-info-circle" style="font-size:1.5rem;color:#1d4ed8;"></i></div>' +
+            '<h3 style="margin:0;color:#1e293b;font-size:1.3rem;">Rental Details</h3>' +
+            '<p style="color:#64748b;font-size:0.85rem;margin-top:5px;">' + item + '</p>' +
+            '</div>' +
+            '<div style="display:flex;flex-direction:column;gap:12px;font-size:0.9rem;color:#374151;">' +
+            '<div style="display:flex;justify-content:space-between;padding:10px;background:#f8fafc;border-radius:10px;"><span><strong>Student:</strong></span><span>' + student + '</span></div>' +
+            '<div style="display:flex;justify-content:space-between;padding:10px;background:#f8fafc;border-radius:10px;"><span><strong>Item:</strong></span><span>' + item + '</span></div>' +
+            '<div style="display:flex;justify-content:space-between;padding:10px;background:#f8fafc;border-radius:10px;"><span><strong>Rented On:</strong></span><span>' + rented + '</span></div>' +
+            '<div style="display:flex;justify-content:space-between;padding:10px;background:#f8fafc;border-radius:10px;"><span><strong>Return Date:</strong></span><span style="color:#ef4444;font-weight:700;">' + returnDate + '</span></div>' +
+            '<div style="display:flex;justify-content:space-between;padding:10px;background:#f8fafc;border-radius:10px;"><span><strong>Total Cost:</strong></span><span style="font-weight:700;">' + cost + '</span></div>' +
+            '<div style="display:flex;justify-content:space-between;padding:10px;background:#f8fafc;border-radius:10px;"><span><strong>Status:</strong></span><span style="color:#10b981;font-weight:700;">Active</span></div>' +
+            '</div>' +
+            '<button id="closeRentalDetailsBtn" style="margin-top:20px;width:100%;padding:12px;background:#f1f5f9;color:#4b5563;border:none;border-radius:10px;font-weight:700;cursor:pointer;">Close</button>' +
+            '</div>';
+        document.body.appendChild(overlay);
+
+        document.getElementById('closeRentalDetailsBtn').onclick = () => overlay.remove();
+        overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
+    },
+
+    extendRental: function(studentName, itemName, currentReturn) {
+        const existing = document.getElementById('extend-rental-overlay');
+        if (existing) existing.remove();
+
+        const overlay = document.createElement('div');
+        overlay.id = 'extend-rental-overlay';
+        overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,23,42,0.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:10000;animation:fadeIn 0.2s ease;';
+
+        const defaultExtension = '3';
+
+        overlay.innerHTML = '<div style="background:#fff;width:95%;max-width:450px;border-radius:20px;padding:30px;box-shadow:0 25px 50px rgba(0,0,0,0.25);animation:modalPop 0.3s cubic-bezier(0.175,0.885,0.32,1.275);">' +
+            '<div style="text-align:center;margin-bottom:20px;">' +
+            '<div style="width:60px;height:60px;background:#fef3c7;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;"><i class="fas fa-calendar-plus" style="font-size:1.5rem;color:#f59e0b;"></i></div>' +
+            '<h3 style="margin:0;color:#1e293b;font-size:1.3rem;">Extend Rental</h3>' +
+            '<p style="color:#64748b;font-size:0.85rem;margin-top:5px;">' + itemName + ' for ' + studentName + '</p>' +
+            '</div>' +
+            '<div style="background:#f8fafc;padding:14px;border-radius:12px;margin-bottom:18px;font-size:0.88rem;">' +
+            '<p style="margin:0 0 6px;"><strong>Current Return Date:</strong> ' + currentReturn + '</p>' +
+            '<p style="margin:0;"><strong>Additional Days:</strong> <input type="number" id="extendDays" value="' + defaultExtension + '" min="1" max="30" style="width:60px;padding:6px 10px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:0.9rem;text-align:center;"></p>' +
+            '</div>' +
+            '<div style="margin-bottom:18px;">' +
+            '<label style="font-weight:700;color:#1e293b;font-size:0.9rem;display:block;margin-bottom:6px;">Reason for Extension</label>' +
+            '<textarea id="extendReason" placeholder="Optional: Explain the extension..." style="width:100%;padding:10px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:0.88rem;resize:vertical;min-height:60px;outline:none;font-family:inherit;"></textarea>' +
+            '</div>' +
+            '<div style="display:flex;gap:10px;">' +
+            '<button id="extendCancelBtn" style="flex:1;padding:12px;background:#f1f5f9;color:#4b5563;border:none;border-radius:10px;font-weight:700;cursor:pointer;">Cancel</button>' +
+            '<button id="extendConfirmBtn" style="flex:1;padding:12px;background:#800000;color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;">Confirm Extension</button>' +
+            '</div>' +
+            '</div>';
+        document.body.appendChild(overlay);
+
+        document.getElementById('extendCancelBtn').onclick = () => overlay.remove();
+        overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
+
+        document.getElementById('extendConfirmBtn').onclick = () => {
+            const days = parseInt(document.getElementById('extendDays').value);
+            if (!days || days < 1) { alert('Please enter a valid number of days.'); return; }
+            overlay.remove();
+            if (typeof UIUtils !== 'undefined' && UIUtils.showToast) {
+                UIUtils.showToast('Rental extended by ' + days + ' days for ' + studentName, 'success');
+            }
+        };
+    },
+
+    contactStudent: function(studentName) {
+        const messages = this._getMessages();
+        const existingThread = messages.find(m => m.student === studentName);
+
+        if (existingThread) {
+            window.location.href = 'faculty-messages.html';
+            setTimeout(() => {
+                localStorage.setItem('kitcycle_open_thread', studentName);
+            }, 100);
+        } else {
+            const newThread = {
+                id: 'thread_' + Date.now(),
+                student: studentName,
+                studentId: '',
+                avatar: '',
+                lastMessage: '',
+                lastTime: 'Just now',
+                unread: 0,
+                messages: []
+            };
+            messages.unshift(newThread);
+            localStorage.setItem('kitcycle_messages', JSON.stringify(messages));
+            window.location.href = 'faculty-messages.html';
+            setTimeout(() => {
+                localStorage.setItem('kitcycle_open_thread', studentName);
+            }, 100);
+        }
+    },
+
+    _getMessages: function() {
+        if (!localStorage.getItem('kitcycle_messages')) {
+            const defaults = [
+                { id: 'thread1', student: 'Maria Santos', studentId: '2024-12345', avatar: '../../images/maria_profile.png', lastMessage: 'Thank you for approving the request!', lastTime: '10:30 AM', unread: 2, messages: [{ from: 'Maria Santos', text: 'Hello Professor! I submitted a request for the microscope.', time: '10:00 AM', self: false }, { from: 'You', text: 'Hi Maria, I will review it shortly.', time: '10:15 AM', self: true }, { from: 'Maria Santos', text: 'Thank you for approving the request!', time: '10:30 AM', self: false }] },
+                { id: 'thread2', student: 'Juan Reyes', studentId: '2024-12346', avatar: '../../images/juan_profile.png', lastMessage: 'Will I be able to get it today?', lastTime: 'Yesterday', unread: 0, messages: [{ from: 'Juan Reyes', text: 'Good day Professor, I would like to extend my calculator rental.', time: 'Yesterday 3:00 PM', self: false }, { from: 'You', text: 'Sure Juan, let me check the schedule.', time: 'Yesterday 3:20 PM', self: true }, { from: 'Juan Reyes', text: 'Will I be able to get it today?', time: 'Yesterday 4:00 PM', self: false }] },
+                { id: 'thread3', student: 'Anna Cruz', studentId: '2024-12347', avatar: '../../images/nash_profile.png', lastMessage: 'Got it, I will make sure to handle it with care.', lastTime: 'Yesterday', unread: 0, messages: [{ from: 'You', text: 'Anna, please ensure the camera equipment is properly stored when not in use.', time: 'Yesterday 11:00 AM', self: true }, { from: 'Anna Cruz', text: 'Got it, I will make sure to handle it with care.', time: 'Yesterday 11:15 AM', self: false }] }
+            ];
+            localStorage.setItem('kitcycle_messages', JSON.stringify(defaults));
+        }
+        return JSON.parse(localStorage.getItem('kitcycle_messages'));
+    },
+
     viewEquipment: function(id) {
         const equipment = this._getEquipment();
         const eq = equipment.find(e => e.id === id);
@@ -680,7 +847,6 @@ window.FacultyActions = {
         alert(`${eq.name}\n\nCategory: ${eq.category}\nTotal: ${eq.quantity} | Available: ${eq.available} | Borrowed: ${eq.borrowed}\nCondition: ${eq.condition}\nLocation: ${eq.location}\nPrice: ₱${eq.price}/day\n\n${eq.description || 'No description.'}`);
     },
 
-    /* ── Render Dashboard ── */
     renderDashboard: function() {
         const equipment = this._getEquipment();
         const requests = this._getRequests();
@@ -690,7 +856,6 @@ window.FacultyActions = {
         const totalBorrowed = equipment.reduce((s, e) => s + e.borrowed, 0);
         const pendingReqs = requests.filter(r => r.status === 'Pending').length;
 
-        // Update stat cards if they exist
         const statCards = document.querySelectorAll('.stat-cards-grid .stat-card h3');
         if (statCards.length >= 3) {
             statCards[0].textContent = totalEquip;
@@ -700,7 +865,6 @@ window.FacultyActions = {
         const pendingBadge = document.querySelector('.pill-badge');
         if (pendingBadge) pendingBadge.textContent = `${pendingReqs} Pending`;
 
-        // Update banner with user name
         const storedName = localStorage.getItem('userName');
         if (storedName) {
             const firstName = storedName.split(' ').pop();
@@ -709,20 +873,17 @@ window.FacultyActions = {
         }
     },
 
-    /* ── Init Dashboard ── */
     initDashboard: function() {
         this.renderDashboard();
     }
 };
 
-/* ── Auto-init on every page ── */
 document.addEventListener('DOMContentLoaded', () => {
     if (document.querySelector('.inventory-grid')) FacultyActions.renderEquipmentGrid();
     if (document.querySelector('.requests-stack')) FacultyActions._refreshApprovals();
     if (document.querySelector('.dashboard-banner')) FacultyActions.initDashboard();
 });
 
-/* ── Inject animation keyframes ── */
 (function() {
     if (!document.getElementById('faculty-actions-styles')) {
         const style = document.createElement('style');

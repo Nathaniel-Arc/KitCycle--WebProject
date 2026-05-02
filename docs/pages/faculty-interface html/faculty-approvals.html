@@ -11,7 +11,6 @@
     <script src="../../script/ui-utils.js"></script>
     <script src="../../script/auth.js" defer></script>
     <script src="../../script/faculty-actions.js" defer></script>
-    <!-- Instant Sidebar State Check -->
     <script>
         (function() {
             const isMinimized = localStorage.getItem('sidebarMinimized') === 'true';
@@ -27,11 +26,10 @@
         .sidebar-is-minimized .sidebar-nav a { justify-content: center !important; padding: 12px 0 !important; }
         .sidebar-is-minimized .sidebar-nav i { font-size: 1.2rem !important; margin: 0 !important; }
         .sidebar-is-minimized .sidebar-profile { justify-content: center !important; padding-bottom: 1.5rem !important; }
-
         .margin-top { margin-top: 1.5rem; }
         .full-width-card { width: 100%; }
 
-        .status-filter-bar { display: flex; gap: 10px; margin-bottom: 20px; }
+        .status-filter-bar { display: flex; gap: 10px; }
         .filter-btn { padding: 8px 20px; border-radius: 25px; border: 1.5px solid #e2e8f0; background: #fff; font-size: 0.85rem; font-weight: 700; cursor: pointer; color: #64748b; transition: 0.2s; }
         .filter-btn:hover { border-color: #800000; color: #800000; }
         .filter-btn.active { background: #800000; color: #fff; border-color: #800000; }
@@ -41,6 +39,7 @@
         .request-panel.status-rejected { border-left-color: #ef4444; }
         .status-pill.approved-pill { background: #f0fdf4; color: #15803d; }
         .status-pill.rejected-pill { background: #fef2f2; color: #dc2626; }
+        .priority-pill.low { background: #f0fdf4; color: #15803d; }
     </style>
 </head>
 <body>
@@ -62,14 +61,11 @@
                 <li><a href="../howitworks.html">How It Works</a></li>
                 <li><a href="../safety.html">Safety</a></li>
             </ul>
-            <div class="auth-buttons">
-                <!-- Injected by auth.js -->
-            </div>
+            <div class="auth-buttons"></div>
         </div>
     </header>
 
     <div class="dashboard-layout">
-
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-profile">
                 <div class="profile-avatar"><img id="sidebarProfileImg" src="../../images/Prof. Ace.jpg" alt="Profile"></div>
@@ -78,7 +74,6 @@
                     <span id="sidebarUserRole">Faculty</span>
                 </div>
             </div>
-
             <ul class="sidebar-nav">
                 <li><a href="faculty-dashboard.html"><i class="fas fa-th-large"></i> <span>Dashboard</span></a></li>
                 <li><a href="faculty-departmentgear.html"><i class="fas fa-boxes"></i> <span>Departmental Gear</span></a></li>
@@ -87,12 +82,10 @@
                 <li><a href="faculty-rentals.html"><i class="fas fa-clock"></i> <span>Active Rentals</span></a></li>
                 <li><a href="faculty-reports.html"><i class="fas fa-chart-pie"></i> <span>Reports</span></a></li>
             </ul>
-
             <a href="javascript:void(0)" onclick="AuthSystem.confirmLogout(); return false;" class="sidebar-logout"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
         </aside>
 
         <main class="dashboard-content" id="mainContent">
-
             <div class="dashboard-banner">
                 <h2><i class="fas fa-check-square"></i> Approval Queue</h2>
                 <p>Review and manage student equipment rental requests</p>
@@ -124,20 +117,16 @@
 
             <div class="content-card full-width-card">
                 <div class="card-header">
-                    <h3>Requests</h3>
-                    <div class="status-filter-bar" style="margin:0;">
-                        <button class="filter-btn active" onclick="filterRequests('all', this)">All</button>
-                        <button class="filter-btn" onclick="filterRequests('Pending', this)">Pending</button>
-                        <button class="filter-btn" onclick="filterRequests('Approved', this)">Approved</button>
-                        <button class="filter-btn" onclick="filterRequests('Rejected', this)">Rejected</button>
+                    <h3>All Requests</h3>
+                    <div class="status-filter-bar">
+                        <button class="filter-btn active" id="filterAll" onclick="filterRequests('all')">All</button>
+                        <button class="filter-btn" id="filterPending" onclick="filterRequests('Pending')">Pending</button>
+                        <button class="filter-btn" id="filterApproved" onclick="filterRequests('Approved')">Approved</button>
+                        <button class="filter-btn" id="filterRejected" onclick="filterRequests('Rejected')">Rejected</button>
                     </div>
                 </div>
-
-                <div class="requests-stack" id="requestsStack">
-                    <!-- Populated by faculty-actions.js -->
-                </div>
+                <div class="requests-stack" id="requestsStack"></div>
             </div>
-
         </main>
     </div>
 
@@ -153,66 +142,39 @@
             localStorage.setItem('sidebarMinimized', isMinimized);
         }
 
-        function filterRequests(status, btn) {
+        function filterRequests(status) {
             currentFilter = status;
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            renderFilteredRequests();
+            document.getElementById('filter' + (status === 'all' ? 'All' : status)).classList.add('active');
+            renderAllRequests();
         }
 
-        function renderFilteredRequests() {
+        function renderAllRequests() {
             const requests = FacultyActions._getRequests();
             let filtered = currentFilter === 'all' ? requests : requests.filter(r => r.status === currentFilter);
             filtered = filtered.slice().reverse();
 
             const stack = document.getElementById('requestsStack');
             if (filtered.length === 0) {
-                stack.innerHTML = '<div style="text-align:center;padding:40px;color:#64748b;"><i class="fas fa-inbox" style="font-size:3rem;color:#cbd5e1;margin-bottom:15px;display:block;"></i><h4 style="color:#374151;margin-bottom:5px;">No Requests Found</h4><p>No requests match the current filter.</p></div>';
+                const emptyMsg = currentFilter === 'all' ? 'No requests yet.' : 'No ' + currentFilter.toLowerCase() + ' requests.';
+                stack.innerHTML = '<div style="text-align:center;padding:40px;color:#64748b;"><i class="fas fa-inbox" style="font-size:3rem;color:#cbd5e1;margin-bottom:15px;display:block;"></i><h4 style="color:#374151;margin-bottom:5px;">No Requests</h4><p>' + emptyMsg + '</p></div>';
             } else {
                 stack.innerHTML = filtered.map(r => {
-                    const statusClass = r.status === 'Approved' ? 'status-approved' : r.status === 'Rejected' ? 'status-rejected' : '';
+                    const borderClass = r.status === 'Approved' ? 'status-approved' : r.status === 'Rejected' ? 'status-rejected' : '';
                     const pillClass = r.status === 'Approved' ? 'approved-pill' : r.status === 'Rejected' ? 'rejected-pill' : 'warning';
-                    const actionsHtml = r.status === 'Pending' ? `
-                        <div class="panel-actions">
-                            <button class="btn-action-light" onclick="alert('${r.student}\\nStudent ID: ${r.studentId}\\nItem: ${r.item}\\nDuration: ${r.duration}\\nPurpose: ${r.purpose}')"><i class="far fa-eye"></i> View Details</button>
-                            <button class="btn-action-approve" onclick="FacultyActions.approveRequest('${r.id}', this)"><i class="fas fa-check"></i> Approve</button>
-                            <button class="btn-action-reject" onclick="FacultyActions.rejectRequest('${r.id}', this)"><i class="fas fa-times"></i> Reject</button>
-                        </div>
-                    ` : `
-                        <div class="panel-actions">
-                            <span style="font-size:0.8rem;color:#64748b;padding:8px 16px;background:#f8fafc;border-radius:8px;">Decided on ${r.date}</span>
-                        </div>
-                    `;
-                    const reasonHtml = r.rejectReason ? `<p style="font-size:0.82rem;color:#ef4444;margin-top:6px;"><strong>Reason:</strong> ${r.rejectReason}${r.rejectNotes ? ' — ' + r.rejectNotes : ''}</p>` : '';
+                    const actionsHtml = r.status === 'Pending'
+                        ? '<div class="panel-actions"><button class="btn-action-light" onclick="FacultyActions.viewEquipmentDetails(\'' + r.id + '\')"><i class="far fa-eye"></i> View Details</button><button class="btn-action-approve" onclick="FacultyActions.approveRequest(\'' + r.id + '\')"><i class="fas fa-check"></i> Approve</button><button class="btn-action-reject" onclick="FacultyActions.rejectRequest(\'' + r.id + '\')"><i class="fas fa-times"></i> Reject</button></div>'
+                        : '<div class="panel-actions"><span style="font-size:0.8rem;color:#64748b;padding:8px 16px;background:#f8fafc;border-radius:8px;">Decided on ' + r.date + '</span></div>';
+                    const reasonHtml = r.rejectReason ? '<p style="font-size:0.82rem;color:#ef4444;margin-top:6px;"><strong>Reason:</strong> ' + r.rejectReason + (r.rejectNotes ? ' — ' + r.rejectNotes : '') + '</p>' : '';
 
-                    return `
-                        <div class="request-panel ${statusClass}" id="${r.id}">
-                            <div class="panel-header">
-                                <div>
-                                    <span class="priority-pill ${r.priority === 'HIGH' ? 'high' : r.priority === 'MEDIUM' ? 'medium' : 'low'}">${r.priority}</span>
-                                    <span class="status-pill ${pillClass}">${r.status}</span>
-                                </div>
-                            </div>
-                            <div class="panel-body">
-                                <div class="student-meta">
-                                    <h4>${r.student}</h4>
-                                    <p>Student ID: <span>${r.studentId}</span></p>
-                                </div>
-                                <div class="item-specs">
-                                    <p><strong>Item:</strong> ${r.item}</p>
-                                    <p><strong>Duration:</strong> ${r.duration}</p>
-                                    <p><strong>Purpose:</strong> ${r.purpose}</p>
-                                    <p class="timestamp"><i class="far fa-clock"></i> Requested on ${r.date}</p>
-                                    ${reasonHtml}
-                                </div>
-                            </div>
-                            ${actionsHtml}
-                        </div>
-                    `;
+                    return '<div class="request-panel ' + borderClass + '">' +
+                        '<div class="panel-header"><div><span class="priority-pill ' + (r.priority === 'HIGH' ? 'high' : r.priority === 'MEDIUM' ? 'medium' : 'low') + '">' + r.priority + '</span><span class="status-pill ' + pillClass + '">' + r.status + '</span></div></div>' +
+                        '<div class="panel-body"><div class="student-meta"><h4>' + r.student + '</h4><p>Student ID: <span>' + r.studentId + '</span></p></div><div class="item-specs"><p><strong>Item:</strong> ' + r.item + '</p><p><strong>Duration:</strong> ' + r.duration + '</p><p><strong>Purpose:</strong> ' + r.purpose + '</p><p class="timestamp"><i class="far fa-clock"></i> Requested on ' + r.date + '</p>' + reasonHtml + '</div></div>' +
+                        actionsHtml +
+                        '</div>';
                 }).join('');
             }
 
-            // Update counts
             const pending = requests.filter(r => r.status === 'Pending');
             const approved = requests.filter(r => r.status === 'Approved');
             const rejected = requests.filter(r => r.status === 'Rejected');
@@ -229,7 +191,7 @@
                 document.getElementById('sidebar').classList.add('minimized');
                 document.getElementById('mainContent').classList.add('expanded');
             }
-            renderFilteredRequests();
+            renderAllRequests();
         };
     </script>
 
