@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-
+ 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,9 +29,9 @@
         .sidebar-is-minimized .sidebar-profile { justify-content: center !important; padding-bottom: 1.5rem !important; }
     </style>
 </head>
-
+ 
 <body>
-
+ 
     <header class="navbar">
         <div class="nav-left-group">
             <div class="sidebar-toggle" onclick="toggleSidebar()">
@@ -54,9 +54,9 @@
             </div>
         </div>
     </header>
-
+ 
     <div class="dashboard-layout">
-
+ 
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-profile">
                 <div class="profile-avatar"><img id="sidebarProfileImg" src="../../images/nash_profile.png" alt="Profile"></div>
@@ -65,7 +65,7 @@
                     <span id="sidebarUserRole">Admin</span>
                 </div>
             </div>
-
+ 
             <ul class="sidebar-nav">
                 <li class="active"><a href="#"><i class="fas fa-chart-line"></i> <span>Dashboard</span></a></li>
                 <li><a href="admin-verification.html"><i class="fas fa-user-check"></i> <span>User Verification</span> <span class="nav-badge-v2" style="display: inline-block;">3</span></a></li>
@@ -77,17 +77,303 @@
 
             <a href="javascript:void(0)" onclick="AuthSystem.confirmLogout(); return false;" class="sidebar-logout"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
         </aside>
-
+ 
         <main class="dashboard-content" id="mainContent">
-
+ 
+            <!-- Banner -->
             <div class="dashboard-banner">
-                <h2>Admin Control Center</h2>
-                <p>Welcome back, Nash. Platform management and analytics are ready.</p>
+                <h2>Admin Dashboard</h2>
+                <p>Comprehensive platform management and analytics overview.</p>
             </div>
-
+ 
+            <!-- Stat Cards -->
+            <div class="stat-cards-grid">
+                <div class="stat-card">
+                    <div class="stat-icon blue-light"><i class="fas fa-users"></i></div>
+                    <div class="stat-numbers">
+                        <div class="stat-label">Total Users</div>
+                        <h3>1247</h3>
+                        <span class="trend success-text">+47 this month</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green-light"><i class="fas fa-handshake"></i></div>
+                    <div class="stat-numbers">
+                        <div class="stat-label">Active Rentals</div>
+                        <h3>89</h3>
+                        <span class="trend success-text">+12 this week</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon purple-light"><i class="fas fa-list-alt"></i></div>
+                    <div class="stat-numbers">
+                        <div class="stat-label">Items Listed</div>
+                        <h3>456</h3>
+                        <span class="trend success-text">+23 this week</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon orange-light"><i class="fas fa-user-clock"></i></div>
+                    <div class="stat-numbers">
+                        <div class="stat-label">Pending Verification</div>
+                        <h3>3</h3>
+                        <span class="trend warning-text">Needs attention</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon red-light"><i class="fas fa-exclamation-triangle"></i></div>
+                    <div class="stat-numbers">
+                        <div class="stat-label">Active Disputes</div>
+                        <h3>2</h3>
+                        <span class="trend danger-text">Urgent review</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon yellow-light"><i class="fas fa-chart-line"></i></div>
+                    <div class="stat-numbers">
+                        <div class="stat-label">Total Revenue</div>
+                        <h3>₱45,600</h3>
+                        <span class="trend success-text">+8% this month</span>
+                    </div>
+                </div>
+            </div>
+ 
+            <!-- Split Row: Verification Queue + Side Widgets -->
+            <div class="split-row">
+ 
+                <!-- LEFT: Verification + Disputes -->
+                <div class="main-column">
+ 
+                    <!-- Verification Queue -->
+                    <div class="content-card" style="margin-bottom: 25px;">
+                        <div class="card-header">
+                            <h3>User Verification Queue</h3>
+                            <span class="badge orange-bg">3 Pending</span>
+                        </div>
+ 
+                        <div class="verifications-stack">
+ 
+                            <!-- Verify Item 1 -->
+                            <div class="verify-item">
+                                <div class="verify-top">
+                                    <div class="verify-user">
+                                        <h4>Pedro Martinez</h4>
+                                        <p>pedro.martinez@wmsu.edu.ph</p>
+                                        <p>Student ID: 2024-15678</p>
+                                    </div>
+                                    <span class="status-pill warning">Pending Review</span>
+                                </div>
+                                <div class="verify-bottom">
+                                    <span class="timestamp"><i class="far fa-clock" style="margin-right:4px;"></i>3/5/2026 &nbsp; 2 documents submitted</span>
+                                    <div class="verify-actions">
+                                        <button class="btn-subtle">Review Details</button>
+                                        <button class="btn-circle-success" title="Approve"><i class="fas fa-check"></i></button>
+                                        <button class="btn-circle-danger" title="Reject"><i class="fas fa-times"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+ 
+                            <!-- Verify Item 2 -->
+                            <div class="verify-item">
+                                <div class="verify-top">
+                                    <div class="verify-user">
+                                        <h4>Lisa Chen</h4>
+                                        <p>lisa.chen@wmsu.edu.ph</p>
+                                        <p>Student ID: 2024-15679</p>
+                                    </div>
+                                    <span class="status-pill warning">Pending Review</span>
+                                </div>
+                                <div class="verify-bottom">
+                                    <span class="timestamp"><i class="far fa-clock" style="margin-right:4px;"></i>3/4/2026 &nbsp; 2 documents submitted</span>
+                                    <div class="verify-actions">
+                                        <button class="btn-subtle">Review Details</button>
+                                        <button class="btn-circle-success" title="Approve"><i class="fas fa-check"></i></button>
+                                        <button class="btn-circle-danger" title="Reject"><i class="fas fa-times"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+ 
+                            <!-- Verify Item 3 -->
+                            <div class="verify-item">
+                                <div class="verify-top">
+                                    <div class="verify-user">
+                                        <h4>Mark Santos</h4>
+                                        <p>mark.santos@wmsu.edu.ph</p>
+                                        <p>Student ID: 2024-15680</p>
+                                    </div>
+                                    <span class="status-pill warning">Pending Review</span>
+                                </div>
+                                <div class="verify-bottom">
+                                    <span class="timestamp"><i class="far fa-clock" style="margin-right:4px;"></i>3/4/2026 &nbsp; 2 documents submitted</span>
+                                    <div class="verify-actions">
+                                        <button class="btn-subtle">Review Details</button>
+                                        <button class="btn-circle-success" title="Approve"><i class="fas fa-check"></i></button>
+                                        <button class="btn-circle-danger" title="Reject"><i class="fas fa-times"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+ 
+                        </div>
+ 
+                        <a href="admin-verification.html" class="btn-block-outline">View All Verification Requests</a>
+                    </div>
+ 
+                    <!-- Active Disputes -->
+                    <div class="content-card">
+                        <div class="card-header">
+                            <h3>Active Disputes</h3>
+                            <span class="badge" style="background:#fee2e2; color:#b91c1c;">2 Active</span>
+                        </div>
+ 
+                        <div class="verifications-stack">
+ 
+                            <!-- Dispute 1 -->
+                            <div class="verify-item">
+                                <div class="verify-top">
+                                    <div class="verify-user">
+                                        <h4>Canon EOS 90D DSLR</h4>
+                                        <p>Item returned with minor damage</p>
+                                        <p style="margin-top:4px; font-size:0.78rem; color:#6b7280;">Reporter: Maria Santos &nbsp;|&nbsp; Reportee: Juan Cruz</p>
+                                        <p style="font-size:0.78rem; color:#9ca3af;">Reported on 3/3/2026</p>
+                                    </div>
+                                    <span class="status-pill" style="background:#fee2e2; color:#b91c1c; font-size:0.7rem; font-weight:700; padding:4px 8px; border-radius:4px;">HIGH</span>
+                                </div>
+                                <div class="verify-bottom" style="padding-top:1rem; border-top:1px solid #f3f4f6;">
+                                    <div style="flex:1;">
+                                        <button class="btn-dispute-action" onclick="window.location.href='admin-disputes.html'">
+                                            <i class="fas fa-gavel" style="margin-right:6px;"></i>Review &amp; Take Action
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+ 
+                            <!-- Dispute 2 -->
+                            <div class="verify-item">
+                                <div class="verify-top">
+                                    <div class="verify-user">
+                                        <h4>Scientific Calculator</h4>
+                                        <p>Late return without notice</p>
+                                        <p style="margin-top:4px; font-size:0.78rem; color:#6b7280;">Reporter: Anna Reyes &nbsp;|&nbsp; Reportee: Pedro Garcia</p>
+                                        <p style="font-size:0.78rem; color:#9ca3af;">Reported on 3/2/2026</p>
+                                    </div>
+                                    <span class="status-pill" style="background:#fff7ed; color:#c2410c; font-size:0.7rem; font-weight:700; padding:4px 8px; border-radius:4px;">MEDIUM</span>
+                                </div>
+                                <div class="verify-bottom" style="padding-top:1rem; border-top:1px solid #f3f4f6;">
+                                    <div style="flex:1;">
+                                        <button class="btn-dispute-action" onclick="window.location.href='admin-disputes.html'">
+                                            <i class="fas fa-gavel" style="margin-right:6px;"></i>Review &amp; Take Action
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+ 
+                        </div>
+ 
+                        <a href="admin-disputes.html" class="btn-block-outline">View All Disputes</a>
+                    </div>
+ 
+                </div><!-- /main-column -->
+ 
+                <!-- RIGHT: Side Widgets -->
+                <div class="side-column">
+ 
+                    <!-- User Growth -->
+                    <div class="content-card" style="margin-bottom: 20px;">
+                        <div class="card-header">
+                            <h3>User Growth</h3>
+                        </div>
+                        <div class="bar-chart-container">
+                            <div class="chart-row">
+                                <span class="month-lbl">Oct</span>
+                                <div class="chart-bar-track"><div class="chart-bar-fill" style="width:61%; background:#800000;"></div></div>
+                                <span class="chart-val">850</span>
+                            </div>
+                            <div class="chart-row">
+                                <span class="month-lbl">Nov</span>
+                                <div class="chart-bar-track"><div class="chart-bar-fill" style="width:68%; background:#800000;"></div></div>
+                                <span class="chart-val">950</span>
+                            </div>
+                            <div class="chart-row">
+                                <span class="month-lbl">Dec</span>
+                                <div class="chart-bar-track"><div class="chart-bar-fill" style="width:75%; background:#800000;"></div></div>
+                                <span class="chart-val">1050</span>
+                            </div>
+                            <div class="chart-row">
+                                <span class="month-lbl">Jan</span>
+                                <div class="chart-bar-track"><div class="chart-bar-fill" style="width:82%; background:#800000;"></div></div>
+                                <span class="chart-val">1150</span>
+                            </div>
+                            <div class="chart-row">
+                                <span class="month-lbl">Feb</span>
+                                <div class="chart-bar-track"><div class="chart-bar-fill" style="width:86%; background:#800000;"></div></div>
+                                <span class="chart-val">1200</span>
+                            </div>
+                            <div class="chart-row">
+                                <span class="month-lbl">Mar</span>
+                                <div class="chart-bar-track"><div class="chart-bar-fill" style="width:89%; background:#800000;"></div></div>
+                                <span class="chart-val">1247</span>
+                            </div>
+                        </div>
+                        <a href="admin-analytics.html" class="btn-block-outline" style="margin-top:1rem;">View Detailed Analytics</a>
+                    </div>
+ 
+                    <!-- Items by Category -->
+                    <div class="content-card" style="margin-bottom: 20px;">
+                        <div class="card-header">
+                            <h3>Items by Category</h3>
+                        </div>
+                        <div class="bar-chart-container">
+                            <div class="chart-row">
+                                <span class="month-lbl" style="width:110px; font-size:0.78rem;">Academic Tools</span>
+                                <div class="chart-bar-track"><div class="chart-bar-fill" style="width:75%; background:#f5c518;"></div></div>
+                                <span class="chart-val" style="width:60px; font-size:0.78rem;">142 items</span>
+                            </div>
+                            <div class="chart-row">
+                                <span class="month-lbl" style="width:110px; font-size:0.78rem;">Media Equip.</span>
+                                <div class="chart-bar-track"><div class="chart-bar-fill" style="width:52%; background:#f5c518;"></div></div>
+                                <span class="chart-val" style="width:60px; font-size:0.78rem;">98 items</span>
+                            </div>
+                            <div class="chart-row">
+                                <span class="month-lbl" style="width:110px; font-size:0.78rem;">Lab Equipment</span>
+                                <div class="chart-bar-track"><div class="chart-bar-fill" style="width:46%; background:#f5c518;"></div></div>
+                                <span class="chart-val" style="width:60px; font-size:0.78rem;">87 items</span>
+                            </div>
+                            <div class="chart-row">
+                                <span class="month-lbl" style="width:110px; font-size:0.78rem;">Textbooks</span>
+                                <div class="chart-bar-track"><div class="chart-bar-fill" style="width:68%; background:#f5c518;"></div></div>
+                                <span class="chart-val" style="width:60px; font-size:0.78rem;">129 items</span>
+                            </div>
+                        </div>
+                    </div>
+ 
+                    <!-- Quick Actions -->
+                    <div class="content-card">
+                        <div class="card-header">
+                            <h3>Quick Actions</h3>
+                        </div>
+                        <div style="display:flex; flex-direction:column; gap:10px;">
+                            <a href="admin-verification.html" class="btn-quick-action btn-qa-yellow">
+                                <i class="fas fa-user-check"></i> Review Verifications
+                            </a>
+                            <a href="admin-disputes.html" class="btn-quick-action btn-qa-outline-red">
+                                <i class="fas fa-gavel"></i> Manage Disputes
+                            </a>
+                            <a href="admin-analytics.html" class="btn-quick-action btn-qa-outline-red">
+                                <i class="fas fa-chart-bar"></i> View Analytics
+                            </a>
+                            <a href="admin-settings.html" class="btn-quick-action btn-qa-ghost">
+                                <i class="fas fa-cog"></i> Platform Settings
+                            </a>
+                        </div>
+                    </div>
+ 
+                </div><!-- /side-column -->
+ 
+            </div><!-- /split-row -->
+ 
         </main>
     </div>
-
+ 
     <script>
         function toggleSidebar() {
             document.documentElement.classList.remove('sidebar-is-minimized');
@@ -97,17 +383,17 @@
             mainContent.classList.toggle('expanded');
             localStorage.setItem('sidebarMinimized', isMinimized);
         }
-
+ 
         function toggleNotifs() {
             // Handled by auth.js
         }
-
+ 
         window.onclick = function(event) {
             if (!event.target.closest('.nav-notification-btn')) {
                 // Handled by auth.js
             }
         }
-
+ 
         window.onload = function() {
             const isMinimized = localStorage.getItem('sidebarMinimized') === 'true';
             if (isMinimized) {
@@ -116,7 +402,6 @@
             }
         };
     </script>
-
+ 
 </body>
-
 </html>
