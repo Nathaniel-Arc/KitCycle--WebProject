@@ -1,145 +1,188 @@
-/* --- APPROVAL SPECIFIC MECHANICS --- */
+/* --- APPROVAL SPECIFIC MECHANICS (Matched to Student Interface) --- */
 
 .full-width-card {
     width: 100%;
 }
 
 .margin-top {
-    margin-top: 2rem;
+    margin-top: 1.5rem;
 }
 
 .pill-badge {
     font-size: 0.75rem;
     font-weight: 700;
-    padding: 6px 12px;
+    padding: 4px 12px;
     border-radius: 20px;
 }
 
-.pill-badge.warning-bg { background: #ffe8cc; color: #fd7e14; }
+.pill-badge.warning-bg { background: #fffbeb; color: #b45309; }
+.pill-badge.success-bg { background: #f0fdf4; color: #15803d; }
+.pill-badge.neutral-bg { background: #f1f5f9; color: #64748b; }
 
 .requests-stack, .decisions-stack {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 15px;
 }
 
 .request-panel {
-    border: 1px solid #eef0f2;
+    border: 1px solid #e2e8f0;
     border-radius: 10px;
-    padding: 1.5rem;
+    padding: 1rem;
     background: #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
+
+.request-panel:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.request-panel.status-approved { border-left: 4px solid #10b981; }
+.request-panel.status-rejected { border-left: 4px solid #ef4444; }
 
 .panel-header {
     display: flex;
     justify-content: flex-end;
-    margin-bottom: 0.5rem;
+    margin-bottom: 12px;
 }
 
 .priority-pill, .status-pill {
     font-size: 0.7rem;
     font-weight: 700;
-    padding: 4px 10px;
+    padding: 3px 8px;
     border-radius: 4px;
     margin-left: 5px;
 }
 
-/* Priority color tags */
-.priority-pill.high { background: #fff5f5; color: #dc3545; }
-.priority-pill.medium { background: #fff9db; color: #f59f00; }
-.priority-pill.low { background: #e7f5ff; color: #1c7ed6; }
+/* Priority color tags (matched to student) */
+.priority-pill.high { background: #fef2f2; color: #dc2626; }
+.priority-pill.medium { background: #fff7ed; color: #c2410c; }
+.priority-pill.low { background: #f0fdf4; color: #15803d; }
 
-.status-pill.warning { background: #fff4e6; color: #fd7e14; }
-.status-pill.success { background: #e6fcf5; color: #0ca678; }
-.status-pill.danger { background: #fff5f5; color: #fa5252; }
+.status-pill.warning { background: #fffbeb; color: #b45309; }
+.status-pill.success { background: #f0fdf4; color: #15803d; }
+.status-pill.danger { background: #fef2f2; color: #dc2626; }
+.status-pill.approved-pill { background: #f0fdf4; color: #15803d; }
+.status-pill.rejected-pill { background: #fef2f2; color: #dc2626; }
 
 .panel-body {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    padding-bottom: 1.5rem;
-    border-bottom: 1px solid #eee;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #f3f4f6;
+    gap: 20px;
 }
 
-.student-meta h4 {
-    font-size: 1.1rem;
-    margin-bottom: 5px;
-}
+.student-meta { flex: 0.8; }
+.student-meta h4 { font-size: 0.95rem; color: #111827; margin-bottom: 4px; }
+.student-meta p { font-size: 0.8rem; color: #6b7280; }
+.student-meta p span { font-weight: 700; color: #111827; }
 
-.student-meta p {
-    font-size: 0.85rem;
-    color: #666;
-}
-
-.item-specs p {
-    font-size: 0.9rem;
-    margin-bottom: 5px;
-    color: #333;
-}
-
-.item-specs .timestamp {
-    color: #888;
-    font-size: 0.8rem;
-    margin-top: 10px;
-}
+.item-specs { flex: 1.2; }
+.item-specs p { font-size: 0.85rem; color: #4b5563; margin-bottom: 4px; }
+.item-specs p strong { color: #111827; }
+.item-specs .timestamp { font-size: 0.75rem; color: #9ca3af; margin-top: 8px; }
 
 .panel-actions {
     display: flex;
-    gap: 15px;
-    margin-top: 1.5rem;
+    gap: 8px;
+    margin-top: 1rem;
+    padding-top: 12px;
+    border-top: 1px solid #f3f4f6;
     justify-content: flex-start;
 }
 
 .panel-actions button {
-    padding: 10px 20px;
-    border-radius: 6px;
+    padding: 8px 14px;
+    border-radius: 8px;
     font-weight: 600;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     transition: 0.2s;
 }
 
-.btn-action-light { background: #f8f9fa; border: 1px solid #ddd; color: #495057; }
-.btn-action-approve { background: #28a745; border: none; color: #fff; }
-.btn-action-reject { background: #fff; border: 1px solid #dc3545; color: #dc3545; }
+.btn-action-light { background: #f8fafc; border: 1px solid #e2e8f0; color: #4b5563; }
+.btn-action-light:hover { background: #e2e8f0; color: #111827; }
 
-.btn-action-approve:hover { background: #218838; }
-.btn-action-reject:hover { background: #fdf2f2; }
+.btn-action-approve { background: #10b981; border: none; color: #fff; }
+.btn-action-approve:hover { background: #059669; }
+
+.btn-action-reject { background: #fff; border: 1px solid #dc2626; color: #dc2626; }
+.btn-action-reject:hover { background: #fef2f2; }
 
 /* Decision History Traces */
 .decision-log {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1.5rem;
-    border-radius: 8px;
-    background: #f8f9fa;
-    border-left: 4px solid #dee2e6;
+    padding: 12px;
+    border-radius: 10px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
 }
 
 .decision-log .log-info h4 {
-    font-size: 1rem;
-    margin-bottom: 5px;
+    font-size: 0.85rem;
+    margin-bottom: 4px;
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
+.decision-log .log-info p {
+    font-size: 0.8rem;
+    color: #64748b;
+    margin: 0;
+}
+
 .decision-log .reason-note {
-    font-size: 0.85rem;
-    color: #e03131;
+    font-size: 0.75rem;
+    color: #dc2626;
     display: block;
-    margin: 5px 0;
+    margin-top: 4px;
 }
 
 .decision-log .timestamp {
-    font-size: 0.8rem;
-    color: #888;
+    font-size: 0.7rem;
+    color: #94a3b8;
+    margin-top: 4px;
 }
 
 .log-icon {
     font-size: 1.5rem;
+}
+
+/* Status Filter Bar */
+.status-filter-bar {
+    display: flex;
+    gap: 10px;
+}
+
+.filter-btn {
+    padding: 8px 20px;
+    border-radius: 25px;
+    border: 1.5px solid #e2e8f0;
+    background: #fff;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    color: #64748b;
+    transition: 0.2s;
+}
+
+.filter-btn:hover {
+    border-color: #800000;
+    color: #800000;
+}
+
+.filter-btn.active {
+    background: #800000;
+    color: #fff;
+    border-color: #800000;
 }

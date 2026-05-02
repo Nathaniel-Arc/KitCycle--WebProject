@@ -1,13 +1,13 @@
-/* --- REPORTS AND ANALYTICS SPECIFIC STYLES --- */
+/* --- REPORTS AND ANALYTICS SPECIFIC STYLES (Matched to Student Interface) --- */
 
 .stat-numbers-only h3 {
     font-size: 1.8rem;
     font-weight: 700;
     margin-top: 10px;
-    color: #1a1a1a;
+    color: #111827;
 }
 
-.purple-text { color: #8a2be2 !important; }
+.purple-text { color: #7e22ce; }
 
 /* Grid for the quick generation cards */
 .report-generator-grid {
@@ -17,14 +17,20 @@
 }
 
 .report-box {
-    border: 1px solid #eef0f2;
+    border: 1px solid #e2e8f0;
     border-radius: 12px;
     padding: 1.5rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     background: #ffffff;
-    transition: 0.2s;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.report-box:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.06);
 }
 
 .report-box-top {
@@ -36,27 +42,27 @@
 .report-box-icon {
     width: 45px;
     height: 45px;
-    border-radius: 8px;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 1.2rem;
 }
 
-.blue-bg { background: #e7f3ff; color: #1877f2; }
-.green-bg { background: #e6fcf5; color: #0ca678; }
-.purple-bg { background: #f3f0ff; color: #7950f2; }
-.orange-bg { background: #fff4e6; color: #fd7e14; }
+.blue-light { background-color: #eff6ff; color: #1d4ed8; }
+.green-light { background-color: #f0fdf4; color: #15803d; }
+.purple-light { background-color: #faf5ff; color: #7e22ce; }
+.orange-light { background-color: #fff7ed; color: #c2410c; }
 
 .report-box-txt h4 {
     font-size: 1rem;
     margin-bottom: 5px;
-    color: #333;
+    color: #111827;
 }
 
 .report-box-txt p {
     font-size: 0.85rem;
-    color: #666;
+    color: #6b7280;
     line-height: 1.4;
 }
 
@@ -64,18 +70,18 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-top: 1px solid #eee;
+    border-top: 1px solid #f3f4f6;
     padding-top: 1rem;
 }
 
 .report-box-bottom span {
     font-size: 0.8rem;
-    color: #888;
+    color: #9ca3af;
 }
 
 .btn-gen {
     padding: 8px 15px;
-    border-radius: 6px;
+    border-radius: 8px;
     font-size: 0.85rem;
     font-weight: 600;
     cursor: pointer;
@@ -83,12 +89,20 @@
     display: flex;
     align-items: center;
     gap: 8px;
+    transition: 0.2s;
 }
 
-.btn-blue { background: #1877f2; color: #fff; }
-.btn-green { background: #0ca678; color: #fff; }
-.btn-purple { background: #7950f2; color: #fff; }
-.btn-orange { background: #fd7e14; color: #fff; }
+.btn-blue { background: #3b82f6; color: #fff; }
+.btn-blue:hover { background: #2563eb; }
+
+.btn-green { background: #10b981; color: #fff; }
+.btn-green:hover { background: #059669; }
+
+.btn-purple { background: #8b5cf6; color: #fff; }
+.btn-purple:hover { background: #7c3aed; }
+
+.btn-orange { background: #f97316; color: #fff; }
+.btn-orange:hover { background: #ea580c; }
 
 /* Custom generator form controls */
 .custom-generator-form {
@@ -112,16 +126,22 @@
 .input-field-block label {
     font-size: 0.9rem;
     font-weight: 600;
-    color: #495057;
+    color: #4b5563;
 }
 
 .custom-select {
     padding: 12px;
     border-radius: 8px;
-    border: 1px solid #ced4da;
+    border: 1.5px solid #e2e8f0;
     background: #fff;
     font-size: 0.95rem;
     cursor: pointer;
+    outline: none;
+    transition: 0.2s;
+}
+
+.custom-select:focus {
+    border-color: #800000;
 }
 
 .btn-wide {
@@ -131,23 +151,35 @@
     font-weight: 600;
     border: none;
     cursor: pointer;
+    background: #800000;
+    color: #fff;
+    transition: 0.2s;
+}
+
+.btn-wide:hover {
+    background: #600000;
 }
 
 /* Download Traces */
 .downloads-stack {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 15px;
 }
 
 .download-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1.2rem;
-    border-radius: 8px;
-    background: #f8f9fa;
-    border: 1px solid #eef0f2;
+    padding: 12px;
+    border-radius: 10px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    transition: 0.2s;
+}
+
+.download-item:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
 .download-left {
@@ -158,16 +190,16 @@
 
 .pdf-icon {
     font-size: 1.5rem;
-    color: #e03131;
+    color: #ef4444;
 }
 
 .pdf-info h4 {
     font-size: 0.95rem;
-    margin-bottom: 5px;
-    color: #333;
+    margin-bottom: 4px;
+    color: #111827;
 }
 
 .pdf-info p {
     font-size: 0.8rem;
-    color: #888;
+    color: #9ca3af;
 }
