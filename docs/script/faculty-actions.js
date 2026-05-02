@@ -851,53 +851,27 @@ window.FacultyActions = {
         const isPickup = type === 'pickup';
         const overlay = document.createElement('div');
         overlay.id = 'qr-scanner-overlay';
-        overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,23,42,0.8);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:10000;animation:fadeIn 0.2s ease;';
+        overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,23,42,0.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:10000;animation:fadeIn 0.2s ease;';
 
-        const icon = isPickup ? 'fa-box-open' : 'fa-box';
         const iconColor = isPickup ? '#10b981' : '#800000';
-        const title = isPickup ? 'Scan Pickup QR' : 'Scan Return QR';
-        const subtitle = isPickup ? 'Scan the student\'s QR code to confirm item pickup' : 'Scan the student\'s return QR to confirm item return';
-        const btnText = isPickup ? 'Confirm Pickup' : 'Confirm Return';
-        const btnClass = isPickup ? 'btn-action-approve' : 'btn-action-reject';
+        const title = isPickup ? 'Pickup QR Code' : 'Return QR Code';
+        const subtitle = isPickup ? 'Show this to the student to confirm item pickup.' : 'Show this to the student to confirm item return.';
+        const code = 'QR-' + Date.now().toString(36).toUpperCase();
 
-        overlay.innerHTML = '<div style="background:#fff;width:95%;max-width:420px;border-radius:20px;padding:30px;box-shadow:0 25px 50px rgba(0,0,0,0.25);animation:modalPop 0.3s cubic-bezier(0.175,0.885,0.32,1.275);">' +
-            '<div style="text-align:center;margin-bottom:20px;">' +
-            '<div style="width:60px;height:60px;background:' + (isPickup ? '#ecfdf5' : '#fef2f2') + ';border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;"><i class="fas ' + icon + '" style="font-size:1.5rem;color:' + iconColor + ';"></i></div>' +
-            '<h3 style="margin:0;color:#1e293b;font-size:1.3rem;">' + title + '</h3>' +
-            '<p style="color:#64748b;font-size:0.85rem;margin-top:5px;">' + subtitle + '</p>' +
+        overlay.innerHTML = '<div style="background:#fff;width:90%;max-width:380px;border-radius:20px;padding:30px;text-align:center;box-shadow:0 25px 50px rgba(0,0,0,0.25);animation:modalPop 0.3s cubic-bezier(0.175,0.885,0.32,1.275);">' +
+            '<div style="width:60px;height:60px;background:' + (isPickup ? '#ecfdf5' : '#fef2f2') + ';border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 15px;"><i class="fas fa-qrcode" style="font-size:1.5rem;color:' + iconColor + ';"></i></div>' +
+            '<h3 style="margin:0 0 5px;color:#1e293b;">' + title + '</h3>' +
+            '<p style="color:#64748b;font-size:0.85rem;margin-bottom:15px;">' + subtitle + '</p>' +
+            '<div style="width:200px;height:200px;margin:0 auto 15px;background:linear-gradient(135deg,#f8fafc,#e2e8f0);border-radius:15px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:2px solid #cbd5e1;">' +
+            '<i class="fas fa-qrcode" style="font-size:5rem;color:#1e293b;margin-bottom:8px;"></i>' +
+            '<span style="font-family:monospace;font-size:0.8rem;font-weight:700;color:#800000;">' + code + '</span>' +
             '</div>' +
-            '<div style="position:relative;width:100%;height:240px;background:#0f172a;border-radius:14px;overflow:hidden;margin-bottom:20px;">' +
-            '<div style="position:absolute;top:0;left:0;width:100%;height:100%;background:repeating-linear-gradient(0deg,transparent,transparent 12px,rgba(128,0,0,0.05) 12px,rgba(128,0,0,0.05) 24px),repeating-linear-gradient(90deg,transparent,transparent 12px,rgba(128,0,0,0.05) 12px,rgba(128,0,0,0.05) 24px);animation:scanMove 2s ease-in-out infinite alternate;"></div>' +
-            '<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:180px;height:180px;border:3px solid ' + iconColor + ';border-radius:12px;box-shadow:0 0 0 100px rgba(0,0,0,0.4);">' +
-            '<div style="position:absolute;top:-2px;left:-2px;width:20px;height:20px;border-top:4px solid ' + iconColor + ';border-left:4px solid ' + iconColor + ';border-radius:4px 0 0 0;"></div>' +
-            '<div style="position:absolute;top:-2px;right:-2px;width:20px;height:20px;border-top:4px solid ' + iconColor + ';border-right:4px solid ' + iconColor + ';border-radius:0 4px 0 0;"></div>' +
-            '<div style="position:absolute;bottom:-2px;left:-2px;width:20px;height:20px;border-bottom:4px solid ' + iconColor + ';border-left:4px solid ' + iconColor + ';border-radius:0 0 0 4px;"></div>' +
-            '<div style="position:absolute;bottom:-2px;right:-2px;width:20px;height:20px;border-bottom:4px solid ' + iconColor + ';border-right:4px solid ' + iconColor + ';border-radius:0 0 4px 0;"></div>' +
-            '<div style="position:absolute;top:0;left:0;width:100%;height:3px;background:' + iconColor + ';box-shadow:0 0 8px ' + iconColor + ';animation:scanLine 1.5s ease-in-out infinite alternate;"></div>' +
-            '</div>' +
-            '<div style="position:absolute;bottom:12px;left:0;right:0;text-align:center;color:#94a3b8;font-size:0.78rem;"><i class="fas fa-camera"></i> Simulated scanner — click Confirm to proceed</div>' +
-            '</div>' +
-            '<div style="display:flex;gap:10px;">' +
-            '<button id="qrScanCancelBtn" style="flex:1;padding:12px;background:#f1f5f9;color:#4b5563;border:none;border-radius:10px;font-weight:700;cursor:pointer;">Cancel</button>' +
-            '<button id="qrScanConfirmBtn" style="flex:1;padding:12px;background:' + (isPickup ? '#10b981' : '#800000') + ';color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;">' + btnText + '</button>' +
-            '</div>' +
+            '<button id="qrScanConfirmBtn" style="width:100%;background:#800000;color:#fff;border:none;padding:12px;border-radius:10px;font-weight:700;cursor:pointer;">' + (isPickup ? 'Confirm Pickup' : 'Confirm Return') + '</button>' +
             '</div>';
         document.body.appendChild(overlay);
 
-        const scanStyle = document.createElement('style');
-        scanStyle.id = 'qr-scanner-anim';
-        scanStyle.textContent = '@keyframes scanMove { 0% { background-position: 0 0; } 100% { background-position: 0 24px; } } @keyframes scanLine { 0% { top: 10px; } 100% { top: calc(100% - 3px); } }';
-        document.head.appendChild(scanStyle);
-
-        document.getElementById('qrScanCancelBtn').onclick = () => { overlay.remove(); const s = document.getElementById('qr-scanner-anim'); if (s) s.remove(); };
-        overlay.onclick = (e) => { if (e.target === overlay) { overlay.remove(); const s = document.getElementById('qr-scanner-anim'); if (s) s.remove(); } };
-
-        document.getElementById('qrScanConfirmBtn').onclick = () => {
-            overlay.remove();
-            const s = document.getElementById('qr-scanner-anim');
-            if (s) s.remove();
-            if (onScan) onScan();
-        };
+        document.getElementById('qrScanConfirmBtn').onclick = () => { overlay.remove(); if (onScan) onScan(); };
+        overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
     },
 
     scanPickupQR: function(requestId) {
