@@ -8,48 +8,73 @@
     <link rel="stylesheet" href="../../css/faculty-interface/faculty-dashboard.css">
     <link rel="stylesheet" href="../../css/faculty-interface/faculty-departmentgear.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="../../script/auth.js" defer></script>
+    <!-- Instant Sidebar State Check -->
+    <script>
+        (function() {
+            const isMinimized = localStorage.getItem('sidebarMinimized') === 'true';
+            if (isMinimized) {
+                document.documentElement.classList.add('sidebar-is-minimized');
+            }
+        })();
+    </script>
+    <style>
+        .sidebar-is-minimized .sidebar { width: 80px !important; padding: 2rem 0.5rem !important; transition: none !important; }
+        .sidebar-is-minimized .dashboard-content { margin-left: 80px !important; transition: none !important; }
+        .sidebar-is-minimized .profile-info, .sidebar-is-minimized .sidebar-nav span, .sidebar-is-minimized .sidebar-logout span { display: none !important; }
+        .sidebar-is-minimized .sidebar-nav a { justify-content: center !important; padding: 12px 0 !important; }
+        .sidebar-is-minimized .sidebar-nav i { font-size: 1.2rem !important; margin: 0 !important; }
+        .sidebar-is-minimized .sidebar-profile { justify-content: center !important; padding-bottom: 1.5rem !important; }
+    </style>
 </head>
 <body>
 
     <header class="navbar">
-        <div class="logo">WMSU <span>KitCycle</span></div>
-        <div class="nav-right">
-            <ul class="nav-links">
-                <li><a href="faculty-dashboard.html">Dashboard</a></li>
-                <li><a href="marketplace.html">Marketplace</a></li>
-                <li><a href="howitworks.html">How It Works</a></li>
-                <li><a href="safety.html">Safety</a></li>
+        <div class="nav-left-group">
+            <div class="sidebar-toggle" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </div>
+            <div class="logo">
+                <img src="../../images/wmsulogo.png" alt="WMSU Logo" class="nav-logo-img">
+                <div class="logo-text">WMSU<span>KitCycle</span></div>
+            </div>
+        </div>
+        <div class="nav-right" style="display: flex; align-items: center; gap: 30px;">
+            <ul class="nav-links" style="display: flex; list-style: none; gap: 25px; align-items: center; margin: 0;">
+                <li><a href="faculty-dashboard.html">Home</a></li>
+                <li><a href="../marketplace.html">Marketplace</a></li>
+                <li><a href="../howitworks.html">How It Works</a></li>
+                <li><a href="../safety.html">Safety</a></li>
             </ul>
             <div class="auth-buttons">
-                <span class="user-profile-nav"><i class="fas fa-user-circle"></i> Dr. Juan Dela Cruz</span>
-                <a href="../login.html" class="btn-login"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                <!-- Injected by auth.js -->
             </div>
         </div>
     </header>
 
     <div class="dashboard-layout">
 
-        <aside class="sidebar">
+        <aside class="sidebar" id="sidebar">
             <div class="sidebar-profile">
-                <div class="profile-avatar">D</div>
+                <div class="profile-avatar"><img id="sidebarProfileImg" src="../../images/ace_profile.png" alt="Profile"></div>
                 <div class="profile-info">
-                    <h4>Dr. Juan Dela Cruz</h4>
-                    <span>Faculty</span>
+                    <h4 id="sidebarUserName">Ace Lorenz C. Patongan</h4>
+                    <span id="sidebarUserRole">Faculty</span>
                 </div>
             </div>
 
             <ul class="sidebar-nav">
-                <li><a href="faculty-dashboard.html"><i class="fas fa-th-large"></i> Dashboard</a></li>
-                <li class="active"><a href="faculty-gear.html"><i class="fas fa-boxes"></i> Departmental Gear</a></li>
-                <li><a href="faculty-approvals.html"><i class="fas fa-clipboard-check"></i> Approval Queue</a></li>
-                <li><a href="faculty-rentals.html"><i class="fas fa-clock"></i> Active Rentals</a></li>
-                <li><a href="faculty-reports.html"><i class="fas fa-chart-pie"></i> Reports</a></li>
+                <li><a href="faculty-dashboard.html"><i class="fas fa-th-large"></i> <span>Dashboard</span></a></li>
+                <li class="active"><a href="faculty-departmentgear.html"><i class="fas fa-boxes"></i> <span>Departmental Gear</span></a></li>
+                <li><a href="faculty-approvals.html"><i class="fas fa-clipboard-check"></i> <span>Approvals</span></a></li>
+                <li><a href="faculty-rentals.html"><i class="fas fa-clock"></i> <span>Active Rentals</span></a></li>
+                <li><a href="faculty-reports.html"><i class="fas fa-chart-pie"></i> <span>Reports</span></a></li>
             </ul>
 
             <a href="javascript:void(0)" onclick="AuthSystem.confirmLogout(); return false;" class="sidebar-logout"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
         </aside>
 
-        <main class="dashboard-content">
+        <main class="dashboard-content" id="mainContent">
 
             <div class="dashboard-banner flex-banner">
                 <div>
@@ -87,7 +112,7 @@
 
                 <div class="gear-card">
                     <div class="gear-image">
-                        <img src="images/microscope.jpeg" alt="Engineering Microscope Set">
+                        <img src="../../images/microscope.jpeg" alt="Engineering Microscope Set">
                         <span class="stock-badge available">Available</span>
                     </div>
                     <div class="gear-info">
@@ -114,7 +139,7 @@
 
                 <div class="gear-card">
                     <div class="gear-image">
-                        <img src="images/calculator.jpg" alt="Scientific Calculators">
+                        <img src="../../images/calculator.jpg" alt="Scientific Calculators">
                         <span class="stock-badge available">Available</span>
                     </div>
                     <div class="gear-info">
@@ -141,7 +166,7 @@
 
                 <div class="gear-card">
                     <div class="gear-image">
-                        <img src="images/camera.jpg" alt="Video Recording Equipment">
+                        <img src="../../images/camera.jpg" alt="Video Recording Equipment">
                         <span class="stock-badge unavailable">Unavailable</span>
                         <div class="all-borrowed-overlay">All Borrowed</div>
                     </div>
@@ -169,7 +194,7 @@
 
                 <div class="gear-card">
                     <div class="gear-image">
-                        <img src="images/multimeters.jpg" alt="Digital Multimeters">
+                        <img src="../../images/multimeters.jpg" alt="Digital Multimeters">
                         <span class="stock-badge available">Available</span>
                     </div>
                     <div class="gear-info">
@@ -196,7 +221,7 @@
 
                 <div class="gear-card">
                     <div class="gear-image">
-                        <img src="images/books.jpeg" alt="Engineering Reference Books">
+                        <img src="../../images/books.jpeg" alt="Engineering Reference Books">
                         <span class="stock-badge available">Available</span>
                     </div>
                     <div class="gear-info">
@@ -223,7 +248,7 @@
 
                 <div class="gear-card">
                     <div class="gear-image">
-                        <img src="images/oscilloscopes.jpg" alt="Oscilloscopes">
+                        <img src="../../images/oscilloscopes.jpg" alt="Oscilloscopes">
                         <span class="stock-badge available">Available</span>
                     </div>
                     <div class="gear-info">
@@ -252,6 +277,25 @@
 
         </main>
     </div>
+
+    <script>
+        function toggleSidebar() {
+            document.documentElement.classList.remove('sidebar-is-minimized');
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            const isMinimized = sidebar.classList.toggle('minimized');
+            mainContent.classList.toggle('expanded');
+            localStorage.setItem('sidebarMinimized', isMinimized);
+        }
+
+        window.onload = function() {
+            const isMinimized = localStorage.getItem('sidebarMinimized') === 'true';
+            if (isMinimized) {
+                document.getElementById('sidebar').classList.add('minimized');
+                document.getElementById('mainContent').classList.add('expanded');
+            }
+        };
+    </script>
 
 </body>
 </html>

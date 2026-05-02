@@ -121,7 +121,7 @@ const DEFAULT_REQUESTS = [
         user: 'Ezra Fitz',
         item: 'Laboratory Microscope',
         date: 'Yesterday',
-        avatar: '../../images/faculty_avatar.png'
+        avatar: '../../images/ace_profile.png'
     }
 ];
 

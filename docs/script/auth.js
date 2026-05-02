@@ -14,7 +14,7 @@ window.AuthSystem = {
         { email: 'juan@wmsu.edu.ph',    password: 'student', role: 'student', name: 'Juan Dela Cruz', profilePic: 'juan_profile.png' },
         { email: 'elena@wmsu.edu.ph',   password: 'student', role: 'student', name: 'Elena Rodriguez', profilePic: 'elena_profile.png' },
         { email: 'admin@wmsu.edu.ph',   password: 'admin',   role: 'admin',   name: 'Admin Officer',  profilePic: null },
-        { email: 'faculty@wmsu.edu.ph', password: 'faculty', role: 'faculty', name: 'Prof. Gomez',    profilePic: 'faculty_avatar.png' }
+        { email: 'faculty@wmsu.edu.ph', password: 'faculty', role: 'faculty', name: 'Ace Lorenz C. Patongan',    profilePic: 'ace_profile.png' }
     ],
 
     /* ── 1. Authenticate — validates email + password ──────── */
