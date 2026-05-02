@@ -119,7 +119,7 @@ window.FacultyActions = {
         overlay.innerHTML = `
             <div style="background:#fff;width:95%;max-width:480px;border-radius:20px;padding:30px;box-shadow:0 25px 50px rgba(0,0,0,0.25);animation:modalPop 0.3s cubic-bezier(0.175,0.885,0.32,1.275);">
                 <div style="text-align:center;margin-bottom:20px;">
-                    <div style="width:60px;height:60px;background:#fef2f2;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;"><i class="fas fa-times-circle" style="font-size:1.5rem;color:#ef4444;"></i></div>
+                    <div style="width:60px;height:60px;background:#fef2f2;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;"><i class="fas fa-times-circle" style="font-size:1.5rem;color:#800000;"></i></div>
                     <h3 style="margin:0;color:#1e293b;font-size:1.2rem;">Reject Request</h3>
                     <p style="color:#64748b;font-size:0.85rem;margin-top:5px;">Select a reason for rejection</p>
                 </div>
@@ -151,7 +151,7 @@ window.FacultyActions = {
                 </div>
                 <div style="display:flex;gap:10px;">
                     <button id="rejectCancelBtn" style="flex:1;padding:12px;background:#f1f5f9;color:#4b5563;border:none;border-radius:10px;font-weight:700;cursor:pointer;">Cancel</button>
-                    <button id="rejectConfirmBtn" style="flex:1;padding:12px;background:#ef4444;color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;opacity:0.5;pointer-events:none;">Confirm Rejection</button>
+                    <button id="rejectConfirmBtn" style="flex:1;padding:12px;background:#800000;color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;opacity:0.5;pointer-events:none;">Confirm Rejection</button>
                 </div>
             </div>
         `;
@@ -172,7 +172,7 @@ window.FacultyActions = {
             radio.onchange = () => {
                 resetHighlights();
                 options[idx].style.borderColor = '#800000';
-                options[idx].style.background = '#fef2f2';
+                options[idx].style.background = '#fff5f5';
                 confirmBtn.style.opacity = '1';
                 confirmBtn.style.pointerEvents = 'auto';
             };
@@ -459,6 +459,9 @@ window.FacultyActions = {
 
         const badge = document.getElementById('sidebarReqBadge');
         if (badge) badge.textContent = pending.length;
+
+        const renderFn = window.renderAllRequests;
+        if (typeof renderFn === 'function') renderFn();
     },
 
     /* ── Render Equipment Grid ── */
@@ -838,6 +841,113 @@ window.FacultyActions = {
             localStorage.setItem('kitcycle_messages', JSON.stringify(defaults));
         }
         return JSON.parse(localStorage.getItem('kitcycle_messages'));
+    },
+
+    /* ── QR Scan Modal (Reusable for Pickup & Return) ── */
+    showQRScanner: function(type, requestId, onScan) {
+        const existing = document.getElementById('qr-scanner-overlay');
+        if (existing) existing.remove();
+
+        const isPickup = type === 'pickup';
+        const overlay = document.createElement('div');
+        overlay.id = 'qr-scanner-overlay';
+        overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,23,42,0.8);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:10000;animation:fadeIn 0.2s ease;';
+
+        const icon = isPickup ? 'fa-box-open' : 'fa-box';
+        const iconColor = isPickup ? '#10b981' : '#800000';
+        const title = isPickup ? 'Scan Pickup QR' : 'Scan Return QR';
+        const subtitle = isPickup ? 'Scan the student\'s QR code to confirm item pickup' : 'Scan the student\'s return QR to confirm item return';
+        const btnText = isPickup ? 'Confirm Pickup' : 'Confirm Return';
+        const btnClass = isPickup ? 'btn-action-approve' : 'btn-action-reject';
+
+        overlay.innerHTML = '<div style="background:#fff;width:95%;max-width:420px;border-radius:20px;padding:30px;box-shadow:0 25px 50px rgba(0,0,0,0.25);animation:modalPop 0.3s cubic-bezier(0.175,0.885,0.32,1.275);">' +
+            '<div style="text-align:center;margin-bottom:20px;">' +
+            '<div style="width:60px;height:60px;background:' + (isPickup ? '#ecfdf5' : '#fef2f2') + ';border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;"><i class="fas ' + icon + '" style="font-size:1.5rem;color:' + iconColor + ';"></i></div>' +
+            '<h3 style="margin:0;color:#1e293b;font-size:1.3rem;">' + title + '</h3>' +
+            '<p style="color:#64748b;font-size:0.85rem;margin-top:5px;">' + subtitle + '</p>' +
+            '</div>' +
+            '<div style="position:relative;width:100%;height:240px;background:#0f172a;border-radius:14px;overflow:hidden;margin-bottom:20px;">' +
+            '<div style="position:absolute;top:0;left:0;width:100%;height:100%;background:repeating-linear-gradient(0deg,transparent,transparent 12px,rgba(128,0,0,0.05) 12px,rgba(128,0,0,0.05) 24px),repeating-linear-gradient(90deg,transparent,transparent 12px,rgba(128,0,0,0.05) 12px,rgba(128,0,0,0.05) 24px);animation:scanMove 2s ease-in-out infinite alternate;"></div>' +
+            '<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:180px;height:180px;border:3px solid ' + iconColor + ';border-radius:12px;box-shadow:0 0 0 100px rgba(0,0,0,0.4);">' +
+            '<div style="position:absolute;top:-2px;left:-2px;width:20px;height:20px;border-top:4px solid ' + iconColor + ';border-left:4px solid ' + iconColor + ';border-radius:4px 0 0 0;"></div>' +
+            '<div style="position:absolute;top:-2px;right:-2px;width:20px;height:20px;border-top:4px solid ' + iconColor + ';border-right:4px solid ' + iconColor + ';border-radius:0 4px 0 0;"></div>' +
+            '<div style="position:absolute;bottom:-2px;left:-2px;width:20px;height:20px;border-bottom:4px solid ' + iconColor + ';border-left:4px solid ' + iconColor + ';border-radius:0 0 0 4px;"></div>' +
+            '<div style="position:absolute;bottom:-2px;right:-2px;width:20px;height:20px;border-bottom:4px solid ' + iconColor + ';border-right:4px solid ' + iconColor + ';border-radius:0 0 4px 0;"></div>' +
+            '<div style="position:absolute;top:0;left:0;width:100%;height:3px;background:' + iconColor + ';box-shadow:0 0 8px ' + iconColor + ';animation:scanLine 1.5s ease-in-out infinite alternate;"></div>' +
+            '</div>' +
+            '<div style="position:absolute;bottom:12px;left:0;right:0;text-align:center;color:#94a3b8;font-size:0.78rem;"><i class="fas fa-camera"></i> Simulated scanner — click Confirm to proceed</div>' +
+            '</div>' +
+            '<div style="display:flex;gap:10px;">' +
+            '<button id="qrScanCancelBtn" style="flex:1;padding:12px;background:#f1f5f9;color:#4b5563;border:none;border-radius:10px;font-weight:700;cursor:pointer;">Cancel</button>' +
+            '<button id="qrScanConfirmBtn" style="flex:1;padding:12px;background:' + (isPickup ? '#10b981' : '#800000') + ';color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;">' + btnText + '</button>' +
+            '</div>' +
+            '</div>';
+        document.body.appendChild(overlay);
+
+        const scanStyle = document.createElement('style');
+        scanStyle.id = 'qr-scanner-anim';
+        scanStyle.textContent = '@keyframes scanMove { 0% { background-position: 0 0; } 100% { background-position: 0 24px; } } @keyframes scanLine { 0% { top: 10px; } 100% { top: calc(100% - 3px); } }';
+        document.head.appendChild(scanStyle);
+
+        document.getElementById('qrScanCancelBtn').onclick = () => { overlay.remove(); const s = document.getElementById('qr-scanner-anim'); if (s) s.remove(); };
+        overlay.onclick = (e) => { if (e.target === overlay) { overlay.remove(); const s = document.getElementById('qr-scanner-anim'); if (s) s.remove(); } };
+
+        document.getElementById('qrScanConfirmBtn').onclick = () => {
+            overlay.remove();
+            const s = document.getElementById('qr-scanner-anim');
+            if (s) s.remove();
+            if (onScan) onScan();
+        };
+    },
+
+    scanPickupQR: function(requestId) {
+        const requests = this._getRequests();
+        const req = requests.find(r => r.id === requestId);
+        if (!req) return;
+
+        this.showQRScanner('pickup', requestId, () => {
+            req.status = 'Picked Up';
+            req.pickupDate = new Date().toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: 'numeric' });
+            this._saveRequests(requests);
+
+            const equipment = this._getEquipment();
+            const eq = equipment.find(e => e.name === req.item);
+            if (eq && eq.available > 0) {
+                eq.available -= 1;
+                eq.borrowed += 1;
+                this._saveEquipment(equipment);
+            }
+
+            if (typeof UIUtils !== 'undefined' && UIUtils.showToast) {
+                UIUtils.showToast('Pickup confirmed for ' + req.student + ' — ' + req.item, 'success');
+            }
+
+            if (typeof this._refreshApprovals === 'function') this._refreshApprovals();
+        });
+    },
+
+    scanReturnQR: function(rentalId) {
+        const requests = this._getRequests();
+        const req = requests.find(r => r.id === rentalId);
+        if (!req) return;
+
+        this.showQRScanner('return', rentalId, () => {
+            req.status = 'Returned';
+            req.returnDate = new Date().toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: 'numeric' });
+            this._saveRequests(requests);
+
+            const equipment = this._getEquipment();
+            const eq = equipment.find(e => e.name === req.item);
+            if (eq) {
+                eq.available += 1;
+                eq.borrowed = Math.max(0, eq.borrowed - 1);
+                this._saveEquipment(equipment);
+            }
+
+            if (typeof UIUtils !== 'undefined' && UIUtils.showToast) {
+                UIUtils.showToast('Return confirmed — ' + req.item + ' is back in inventory', 'success');
+            }
+        });
     },
 
     viewEquipment: function(id) {
