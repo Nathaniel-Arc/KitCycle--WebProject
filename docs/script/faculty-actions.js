@@ -1279,8 +1279,10 @@ window.FacultyActions = {
         const pendingBadge = document.querySelector('.pill-badge');
         if (pendingBadge) pendingBadge.textContent = `${pendingReqs} Pending`;
 
-        const storedName = localStorage.getItem('userName');
+        const storedName = localStorage.getItem('facultyProfileName');
         if (storedName) {
+            const sidebarName = document.getElementById('sidebarUserName');
+            if (sidebarName) sidebarName.textContent = storedName;
             const firstName = storedName.split(' ').pop();
             const bannerGreeting = document.querySelector('.dashboard-banner p');
             if (bannerGreeting) bannerGreeting.textContent = `Welcome back, Professor ${firstName}. Manage departmental assets and approvals here.`;

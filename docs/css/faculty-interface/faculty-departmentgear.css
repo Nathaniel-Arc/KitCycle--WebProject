@@ -7,11 +7,11 @@
 }
 
 .btn-add-gear {
-    background: #800000;
-    color: #fff;
+    background: #ffd700;
+    color: #111827;
     border: none;
     padding: 12px 24px;
-    border-radius: 10px;
+    border-radius: 12px;
     font-weight: 700;
     cursor: pointer;
     font-size: 0.9rem;
@@ -19,10 +19,11 @@
     align-items: center;
     gap: 8px;
     transition: 0.2s;
+    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
 }
 
 .btn-add-gear:hover {
-    background: #a52a2a;
+    background: #e6c200;
     transform: translateY(-2px);
 }
 
