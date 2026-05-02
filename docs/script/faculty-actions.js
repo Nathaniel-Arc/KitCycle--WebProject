@@ -204,92 +204,157 @@ window.FacultyActions = {
 
         const overlay = document.createElement('div');
         overlay.id = 'add-equipment-overlay';
+        overlay.className = 'modal-overlay';
         overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,23,42,0.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:10000;animation:fadeIn 0.2s ease;';
 
         overlay.innerHTML = `
-            <div style="background:#fff;width:95%;max-width:620px;border-radius:20px;padding:30px;box-shadow:0 25px 50px rgba(0,0,0,0.25);animation:modalPop 0.3s cubic-bezier(0.175,0.885,0.32,1.275);max-height:90vh;overflow-y:auto;">
-                <div style="text-align:center;margin-bottom:20px;">
-                    <div style="width:60px;height:60px;background:#eff6ff;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;"><i class="fas fa-plus-circle" style="font-size:1.5rem;color:#1d4ed8;"></i></div>
-                    <h3 style="margin:0;color:#1e293b;font-size:1.3rem;">Add New Equipment</h3>
-                    <p style="color:#64748b;font-size:0.85rem;margin-top:5px;">List details of the item for students to rent</p>
+            <div style="background:#fff;width:95%;max-width:800px;border-radius:24px;overflow:hidden;box-shadow:0 25px 50px -12px rgba(0,0,0,0.3);border:1px solid rgba(128,0,0,0.1);animation:modalPop 0.3s cubic-bezier(0.175,0.885,0.32,1.275);">
+                <div style="background:linear-gradient(rgba(128,0,0,0.5),rgba(128,0,0,0.5)),url('../../images/wmsu_campus.png');background-size:cover;background-position:center;padding:40px 30px;color:white;display:flex;justify-content:space-between;align-items:center;position:relative;">
+                    <div style="position:relative;z-index:2;">
+                        <h3 style="margin:0;font-size:1.6rem;display:flex;align-items:center;gap:12px;font-weight:800;text-shadow:0 2px 4px rgba(0,0,0,0.3);"><i class="fas fa-plus-circle"></i> Add New Equipment</h3>
+                        <p style="margin:5px 0 0 0;opacity:0.9;font-size:0.9rem;font-weight:500;">List departmental equipment for students to rent</p>
+                    </div>
+                    <i class="fas fa-times" id="addEqCloseX" style="cursor:pointer;font-size:1.5rem;opacity:0.8;transition:0.2s;position:relative;z-index:2;"></i>
                 </div>
-
-                <div style="display:flex;flex-direction:column;gap:16px;">
-                    <div>
-                        <label style="font-weight:700;color:#1e293b;font-size:0.9rem;display:block;margin-bottom:6px;"><i class="fas fa-camera" style="color:#800000;margin-right:5px;"></i>Equipment Photos</label>
-                        <div id="photoPreviewGrid" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px;min-height:40px;"></div>
-                        <label style="display:inline-flex;align-items:center;gap:8px;padding:10px 18px;background:#f1f5f9;border:1.5px dashed #cbd5e1;border-radius:10px;cursor:pointer;font-size:0.85rem;font-weight:600;color:#4b5563;transition:0.2s;">
-                            <i class="fas fa-upload"></i> Upload Photos
-                            <input type="file" id="equipmentPhotos" accept="image/*" multiple style="display:none;" onchange="FacultyActions._handlePhotoUpload(this)">
-                        </label>
-                        <p style="font-size:0.75rem;color:#9ca3af;margin-top:4px;">Upload 1 or more photos showing the item</p>
-                    </div>
-
-                    <div>
-                        <label style="font-weight:700;color:#1e293b;font-size:0.9rem;display:block;margin-bottom:6px;">Item Name *</label>
-                        <input type="text" id="eqName" placeholder="e.g. Engineering Microscope Set" style="width:100%;padding:12px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:0.9rem;outline:none;">
-                    </div>
-
-                    <div>
-                        <label style="font-weight:700;color:#1e293b;font-size:0.9rem;display:block;margin-bottom:6px;">Category *</label>
-                        <select id="eqCategory" style="width:100%;padding:12px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:0.9rem;outline:none;cursor:pointer;background:#fff;">
-                            <option value="">Select a category</option>
-                            <option value="Academic Tools">Academic Tools</option>
-                            <option value="Media Equipment">Media Equipment</option>
-                            <option value="Laboratory Equipment">Laboratory Equipment</option>
-                            <option value="Textbooks">Textbooks</option>
-                        </select>
-                    </div>
-
-                    <div style="display:flex;gap:12px;">
-                        <div style="flex:1;">
-                            <label style="font-weight:700;color:#1e293b;font-size:0.9rem;display:block;margin-bottom:6px;">Total Quantity *</label>
-                            <input type="number" id="eqQuantity" min="1" value="1" placeholder="1" style="width:100%;padding:12px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:0.9rem;outline:none;">
+                <form id="addEqForm" style="padding:30px;text-align:left;max-height:75vh;overflow-y:auto;">
+                    <div style="display:flex;gap:30px;flex-wrap:wrap;">
+                        <div style="flex:1;min-width:280px;display:flex;flex-direction:column;gap:20px;">
+                            <div>
+                                <label style="display:block;font-weight:700;color:#1e293b;margin-bottom:8px;">Equipment Photos</label>
+                                <input type="file" id="equipmentPhotos" accept="image/*" style="display:none;">
+                                <div id="photoUploadArea" style="border:2px dashed #cbd5e1;border-radius:15px;height:160px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#f8fafc;cursor:pointer;transition:0.2s;overflow:hidden;position:relative;">
+                                    <div id="photoUploadPlaceholder" style="text-align:center;">
+                                        <i class="fas fa-cloud-upload-alt" style="font-size:2.2rem;color:#94a3b8;margin-bottom:10px;"></i>
+                                        <br>
+                                        <span style="font-size:0.85rem;color:#64748b;font-weight:600;">Drag & drop or <span style="color:#800000;">browse</span></span>
+                                    </div>
+                                    <div id="photoPreviewGrid" style="display:flex;gap:10px;flex-wrap:wrap;width:100%;height:100%;padding:10px;overflow:auto;display:none;"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <label style="display:block;font-weight:700;color:#1e293b;margin-bottom:8px;">Description</label>
+                                <textarea id="eqDescription" placeholder="Describe the equipment, included accessories, and usage guidelines..." style="width:100%;height:120px;padding:12px 15px;border:1.5px solid #e2e8f0;border-radius:12px;font-size:0.95rem;outline:none;transition:0.2s;resize:none;font-family:inherit;" onfocus="this.style.borderColor='#800000'"></textarea>
+                            </div>
+                            <div>
+                                <label style="display:block;font-weight:700;color:#1e293b;margin-bottom:8px;">Storage Location</label>
+                                <div style="position:relative;">
+                                    <i class="fas fa-map-marker-alt" style="position:absolute;left:15px;top:50%;transform:translateY(-50%);color:#94a3b8;"></i>
+                                    <input type="text" id="eqLocation" placeholder="e.g. Engineering Lab Room 301" style="width:100%;padding:12px 15px 12px 40px;border:1.5px solid #e2e8f0;border-radius:12px;font-size:0.95rem;outline:none;transition:0.2s;" onfocus="this.style.borderColor='#800000'">
+                                </div>
+                            </div>
                         </div>
-                        <div style="flex:1;">
-                            <label style="font-weight:700;color:#1e293b;font-size:0.9rem;display:block;margin-bottom:6px;">Price per Day (₱) *</label>
-                            <input type="number" id="eqPrice" min="0" placeholder="150" style="width:100%;padding:12px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:0.9rem;outline:none;">
+                        <div style="flex:1.2;min-width:300px;display:flex;flex-direction:column;gap:20px;">
+                            <div>
+                                <label style="display:block;font-weight:700;color:#1e293b;margin-bottom:8px;">Item Name</label>
+                                <input type="text" id="eqName" required placeholder="e.g. Engineering Microscope Set" style="width:100%;padding:12px 15px;border:1.5px solid #e2e8f0;border-radius:12px;font-size:0.95rem;outline:none;transition:0.2s;" onfocus="this.style.borderColor='#800000'">
+                            </div>
+                            <div style="display:flex;gap:15px;">
+                                <div style="flex:1;">
+                                    <label style="display:block;font-weight:700;color:#1e293b;margin-bottom:8px;">Category</label>
+                                    <div style="position:relative;">
+                                        <select id="eqCategory" required style="width:100%;padding:12px 15px;border:1.5px solid #e2e8f0;border-radius:12px;font-size:0.95rem;appearance:none;outline:none;background:#fff;cursor:pointer;" onfocus="this.style.borderColor='#800000'">
+                                            <option value="">Select a category</option>
+                                            <option>Media Equipment</option>
+                                            <option>Academic Tools</option>
+                                            <option>Textbooks</option>
+                                            <option>Laboratory Equipment</option>
+                                        </select>
+                                        <i class="fas fa-chevron-down" style="position:absolute;right:15px;top:50%;transform:translateY(-50%);color:#94a3b8;pointer-events:none;"></i>
+                                    </div>
+                                </div>
+                                <div style="flex:1;">
+                                    <label style="display:block;font-weight:700;color:#1e293b;margin-bottom:8px;">Condition</label>
+                                    <div style="position:relative;">
+                                        <select id="eqCondition" style="width:100%;padding:12px 15px;border:1.5px solid #e2e8f0;border-radius:12px;font-size:0.95rem;appearance:none;outline:none;background:#fff;cursor:pointer;" onfocus="this.style.borderColor='#800000'">
+                                            <option>Excellent</option>
+                                            <option>Good</option>
+                                            <option>Fair</option>
+                                        </select>
+                                        <i class="fas fa-chevron-down" style="position:absolute;right:15px;top:50%;transform:translateY(-50%);color:#94a3b8;pointer-events:none;"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <label style="display:block;font-weight:700;color:#1e293b;margin-bottom:8px;">Total Quantity</label>
+                                <input type="number" id="eqQuantity" min="1" value="1" style="width:100%;padding:12px 15px;border:1.5px solid #e2e8f0;border-radius:12px;font-size:0.95rem;outline:none;transition:0.2s;" onfocus="this.style.borderColor='#800000'">
+                            </div>
+                            <div style="background:#f8fafc;padding:20px;border-radius:15px;border:1px solid #e2e8f0;">
+                                <label style="display:block;font-weight:800;color:#1e293b;margin-bottom:15px;font-size:0.85rem;text-transform:uppercase;letter-spacing:0.5px;">Flexible Pricing (₱)</label>
+                                <div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;">
+                                    <div>
+                                        <label style="display:block;font-size:0.8rem;font-weight:700;color:#64748b;margin-bottom:5px;">Per Hour</label>
+                                        <input type="number" id="eqPriceHourly" placeholder="0" style="width:100%;padding:10px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:0.9rem;outline:none;" onfocus="this.style.borderColor='#800000'">
+                                    </div>
+                                    <div>
+                                        <label style="display:block;font-size:0.8rem;font-weight:700;color:#64748b;margin-bottom:5px;">Per Day *</label>
+                                        <input type="number" id="eqPrice" required placeholder="150" style="width:100%;padding:10px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:0.9rem;outline:none;border-color:#800000;" onfocus="this.style.borderColor='#800000'">
+                                    </div>
+                                    <div>
+                                        <label style="display:block;font-size:0.8rem;font-weight:700;color:#64748b;margin-bottom:5px;">Per Week</label>
+                                        <input type="number" id="eqPriceWeekly" placeholder="0" style="width:100%;padding:10px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:0.9rem;outline:none;" onfocus="this.style.borderColor='#800000'">
+                                    </div>
+                                    <div>
+                                        <label style="display:block;font-size:0.8rem;font-weight:700;color:#64748b;margin-bottom:5px;">Per Month</label>
+                                        <input type="number" id="eqPriceMonthly" placeholder="0" style="width:100%;padding:10px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:0.9rem;outline:none;" onfocus="this.style.borderColor='#800000'">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-
-                    <div>
-                        <label style="font-weight:700;color:#1e293b;font-size:0.9rem;display:block;margin-bottom:6px;">Storage Location</label>
-                        <input type="text" id="eqLocation" placeholder="e.g. Engineering Lab Room 301" style="width:100%;padding:12px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:0.9rem;outline:none;">
+                    <div style="display:flex;gap:15px;justify-content:flex-end;margin-top:30px;">
+                        <button type="button" id="addEqCancelBtn" style="padding:12px 25px;border:none;border-radius:12px;font-weight:700;cursor:pointer;background:#f1f5f9;color:#4b5563;transition:0.2s;">Cancel</button>
+                        <button type="submit" style="padding:12px 35px;border:none;border-radius:12px;font-weight:700;cursor:pointer;background:#800000;color:#fff;box-shadow:0 4px 12px rgba(128,0,0,0.25);transition:0.2s;">Add Equipment</button>
                     </div>
-
-                    <div>
-                        <label style="font-weight:700;color:#1e293b;font-size:0.9rem;display:block;margin-bottom:6px;">Description</label>
-                        <textarea id="eqDescription" placeholder="Describe the equipment, included accessories, usage guidelines..." style="width:100%;padding:12px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:0.9rem;resize:vertical;min-height:80px;outline:none;font-family:inherit;"></textarea>
-                    </div>
-
-                    <div>
-                        <label style="font-weight:700;color:#1e293b;font-size:0.9rem;display:block;margin-bottom:6px;">Condition</label>
-                        <select id="eqCondition" style="width:100%;padding:12px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:0.9rem;outline:none;cursor:pointer;background:#fff;">
-                            <option value="Excellent">Excellent</option>
-                            <option value="Good">Good</option>
-                            <option value="Fair">Fair</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div style="display:flex;gap:10px;margin-top:20px;">
-                    <button id="addEqCancelBtn" style="flex:1;padding:12px;background:#f1f5f9;color:#4b5563;border:none;border-radius:10px;font-weight:700;cursor:pointer;">Cancel</button>
-                    <button id="addEqSaveBtn" style="flex:1;padding:12px;background:#800000;color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;">Add Equipment</button>
-                </div>
+                </form>
             </div>
         `;
         document.body.appendChild(overlay);
 
         window._facultyUploadedPhotos = [];
 
-        document.getElementById('addEqCancelBtn').onclick = () => { overlay.remove(); window._facultyUploadedPhotos = []; };
-        overlay.onclick = (e) => { if (e.target === overlay) { overlay.remove(); window._facultyUploadedPhotos = []; } };
+        const photoUploadArea = document.getElementById('photoUploadArea');
+        const photoInput = document.getElementById('equipmentPhotos');
+        const uploadPlaceholder = document.getElementById('photoUploadPlaceholder');
+        const previewGrid = document.getElementById('photoPreviewGrid');
 
-        document.getElementById('addEqSaveBtn').onclick = () => {
+        photoUploadArea.onclick = (e) => { if (e.target.tagName !== 'BUTTON') photoInput.click(); };
+        photoUploadArea.onmouseover = () => { photoUploadArea.style.borderColor = '#800000'; photoUploadArea.style.background = '#fef2f2'; };
+        photoUploadArea.onmouseout = () => { photoUploadArea.style.borderColor = '#cbd5e1'; photoUploadArea.style.background = '#f8fafc'; };
+
+        photoInput.onchange = function() {
+            const files = this.files;
+            for (let i = 0; i < files.length; i++) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    window._facultyUploadedPhotos.push(e.target.result);
+                    uploadPlaceholder.style.display = 'none';
+                    previewGrid.style.display = 'flex';
+                    const idx = window._facultyUploadedPhotos.length - 1;
+                    const thumb = document.createElement('div');
+                    thumb.style.cssText = 'width:100px;height:100px;border-radius:10px;overflow:hidden;position:relative;border:1.5px solid #e2e8f0;flex-shrink:0;';
+                    thumb.innerHTML = '<img src="' + e.target.result + '" style="width:100%;height:100%;object-fit:cover;"><button onclick="event.stopPropagation();FacultyActions._removeAddPhoto(' + idx + ',this)" style="position:absolute;top:3px;right:3px;width:22px;height:22px;border-radius:50%;background:#ef4444;color:#fff;border:none;cursor:pointer;font-size:0.7rem;display:flex;align-items:center;justify-content:center;">x</button>';
+                    previewGrid.appendChild(thumb);
+                };
+                reader.readAsDataURL(files[i]);
+            }
+            this.value = '';
+        };
+
+        function closeAddModal() { overlay.remove(); window._facultyUploadedPhotos = []; }
+
+        document.getElementById('addEqCloseX').onclick = closeAddModal;
+        document.getElementById('addEqCancelBtn').onclick = closeAddModal;
+        overlay.onclick = (e) => { if (e.target === overlay) closeAddModal(); };
+
+        document.getElementById('addEqForm').onsubmit = (e) => {
+            e.preventDefault();
             const name = document.getElementById('eqName').value.trim();
             const category = document.getElementById('eqCategory').value;
             const quantity = parseInt(document.getElementById('eqQuantity').value) || 1;
             const price = parseInt(document.getElementById('eqPrice').value) || 0;
+            const priceHourly = document.getElementById('eqPriceHourly').value;
+            const priceWeekly = document.getElementById('eqPriceWeekly').value;
+            const priceMonthly = document.getElementById('eqPriceMonthly').value;
             const location = document.getElementById('eqLocation').value.trim() || 'Faculty Storage';
             const description = document.getElementById('eqDescription').value.trim();
             const condition = document.getElementById('eqCondition').value;
@@ -314,6 +379,9 @@ window.FacultyActions = {
                 location: location,
                 lastMaintained: dateStr,
                 price: price,
+                priceHourly: priceHourly,
+                priceWeekly: priceWeekly,
+                priceMonthly: priceMonthly,
                 image: image,
                 images: [...window._facultyUploadedPhotos],
                 description: description,
@@ -326,31 +394,253 @@ window.FacultyActions = {
         };
     },
 
-    /* ── Photo Upload Handler ── */
-    _handlePhotoUpload: function(input) {
-        const files = input.files;
-        const grid = document.getElementById('photoPreviewGrid');
-        for (let i = 0; i < files.length; i++) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                window._facultyUploadedPhotos.push(e.target.result);
-                const idx = window._facultyUploadedPhotos.length - 1;
-                const thumb = document.createElement('div');
-                thumb.style.cssText = 'width:80px;height:80px;border-radius:10px;overflow:hidden;position:relative;border:1.5px solid #e2e8f0;';
-                thumb.innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;"><button onclick="FacultyActions._removePhoto(${idx}, this)" style="position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;background:#ef4444;color:#fff;border:none;cursor:pointer;font-size:0.6rem;display:flex;align-items:center;justify-content:center;">x</button>`;
-                grid.appendChild(thumb);
-            };
-            reader.readAsDataURL(files[i]);
-        }
-        input.value = '';
-    },
-
-    _removePhoto: function(idx, btn) {
+    _removeAddPhoto: function(idx, btn) {
         window._facultyUploadedPhotos[idx] = null;
         btn.parentElement.remove();
+        if (window._facultyUploadedPhotos.filter(Boolean).length === 0) {
+            document.getElementById('photoUploadPlaceholder').style.display = 'block';
+            document.getElementById('photoPreviewGrid').style.display = 'none';
+        }
     },
 
-    /* ── Approve Request ── */
+    /* ── Edit Equipment Modal ── */
+    editEquipment: function(id) {
+        const equipment = this._getEquipment();
+        const eq = equipment.find(e => e.id === id);
+        if (!eq) return;
+
+        const existing = document.getElementById('edit-equipment-overlay');
+        if (existing) existing.remove();
+
+        const overlay = document.createElement('div');
+        overlay.id = 'edit-equipment-overlay';
+        overlay.className = 'modal-overlay';
+        overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,23,42,0.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:10000;animation:fadeIn 0.2s ease;';
+
+        const imagePreviewSrc = eq.images && eq.images.length > 0 ? eq.images[0] : eq.image || '';
+        const hasImage = !!imagePreviewSrc;
+
+        overlay.innerHTML = `
+            <div style="background:#fff;width:95%;max-width:800px;border-radius:24px;overflow:hidden;box-shadow:0 25px 50px -12px rgba(0,0,0,0.3);border:1px solid rgba(128,0,0,0.1);animation:modalPop 0.3s cubic-bezier(0.175,0.885,0.32,1.275);">
+                <div style="background:linear-gradient(rgba(128,0,0,0.5),rgba(128,0,0,0.5)),url('../../images/wmsu_campus.png');background-size:cover;background-position:center;padding:40px 30px;color:white;display:flex;justify-content:space-between;align-items:center;position:relative;">
+                    <div style="position:relative;z-index:2;">
+                        <h3 style="margin:0;font-size:1.6rem;display:flex;align-items:center;gap:12px;font-weight:800;text-shadow:0 2px 4px rgba(0,0,0,0.3);"><i class="fas fa-edit"></i> Edit Equipment</h3>
+                        <p style="margin:5px 0 0 0;opacity:0.9;font-size:0.9rem;font-weight:500;">Update the details of this item</p>
+                    </div>
+                    <i class="fas fa-times" id="editEqCloseX" style="cursor:pointer;font-size:1.5rem;opacity:0.8;transition:0.2s;position:relative;z-index:2;"></i>
+                </div>
+                <form id="editEqForm" style="padding:30px;text-align:left;max-height:75vh;overflow-y:auto;">
+                    <div style="display:flex;gap:30px;flex-wrap:wrap;">
+                        <div style="flex:1;min-width:280px;display:flex;flex-direction:column;gap:20px;">
+                            <div>
+                                <label style="display:block;font-weight:700;color:#1e293b;margin-bottom:8px;">Equipment Photos</label>
+                                <input type="file" id="editEquipmentPhotos" accept="image/*" style="display:none;">
+                                <div id="editPhotoUploadArea" style="border:2px dashed #cbd5e1;border-radius:15px;height:160px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#f8fafc;cursor:pointer;transition:0.2s;overflow:hidden;position:relative;">
+                                    <div id="editUploadPlaceholder" style="${hasImage ? 'display:none;' : 'text-align:center;'}">
+                                        <i class="fas fa-cloud-upload-alt" style="font-size:2.2rem;color:#94a3b8;margin-bottom:10px;"></i>
+                                        <br>
+                                        <span style="font-size:0.85rem;color:#64748b;font-weight:600;">Drag & drop or <span style="color:#800000;">browse</span></span>
+                                    </div>
+                                    <img id="editImagePreview" src="${imagePreviewSrc}" style="${hasImage ? 'display:block;' : 'display:none;'}width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0;">
+                                    <div id="editPhotoPreviewGrid" style="display:flex;gap:10px;flex-wrap:wrap;width:100%;height:100%;padding:10px;overflow:auto;${hasImage ? '' : 'display:none;'}"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <label style="display:block;font-weight:700;color:#1e293b;margin-bottom:8px;">Description</label>
+                                <textarea id="editEqDescription" placeholder="Describe the equipment..." style="width:100%;height:120px;padding:12px 15px;border:1.5px solid #e2e8f0;border-radius:12px;font-size:0.95rem;outline:none;transition:0.2s;resize:none;font-family:inherit;" onfocus="this.style.borderColor='#800000'">${eq.description || ''}</textarea>
+                            </div>
+                            <div>
+                                <label style="display:block;font-weight:700;color:#1e293b;margin-bottom:8px;">Storage Location</label>
+                                <div style="position:relative;">
+                                    <i class="fas fa-map-marker-alt" style="position:absolute;left:15px;top:50%;transform:translateY(-50%);color:#94a3b8;"></i>
+                                    <input type="text" id="editEqLocation" value="${eq.location}" placeholder="e.g. Engineering Lab Room 301" style="width:100%;padding:12px 15px 12px 40px;border:1.5px solid #e2e8f0;border-radius:12px;font-size:0.95rem;outline:none;transition:0.2s;" onfocus="this.style.borderColor='#800000'">
+                                </div>
+                            </div>
+                        </div>
+                        <div style="flex:1.2;min-width:300px;display:flex;flex-direction:column;gap:20px;">
+                            <div>
+                                <label style="display:block;font-weight:700;color:#1e293b;margin-bottom:8px;">Item Name</label>
+                                <input type="text" id="editEqName" value="${eq.name}" required placeholder="e.g. Engineering Microscope Set" style="width:100%;padding:12px 15px;border:1.5px solid #e2e8f0;border-radius:12px;font-size:0.95rem;outline:none;transition:0.2s;" onfocus="this.style.borderColor='#800000'">
+                            </div>
+                            <div style="display:flex;gap:15px;">
+                                <div style="flex:1;">
+                                    <label style="display:block;font-weight:700;color:#1e293b;margin-bottom:8px;">Category</label>
+                                    <div style="position:relative;">
+                                        <select id="editEqCategory" style="width:100%;padding:12px 15px;border:1.5px solid #e2e8f0;border-radius:12px;font-size:0.95rem;appearance:none;outline:none;background:#fff;cursor:pointer;" onfocus="this.style.borderColor='#800000'">
+                                            <option ${eq.category === 'Media Equipment' ? 'selected' : ''}>Media Equipment</option>
+                                            <option ${eq.category === 'Academic Tools' ? 'selected' : ''}>Academic Tools</option>
+                                            <option ${eq.category === 'Textbooks' ? 'selected' : ''}>Textbooks</option>
+                                            <option ${eq.category === 'Laboratory Equipment' ? 'selected' : ''}>Laboratory Equipment</option>
+                                        </select>
+                                        <i class="fas fa-chevron-down" style="position:absolute;right:15px;top:50%;transform:translateY(-50%);color:#94a3b8;pointer-events:none;"></i>
+                                    </div>
+                                </div>
+                                <div style="flex:1;">
+                                    <label style="display:block;font-weight:700;color:#1e293b;margin-bottom:8px;">Condition</label>
+                                    <div style="position:relative;">
+                                        <select id="editEqCondition" style="width:100%;padding:12px 15px;border:1.5px solid #e2e8f0;border-radius:12px;font-size:0.95rem;appearance:none;outline:none;background:#fff;cursor:pointer;" onfocus="this.style.borderColor='#800000'">
+                                            <option ${eq.condition === 'Excellent' ? 'selected' : ''}>Excellent</option>
+                                            <option ${eq.condition === 'Good' ? 'selected' : ''}>Good</option>
+                                            <option ${eq.condition === 'Fair' ? 'selected' : ''}>Fair</option>
+                                        </select>
+                                        <i class="fas fa-chevron-down" style="position:absolute;right:15px;top:50%;transform:translateY(-50%);color:#94a3b8;pointer-events:none;"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <label style="display:block;font-weight:700;color:#1e293b;margin-bottom:8px;">Total Quantity</label>
+                                <input type="number" id="editEqQuantity" min="1" value="${eq.quantity}" style="width:100%;padding:12px 15px;border:1.5px solid #e2e8f0;border-radius:12px;font-size:0.95rem;outline:none;transition:0.2s;" onfocus="this.style.borderColor='#800000'">
+                            </div>
+                            <div style="background:#f8fafc;padding:20px;border-radius:15px;border:1px solid #e2e8f0;">
+                                <label style="display:block;font-weight:800;color:#1e293b;margin-bottom:15px;font-size:0.85rem;text-transform:uppercase;letter-spacing:0.5px;">Flexible Pricing (₱)</label>
+                                <div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;">
+                                    <div>
+                                        <label style="display:block;font-size:0.8rem;font-weight:700;color:#64748b;margin-bottom:5px;">Per Hour</label>
+                                        <input type="number" id="editEqPriceHourly" value="${eq.priceHourly || ''}" placeholder="0" style="width:100%;padding:10px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:0.9rem;outline:none;" onfocus="this.style.borderColor='#800000'">
+                                    </div>
+                                    <div>
+                                        <label style="display:block;font-size:0.8rem;font-weight:700;color:#64748b;margin-bottom:5px;">Per Day *</label>
+                                        <input type="number" id="editEqPrice" value="${eq.price}" required placeholder="150" style="width:100%;padding:10px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:0.9rem;outline:none;border-color:#800000;" onfocus="this.style.borderColor='#800000'">
+                                    </div>
+                                    <div>
+                                        <label style="display:block;font-size:0.8rem;font-weight:700;color:#64748b;margin-bottom:5px;">Per Week</label>
+                                        <input type="number" id="editEqPriceWeekly" value="${eq.priceWeekly || ''}" placeholder="0" style="width:100%;padding:10px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:0.9rem;outline:none;" onfocus="this.style.borderColor='#800000'">
+                                    </div>
+                                    <div>
+                                        <label style="display:block;font-size:0.8rem;font-weight:700;color:#64748b;margin-bottom:5px;">Per Month</label>
+                                        <input type="number" id="editEqPriceMonthly" value="${eq.priceMonthly || ''}" placeholder="0" style="width:100%;padding:10px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:0.9rem;outline:none;" onfocus="this.style.borderColor='#800000'">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display:flex;gap:15px;justify-content:flex-end;margin-top:30px;">
+                        <button type="button" id="editEqDeleteBtn" style="padding:12px 25px;border:none;border-radius:12px;font-weight:700;cursor:pointer;background:#fef2f2;color:#ef4444;transition:0.2s;margin-right:auto;"><i class="fas fa-trash"></i> Delete</button>
+                        <button type="button" id="editEqCancelBtn" style="padding:12px 25px;border:none;border-radius:12px;font-weight:700;cursor:pointer;background:#f1f5f9;color:#4b5563;transition:0.2s;">Cancel</button>
+                        <button type="submit" style="padding:12px 35px;border:none;border-radius:12px;font-weight:700;cursor:pointer;background:#800000;color:#fff;box-shadow:0 4px 12px rgba(128,0,0,0.25);transition:0.2s;">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+
+        window._editEqId = id;
+        window._editUploadedPhotos = eq.images ? [...eq.images].filter(Boolean) : [];
+
+        const photoUploadArea = document.getElementById('editPhotoUploadArea');
+        const photoInput = document.getElementById('editEquipmentPhotos');
+        const uploadPlaceholder = document.getElementById('editUploadPlaceholder');
+        const imgPreview = document.getElementById('editImagePreview');
+        const previewGrid = document.getElementById('editPhotoPreviewGrid');
+
+        photoUploadArea.onclick = (e) => { if (e.target.tagName !== 'BUTTON') photoInput.click(); };
+        photoUploadArea.onmouseover = () => { photoUploadArea.style.borderColor = '#800000'; photoUploadArea.style.background = '#fef2f2'; };
+        photoUploadArea.onmouseout = () => { photoUploadArea.style.borderColor = '#cbd5e1'; photoUploadArea.style.background = '#f8fafc'; };
+
+        photoInput.onchange = function() {
+            const files = this.files;
+            for (let i = 0; i < files.length; i++) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    window._editUploadedPhotos.push(e.target.result);
+                    imgPreview.style.display = 'block';
+                    imgPreview.src = e.target.result;
+                    uploadPlaceholder.style.display = 'none';
+                    previewGrid.style.display = 'flex';
+                    const idx = window._editUploadedPhotos.length - 1;
+                    const thumb = document.createElement('div');
+                    thumb.style.cssText = 'width:100px;height:100px;border-radius:10px;overflow:hidden;position:relative;border:1.5px solid #e2e8f0;flex-shrink:0;';
+                    thumb.innerHTML = '<img src="' + e.target.result + '" style="width:100%;height:100%;object-fit:cover;"><button onclick="event.stopPropagation();FacultyActions._removeEditPhoto(' + idx + ',this)" style="position:absolute;top:3px;right:3px;width:22px;height:22px;border-radius:50%;background:#ef4444;color:#fff;border:none;cursor:pointer;font-size:0.7rem;display:flex;align-items:center;justify-content:center;">x</button>';
+                    previewGrid.appendChild(thumb);
+                };
+                reader.readAsDataURL(files[i]);
+            }
+            this.value = '';
+        };
+
+        if (window._editUploadedPhotos.length > 0) {
+            imgPreview.style.display = 'block';
+            imgPreview.src = window._editUploadedPhotos[0];
+            uploadPlaceholder.style.display = 'none';
+            previewGrid.style.display = 'flex';
+            window._editUploadedPhotos.forEach((src, idx) => {
+                if (!src) return;
+                const thumb = document.createElement('div');
+                thumb.style.cssText = 'width:100px;height:100px;border-radius:10px;overflow:hidden;position:relative;border:1.5px solid #e2e8f0;flex-shrink:0;';
+                thumb.innerHTML = '<img src="' + src + '" style="width:100%;height:100%;object-fit:cover;"><button onclick="event.stopPropagation();FacultyActions._removeEditPhoto(' + idx + ',this)" style="position:absolute;top:3px;right:3px;width:22px;height:22px;border-radius:50%;background:#ef4444;color:#fff;border:none;cursor:pointer;font-size:0.7rem;display:flex;align-items:center;justify-content:center;">x</button>';
+                previewGrid.appendChild(thumb);
+            });
+        }
+
+        function closeEditModal() { overlay.remove(); window._editUploadedPhotos = []; }
+
+        document.getElementById('editEqCloseX').onclick = closeEditModal;
+        document.getElementById('editEqCancelBtn').onclick = closeEditModal;
+        overlay.onclick = (e) => { if (e.target === overlay) closeEditModal(); };
+
+        document.getElementById('editEqDeleteBtn').onclick = () => {
+            if (confirm('Delete "' + eq.name + '"? This action cannot be undone.')) {
+                const updated = equipment.filter(e => e.id !== id);
+                this._saveEquipment(updated);
+                this.renderEquipmentGrid();
+                overlay.remove();
+                window._editUploadedPhotos = [];
+                if (typeof UIUtils !== 'undefined' && UIUtils.showToast) UIUtils.showToast('Equipment deleted.', 'error');
+            }
+        };
+
+        document.getElementById('editEqForm').onsubmit = (e) => {
+            e.preventDefault();
+            const name = document.getElementById('editEqName').value.trim();
+            const category = document.getElementById('editEqCategory').value;
+            const quantity = parseInt(document.getElementById('editEqQuantity').value) || 1;
+            const price = parseInt(document.getElementById('editEqPrice').value) || 0;
+            const priceHourly = document.getElementById('editEqPriceHourly').value;
+            const priceWeekly = document.getElementById('editEqPriceWeekly').value;
+            const priceMonthly = document.getElementById('editEqPriceMonthly').value;
+            const available = parseInt(document.getElementById('editEqAvailable').value) || quantity;
+            const location = document.getElementById('editEqLocation').value.trim() || 'Faculty Storage';
+            const description = document.getElementById('editEqDescription').value.trim();
+            const condition = document.getElementById('editEqCondition').value;
+
+            if (!name) { alert('Please enter an item name.'); return; }
+            if (!category) { alert('Please select a category.'); return; }
+            if (price <= 0) { alert('Please enter a valid price.'); return; }
+
+            const borrowed = Math.max(0, quantity - available);
+
+            const image = window._editUploadedPhotos.length > 0 ? window._editUploadedPhotos[0] : eq.image;
+
+            const idx = equipment.findIndex(e => e.id === id);
+            if (idx === -1) return;
+
+            equipment[idx] = {
+                ...equipment[idx],
+                name: name,
+                category: category,
+                quantity: quantity,
+                available: Math.min(available, quantity),
+                borrowed: borrowed,
+                condition: condition,
+                location: location,
+                price: price,
+                priceHourly: priceHourly,
+                priceWeekly: priceWeekly,
+                priceMonthly: priceMonthly,
+                image: image,
+                images: [...window._editUploadedPhotos.filter(Boolean)],
+                description: description
+            };
+
+            this._saveEquipment(equipment);
+            this.renderEquipmentGrid();
+            overlay.remove();
+            window._editUploadedPhotos = [];
+            if (typeof UIUtils !== 'undefined' && UIUtils.showToast) UIUtils.showToast('Equipment updated successfully!', 'success');
+        };
+    },
+
+    /* ── Photo Upload Handler ── */
     approveRequest: function(requestId) {
         const requests = this._getRequests();
         const req = requests.find(r => r.id === requestId);
