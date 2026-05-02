@@ -27,6 +27,20 @@
         .sidebar-is-minimized .sidebar-nav a { justify-content: center !important; padding: 12px 0 !important; }
         .sidebar-is-minimized .sidebar-nav i { font-size: 1.2rem !important; margin: 0 !important; }
         .sidebar-is-minimized .sidebar-profile { justify-content: center !important; padding-bottom: 1.5rem !important; }
+
+        .margin-top { margin-top: 1.5rem; }
+        .full-width-card { width: 100%; }
+
+        .status-filter-bar { display: flex; gap: 10px; margin-bottom: 20px; }
+        .filter-btn { padding: 8px 20px; border-radius: 25px; border: 1.5px solid #e2e8f0; background: #fff; font-size: 0.85rem; font-weight: 700; cursor: pointer; color: #64748b; transition: 0.2s; }
+        .filter-btn:hover { border-color: #800000; color: #800000; }
+        .filter-btn.active { background: #800000; color: #fff; border-color: #800000; }
+
+        .request-panel { border-left: 4px solid #f59e0b; }
+        .request-panel.status-approved { border-left-color: #10b981; }
+        .request-panel.status-rejected { border-left-color: #ef4444; }
+        .status-pill.approved-pill { background: #f0fdf4; color: #15803d; }
+        .status-pill.rejected-pill { background: #fef2f2; color: #dc2626; }
     </style>
 </head>
 <body>
@@ -58,7 +72,7 @@
 
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-profile">
-                <div class="profile-avatar"><img id="sidebarProfileImg" src="../../images/ace_profile.png" alt="Profile"></div>
+                <div class="profile-avatar"><img id="sidebarProfileImg" src="../../images/Prof. Ace.jpg" alt="Profile"></div>
                 <div class="profile-info">
                     <h4 id="sidebarUserName">Ace Lorenz C. Patongan</h4>
                     <span id="sidebarUserRole">Faculty</span>
@@ -110,8 +124,13 @@
 
             <div class="content-card full-width-card">
                 <div class="card-header">
-                    <h3>Pending Requests</h3>
-                    <span class="pill-badge warning-bg" id="pendingBadge">5 Pending</span>
+                    <h3>Requests</h3>
+                    <div class="status-filter-bar" style="margin:0;">
+                        <button class="filter-btn active" onclick="filterRequests('all', this)">All</button>
+                        <button class="filter-btn" onclick="filterRequests('Pending', this)">Pending</button>
+                        <button class="filter-btn" onclick="filterRequests('Approved', this)">Approved</button>
+                        <button class="filter-btn" onclick="filterRequests('Rejected', this)">Rejected</button>
+                    </div>
                 </div>
 
                 <div class="requests-stack" id="requestsStack">
@@ -119,20 +138,12 @@
                 </div>
             </div>
 
-            <div class="content-card full-width-card margin-top">
-                <div class="card-header">
-                    <h3>Recent Decisions</h3>
-                </div>
-
-                <div class="decisions-stack" id="decisionsStack">
-                    <p style="text-align:center;color:#9ca3af;padding:20px;">No decisions yet. Approve or reject requests above to see them here.</p>
-                </div>
-            </div>
-
         </main>
     </div>
 
     <script>
+        let currentFilter = 'all';
+
         function toggleSidebar() {
             document.documentElement.classList.remove('sidebar-is-minimized');
             const sidebar = document.getElementById('sidebar');
@@ -142,15 +153,66 @@
             localStorage.setItem('sidebarMinimized', isMinimized);
         }
 
-        window.onload = function() {
-            const isMinimized = localStorage.getItem('sidebarMinimized') === 'true';
-            if (isMinimized) {
-                document.getElementById('sidebar').classList.add('minimized');
-                document.getElementById('mainContent').classList.add('expanded');
-            }
-            FacultyActions._refreshApprovals();
-            // Update counts
+        function filterRequests(status, btn) {
+            currentFilter = status;
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderFilteredRequests();
+        }
+
+        function renderFilteredRequests() {
             const requests = FacultyActions._getRequests();
+            let filtered = currentFilter === 'all' ? requests : requests.filter(r => r.status === currentFilter);
+            filtered = filtered.slice().reverse();
+
+            const stack = document.getElementById('requestsStack');
+            if (filtered.length === 0) {
+                stack.innerHTML = '<div style="text-align:center;padding:40px;color:#64748b;"><i class="fas fa-inbox" style="font-size:3rem;color:#cbd5e1;margin-bottom:15px;display:block;"></i><h4 style="color:#374151;margin-bottom:5px;">No Requests Found</h4><p>No requests match the current filter.</p></div>';
+            } else {
+                stack.innerHTML = filtered.map(r => {
+                    const statusClass = r.status === 'Approved' ? 'status-approved' : r.status === 'Rejected' ? 'status-rejected' : '';
+                    const pillClass = r.status === 'Approved' ? 'approved-pill' : r.status === 'Rejected' ? 'rejected-pill' : 'warning';
+                    const actionsHtml = r.status === 'Pending' ? `
+                        <div class="panel-actions">
+                            <button class="btn-action-light" onclick="alert('${r.student}\\nStudent ID: ${r.studentId}\\nItem: ${r.item}\\nDuration: ${r.duration}\\nPurpose: ${r.purpose}')"><i class="far fa-eye"></i> View Details</button>
+                            <button class="btn-action-approve" onclick="FacultyActions.approveRequest('${r.id}', this)"><i class="fas fa-check"></i> Approve</button>
+                            <button class="btn-action-reject" onclick="FacultyActions.rejectRequest('${r.id}', this)"><i class="fas fa-times"></i> Reject</button>
+                        </div>
+                    ` : `
+                        <div class="panel-actions">
+                            <span style="font-size:0.8rem;color:#64748b;padding:8px 16px;background:#f8fafc;border-radius:8px;">Decided on ${r.date}</span>
+                        </div>
+                    `;
+                    const reasonHtml = r.rejectReason ? `<p style="font-size:0.82rem;color:#ef4444;margin-top:6px;"><strong>Reason:</strong> ${r.rejectReason}${r.rejectNotes ? ' — ' + r.rejectNotes : ''}</p>` : '';
+
+                    return `
+                        <div class="request-panel ${statusClass}" id="${r.id}">
+                            <div class="panel-header">
+                                <div>
+                                    <span class="priority-pill ${r.priority === 'HIGH' ? 'high' : r.priority === 'MEDIUM' ? 'medium' : 'low'}">${r.priority}</span>
+                                    <span class="status-pill ${pillClass}">${r.status}</span>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <div class="student-meta">
+                                    <h4>${r.student}</h4>
+                                    <p>Student ID: <span>${r.studentId}</span></p>
+                                </div>
+                                <div class="item-specs">
+                                    <p><strong>Item:</strong> ${r.item}</p>
+                                    <p><strong>Duration:</strong> ${r.duration}</p>
+                                    <p><strong>Purpose:</strong> ${r.purpose}</p>
+                                    <p class="timestamp"><i class="far fa-clock"></i> Requested on ${r.date}</p>
+                                    ${reasonHtml}
+                                </div>
+                            </div>
+                            ${actionsHtml}
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            // Update counts
             const pending = requests.filter(r => r.status === 'Pending');
             const approved = requests.filter(r => r.status === 'Approved');
             const rejected = requests.filter(r => r.status === 'Rejected');
@@ -159,6 +221,15 @@
             document.getElementById('rejectedCount').textContent = rejected.length;
             const badge = document.getElementById('sidebarReqBadge');
             if (badge) badge.textContent = pending.length;
+        }
+
+        window.onload = function() {
+            const isMinimized = localStorage.getItem('sidebarMinimized') === 'true';
+            if (isMinimized) {
+                document.getElementById('sidebar').classList.add('minimized');
+                document.getElementById('mainContent').classList.add('expanded');
+            }
+            renderFilteredRequests();
         };
     </script>
 

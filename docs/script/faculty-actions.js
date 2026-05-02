@@ -484,7 +484,192 @@ window.FacultyActions = {
         const equipment = this._getEquipment();
         const eq = equipment.find(e => e.id === id);
         if (!eq) return;
-        alert(`Edit mode for: ${eq.name}\n\nFull edit form coming soon.\n\nCategory: ${eq.category}\nQuantity: ${eq.quantity}\nPrice: ₱${eq.price}/day\nLocation: ${eq.location}`);
+
+        const overlay = document.createElement('div');
+        overlay.id = 'edit-equipment-overlay';
+        overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,23,42,0.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:10000;animation:fadeIn 0.2s ease;';
+
+        overlay.innerHTML = `
+            <div style="background:#fff;width:95%;max-width:620px;border-radius:20px;padding:30px;box-shadow:0 25px 50px rgba(0,0,0,0.25);animation:modalPop 0.3s cubic-bezier(0.175,0.885,0.32,1.275);max-height:90vh;overflow-y:auto;">
+                <div style="text-align:center;margin-bottom:20px;">
+                    <div style="width:60px;height:60px;background:#fef2f2;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;"><i class="fas fa-edit" style="font-size:1.5rem;color:#800000;"></i></div>
+                    <h3 style="margin:0;color:#1e293b;font-size:1.3rem;">Edit Equipment</h3>
+                    <p style="color:#64748b;font-size:0.85rem;margin-top:5px;">Update the details of this item</p>
+                </div>
+
+                <div style="display:flex;flex-direction:column;gap:16px;">
+                    <!-- Photo Upload -->
+                    <div>
+                        <label style="font-weight:700;color:#1e293b;font-size:0.9rem;display:block;margin-bottom:6px;"><i class="fas fa-camera" style="color:#800000;margin-right:5px;"></i>Equipment Photos</label>
+                        <div id="editPhotoPreviewGrid" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px;min-height:40px;"></div>
+                        <label style="display:inline-flex;align-items:center;gap:8px;padding:10px 18px;background:#f1f5f9;border:1.5px dashed #cbd5e1;border-radius:10px;cursor:pointer;font-size:0.85rem;font-weight:600;color:#4b5563;transition:0.2s;">
+                            <i class="fas fa-upload"></i> Upload Photos
+                            <input type="file" id="editEquipmentPhotos" accept="image/*" multiple style="display:none;" onchange="FacultyActions._handleEditPhotoUpload(this)">
+                        </label>
+                        <p style="font-size:0.75rem;color:#9ca3af;margin-top:4px;">Upload 1 or more photos showing the item</p>
+                    </div>
+
+                    <!-- Item Name -->
+                    <div>
+                        <label style="font-weight:700;color:#1e293b;font-size:0.9rem;display:block;margin-bottom:6px;">Item Name *</label>
+                        <input type="text" id="editEqName" value="${eq.name}" placeholder="e.g. Engineering Microscope Set" style="width:100%;padding:12px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:0.9rem;outline:none;">
+                    </div>
+
+                    <!-- Category -->
+                    <div>
+                        <label style="font-weight:700;color:#1e293b;font-size:0.9rem;display:block;margin-bottom:6px;">Category *</label>
+                        <select id="editEqCategory" style="width:100%;padding:12px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:0.9rem;outline:none;cursor:pointer;background:#fff;">
+                            <option value="Academic Tools" ${eq.category === 'Academic Tools' ? 'selected' : ''}>Academic Tools</option>
+                            <option value="Media Equipment" ${eq.category === 'Media Equipment' ? 'selected' : ''}>Media Equipment</option>
+                            <option value="Laboratory Equipment" ${eq.category === 'Laboratory Equipment' ? 'selected' : ''}>Laboratory Equipment</option>
+                            <option value="Textbooks" ${eq.category === 'Textbooks' ? 'selected' : ''}>Textbooks</option>
+                        </select>
+                    </div>
+
+                    <!-- Quantity & Price Row -->
+                    <div style="display:flex;gap:12px;">
+                        <div style="flex:1;">
+                            <label style="font-weight:700;color:#1e293b;font-size:0.9rem;display:block;margin-bottom:6px;">Total Quantity *</label>
+                            <input type="number" id="editEqQuantity" min="1" value="${eq.quantity}" style="width:100%;padding:12px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:0.9rem;outline:none;">
+                        </div>
+                        <div style="flex:1;">
+                            <label style="font-weight:700;color:#1e293b;font-size:0.9rem;display:block;margin-bottom:6px;">Price per Day (₱) *</label>
+                            <input type="number" id="editEqPrice" min="0" value="${eq.price}" style="width:100%;padding:12px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:0.9rem;outline:none;">
+                        </div>
+                    </div>
+
+                    <!-- Available -->
+                    <div>
+                        <label style="font-weight:700;color:#1e293b;font-size:0.9rem;display:block;margin-bottom:6px;">Available Quantity</label>
+                        <input type="number" id="editEqAvailable" min="0" max="${eq.quantity}" value="${eq.available}" style="width:100%;padding:12px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:0.9rem;outline:none;">
+                    </div>
+
+                    <!-- Location -->
+                    <div>
+                        <label style="font-weight:700;color:#1e293b;font-size:0.9rem;display:block;margin-bottom:6px;">Storage Location</label>
+                        <input type="text" id="editEqLocation" value="${eq.location}" placeholder="e.g. Engineering Lab Room 301" style="width:100%;padding:12px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:0.9rem;outline:none;">
+                    </div>
+
+                    <!-- Description -->
+                    <div>
+                        <label style="font-weight:700;color:#1e293b;font-size:0.9rem;display:block;margin-bottom:6px;">Description</label>
+                        <textarea id="editEqDescription" placeholder="Describe the equipment..." style="width:100%;padding:12px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:0.9rem;resize:vertical;min-height:80px;outline:none;font-family:inherit;">${eq.description || ''}</textarea>
+                    </div>
+
+                    <!-- Condition -->
+                    <div>
+                        <label style="font-weight:700;color:#1e293b;font-size:0.9rem;display:block;margin-bottom:6px;">Condition</label>
+                        <select id="editEqCondition" style="width:100%;padding:12px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:0.9rem;outline:none;cursor:pointer;background:#fff;">
+                            <option value="Excellent" ${eq.condition === 'Excellent' ? 'selected' : ''}>Excellent</option>
+                            <option value="Good" ${eq.condition === 'Good' ? 'selected' : ''}>Good</option>
+                            <option value="Fair" ${eq.condition === 'Fair' ? 'selected' : ''}>Fair</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="display:flex;gap:10px;margin-top:20px;">
+                    <button id="editEqCancelBtn" style="flex:1;padding:12px;background:#f1f5f9;color:#4b5563;border:none;border-radius:10px;font-weight:700;cursor:pointer;">Cancel</button>
+                    <button id="editEqDeleteBtn" style="flex:1;padding:12px;background:#ef4444;color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;"><i class="fas fa-trash"></i> Delete</button>
+                    <button id="editEqSaveBtn" style="flex:1;padding:12px;background:#800000;color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;">Save Changes</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+
+        window._editEqId = id;
+        window._editUploadedPhotos = eq.images ? [...eq.images].filter(Boolean) : [];
+
+        // Render existing photos
+        const grid = document.getElementById('editPhotoPreviewGrid');
+        if (window._editUploadedPhotos.length > 0) {
+            window._editUploadedPhotos.forEach((src, idx) => {
+                if (!src) return;
+                const thumb = document.createElement('div');
+                thumb.style.cssText = 'width:80px;height:80px;border-radius:10px;overflow:hidden;position:relative;border:1.5px solid #e2e8f0;';
+                thumb.innerHTML = `<img src="${src}" style="width:100%;height:100%;object-fit:cover;"><button onclick="FacultyActions._removeEditPhoto(${idx}, this)" style="position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;background:#ef4444;color:#fff;border:none;cursor:pointer;font-size:0.6rem;display:flex;align-items:center;justify-content:center;">×</button>`;
+                grid.appendChild(thumb);
+            });
+        }
+
+        document.getElementById('editEqCancelBtn').onclick = () => { overlay.remove(); window._editUploadedPhotos = []; };
+        overlay.onclick = (e) => { if (e.target === overlay) { overlay.remove(); window._editUploadedPhotos = []; } };
+
+        document.getElementById('editEqDeleteBtn').onclick = () => {
+            if (confirm(`Delete "${eq.name}"? This action cannot be undone.`)) {
+                const updated = equipment.filter(e => e.id !== id);
+                this._saveEquipment(updated);
+                this.renderEquipmentGrid();
+                overlay.remove();
+                window._editUploadedPhotos = [];
+                if (typeof UIUtils !== 'undefined' && UIUtils.showToast) UIUtils.showToast('Equipment deleted.', 'error');
+            }
+        };
+
+        document.getElementById('editEqSaveBtn').onclick = () => {
+            const name = document.getElementById('editEqName').value.trim();
+            const category = document.getElementById('editEqCategory').value;
+            const quantity = parseInt(document.getElementById('editEqQuantity').value) || 1;
+            const price = parseInt(document.getElementById('editEqPrice').value) || 0;
+            const available = parseInt(document.getElementById('editEqAvailable').value) || 0;
+            const location = document.getElementById('editEqLocation').value.trim() || 'Faculty Storage';
+            const description = document.getElementById('editEqDescription').value.trim();
+            const condition = document.getElementById('editEqCondition').value;
+
+            if (!name) { alert('Please enter an item name.'); return; }
+            if (!category) { alert('Please select a category.'); return; }
+            if (price <= 0) { alert('Please enter a valid price.'); return; }
+
+            const borrowed = quantity - available;
+            const image = window._editUploadedPhotos.length > 0 ? window._editUploadedPhotos[0] : '';
+
+            const idx = equipment.findIndex(e => e.id === id);
+            if (idx === -1) return;
+
+            equipment[idx] = {
+                ...equipment[idx],
+                name: name,
+                category: category,
+                quantity: quantity,
+                available: Math.min(available, quantity),
+                borrowed: Math.max(0, borrowed),
+                condition: condition,
+                location: location,
+                price: price,
+                image: image || equipment[idx].image,
+                images: [...window._editUploadedPhotos.filter(Boolean)],
+                description: description
+            };
+
+            this._saveEquipment(equipment);
+            this.renderEquipmentGrid();
+            overlay.remove();
+            window._editUploadedPhotos = [];
+            if (typeof UIUtils !== 'undefined' && UIUtils.showToast) UIUtils.showToast('Equipment updated successfully!', 'success');
+        };
+    },
+
+    /* ── Edit Photo Upload ── */
+    _handleEditPhotoUpload: function(input) {
+        const files = input.files;
+        const grid = document.getElementById('editPhotoPreviewGrid');
+        for (let i = 0; i < files.length; i++) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                window._editUploadedPhotos.push(e.target.result);
+                const idx = window._editUploadedPhotos.length - 1;
+                const thumb = document.createElement('div');
+                thumb.style.cssText = 'width:80px;height:80px;border-radius:10px;overflow:hidden;position:relative;border:1.5px solid #e2e8f0;';
+                thumb.innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;"><button onclick="FacultyActions._removeEditPhoto(${idx}, this)" style="position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;background:#ef4444;color:#fff;border:none;cursor:pointer;font-size:0.6rem;display:flex;align-items:center;justify-content:center;">×</button>`;
+                grid.appendChild(thumb);
+            };
+            reader.readAsDataURL(files[i]);
+        }
+        input.value = '';
+    },
+
+    _removeEditPhoto: function(idx, btn) {
+        window._editUploadedPhotos[idx] = null;
+        btn.parentElement.remove();
     },
 
     /* ── View Equipment ── */
