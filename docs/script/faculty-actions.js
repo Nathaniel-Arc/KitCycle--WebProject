@@ -9,12 +9,12 @@ window.FacultyActions = {
     _getEquipment: function() {
         if (!localStorage.getItem('kitcycle_faculty_equipment')) {
             const defaults = [
-                { id: 'eq1', name: 'Engineering Microscope Set', category: 'Laboratory Equipment', quantity: 5, available: 3, borrowed: 2, condition: 'Excellent', location: 'Engineering Lab Room 301', lastMaintained: '2/15/2026', price: 150, image: '../../images/microscope.jpeg', description: 'High-quality binocular microscope suitable for biology and chemistry lab work.' },
-                { id: 'eq2', name: 'Scientific Calculators', category: 'Academic Tools', quantity: 10, available: 7, borrowed: 3, condition: 'Good', location: 'Engineering Department Office', lastMaintained: '2/20/2026', price: 50, image: '../../images/calculator.jpg', description: 'TI-84 Plus scientific calculators for advanced mathematics.' },
-                { id: 'eq3', name: 'Video Recording Equipment', category: 'Media Equipment', quantity: 3, available: 0, borrowed: 3, condition: 'Excellent', location: 'Media Lab Room 205', lastMaintained: '2/10/2026', price: 300, image: '../../images/camera.jpg', description: 'Complete video recording kit with tripod and microphone.' },
-                { id: 'eq4', name: 'Digital Multimeters', category: 'Laboratory Equipment', quantity: 8, available: 5, borrowed: 3, condition: 'Good', location: 'Electronics Lab', lastMaintained: '2/25/2026', price: 80, image: '../../images/calc-set.png', description: 'Essential multimeters for electronics and circuit testing.' },
-                { id: 'eq5', name: 'Engineering Reference Books', category: 'Textbooks', quantity: 15, available: 12, borrowed: 3, condition: 'Good', location: 'Department Library', lastMaintained: '1/15/2026', price: 70, image: '../../images/books.jpeg', description: 'Reference books for mechanical and civil engineering.' },
-                { id: 'eq6', name: 'Oscilloscopes', category: 'Laboratory Equipment', quantity: 4, available: 2, borrowed: 2, condition: 'Excellent', location: 'Advanced Electronics Lab', lastMaintained: '3/1/2026', price: 200, image: '../../images/stethoscope.png', description: 'Digital oscilloscopes for signal analysis and testing.' }
+                { id: 'eq1', name: 'Engineering Microscope Set', category: 'Laboratory Equipment', quantity: 5, available: 3, borrowed: 2, condition: 'Excellent', location: 'Engineering Lab Room 301', lastMaintained: '2/15/2026', price: 150, serialNumber: 'WMSU-ENG-001', image: '../../images/microscope.jpeg', description: 'High-quality binocular microscope suitable for biology and chemistry lab work.' },
+                { id: 'eq2', name: 'Scientific Calculators', category: 'Academic Tools', quantity: 10, available: 7, borrowed: 3, condition: 'Good', location: 'Engineering Department Office', lastMaintained: '2/20/2026', price: 50, serialNumber: 'WMSU-CALC-002', image: '../../images/calculator.jpg', description: 'TI-84 Plus scientific calculators for advanced mathematics.' },
+                { id: 'eq3', name: 'Video Recording Equipment', category: 'Media Equipment', quantity: 3, available: 0, borrowed: 3, condition: 'Excellent', location: 'Media Lab Room 205', lastMaintained: '2/10/2026', price: 300, serialNumber: 'WMSU-MEDIA-003', image: '../../images/camera.jpg', description: 'Complete video recording kit with tripod and microphone.' },
+                { id: 'eq4', name: 'Digital Multimeters', category: 'Laboratory Equipment', quantity: 8, available: 5, borrowed: 3, condition: 'Good', location: 'Electronics Lab', lastMaintained: '2/25/2026', price: 80, serialNumber: 'WMSU-ELEC-004', image: '../../images/calc-set.png', description: 'Essential multimeters for electronics and circuit testing.' },
+                { id: 'eq5', name: 'Engineering Reference Books', category: 'Textbooks', quantity: 15, available: 12, borrowed: 3, condition: 'Good', location: 'Department Library', lastMaintained: '1/15/2026', price: 70, serialNumber: 'WMSU-LIB-005', image: '../../images/books.jpeg', description: 'Reference books for mechanical and civil engineering.' },
+                { id: 'eq6', name: 'Oscilloscopes', category: 'Laboratory Equipment', quantity: 4, available: 2, borrowed: 2, condition: 'Excellent', location: 'Advanced Electronics Lab', lastMaintained: '3/1/2026', price: 200, serialNumber: 'WMSU-ADV-006', image: '../../images/stethoscope.png', description: 'Digital oscilloscopes for signal analysis and testing.' }
             ];
             localStorage.setItem('kitcycle_faculty_equipment', JSON.stringify(defaults));
         }
@@ -22,15 +22,27 @@ window.FacultyActions = {
     },
     _saveEquipment: function(data) { localStorage.setItem('kitcycle_faculty_equipment', JSON.stringify(data)); },
 
+    /* ── Incidents Data Store ── */
+    _getIncidents: function() {
+        if (!localStorage.getItem('kitcycle_incidents')) {
+            const defaults = [
+                { id: 'inc1', student: 'Sara Lim', studentId: '2024-12349', item: 'Engineering Reference Books', type: 'Damaged', penalty: 35, status: 'Pending', date: '2/15/2026', note: 'Water damage on Chapter 4.' }
+            ];
+            localStorage.setItem('kitcycle_incidents', JSON.stringify(defaults));
+        }
+        return JSON.parse(localStorage.getItem('kitcycle_incidents'));
+    },
+    _saveIncidents: function(data) { localStorage.setItem('kitcycle_incidents', JSON.stringify(data)); },
+
     /* ── Approval Request Data Store ── */
     _getRequests: function() {
         if (!localStorage.getItem('kitcycle_faculty_requests')) {
             const defaults = [
-                { id: 'req1', student: 'Maria Santos', studentId: '2024-12345', item: 'Engineering Microscope Set', duration: '3 days', purpose: 'Materials Science Lab Project', date: '3/5/2026', priority: 'HIGH', status: 'Picked Up', pickupDate: '3/5/2026', dueDate: '3/8/2026' },
-                { id: 'req2', student: 'Juan Reyes', studentId: '2024-12346', item: 'Scientific Calculator', duration: '1 week', purpose: 'Advanced Calculus Course', date: '3/4/2026', priority: 'MEDIUM', status: 'Picked Up', pickupDate: '3/4/2026', dueDate: '3/11/2026' },
-                { id: 'req3', student: 'Anna Cruz', studentId: '2024-12347', item: 'Video Recording Equipment', duration: '2 days', purpose: 'Thesis Documentation', date: '3/3/2026', priority: 'HIGH', status: 'Picked Up', pickupDate: '3/3/2026', dueDate: '3/5/2026' },
-                { id: 'req4', student: 'Mark Tan', studentId: '2024-12348', item: 'Digital Multimeters', duration: '5 days', purpose: 'Circuit Analysis Lab', date: '3/6/2026', priority: 'LOW', status: 'Returned', pickupDate: '2/15/2026', returnDate: '2/22/2026' },
-                { id: 'req5', student: 'Sara Lim', studentId: '2024-12349', item: 'Engineering Reference Books', duration: '2 weeks', purpose: 'Research Paper Reference', date: '3/2/2026', priority: 'MEDIUM', status: 'Returned', pickupDate: '2/10/2026', returnDate: '2/15/2026' }
+                { id: 'req1', student: 'Maria Santos', studentId: '2024-12345', item: 'Engineering Microscope Set', duration: '3 days', purpose: 'Materials Science Lab Project', date: '3/5/2026', priority: 'HIGH', status: 'Picked Up', pickupDate: '3/5/2026', dueDate: '3/8/2026', totalCost: 450, amountPaid: 0, paymentStatus: 'Unpaid', paymentMethod: 'Cash', proofRef: '' },
+                { id: 'req2', student: 'Juan Reyes', studentId: '2024-12346', item: 'Scientific Calculator', duration: '1 week', purpose: 'Advanced Calculus Course', date: '3/4/2026', priority: 'MEDIUM', status: 'Picked Up', pickupDate: '3/4/2026', dueDate: '3/11/2026', totalCost: 350, amountPaid: 350, paymentStatus: 'Paid', paymentMethod: 'GCash', proofRef: 'GC-99887766' },
+                { id: 'req3', student: 'Anna Cruz', studentId: '2024-12347', item: 'Video Recording Equipment', duration: '2 days', purpose: 'Thesis Documentation', date: '3/3/2026', priority: 'HIGH', status: 'Picked Up', pickupDate: '3/3/2026', dueDate: '3/5/2026', totalCost: 600, amountPaid: 300, paymentStatus: 'Partial', paymentMethod: 'Maya', proofRef: 'MY-11223344' },
+                { id: 'req4', student: 'Mark Tan', studentId: '2024-12348', item: 'Digital Multimeters', duration: '5 days', purpose: 'Circuit Analysis Lab', date: '3/6/2026', priority: 'LOW', status: 'Returned', pickupDate: '2/15/2026', returnDate: '2/22/2026', totalCost: 400, amountPaid: 400, paymentStatus: 'Paid', paymentMethod: 'Cash', proofRef: '' },
+                { id: 'req5', student: 'Sara Lim', studentId: '2024-12349', item: 'Engineering Reference Books', duration: '2 weeks', purpose: 'Research Paper Reference', date: '3/2/2026', priority: 'MEDIUM', status: 'Returned', pickupDate: '2/10/2026', returnDate: '2/15/2026', totalCost: 70, amountPaid: 70, paymentStatus: 'Paid', paymentMethod: 'Bank Transfer', proofRef: 'BT-55667788' }
             ];
             localStorage.setItem('kitcycle_faculty_requests', JSON.stringify(defaults));
         }
@@ -1020,6 +1032,14 @@ window.FacultyActions = {
             ? '<div style="margin-top:12px;padding:12px;background:#fef2f2;border-radius:10px;"><strong style="color:#ef4444;">Rejection Reason:</strong><p style="margin:4px 0 0;color:#374151;">' + req.rejectReason + (req.rejectNotes ? ' — ' + req.rejectNotes : '') + '</p></div>'
             : '';
 
+        const paidHtml = req.totalCost != null 
+            ? '<div style="margin-top:12px;padding:12px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;"><strong style="color:#166534;"><i class="fas fa-money-bill-wave"></i> Payment Status: ' + req.paymentStatus + '</strong><div style="display:flex;justify-content:space-between;margin-top:5px;font-size:0.8rem;"><span>Total: ₱' + req.totalCost + '</span><span>Paid: ₱' + (req.amountPaid || 0) + '</span><span style="color:#dc2626;font-weight:700;">Balance: ₱' + ((req.totalCost || 0) - (req.amountPaid || 0)) + '</span></div>' + (req.paymentMethod !== 'Cash' ? '<p style="margin-top:5px;font-size:0.75rem;color:#64748b;">Method: ' + req.paymentMethod + ' | Ref: ' + (req.proofRef || 'N/A') + '</p>' : '') + '</div>' 
+            : '';
+
+        const payBtnHtml = req.paymentStatus !== 'Paid' && ['Pending', 'Approved'].includes(req.status)
+            ? '<button onclick="FacultyActions.showRecordPayment(\'' + req.id + '\')" style="margin-top:10px;width:100%;padding:10px;background:#ffd700;color:#111827;border:none;border-radius:10px;font-weight:700;cursor:pointer;"><i class="fas fa-cash-register"></i> Record Payment</button>' 
+            : '';
+
         overlay.innerHTML = '<div style="background:#fff;width:95%;max-width:520px;border-radius:20px;padding:30px;box-shadow:0 25px 50px rgba(0,0,0,0.25);animation:modalPop 0.3s cubic-bezier(0.175,0.885,0.32,1.275);">' +
             '<div style="text-align:center;margin-bottom:20px;">' +
             '<div style="width:60px;height:60px;background:' + statusColor + '15;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;"><i class="fas fa-clipboard-list" style="font-size:1.5rem;color:' + statusColor + ';"></i></div>' +
@@ -1034,7 +1054,7 @@ window.FacultyActions = {
             '<div style="display:flex;justify-content:space-between;padding:10px;background:#f8fafc;border-radius:10px;"><span><strong>Priority:</strong></span><span style="color:' + (req.priority === 'HIGH' ? '#ef4444' : req.priority === 'MEDIUM' ? '#f59e0b' : '#10b981') + ';font-weight:700;">' + req.priority + '</span></div>' +
             '<div style="display:flex;justify-content:space-between;padding:10px;background:#f8fafc;border-radius:10px;"><span><strong>Status:</strong></span><span style="color:' + statusColor + ';font-weight:700;">' + req.status + '</span></div>' +
             '<div style="display:flex;justify-content:space-between;padding:10px;background:#f8fafc;border-radius:10px;"><span><strong>Requested:</strong></span><span>' + req.date + '</span></div>' +
-            reasonHtml +
+            reasonHtml + paidHtml + payBtnHtml +
             '</div>' +
             '<button id="closeDetailsBtn" style="margin-top:20px;width:100%;padding:12px;background:#f1f5f9;color:#4b5563;border:none;border-radius:10px;font-weight:700;cursor:pointer;">Close</button>' +
             '</div>';
@@ -1042,6 +1062,62 @@ window.FacultyActions = {
 
         document.getElementById('closeDetailsBtn').onclick = () => overlay.remove();
         overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
+    },
+
+    showRecordPayment: function(reqId) {
+        const requests = this._getRequests();
+        const req = requests.find(r => r.id === reqId);
+        if (!req) return;
+
+        const balance = (req.totalCost || 0) - (req.amountPaid || 0);
+        const overlay = document.createElement('div');
+        overlay.id = 'payment-record-overlay';
+        overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,23,42,0.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:10000;animation:fadeIn 0.2s ease;';
+        overlay.innerHTML = `
+            <div style="background:#fff;width:95%;max-width:400px;border-radius:20px;padding:25px;box-shadow:0 25px 50px rgba(0,0,0,0.25);animation:modalPop 0.3s cubic-bezier(0.175,0.885,0.32,1.275);">
+                <h3 style="margin:0 0 5px;color:#1e293b;text-align:center;"><i class="fas fa-cash-register" style="color:#ffd700;"></i> Record Payment</h3>
+                <p style="text-align:center;color:#64748b;font-size:0.85rem;margin-bottom:15px;">Balance: <strong style="color:#dc2626;">₱${balance}</strong></p>
+                <div style="display:flex;flex-direction:column;gap:12px;">
+                    <label style="font-size:0.8rem;font-weight:700;color:#374151;">Payment Method</label>
+                    <select id="payMethod" style="padding:10px;border:1px solid #e2e8f0;border-radius:8px;font-size:0.9rem;">
+                        <option value="Cash">Cash</option>
+                        <option value="GCash">GCash</option>
+                        <option value="Maya">Maya</option>
+                        <option value="Bank Transfer">Bank Transfer</option>
+                    </select>
+                    <label style="font-size:0.8rem;font-weight:700;color:#374151;">Amount Paid (₱)</label>
+                    <input id="payAmount" type="number" value="${balance}" style="padding:10px;border:1px solid #e2e8f0;border-radius:8px;font-size:0.9rem;">
+                    <label style="font-size:0.8rem;font-weight:700;color:#374151;">Reference Number (if non-cash)</label>
+                    <input id="payRef" type="text" placeholder="e.g., GC-99887766" style="padding:10px;border:1px solid #e2e8f0;border-radius:8px;font-size:0.9rem;">
+                </div>
+                <div style="display:flex;gap:10px;margin-top:20px;">
+                    <button onclick="document.getElementById('payment-record-overlay').remove();" style="flex:1;padding:10px;background:#f1f5f9;color:#4b5563;border:none;border-radius:8px;font-weight:700;cursor:pointer;">Cancel</button>
+                    <button id="confirmPayBtn" style="flex:1;padding:10px;background:#10b981;color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;">Confirm</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+
+        document.getElementById('confirmPayBtn').onclick = () => {
+            const amt = parseFloat(document.getElementById('payAmount').value) || 0;
+            const method = document.getElementById('payMethod').value;
+            const ref = document.getElementById('payRef').value;
+
+            req.amountPaid = (req.amountPaid || 0) + amt;
+            req.paymentMethod = method;
+            req.proofRef = ref;
+            
+            if (req.amountPaid >= req.totalCost) {
+                req.paymentStatus = 'Paid';
+            } else if (req.amountPaid > 0) {
+                req.paymentStatus = 'Partial';
+            }
+
+            this._saveRequests(requests);
+            overlay.remove();
+            if (typeof UIUtils !== 'undefined' && UIUtils.showToast) UIUtils.showToast('₱' + amt + ' recorded successfully!', 'success');
+            this.viewEquipmentDetails(reqId);
+        };
     },
 
     viewRentalDetails: function(student, item, rented, returnDate, cost) {
@@ -1197,25 +1273,35 @@ window.FacultyActions = {
         const req = requests.find(r => r.id === requestId);
         if (!req) return;
 
-        this.showQRScanner('pickup', requestId, () => {
-            req.status = 'Picked Up';
-            req.pickupDate = new Date().toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: 'numeric' });
-            this._saveRequests(requests);
-
-            const equipment = this._getEquipment();
-            const eq = equipment.find(e => e.name === req.item);
-            if (eq && eq.available > 0) {
-                eq.available -= 1;
-                eq.borrowed += 1;
-                this._saveEquipment(equipment);
+        if (req.paymentStatus !== 'Paid') {
+            if (confirm('⚠️ Warning: This request is NOT fully paid.\n\nBalance: ₱' + ((req.totalCost || 0) - (req.amountPaid || 0)) + '\n\nDo you still want to confirm pickup?')) {
+                this.confirmPickup(requestId);
             }
+        } else {
+            this.confirmPickup(requestId);
+        }
+    },
 
-            if (typeof UIUtils !== 'undefined' && UIUtils.showToast) {
-                UIUtils.showToast('Pickup confirmed for ' + req.student + ' — ' + req.item, 'success');
-            }
+    confirmPickup: function(requestId) {
+        const requests = this._getRequests();
+        const req = requests.find(r => r.id === requestId);
+        req.status = 'Picked Up';
+        req.pickupDate = new Date().toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: 'numeric' });
+        this._saveRequests(requests);
 
-            if (typeof this._refreshApprovals === 'function') this._refreshApprovals();
-        });
+        const equipment = this._getEquipment();
+        const eq = equipment.find(e => e.name === req.item);
+        if (eq && eq.available > 0) {
+            eq.available -= 1;
+            eq.borrowed += 1;
+            this._saveEquipment(equipment);
+        }
+
+        if (typeof UIUtils !== 'undefined' && UIUtils.showToast) {
+            UIUtils.showToast('Pickup confirmed for ' + req.student + ' — ' + req.item, 'success');
+        }
+
+        if (typeof this._refreshApprovals === 'function') this._refreshApprovals();
     },
 
     scanReturnQR: function(rentalId) {
@@ -1223,60 +1309,90 @@ window.FacultyActions = {
         const req = requests.find(r => r.id === rentalId);
         if (!req) return;
 
-        this.showQRScanner('return', rentalId, () => {
+        this.showReturnInspection(req);
+    },
+
+    showReturnInspection: function(req) {
+        const equipment = this._getEquipment();
+        const eq = equipment.find(e => e.name === req.item);
+        const serial = eq ? (eq.serialNumber || 'N/A') : 'N/A';
+        const overlay = document.createElement('div');
+        overlay.id = 'return-inspection-overlay';
+        overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,23,42,0.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:10000;animation:fadeIn 0.2s ease;';
+        overlay.innerHTML = `
+            <div style="background:#fff;width:95%;max-width:420px;border-radius:20px;padding:25px;box-shadow:0 25px 50px rgba(0,0,0,0.25);animation:modalPop 0.3s cubic-bezier(0.175,0.885,0.32,1.275);max-height:90vh;overflow-y:auto;">
+                <h3 style="margin:0 0 5px;color:#1e293b;text-align:center;"><i class="fas fa-search" style="color:#3b82f6;"></i> Return Inspection</h3>
+                <p style="text-align:center;color:#64748b;font-size:0.85rem;margin-bottom:15px;">${req.item} | Serial: ${serial}</p>
+                <div style="display:flex;flex-direction:column;gap:12px;">
+                    <label style="font-size:0.8rem;font-weight:700;color:#374151;">Asset Tag Verification</label>
+                    <select id="inspTagMatch" style="padding:10px;border:1px solid #e2e8f0;border-radius:8px;font-size:0.9rem;">
+                        <option value="yes">Matches Original Tag</option>
+                        <option value="no">Tag Mismatch / Replaced</option>
+                    </select>
+                    <label style="font-size:0.8rem;font-weight:700;color:#374151;">Item Condition</label>
+                    <select id="inspCondition" style="padding:10px;border:1px solid #e2e8f0;border-radius:8px;font-size:0.9rem;" onchange="const p=document.getElementById('inspPenalty'); p.style.display=this.value==='Damaged'?'block':'none';">
+                        <option value="Matches Original">✅ Matches Original</option>
+                        <option value="Slight Wear">⚠️ Slight Wear</option>
+                        <option value="Damaged">❌ Damaged</option>
+                        <option value="Replaced">🔄 Replaced by Student</option>
+                    </select>
+                    <div id="inspPenalty" style="display:none;">
+                        <label style="font-size:0.8rem;font-weight:700;color:#374151;">Penalty Amount (₱)</label>
+                        <input id="inspPenaltyAmt" type="number" value="${Math.round((req.totalCost || 100) * 0.5)}" style="width:100%;padding:10px;border:1px solid #e2e8f0;border-radius:8px;font-size:0.9rem;">
+                    </div>
+                    <label style="font-size:0.8rem;font-weight:700;color:#374151;">Notes</label>
+                    <textarea id="inspNotes" rows="2" placeholder="Describe any damage or observations..." style="padding:10px;border:1px solid #e2e8f0;border-radius:8px;font-size:0.9rem;"></textarea>
+                </div>
+                <div style="display:flex;gap:10px;margin-top:20px;">
+                    <button onclick="document.getElementById('return-inspection-overlay').remove();" style="flex:1;padding:10px;background:#f1f5f9;color:#4b5563;border:none;border-radius:8px;font-weight:700;cursor:pointer;">Cancel</button>
+                    <button id="confirmReturnBtn" style="flex:1;padding:10px;background:#10b981;color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;">Confirm Return</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+
+        document.getElementById('confirmReturnBtn').onclick = () => {
+            const tagMatch = document.getElementById('inspTagMatch').value;
+            const condition = document.getElementById('inspCondition').value;
+            const penalty = condition === 'Damaged' ? parseFloat(document.getElementById('inspPenaltyAmt').value) || 0 : 0;
+            const notes = document.getElementById('inspNotes').value;
+
             req.status = 'Returned';
             req.returnDate = new Date().toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: 'numeric' });
-            this._saveRequests(requests);
+            req.returnCondition = condition;
+            this._saveRequests(req);
 
             const equipment = this._getEquipment();
-            const eq = equipment.find(e => e.name === req.item);
-            if (eq) {
-                eq.available += 1;
-                eq.borrowed = Math.max(0, eq.borrowed - 1);
+            const eqItem = equipment.find(e => e.name === req.item);
+            if (eqItem) {
+                eqItem.available += 1;
+                eqItem.borrowed = Math.max(0, eqItem.borrowed - 1);
+                if (condition === 'Damaged') eqItem.condition = 'Needs Repair';
                 this._saveEquipment(equipment);
             }
 
-            const historyStack = document.querySelector('.history-stack');
-            if (historyStack) {
-                const rentalPanel = document.querySelector(`button[onclick*="${rentalId}"]`)?.closest('.rental-item-panel');
-                const domImg = rentalPanel ? rentalPanel.querySelector('.rental-thumbnail img')?.src : '';
-                const imgSrc = eq && eq.image ? eq.image : (domImg || '');
-                
-                const newItem = document.createElement('div');
-                newItem.className = 'history-item';
-                newItem.innerHTML = `
-                    <div class="history-thumbnail">
-                        ${imgSrc ? `<img src="${imgSrc}" alt="${req.item}">` : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#f1f5f9;color:#9ca3af;"><i class="fas fa-box"></i></div>`}
-                    </div>
-                    <div class="history-info">
-                        <div>
-                            <h4>${req.item}</h4>
-                            <p class="owner-trace">Borrowed by ${req.student}</p>
-                            <p class="duration-trace">${req.returnDate}  •  Returned</p>
-                        </div>
-                        <span class="status-pill neutral">Completed</span>
-                    </div>
-                `;
-                historyStack.insertBefore(newItem, historyStack.firstChild);
-                newItem.style.animation = 'fadeIn 0.3s ease';
-
-                const completedBadge = document.querySelector('.card-header .pill-badge');
-                if (completedBadge) {
-                    const currentCount = parseInt(completedBadge.textContent) || 0;
-                    completedBadge.textContent = `${currentCount + 1} Completed`;
-                }
+            if (condition === 'Damaged' || tagMatch === 'no') {
+                const incidents = this._getIncidents();
+                incidents.push({
+                    id: 'inc_' + Date.now(),
+                    student: req.student,
+                    studentId: req.studentId,
+                    item: req.item,
+                    type: condition === 'Damaged' ? 'Damaged' : 'Replaced',
+                    penalty: penalty,
+                    status: 'Pending',
+                    date: new Date().toLocaleDateString(),
+                    note: notes
+                });
+                this._saveIncidents(incidents);
             }
 
-            const rentalPanel = document.querySelector(`button[onclick*="${rentalId}"]`)?.closest('.rental-item-panel');
-            if (rentalPanel) {
-                rentalPanel.style.animation = 'fadeIn 0.3s ease reverse';
-                setTimeout(() => rentalPanel.remove(), 250);
-            }
-
+            overlay.remove();
             if (typeof UIUtils !== 'undefined' && UIUtils.showToast) {
-                UIUtils.showToast('Return confirmed — ' + req.item + ' is back in inventory', 'success');
+                UIUtils.showToast('Return confirmed — ' + req.item + ' (' + condition + ')', 'success');
             }
-        });
+            if (typeof this.renderRentals === 'function') this.renderRentals();
+        };
     },
 
     viewEquipment: function(id) {
@@ -1444,6 +1560,30 @@ window.FacultyActions = {
         if (el('reportActiveRentals')) el('reportActiveRentals').textContent = activeRentals;
         if (el('reportCompleted')) el('reportCompleted').textContent = completed;
         if (el('reportUtilization')) el('reportUtilization').textContent = utilRate + '%';
+
+        const incidents = this._getIncidents();
+        const incList = document.getElementById('incidentsList');
+        if (incList) {
+            if (incidents.length === 0) {
+                incList.innerHTML = '<div style="text-align:center;padding:30px;color:#64748b;"><i class="fas fa-check-circle" style="font-size:2rem;color:#10b981;margin-bottom:10px;display:block;"></i><h4>No Incidents</h4><p>All items returned in good condition.</p></div>';
+            } else {
+                incList.innerHTML = '<div style="display:flex;flex-direction:column;gap:10px;">' + incidents.map(inc => `
+                    <div style="display:flex;align-items:center;gap:15px;padding:12px;border:1px solid #e2e8f0;border-radius:10px;background:#fff;">
+                        <div style="width:40px;height:40px;background:${inc.type === 'Damaged' ? '#fef2f2' : '#f0f9ff'};border-radius:50%;display:flex;align-items:center;justify-content:center;">
+                            <i class="fas ${inc.type === 'Damaged' ? 'fa-exclamation-triangle' : 'fa-sync-alt'}" style="color:${inc.type === 'Damaged' ? '#dc2626' : '#0ea5e9'};"></i>
+                        </div>
+                        <div style="flex:1;">
+                            <h4 style="margin:0;font-size:0.9rem;color:#1e293b;">${inc.item} — ${inc.student}</h4>
+                            <p style="margin:3px 0;font-size:0.8rem;color:#64748b;">${inc.type} | ${inc.note || 'No details provided'}</p>
+                        </div>
+                        <div style="text-align:right;">
+                            <span style="font-weight:700;color:#dc2626;">₱${inc.penalty}</span>
+                            <div style="font-size:0.75rem;color:#64748b;">${inc.status}</div>
+                        </div>
+                    </div>
+                `).join('') + '</div>';
+            }
+        }
     },
 
     initDashboard: function() {
