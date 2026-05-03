@@ -807,6 +807,39 @@ window.FacultyActions = {
         };
     },
 
+    viewListingDetails: function(listId) {
+        const listings = this._getStudentListings();
+        const l = listings.find(x => x.id === listId);
+        if (!l) return;
+
+        const existing = document.getElementById('listing-details-overlay');
+        if (existing) existing.remove();
+
+        const overlay = document.createElement('div');
+        overlay.id = 'listing-details-overlay';
+        overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,23,42,0.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:10000;animation:fadeIn 0.2s ease;';
+        
+        const photos = [l.image, l.image, l.image]; 
+        overlay.innerHTML = `
+            <div style="background:#fff;width:95%;max-width:450px;border-radius:20px;padding:25px;box-shadow:0 25px 50px rgba(0,0,0,0.25);animation:modalPop 0.3s cubic-bezier(0.175,0.885,0.32,1.275);max-height:90vh;overflow-y:auto;">
+                <h3 style="margin:0 0 5px;color:#1e293b;text-align:center;">Listing Details</h3>
+                <p style="text-align:center;color:#64748b;font-size:0.85rem;margin-bottom:15px;">${l.name} by ${l.student}</p>
+                <div style="display:flex;gap:8px;margin-bottom:15px;overflow-x:auto;">
+                    ${photos.map(p => `<div style="min-width:100px;height:100px;border-radius:10px;overflow:hidden;border:1px solid #e2e8f0;"><img src="${p}" style="width:100%;height:100%;object-fit:cover;"></div>`).join('')}
+                </div>
+                <div style="display:flex;flex-direction:column;gap:10px;font-size:0.9rem;color:#374151;">
+                    <div style="padding:10px;background:#f8fafc;border-radius:10px;"><strong>Category:</strong> ${l.category}</div>
+                    <div style="padding:10px;background:#f8fafc;border-radius:10px;"><strong>Condition:</strong> ${l.condition}</div>
+                    <div style="padding:10px;background:#f8fafc;border-radius:10px;"><strong>Price/Day:</strong> ₱${l.price}</div>
+                    <div style="padding:10px;background:#f8fafc;border-radius:10px;"><strong>Description:</strong> ${l.description}</div>
+                    <div style="padding:10px;background:#f8fafc;border-radius:10px;"><strong>Student ID:</strong> ${l.studentId}</div>
+                </div>
+                <button onclick="document.getElementById('listing-details-overlay').remove();" style="margin-top:15px;width:100%;padding:10px;background:#f1f5f9;color:#4b5563;border:none;border-radius:8px;font-weight:700;cursor:pointer;">Close</button>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+    },
+
     approveListing: function(listId) {
         const listings = this._getStudentListings();
         const listing = listings.find(l => l.id === listId);
