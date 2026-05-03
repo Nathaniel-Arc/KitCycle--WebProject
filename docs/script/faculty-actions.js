@@ -50,6 +50,19 @@ window.FacultyActions = {
     },
     _saveRequests: function(data) { localStorage.setItem('kitcycle_faculty_requests', JSON.stringify(data)); },
 
+    /* ── Student Listings Data Store ── */
+    _getStudentListings: function() {
+        if (!localStorage.getItem('kitcycle_student_listings')) {
+            const defaults = [
+                { id: 'list1', student: 'Elena Gomez', studentId: '2024-12350', name: 'Canon EOS R50', category: 'Camera', condition: 'Excellent', price: 250, image: '../../images/camera.jpg', date: '3/7/2026', status: 'Pending', description: 'Great condition DSLR for photography projects.' },
+                { id: 'list2', student: 'Mark Tan', studentId: '2024-12348', name: 'Casio FX-991EX', category: 'Calculator', condition: 'Good', price: 30, image: '../../images/calculator.jpg', date: '3/8/2026', status: 'Pending', description: 'Advanced scientific calculator.' }
+            ];
+            localStorage.setItem('kitcycle_student_listings', JSON.stringify(defaults));
+        }
+        return JSON.parse(localStorage.getItem('kitcycle_student_listings'));
+    },
+    _saveStudentListings: function(data) { localStorage.setItem('kitcycle_student_listings', JSON.stringify(data)); },
+
     /* ── Terms and Conditions Modal ── */
     showTermsModal: function(onAccept) {
         const existing = document.getElementById('terms-overlay');
@@ -705,6 +718,65 @@ window.FacultyActions = {
                 messages: [{ from: 'You', text: 'Hi ' + req.student.split(' ')[0] + ', your request for ' + req.item + ' has been approved. When would you like to pick it up?', time: 'Just now', self: true }]
             });
             this._saveMessages(msgs);
+        }
+    },
+
+    /* ── Listing Approvals ── */
+    approveListing: function(listId) {
+        const listings = this._getStudentListings();
+        const listing = listings.find(l => l.id === listId);
+        if (!listing) return;
+
+        if (typeof UIUtils !== 'undefined' && UIUtils.showModal) {
+            UIUtils.showModal({
+                title: 'Verify Student Listing',
+                message: `Mark "${listing.name}" owned by ${listing.student} as verified? This will make it visible in the Marketplace.`,
+                type: 'confirm',
+                onConfirm: (val) => {
+                    if (val) {
+                        listing.status = 'Approved';
+                        this._saveStudentListings(listings);
+                        if (typeof renderListings === 'function') renderListings();
+                        if (typeof UIUtils !== 'undefined' && UIUtils.showToast) UIUtils.showToast(`${listing.name} verified and published!`, 'success');
+                    }
+                }
+            });
+        } else {
+            if (confirm(`Verify "${listing.name}" by ${listing.student}?`)) {
+                listing.status = 'Approved';
+                this._saveStudentListings(listings);
+                if (typeof renderListings === 'function') renderListings();
+                alert('Listing verified!');
+            }
+        }
+    },
+
+    rejectListing: function(listId) {
+        const listings = this._getStudentListings();
+        const listing = listings.find(l => l.id === listId);
+        if (!listing) return;
+
+        if (typeof UIUtils !== 'undefined' && UIUtils.showModal) {
+            UIUtils.showModal({
+                title: 'Reject Listing',
+                message: `Reject "${listing.name}"? The student will be notified to fix their listing details.`,
+                type: 'confirm',
+                onConfirm: (val) => {
+                    if (val) {
+                        listing.status = 'Rejected';
+                        this._saveStudentListings(listings);
+                        if (typeof renderListings === 'function') renderListings();
+                        if (typeof UIUtils !== 'undefined' && UIUtils.showToast) UIUtils.showToast(`${listing.name} rejected.`, 'error');
+                    }
+                }
+            });
+        } else {
+            if (confirm(`Reject "${listing.name}"?`)) {
+                listing.status = 'Rejected';
+                this._saveStudentListings(listings);
+                if (typeof renderListings === 'function') renderListings();
+                alert('Listing rejected.');
+            }
         }
     },
 

@@ -117,9 +117,15 @@
             </div>
 
             <div class="content-card full-width-card">
-                <div class="card-header">
-                    <h3>All Requests</h3>
-                    <div style="display:flex; gap:10px; align-items:center;">
+                <div class="card-header" style="flex-direction:column; align-items:stretch; gap:10px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <h3 style="margin:0;">Approvals</h3>
+                        <div class="approval-tabs" style="display:flex; gap:5px;">
+                            <button class="tab-btn active" id="tabBorrow" onclick="switchApprovalTab('borrow')">Borrow Requests</button>
+                            <button class="tab-btn" id="tabListings" onclick="switchApprovalTab('listings')">Listing Verifications</button>
+                        </div>
+                    </div>
+                    <div id="borrowFilters" style="display:flex; gap:10px; align-items:center;">
                         <input type="text" id="approvalSearch" placeholder="Search student or item..." style="padding:8px 12px; border:1px solid #e2e8f0; border-radius:8px; font-size:0.85rem; outline:none; width:220px;" oninput="filterRequests(currentFilter)">
                         <div class="status-filter-bar">
                             <button class="filter-btn active" id="filterAll" onclick="filterRequests('all')">All</button>
@@ -132,12 +138,19 @@
                     </div>
                 </div>
                 <div class="requests-stack" id="requestsStack"></div>
+                <div class="requests-stack" id="listingsStack" style="display:none;"></div>
             </div>
         </main>
     </div>
 
+    <style>
+        .approval-tabs .tab-btn { padding: 8px 16px; border: 1px solid #e2e8f0; border-radius: 8px; background: #f8fafc; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .approval-tabs .tab-btn.active { background: #800000; color: #fff; border-color: #800000; }
+    </style>
+
     <script>
         let currentFilter = 'all';
+        let currentTab = 'borrow';
 
         function toggleSidebar() {
             document.documentElement.classList.remove('sidebar-is-minimized');
@@ -150,6 +163,7 @@
 
         function filterRequests(status) {
             currentFilter = status;
+            if (currentTab !== 'borrow') return;
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             const btnId = status === 'all' ? 'All' : status;
             const btn = document.getElementById('filter' + btnId);
@@ -207,6 +221,49 @@
             if (badge) badge.textContent = pending.length;
 
             if (typeof FacultyActions !== 'undefined' && FacultyActions._refreshApprovals) FacultyActions._refreshApprovals();
+        }
+
+        function switchApprovalTab(tab) {
+            currentTab = tab;
+            document.getElementById('tabBorrow').classList.toggle('active', tab === 'borrow');
+            document.getElementById('tabListings').classList.toggle('active', tab === 'listings');
+            document.getElementById('borrowFilters').style.display = tab === 'borrow' ? 'flex' : 'none';
+            document.getElementById('requestsStack').style.display = tab === 'borrow' ? 'block' : 'none';
+            document.getElementById('listingsStack').style.display = tab === 'listings' ? 'block' : 'none';
+            
+            if (tab === 'listings') renderListings();
+        }
+
+        function renderListings() {
+            const listings = FacultyActions._getStudentListings();
+            const stack = document.getElementById('listingsStack');
+            if (listings.length === 0) {
+                stack.innerHTML = '<div style="text-align:center;padding:40px;color:#64748b;"><i class="fas fa-box-open" style="font-size:3rem;color:#cbd5e1;margin-bottom:15px;display:block;"></i><h4 style="color:#374151;margin-bottom:5px;">No Listings to Verify</h4><p>All student gear is approved.</p></div>';
+            } else {
+                stack.innerHTML = listings.map(l => `
+                    <div class="request-panel ${l.status === 'Approved' ? 'status-approved' : l.status === 'Rejected' ? 'status-rejected' : ''}">
+                        <div class="panel-header"><div><span class="status-pill ${l.status === 'Approved' ? 'approved-pill' : l.status === 'Rejected' ? 'rejected-pill' : 'warning'}">${l.status}</span></div></div>
+                        <div class="panel-body">
+                            <div class="student-meta"><h4>${l.student}</h4><p>Student ID: <span>${l.studentId}</span></p></div>
+                            <div class="item-specs">
+                                <p><strong>Item:</strong> ${l.name}</p>
+                                <p><strong>Category:</strong> ${l.category}</p>
+                                <p><strong>Condition:</strong> ${l.condition}</p>
+                                <p><strong>Price/Day:</strong> ₱${l.price}</p>
+                                <p><strong>Description:</strong> ${l.description}</p>
+                                <p class="timestamp"><i class="far fa-clock"></i> Listed on ${l.date}</p>
+                            </div>
+                        </div>
+                        <div class="panel-actions">
+                            ${l.status === 'Pending' 
+                                ? `<button class="btn-action-light" onclick="alert('Viewing ${l.name}')"><i class="far fa-eye"></i> View Photos</button>
+                                   <button class="btn-action-approve" onclick="FacultyActions.approveListing('${l.id}')"><i class="fas fa-check"></i> Verify</button>
+                                   <button class="btn-action-reject" onclick="FacultyActions.rejectListing('${l.id}')"><i class="fas fa-times"></i> Reject</button>`
+                                : `<span style="font-size:0.8rem;color:#64748b;padding:8px 16px;background:#f8fafc;border-radius:8px;">Decided on ${l.date}</span>`}
+                        </div>
+                    </div>
+                `).join('');
+            }
         }
 
         window.onload = function() {
