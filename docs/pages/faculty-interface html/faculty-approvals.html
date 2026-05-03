@@ -266,7 +266,7 @@
             }
 
             if (filtered.length === 0) {
-                stack.innerHTML = '<div style="text-align:center;padding:40px;color:#64748b;"><i class="fas fa-box-open" style="font-size:3rem;color:#cbd5e1;margin-bottom:15px;display:block;"></i><h4 style="color:#374151;margin-bottom:5px;">No Listings to Verify</h4><p>All student gear is approved.</p></div>';
+                stack.innerHTML = '<div style="text-align:center;padding:40px;color:#64748b;"><i class="fas fa-box-open" style="font-size:3rem;color:#cbd5e1;margin-bottom:15px;display:block;"></i><h4 style="color:#374151;margin-bottom:5px;">No Listings to Verify</h4><p>No pending requests at this time.</p></div>';
             } else {
                 stack.innerHTML = filtered.map(l => `
                     <div class="request-panel ${l.status === 'Approved' ? 'status-approved' : l.status === 'Rejected' ? 'status-rejected' : ''}">
