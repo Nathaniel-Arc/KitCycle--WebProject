@@ -81,6 +81,7 @@
                 <li><a href="faculty-messages.html"><i class="fas fa-comments"></i> <span>Messages</span></a></li>
                 <li><a href="faculty-rentals.html"><i class="fas fa-clock"></i> <span>Active Rentals</span></a></li>
                 <li><a href="faculty-reports.html"><i class="fas fa-chart-pie"></i> <span>Reports</span></a></li>
+                <li><a href="faculty-settings.html"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
             </ul>
             <a href="javascript:void(0)" onclick="AuthSystem.confirmLogout(); return false;" class="sidebar-logout"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
         </aside>
@@ -118,13 +119,16 @@
             <div class="content-card full-width-card">
                 <div class="card-header">
                     <h3>All Requests</h3>
-                    <div class="status-filter-bar">
-                        <button class="filter-btn active" id="filterAll" onclick="filterRequests('all')">All</button>
-                        <button class="filter-btn" id="filterPending" onclick="filterRequests('Pending')">Pending</button>
-                        <button class="filter-btn" id="filterApproved" onclick="filterRequests('Approved')">Approved</button>
-                        <button class="filter-btn" id="filterPickedUp" onclick="filterRequests('Picked Up')">Picked Up</button>
-                        <button class="filter-btn" id="filterReturned" onclick="filterRequests('Returned')">Returned</button>
-                        <button class="filter-btn" id="filterRejected" onclick="filterRequests('Rejected')">Rejected</button>
+                    <div style="display:flex; gap:10px; align-items:center;">
+                        <input type="text" id="approvalSearch" placeholder="Search student or item..." style="padding:8px 12px; border:1px solid #e2e8f0; border-radius:8px; font-size:0.85rem; outline:none; width:220px;" oninput="filterRequests(currentFilter)">
+                        <div class="status-filter-bar">
+                            <button class="filter-btn active" id="filterAll" onclick="filterRequests('all')">All</button>
+                            <button class="filter-btn" id="filterPending" onclick="filterRequests('Pending')">Pending</button>
+                            <button class="filter-btn" id="filterApproved" onclick="filterRequests('Approved')">Approved</button>
+                            <button class="filter-btn" id="filterPickedUp" onclick="filterRequests('Picked Up')">Picked Up</button>
+                            <button class="filter-btn" id="filterReturned" onclick="filterRequests('Returned')">Returned</button>
+                            <button class="filter-btn" id="filterRejected" onclick="filterRequests('Rejected')">Rejected</button>
+                        </div>
                     </div>
                 </div>
                 <div class="requests-stack" id="requestsStack"></div>
@@ -147,13 +151,20 @@
         function filterRequests(status) {
             currentFilter = status;
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById('filter' + (status === 'all' ? 'All' : status)).classList.add('active');
+            const btnId = status === 'all' ? 'All' : status;
+            const btn = document.getElementById('filter' + btnId);
+            if (btn) btn.classList.add('active');
             renderAllRequests();
         }
 
         function renderAllRequests() {
             const requests = FacultyActions._getRequests();
+            const search = document.getElementById('approvalSearch') ? document.getElementById('approvalSearch').value.toLowerCase() : '';
+            
             let filtered = currentFilter === 'all' ? requests : requests.filter(r => r.status === currentFilter);
+            if (search) {
+                filtered = filtered.filter(r => r.student.toLowerCase().includes(search) || r.item.toLowerCase().includes(search) || r.studentId.toLowerCase().includes(search));
+            }
             filtered = filtered.slice().reverse();
 
             const stack = document.getElementById('requestsStack');

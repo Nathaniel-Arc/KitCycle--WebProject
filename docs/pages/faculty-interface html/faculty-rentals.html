@@ -75,6 +75,7 @@
                 <li><a href="faculty-messages.html"><i class="fas fa-comments"></i> <span>Messages</span></a></li>
                 <li class="active"><a href="faculty-rentals.html"><i class="fas fa-clock"></i> <span>Active Rentals</span></a></li>
                 <li><a href="faculty-reports.html"><i class="fas fa-chart-pie"></i> <span>Reports</span></a></li>
+                <li><a href="faculty-settings.html"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
             </ul>
 
             <a href="javascript:void(0)" onclick="AuthSystem.confirmLogout(); return false;" class="sidebar-logout"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
@@ -114,144 +115,17 @@
             <div class="content-card full-width-card">
                 <div class="card-header">
                     <h3>Currently Out</h3>
-                    <span class="pill-badge success-bg">16 Active</span>
+                    <span class="pill-badge success-bg" id="activeRentalsCount">0 Active</span>
                 </div>
-
-                <div class="rental-panels-stack">
-
-                    <div class="rental-item-panel">
-                        <div class="rental-thumbnail">
-                            <img src="../../images/microscope.jpeg" alt="Engineering Microscope Set">
-                        </div>
-                        <div class="rental-panel-details">
-                            <div class="details-header">
-                                <div>
-                                    <h4>Engineering Microscope Set</h4>
-                                    <p class="owner-trace">Borrowed by Maria Santos <i class="fas fa-shield-alt" style="color:#800000;font-size:0.75rem;"></i> Verified</p>
-                                </div>
-                                <span class="status-pill success">Active</span>
-                            </div>
-                            <div class="details-body">
-                                <div class="specs-grid">
-                                    <p><i class="far fa-calendar-check"></i> Rented: 3/5/2026</p>
-                                    <p><i class="fas fa-map-marker-alt"></i> Engineering Building</p>
-                                </div>
-                                <div class="specs-grid">
-                                    <p><i class="far fa-calendar-times danger-text"></i> Return: 3/12/2026</p>
-                                    <p>Total Cost: <strong>₱1,050</strong></p>
-                                </div>
-                            </div>
-                            <div class="details-footer">
-                                <button class="btn-primary-maroon" onclick="FacultyActions.extendRental('Maria Santos', 'Engineering Microscope Set', '3/12/2026')">Extend Rental</button>
-                                <button class="btn-outline-dark" onclick="FacultyActions.viewRentalDetails('Maria Santos', 'Engineering Microscope Set', '3/5/2026', '3/12/2026', '₱1,050')">View Details</button>
-                                <button class="btn-primary-qr" onclick="FacultyActions.scanReturnQR('req1')"><i class="fas fa-qrcode"></i> Scan Return QR</button>
-                                <button class="btn-primary-blue" onclick="FacultyActions.contactStudent('Maria Santos')"><i class="far fa-comment-alt"></i> Contact Student</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="rental-item-panel">
-                        <div class="rental-thumbnail">
-                            <img src="../../images/calculator.jpg" alt="Scientific Calculator TI-84">
-                        </div>
-                        <div class="rental-panel-details">
-                            <div class="details-header">
-                                <div>
-                                    <h4>Scientific Calculator TI-84</h4>
-                                    <p class="owner-trace">Borrowed by Juan Reyes <i class="fas fa-shield-alt" style="color:#800000;font-size:0.75rem;"></i> Verified</p>
-                                </div>
-                                <span class="status-pill success">Active</span>
-                            </div>
-                            <div class="details-body">
-                                <div class="specs-grid">
-                                    <p><i class="far fa-calendar-check"></i> Rented: 2/28/2026</p>
-                                    <p><i class="fas fa-map-marker-alt"></i> Library Lobby</p>
-                                </div>
-                                <div class="specs-grid">
-                                    <p><i class="far fa-calendar-times danger-text"></i> Return: 3/7/2026</p>
-                                    <p>Total Cost: <strong>₱350</strong></p>
-                                </div>
-                            </div>
-                            <div class="details-footer">
-                                <button class="btn-primary-maroon" onclick="FacultyActions.extendRental('Juan Reyes', 'Scientific Calculator TI-84', '3/7/2026')">Extend Rental</button>
-                                <button class="btn-outline-dark" onclick="FacultyActions.viewRentalDetails('Juan Reyes', 'Scientific Calculator TI-84', '2/28/2026', '3/7/2026', '₱350')">View Item Details</button>
-                                <button class="btn-primary-qr" onclick="FacultyActions.scanReturnQR('req2')"><i class="fas fa-qrcode"></i> Scan Return QR</button>
-                                <button class="btn-primary-blue" onclick="FacultyActions.contactStudent('Juan Reyes')"><i class="far fa-comment-alt"></i> Contact Student</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="rental-item-panel">
-                        <div class="rental-thumbnail">
-                            <img src="../../images/camera.jpg" alt="Video Recording Equipment">
-                        </div>
-                        <div class="rental-panel-details">
-                            <div class="details-header">
-                                <div>
-                                    <h4>Video Recording Equipment</h4>
-                                    <p class="owner-trace">Borrowed by Anna Cruz <i class="fas fa-shield-alt" style="color:#800000;font-size:0.75rem;"></i> Verified</p>
-                                </div>
-                                <span class="status-pill warning" style="background:#fffbeb;color:#b45309;">Due Soon</span>
-                            </div>
-                            <div class="details-body">
-                                <div class="specs-grid">
-                                    <p><i class="far fa-calendar-check"></i> Rented: 3/3/2026</p>
-                                    <p><i class="fas fa-map-marker-alt"></i> Media Lab Room 205</p>
-                                </div>
-                                <div class="specs-grid">
-                                    <p><i class="far fa-calendar-times danger-text"></i> Return: 3/8/2026</p>
-                                    <p>Total Cost: <strong>₱600</strong></p>
-                                </div>
-                            </div>
-                            <div class="details-footer">
-                                <button class="btn-primary-maroon" onclick="FacultyActions.extendRental('Anna Cruz', 'Video Recording Equipment', '3/8/2026')">Extend Rental</button>
-                                <button class="btn-outline-dark" onclick="FacultyActions.viewRentalDetails('Anna Cruz', 'Video Recording Equipment', '3/3/2026', '3/8/2026', '₱600')">View Item Details</button>
-                                <button class="btn-primary-qr" onclick="FacultyActions.scanReturnQR('req3')"><i class="fas fa-qrcode"></i> Scan Return QR</button>
-                                <button class="btn-primary-blue" onclick="FacultyActions.contactStudent('Anna Cruz')"><i class="far fa-comment-alt"></i> Contact Student</button>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
+                <div class="rental-panels-stack" id="activeRentalsStack"></div>
             </div>
 
             <div class="content-card full-width-card margin-top">
                 <div class="card-header">
                     <h3>Recently Returned</h3>
-                    <span class="pill-badge neutral-bg">3 Completed</span>
+                    <span class="pill-badge neutral-bg" id="returnedCount">0 Completed</span>
                 </div>
-
-                <div class="history-stack">
-
-                    <div class="history-item">
-                        <div class="history-thumbnail">
-                            <img src="../../images/books.jpeg" alt="Engineering Reference Books">
-                        </div>
-                        <div class="history-info">
-                            <div>
-                                <h4>Engineering Reference Books</h4>
-                                <p class="owner-trace">Borrowed by Mark Tan</p>
-                                <p class="duration-trace">2/15/2026 - 2/22/2026  •  Total: <strong>₱490</strong></p>
-                            </div>
-                            <span class="status-pill neutral">Completed</span>
-                        </div>
-                    </div>
-
-                    <div class="history-item">
-                        <div class="history-thumbnail">
-                            <img src="../../images/calc-set.png" alt="Digital Multimeters">
-                        </div>
-                        <div class="history-info">
-                            <div>
-                                <h4>Digital Multimeters</h4>
-                                <p class="owner-trace">Borrowed by Sara Lim</p>
-                                <p class="duration-trace">2/10/2026 - 2/15/2026  •  Total: <strong>₱400</strong></p>
-                            </div>
-                            <span class="status-pill neutral">Completed</span>
-                        </div>
-                    </div>
-
-                </div>
+                <div class="history-stack" id="returnedRentalsStack"></div>
             </div>
 
         </main>
@@ -273,6 +147,7 @@
                 document.getElementById('sidebar').classList.add('minimized');
                 document.getElementById('mainContent').classList.add('expanded');
             }
+            FacultyActions.renderRentals();
         };
     </script>
 

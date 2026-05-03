@@ -26,11 +26,11 @@ window.FacultyActions = {
     _getRequests: function() {
         if (!localStorage.getItem('kitcycle_faculty_requests')) {
             const defaults = [
-                { id: 'req1', student: 'Maria Santos', studentId: '2024-12345', item: 'Engineering Microscope Set', duration: '3 days', purpose: 'Materials Science Lab Project', date: '3/5/2026', priority: 'HIGH', status: 'Pending' },
-                { id: 'req2', student: 'Juan Reyes', studentId: '2024-12346', item: 'Scientific Calculator', duration: '1 week', purpose: 'Advanced Calculus Course', date: '3/4/2026', priority: 'MEDIUM', status: 'Pending' },
-                { id: 'req3', student: 'Anna Cruz', studentId: '2024-12347', item: 'Video Recording Equipment', duration: '2 days', purpose: 'Thesis Documentation', date: '3/3/2026', priority: 'HIGH', status: 'Pending' },
-                { id: 'req4', student: 'Mark Tan', studentId: '2024-12348', item: 'Digital Multimeters', duration: '5 days', purpose: 'Circuit Analysis Lab', date: '3/6/2026', priority: 'LOW', status: 'Pending' },
-                { id: 'req5', student: 'Sara Lim', studentId: '2024-12349', item: 'Engineering Reference Books', duration: '2 weeks', purpose: 'Research Paper Reference', date: '3/2/2026', priority: 'MEDIUM', status: 'Pending' }
+                { id: 'req1', student: 'Maria Santos', studentId: '2024-12345', item: 'Engineering Microscope Set', duration: '3 days', purpose: 'Materials Science Lab Project', date: '3/5/2026', priority: 'HIGH', status: 'Picked Up', pickupDate: '3/5/2026', dueDate: '3/8/2026' },
+                { id: 'req2', student: 'Juan Reyes', studentId: '2024-12346', item: 'Scientific Calculator', duration: '1 week', purpose: 'Advanced Calculus Course', date: '3/4/2026', priority: 'MEDIUM', status: 'Picked Up', pickupDate: '3/4/2026', dueDate: '3/11/2026' },
+                { id: 'req3', student: 'Anna Cruz', studentId: '2024-12347', item: 'Video Recording Equipment', duration: '2 days', purpose: 'Thesis Documentation', date: '3/3/2026', priority: 'HIGH', status: 'Picked Up', pickupDate: '3/3/2026', dueDate: '3/5/2026' },
+                { id: 'req4', student: 'Mark Tan', studentId: '2024-12348', item: 'Digital Multimeters', duration: '5 days', purpose: 'Circuit Analysis Lab', date: '3/6/2026', priority: 'LOW', status: 'Returned', pickupDate: '2/15/2026', returnDate: '2/22/2026' },
+                { id: 'req5', student: 'Sara Lim', studentId: '2024-12349', item: 'Engineering Reference Books', duration: '2 weeks', purpose: 'Research Paper Reference', date: '3/2/2026', priority: 'MEDIUM', status: 'Returned', pickupDate: '2/10/2026', returnDate: '2/15/2026' }
             ];
             localStorage.setItem('kitcycle_faculty_requests', JSON.stringify(defaults));
         }
@@ -104,7 +104,11 @@ window.FacultyActions = {
 
         document.getElementById('termsCancelBtn').onclick = () => overlay.remove();
         overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
-        acceptBtn.onclick = () => { overlay.remove(); if (onAccept) onAccept(); };
+        acceptBtn.onclick = () => { 
+            localStorage.setItem('facultyTermsAccepted', 'true');
+            overlay.remove(); 
+            if (onAccept) onAccept(); 
+        };
     },
 
     /* ── Rejection Reason Modal ── */
@@ -656,6 +660,7 @@ window.FacultyActions = {
                         req.status = 'Approved';
                         this._saveRequests(requests);
                         this._refreshApprovals();
+                        this._createMessageThread(req);
                         if (typeof UIUtils !== 'undefined' && UIUtils.showToast) UIUtils.showToast(`${req.item} approved for ${req.student}`, 'success');
                     }
                 }
@@ -665,8 +670,29 @@ window.FacultyActions = {
                 req.status = 'Approved';
                 this._saveRequests(requests);
                 this._refreshApprovals();
+                this._createMessageThread(req);
                 alert('Request approved!');
             }
+        }
+    },
+
+    _createMessageThread: function(req) {
+        const msgs = this._getMessages();
+        const exists = msgs.find(m => m.studentId === req.studentId && m.id.includes(req.id));
+        if (!exists) {
+            const initialColor = ['#800000', '#111827', '#3b82f6', '#10b981'][Math.floor(Math.random() * 4)];
+            msgs.push({
+                id: 'thread_' + req.id + '_' + Date.now(),
+                student: req.student,
+                studentId: req.studentId,
+                initial: req.student.charAt(0),
+                initialColor: initialColor,
+                lastMessage: 'Your request for ' + req.item + ' has been approved!',
+                lastTime: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                unread: 0,
+                messages: [{ from: 'You', text: 'Hi ' + req.student.split(' ')[0] + ', your request for ' + req.item + ' has been approved. When would you like to pick it up?', time: 'Just now', self: true }]
+            });
+            this._saveMessages(msgs);
         }
     },
 
@@ -1124,9 +1150,9 @@ window.FacultyActions = {
     _getMessages: function() {
         if (!localStorage.getItem('kitcycle_messages')) {
             const defaults = [
-                { id: 'thread1', student: 'Maria Santos', studentId: '2024-12345', avatar: '../../images/maria_profile.png', lastMessage: 'Thank you for approving the request!', lastTime: '10:30 AM', unread: 2, messages: [{ from: 'Maria Santos', text: 'Hello Professor! I submitted a request for the microscope.', time: '10:00 AM', self: false }, { from: 'You', text: 'Hi Maria, I will review it shortly.', time: '10:15 AM', self: true }, { from: 'Maria Santos', text: 'Thank you for approving the request!', time: '10:30 AM', self: false }] },
-                { id: 'thread2', student: 'Juan Reyes', studentId: '2024-12346', avatar: '../../images/juan_profile.png', lastMessage: 'Will I be able to get it today?', lastTime: 'Yesterday', unread: 0, messages: [{ from: 'Juan Reyes', text: 'Good day Professor, I would like to extend my calculator rental.', time: 'Yesterday 3:00 PM', self: false }, { from: 'You', text: 'Sure Juan, let me check the schedule.', time: 'Yesterday 3:20 PM', self: true }, { from: 'Juan Reyes', text: 'Will I be able to get it today?', time: 'Yesterday 4:00 PM', self: false }] },
-                { id: 'thread3', student: 'Anna Cruz', studentId: '2024-12347', avatar: '../../images/nash_profile.png', lastMessage: 'Got it, I will make sure to handle it with care.', lastTime: 'Yesterday', unread: 0, messages: [{ from: 'You', text: 'Anna, please ensure the camera equipment is properly stored when not in use.', time: 'Yesterday 11:00 AM', self: true }, { from: 'Anna Cruz', text: 'Got it, I will make sure to handle it with care.', time: 'Yesterday 11:15 AM', self: false }] }
+                { id: 'thread1', student: 'Maria Santos', studentId: '2024-12345', initial: 'M', initialColor: '#800000', lastMessage: 'Thank you for approving the request!', lastTime: '10:30 AM', unread: 2, messages: [{ from: 'Maria Santos', text: 'Hello Professor! I submitted a request for the microscope.', time: '10:00 AM', self: false }, { from: 'You', text: 'Hi Maria, I will review it shortly.', time: '10:15 AM', self: true }, { from: 'Maria Santos', text: 'Thank you for approving the request!', time: '10:30 AM', self: false }] },
+                { id: 'thread2', student: 'Juan Reyes', studentId: '2024-12346', initial: 'J', initialColor: '#111827', lastMessage: 'Will I be able to get it today?', lastTime: 'Yesterday', unread: 0, messages: [{ from: 'Juan Reyes', text: 'Good day Professor, I would like to extend my calculator rental.', time: 'Yesterday 3:00 PM', self: false }, { from: 'You', text: 'Sure Juan, let me check the schedule.', time: 'Yesterday 3:20 PM', self: true }, { from: 'Juan Reyes', text: 'Will I be able to get it today?', time: 'Yesterday 4:00 PM', self: false }] },
+                { id: 'thread3', student: 'Anna Cruz', studentId: '2024-12347', initial: 'A', initialColor: '#3b82f6', lastMessage: 'Got it, I will make sure to handle it with care.', lastTime: 'Yesterday', unread: 0, messages: [{ from: 'You', text: 'Anna, please ensure the camera equipment is properly stored when not in use.', time: 'Yesterday 11:00 AM', self: true }, { from: 'Anna Cruz', text: 'Got it, I will make sure to handle it with care.', time: 'Yesterday 11:15 AM', self: false }] }
             ];
             localStorage.setItem('kitcycle_messages', JSON.stringify(defaults));
         }
@@ -1300,32 +1326,124 @@ window.FacultyActions = {
         overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
     },
 
-    renderDashboard: function() {
+    /* ── Save Profile Settings ── */
+    saveProfileSettings: function() {
+        const name = document.getElementById('settingsName').value;
+        const dept = document.getElementById('settingsDept').value;
+        const office = document.getElementById('settingsOffice').value;
+        
+        localStorage.setItem('facultyProfileName', name);
+        localStorage.setItem('facultyDept', dept);
+        localStorage.setItem('facultyOffice', office);
+        
+        document.getElementById('sidebarUserName').textContent = name;
+        
+        if (typeof UIUtils !== 'undefined' && UIUtils.showToast) {
+            UIUtils.showToast('Profile updated successfully!', 'success');
+        }
+    },
+
+    /* ── Render Rentals (Active, Returned, Overdue) ── */
+    renderRentals: function() {
+        const requests = this._getRequests();
+        const active = requests.filter(r => ['Picked Up', 'Approved'].includes(r.status));
+        const returned = requests.filter(r => r.status === 'Returned');
+
+        const activeStack = document.getElementById('activeRentalsStack');
+        const returnedStack = document.getElementById('returnedRentalsStack');
+        const activeCount = document.getElementById('activeRentalsCount');
+        const returnedCount = document.getElementById('returnedCount');
+
+        if (activeCount) activeCount.textContent = active.length + ' Active';
+        if (returnedCount) returnedCount.textContent = returned.length + ' Completed';
+
+        if (activeStack) {
+            if (active.length === 0) {
+                activeStack.innerHTML = '<div style="text-align:center;padding:40px;color:#64748b;"><i class="fas fa-box-open" style="font-size:3rem;color:#cbd5e1;margin-bottom:15px;display:block;"></i><h4 style="color:#374151;margin-bottom:5px;">No Active Rentals</h4><p>All equipment is currently in storage.</p></div>';
+            } else {
+                const today = new Date();
+                activeStack.innerHTML = active.map(r => {
+                    const dueDate = new Date(r.dueDate || r.pickupDate); 
+                    // If no dueDate, assume 7 days from pickup or original date
+                    if (!r.dueDate) {
+                        dueDate.setDate(dueDate.getDate() + (r.duration.includes('week') ? 7 : 3));
+                    }
+                    
+                    const daysLeft = Math.ceil((dueDate - today) / (1000 * 60 * 60 * 24));
+                    const isOverdue = daysLeft < 0;
+                    const statusHtml = isOverdue 
+                        ? '<span class="status-pill" style="background:#fef2f2;color:#dc2626;">Overdue</span>' 
+                        : (daysLeft <= 2 ? '<span class="status-pill warning">Due Soon</span>' : '<span class="status-pill success">Active</span>');
+                    
+                    const eq = this._getEquipment().find(e => e.name === r.item);
+                    const imgSrc = eq ? eq.image : '../../images/box-placeholder.png';
+
+                    return `
+                    <div class="rental-item-panel">
+                        <div class="rental-thumbnail"><img src="${imgSrc}" alt="${r.item}"></div>
+                        <div class="rental-panel-details">
+                            <div class="details-header">
+                                <div><h4>${r.item}</h4><p class="owner-trace">Borrowed by ${r.student}</p></div>
+                                ${statusHtml}
+                            </div>
+                            <div class="details-body">
+                                <div class="specs-grid">
+                                    <p><i class="far fa-calendar-check"></i> Picked Up: ${r.pickupDate || r.date}</p>
+                                    <p><i class="far fa-calendar-times ${isOverdue ? 'danger-text' : ''}"></i> Due: ${dueDate.toLocaleDateString()}</p>
+                                </div>
+                            </div>
+                            <div class="details-footer">
+                                <button class="btn-primary-qr" onclick="FacultyActions.scanReturnQR('${r.id}')"><i class="fas fa-qrcode"></i> Scan Return QR</button>
+                                ${isOverdue ? '<button class="btn-primary-maroon" onclick="FacultyActions.sendReminder(\'' + r.student + '\', \'' + r.item + '\')"><i class="fas fa-bell"></i> Send Reminder</button>' : ''}
+                                <button class="btn-primary-blue" onclick="FacultyActions.contactStudent('${r.student}')"><i class="far fa-comment-alt"></i> Contact</button>
+                            </div>
+                        </div>
+                    </div>`;
+                }).join('');
+            }
+        }
+
+        if (returnedStack) {
+            if (returned.length === 0) {
+                returnedStack.innerHTML = '<div style="text-align:center;padding:40px;color:#64748b;"><p>No recently returned items.</p></div>';
+            } else {
+                returnedStack.innerHTML = returned.slice().reverse().map(r => `
+                    <div class="history-item">
+                        <div class="history-thumbnail"><img src="../../images/box-placeholder.png" alt="${r.item}"></div>
+                        <div class="history-info">
+                            <div><h4>${r.item}</h4><p class="owner-trace">Returned by ${r.student}</p><p class="duration-trace">${r.pickupDate} - ${r.returnDate}</p></div>
+                            <span class="status-pill neutral">Completed</span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+    },
+
+    /* ── Send Reminder ── */
+    sendReminder: function(student, item) {
+        if (typeof UIUtils !== 'undefined' && UIUtils.showToast) {
+            UIUtils.showToast('Reminder sent to ' + student + ' for ' + item, 'success');
+        }
+    },
+
+    /* ── Render Reports ── */
+    renderReports: function() {
         const equipment = this._getEquipment();
         const requests = this._getRequests();
+        
+        const totalEquip = equipment.length;
+        const activeRentals = requests.filter(r => ['Picked Up', 'Approved'].includes(r.status)).length;
+        const completed = requests.filter(r => r.status === 'Returned').length;
+        const totalBorrowed = equipment.reduce((sum, eq) => sum + (eq.borrowed || 0), 0);
+        const totalQty = equipment.reduce((sum, eq) => sum + (eq.quantity || 0), 0);
+        const utilRate = totalQty > 0 ? Math.round((totalBorrowed / totalQty) * 100) : 0;
 
-        const totalEquip = equipment.reduce((s, e) => s + e.quantity, 0);
-        const totalAvailable = equipment.reduce((s, e) => s + e.available, 0);
-        const totalBorrowed = equipment.reduce((s, e) => s + e.borrowed, 0);
-        const pendingReqs = requests.filter(r => r.status === 'Pending').length;
-
-        const statCards = document.querySelectorAll('.stat-cards-grid .stat-card h3');
-        if (statCards.length >= 3) {
-            statCards[0].textContent = totalEquip;
-            statCards[1].textContent = totalAvailable;
-            statCards[2].textContent = totalBorrowed;
-        }
-        const pendingBadge = document.querySelector('.pill-badge');
-        if (pendingBadge) pendingBadge.textContent = `${pendingReqs} Pending`;
-
-        const storedName = localStorage.getItem('facultyProfileName');
-        if (storedName) {
-            const sidebarName = document.getElementById('sidebarUserName');
-            if (sidebarName) sidebarName.textContent = storedName;
-            const firstName = storedName.split(' ').pop();
-            const bannerGreeting = document.querySelector('.dashboard-banner p');
-            if (bannerGreeting) bannerGreeting.textContent = `Welcome back, Professor ${firstName}. Manage departmental assets and approvals here.`;
-        }
+        const el = (id) => document.getElementById(id);
+        if (el('reportTotalEquip')) el('reportTotalEquip').textContent = totalEquip;
+        if (el('reportActiveRentals')) el('reportActiveRentals').textContent = activeRentals;
+        if (el('reportCompleted')) el('reportCompleted').textContent = completed;
+        if (el('reportUtilization')) el('reportUtilization').textContent = utilRate + '%';
     },
 
     initDashboard: function() {

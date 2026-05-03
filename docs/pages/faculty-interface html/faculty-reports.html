@@ -73,6 +73,7 @@
                 <li><a href="faculty-messages.html"><i class="fas fa-comments"></i> <span>Messages</span></a></li>
                 <li><a href="faculty-rentals.html"><i class="fas fa-clock"></i> <span>Active Rentals</span></a></li>
                 <li class="active"><a href="faculty-reports.html"><i class="fas fa-chart-pie"></i> <span>Reports</span></a></li>
+                <li><a href="faculty-settings.html"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
             </ul>
 
             <a href="javascript:void(0)" onclick="AuthSystem.confirmLogout(); return false;" class="sidebar-logout"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
@@ -89,25 +90,25 @@
                 <div class="stat-card">
                     <div class="stat-numbers-only">
                         <span class="stat-label">Total Equipment</span>
-                        <h3>48</h3>
+                        <h3 id="reportTotalEquip">0</h3>
                     </div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-numbers-only">
                         <span class="stat-label">Active Rentals</span>
-                        <h3 class="info-text">23</h3>
+                        <h3 class="info-text" id="reportActiveRentals">0</h3>
                     </div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-numbers-only">
                         <span class="stat-label">Completed (This Month)</span>
-                        <h3 class="success-text">67</h3>
+                        <h3 class="success-text" id="reportCompleted">0</h3>
                     </div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-numbers-only">
                         <span class="stat-label">Utilization Rate</span>
-                        <h3 class="purple-text">78%</h3>
+                        <h3 class="purple-text" id="reportUtilization">0%</h3>
                     </div>
                 </div>
             </div>
@@ -277,6 +278,7 @@
                 document.getElementById('sidebar').classList.add('minimized');
                 document.getElementById('mainContent').classList.add('expanded');
             }
+            FacultyActions.renderReports();
         };
     </script>
 
