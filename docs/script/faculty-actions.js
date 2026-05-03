@@ -691,6 +691,8 @@ window.FacultyActions = {
                         this._refreshApprovals();
                         this._createMessageThread(req);
                         if (typeof UIUtils !== 'undefined' && UIUtils.showToast) UIUtils.showToast(`${req.item} approved for ${req.student}`, 'success');
+                        // Show QR code for pickup
+                        this.scanPickupQR(requestId);
                     }
                 }
             });
@@ -701,6 +703,7 @@ window.FacultyActions = {
                 this._refreshApprovals();
                 this._createMessageThread(req);
                 alert('Request approved!');
+                this.scanPickupQR(requestId);
             }
         }
     },
