@@ -10,7 +10,7 @@ window.FacultyActions = {
         if (!localStorage.getItem('kitcycle_faculty_equipment')) {
             const defaults = [
                 { id: 'eq1', name: 'Engineering Microscope Set', category: 'Laboratory Equipment', quantity: 5, available: 3, borrowed: 2, condition: 'Excellent', location: 'Engineering Lab Room 301', lastMaintained: '2/15/2026', price: 150, serialNumber: 'WMSU-ENG-001', image: '../../images/microscope.jpeg', description: 'High-quality binocular microscope suitable for biology and chemistry lab work.' },
-                { id: 'eq2', name: 'Scientific Calculators', category: 'Academic Tools', quantity: 10, available: 7, borrowed: 3, condition: 'Good', location: 'Engineering Department Office', lastMaintained: '2/20/2026', price: 50, serialNumber: 'WMSU-CALC-002', image: '../../images/calculator.jpg', description: 'TI-84 Plus scientific calculators for advanced mathematics.' },
+                { id: 'eq2', name: 'Scientific Calculators', category: 'Academic Tools', quantity: 10, available: 7, borrowed: 3, condition: 'Good', location: 'Engineering Department Office', lastMaintained: '2/20/2026', price: 50, serialNumber: 'WMSU-CALC-002', image: 'https://images.unsplash.com/photo-1587145820266-a5951ee06084?auto=format&fit=crop&w=400&q=80', description: 'TI-84 Plus scientific calculators for advanced mathematics.' },
                 { id: 'eq3', name: 'Video Recording Equipment', category: 'Media Equipment', quantity: 3, available: 0, borrowed: 3, condition: 'Excellent', location: 'Media Lab Room 205', lastMaintained: '2/10/2026', price: 300, serialNumber: 'WMSU-MEDIA-003', image: '../../images/camera.jpg', description: 'Complete video recording kit with tripod and microphone.' },
                 { id: 'eq4', name: 'Digital Multimeters', category: 'Laboratory Equipment', quantity: 8, available: 5, borrowed: 3, condition: 'Good', location: 'Electronics Lab', lastMaintained: '2/25/2026', price: 80, serialNumber: 'WMSU-ELEC-004', image: '../../images/calc-set.png', description: 'Essential multimeters for electronics and circuit testing.' },
                 { id: 'eq5', name: 'Engineering Reference Books', category: 'Textbooks', quantity: 15, available: 12, borrowed: 3, condition: 'Good', location: 'Department Library', lastMaintained: '1/15/2026', price: 70, serialNumber: 'WMSU-LIB-005', image: '../../images/books.jpeg', description: 'Reference books for mechanical and civil engineering.' },
@@ -1255,11 +1255,13 @@ window.FacultyActions = {
             '<div style="width:60px;height:60px;background:' + (isPickup ? '#ecfdf5' : '#fef2f2') + ';border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 15px;"><i class="fas fa-qrcode" style="font-size:1.5rem;color:' + iconColor + ';"></i></div>' +
             '<h3 style="margin:0 0 5px;color:#1e293b;">' + title + '</h3>' +
             '<p style="color:#64748b;font-size:0.85rem;margin-bottom:15px;">' + subtitle + '</p>' +
-            '<div style="width:200px;height:200px;margin:0 auto 15px;background:linear-gradient(135deg,#f8fafc,#e2e8f0);border-radius:15px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:2px solid #cbd5e1;">' +
-            '<i class="fas fa-qrcode" style="font-size:5rem;color:#1e293b;margin-bottom:8px;"></i>' +
-            '<span style="font-family:monospace;font-size:0.8rem;font-weight:700;color:#800000;">' + code + '</span>' +
-            '</div>' +
-            '<button id="qrScanConfirmBtn" style="width:100%;background:#800000;color:#fff;border:none;padding:12px;border-radius:10px;font-weight:700;cursor:pointer;">' + (isPickup ? 'Confirm Pickup' : 'Confirm Return') + '</button>' +
+            '<div style="width:220px;height:220px;margin:0 auto 15px;background:#fff;border-radius:12px;display:grid;place-items:center;border:3px solid #800000;padding:10px;">' +
+            '<div style="width:180px;height:180px;background:#111827;border-radius:4px;display:grid;grid-template-columns:repeat(9,1fr);grid-template-rows:repeat(9,1fr);gap:2px;padding:8px;">' +
+            '<div style="background:#fff;grid-column:1/4;grid-row:1/4;"></div><div style="background:#fff;grid-column:7/10;grid-row:1/4;"></div><div style="background:#fff;grid-column:1/4;grid-row:7/10;"></div>' +
+            '<div style="background:#fff;grid-column:4/7;grid-row:4/7;"></div><div style="background:#fff;grid-column:7/8;grid-row:7/8;"></div><div style="background:#fff;grid-column:9/10;grid-row:9/10;"></div>' +
+            '</div></div>' +
+            '<span style="display:block;text-align:center;font-family:monospace;font-size:0.85rem;font-weight:700;color:#800000;margin-bottom:15px;">' + code + '</span>' +
+            '<button id="qrScanConfirmBtn" style="width:100%;background:#800000;color:#fff;border:none;padding:12px;border-radius:10px;font-weight:700;cursor:pointer;transition:0.2s;">' + (isPickup ? 'Confirm Pickup' : 'Confirm Return') + '</button>' +
             '</div>';
         document.body.appendChild(overlay);
 
