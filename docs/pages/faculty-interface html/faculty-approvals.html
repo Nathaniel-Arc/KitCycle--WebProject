@@ -190,7 +190,7 @@
                 filtered = filtered.filter(r => r.student.toLowerCase().includes(search) || r.item.toLowerCase().includes(search) || r.studentId.toLowerCase().includes(search));
             }
             filtered = filtered.slice().reverse();
-
+            
             const stack = document.getElementById('requestsStack');
             if (filtered.length === 0) {
                 const emptyMsg = currentFilter === 'all' ? 'No requests yet.' : 'No ' + currentFilter.toLowerCase() + ' requests.';
@@ -199,11 +199,13 @@
                 stack.innerHTML = filtered.map(r => {
                     const borderClass = r.status === 'Approved' ? 'status-approved' : r.status === 'Rejected' ? 'status-rejected' : r.status === 'Picked Up' ? 'status-approved' : '';
                     const pillClass = r.status === 'Approved' ? 'approved-pill' : r.status === 'Rejected' ? 'rejected-pill' : r.status === 'Picked Up' ? 'approved-pill' : r.status === 'Returned' ? 'rejected-pill' : 'warning';
+                    const esc = (s) => s.replace(/'/g, "\\'");
+                    const rid = esc(r.id);
                     let actionsHtml;
                     if (r.status === 'Pending') {
-                        actionsHtml = '<div class="panel-actions"><button class="btn-action-light" onclick="FacultyActions.viewEquipmentDetails(\"' + r.id + '\")"><i class="far fa-eye"></i> View Details</button><button class="btn-action-approve" onclick="FacultyActions.approveRequest(\"' + r.id + '\")"><i class="fas fa-check"></i> Approve</button><button class="btn-action-reject" onclick="FacultyActions._showRejectionForm(\"' + r.id + '\", \"borrow\")"><i class="fas fa-times"></i> Reject</button></div>';
+                        actionsHtml = '<div class="panel-actions"><button class="btn-action-light" onclick="FacultyActions.viewEquipmentDetails(\'' + rid + '\')"><i class="far fa-eye"></i> View Details</button><button class="btn-action-approve" onclick="FacultyActions.approveRequest(\'' + rid + '\')"><i class="fas fa-check"></i> Approve</button><button class="btn-action-reject" onclick="FacultyActions._showRejectionForm(\'' + rid + '\', \'borrow\')"><i class="fas fa-times"></i> Reject</button></div>';
                     } else if (r.status === 'Approved') {
-                        actionsHtml = '<div class="panel-actions"><button class="btn-action-light" onclick="FacultyActions.viewEquipmentDetails(\"' + r.id + '\")"><i class="far fa-eye"></i> View Details</button><button class="btn-action-approve" onclick="FacultyActions.scanPickupQR(\"' + r.id + '\")"><i class="fas fa-qrcode"></i> Scan Pickup QR</button></div>';
+                        actionsHtml = '<div class="panel-actions"><button class="btn-action-light" onclick="FacultyActions.viewEquipmentDetails(\'' + rid + '\')"><i class="far fa-eye"></i> View Details</button><button class="btn-action-approve" onclick="FacultyActions.scanPickupQR(\'' + rid + '\')"><i class="fas fa-qrcode"></i> Scan Pickup QR</button></div>';
                     } else if (r.status === 'Picked Up') {
                         actionsHtml = '<div class="panel-actions"><span style="font-size:0.8rem;color:#64748b;padding:8px 16px;background:#f8fafc;border-radius:8px;"><i class="fas fa-check-circle" style="color:#10b981;margin-right:4px;"></i>Picked up on ' + (r.pickupDate || r.date) + '</span></div>';
                     } else if (r.status === 'Returned') {
