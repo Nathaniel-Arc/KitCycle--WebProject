@@ -170,6 +170,19 @@
             localStorage.setItem('sidebarMinimized', isMinimized);
         }
 
+        function switchApprovalTab(tab) {
+            currentTab = tab;
+            document.getElementById('tabBorrow').classList.toggle('active', tab === 'borrow');
+            document.getElementById('tabListings').classList.toggle('active', tab === 'listings');
+            document.getElementById('borrowFilters').style.display = tab === 'borrow' ? 'flex' : 'none';
+            document.getElementById('listingFilters').style.display = tab === 'listings' ? 'flex' : 'none';
+            document.getElementById('requestsStack').style.display = tab === 'borrow' ? 'block' : 'none';
+            document.getElementById('listingsStack').style.display = tab === 'listings' ? 'block' : 'none';
+            
+            if (tab === 'borrow') renderAllRequests();
+            else if (tab === 'listings') renderListings();
+        }
+
         function filterRequests(status) {
             currentFilter = status;
             if (currentTab !== 'borrow') return;
@@ -243,63 +256,6 @@
             if (badge) badge.textContent = pending.length;
             
             if (typeof FacultyActions !== 'undefined' && FacultyActions._refreshApprovals) FacultyActions._refreshApprovals();
-        }
-            filtered = filtered.slice().reverse();
-            
-            const stack = document.getElementById('requestsStack');
-            if (filtered.length === 0) {
-                const emptyMsg = currentFilter === 'all' ? 'No requests yet.' : 'No ' + currentFilter.toLowerCase() + ' requests.';
-                stack.innerHTML = '<div style="text-align:center;padding:40px;color:#64748b;"><i class="fas fa-inbox" style="font-size:3rem;color:#cbd5e1;margin-bottom:15px;display:block;"></i><h4 style="color:#374151;margin-bottom:5px;">No Requests</h4><p>' + emptyMsg + '</p></div>';
-            } else {
-                stack.innerHTML = filtered.map(r => {
-                    const borderClass = r.status === 'Approved' ? 'status-approved' : r.status === 'Rejected' ? 'status-rejected' : r.status === 'Picked Up' ? 'status-approved' : '';
-                    const pillClass = r.status === 'Approved' ? 'approved-pill' : r.status === 'Rejected' ? 'rejected-pill' : r.status === 'Picked Up' ? 'approved-pill' : r.status === 'Returned' ? 'rejected-pill' : 'warning';
-                    const esc = (s) => s.replace(/'/g, "\\'");
-                    const rid = esc(r.id);
-                    let actionsHtml;
-                    if (r.status === 'Pending') {
-                        actionsHtml = '<div class="panel-actions"><button class="btn-action-light" onclick="FacultyActions.viewEquipmentDetails(\'' + rid + '\')"><i class="far fa-eye"></i> View Details</button><button class="btn-action-approve" onclick="FacultyActions.approveRequest(\'' + rid + '\')"><i class="fas fa-check"></i> Approve</button><button class="btn-action-reject" onclick="FacultyActions._showRejectionForm(\'' + rid + '\', \'borrow\')"><i class="fas fa-times"></i> Reject</button></div>';
-                    } else if (r.status === 'Approved') {
-                        actionsHtml = '<div class="panel-actions"><button class="btn-action-light" onclick="FacultyActions.viewEquipmentDetails(\'' + rid + '\')"><i class="far fa-eye"></i> View Details</button><button class="btn-action-approve" onclick="FacultyActions.scanPickupQR(\'' + rid + '\')"><i class="fas fa-qrcode"></i> Scan Pickup QR</button></div>';
-                    } else if (r.status === 'Picked Up') {
-                        actionsHtml = '<div class="panel-actions"><span style="font-size:0.8rem;color:#64748b;padding:8px 16px;background:#f8fafc;border-radius:8px;"><i class="fas fa-check-circle" style="color:#10b981;margin-right:4px;"></i>Picked up on ' + (r.pickupDate || r.date) + '</span></div>';
-                    } else if (r.status === 'Returned') {
-                        actionsHtml = '<div class="panel-actions"><span style="font-size:0.8rem;color:#64748b;padding:8px 16px;background:#f8fafc;border-radius:8px;"><i class="fas fa-box" style="color:#800000;margin-right:4px;"></i>Returned on ' + (r.returnDate || r.date) + '</span></div>';
-                    } else {
-                        actionsHtml = '<div class="panel-actions"><span style="font-size:0.8rem;color:#64748b;padding:8px 16px;background:#f8fafc;border-radius:8px;">Decided on ' + r.date + '</span></div>';
-                    }
-                    const reasonHtml = r.rejectReason ? '<p style="font-size:0.82rem;color:#800000;margin-top:6px;"><strong>Reason:</strong> ' + r.rejectReason + (r.rejectNotes ? ' — ' + r.rejectNotes : '') + '</p>' : '';
-                    
-                    return '<div class="request-panel ' + borderClass + '">' +
-                        '<div class="panel-header"><div><span class="priority-pill ' + (r.priority === 'HIGH' ? 'high' : r.priority === 'MEDIUM' ? 'medium' : 'low') + '">' + r.priority + '</span><span class="status-pill ' + pillClass + '">' + r.status + '</span></div></div>' +
-                        '<div class="panel-body"><div class="student-meta"><h4>' + r.student + '</h4><p>Student ID: <span>' + r.studentId + '</span></p></div><div class="item-specs"><p><strong>Item:</strong> ' + r.item + '</p><p><strong>Duration:</strong> ' + r.duration + '</p><p><strong>Purpose:</strong> ' + r.purpose + '</p><p class="timestamp"><i class="far fa-clock"></i> Requested on ' + r.date + '</p>' + reasonHtml + '</div></div>' +
-                        actionsHtml +
-                        '</div>';
-                }).join('');
-            }
-
-            const pending = requests.filter(r => r.status === 'Pending');
-            const approved = requests.filter(r => r.status === 'Approved');
-            const rejected = requests.filter(r => r.status === 'Rejected');
-            document.getElementById('pendingCount').textContent = pending.length;
-            document.getElementById('approvedCount').textContent = approved.length;
-            document.getElementById('rejectedCount').textContent = rejected.length;
-            const badge = document.getElementById('sidebarReqBadge');
-            if (badge) badge.textContent = pending.length;
-
-            if (typeof FacultyActions !== 'undefined' && FacultyActions._refreshApprovals) FacultyActions._refreshApprovals();
-        }
-
-        function switchApprovalTab(tab) {
-            currentTab = tab;
-            document.getElementById('tabBorrow').classList.toggle('active', tab === 'borrow');
-            document.getElementById('tabListings').classList.toggle('active', tab === 'listings');
-            document.getElementById('borrowFilters').style.display = tab === 'borrow' ? 'flex' : 'none';
-            document.getElementById('listingFilters').style.display = tab === 'listings' ? 'flex' : 'none';
-            document.getElementById('requestsStack').style.display = tab === 'borrow' ? 'block' : 'none';
-            document.getElementById('listingsStack').style.display = tab === 'listings' ? 'block' : 'none';
-            
-            if (tab === 'listings') renderListings();
         }
 
         let listingFilter = 'all';
