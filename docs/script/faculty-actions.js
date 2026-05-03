@@ -1148,7 +1148,8 @@ window.FacultyActions = {
         const subtitle = isPickup ? 'Show this to the student to confirm item pickup.' : 'Show this to the student to confirm item return.';
         const code = 'QR-' + Date.now().toString(36).toUpperCase();
 
-        overlay.innerHTML = '<div style="background:#fff;width:90%;max-width:380px;border-radius:20px;padding:30px;text-align:center;box-shadow:0 25px 50px rgba(0,0,0,0.25);animation:modalPop 0.3s cubic-bezier(0.175,0.885,0.32,1.275);">' +
+        overlay.innerHTML = '<div style="position:relative;background:#fff;width:90%;max-width:380px;border-radius:20px;padding:30px;box-shadow:0 25px 50px rgba(0,0,0,0.25);animation:modalPop 0.3s cubic-bezier(0.175,0.885,0.32,1.275);">' +
+            '<button id="qrCloseBtn" style="position:absolute;top:15px;right:15px;width:32px;height:32px;border-radius:50%;background:#f1f5f9;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1rem;color:#4b5563;transition:0.2s;"><i class="fas fa-times"></i></button>' +
             '<div style="width:60px;height:60px;background:' + (isPickup ? '#ecfdf5' : '#fef2f2') + ';border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 15px;"><i class="fas fa-qrcode" style="font-size:1.5rem;color:' + iconColor + ';"></i></div>' +
             '<h3 style="margin:0 0 5px;color:#1e293b;">' + title + '</h3>' +
             '<p style="color:#64748b;font-size:0.85rem;margin-bottom:15px;">' + subtitle + '</p>' +
@@ -1160,6 +1161,7 @@ window.FacultyActions = {
             '</div>';
         document.body.appendChild(overlay);
 
+        document.getElementById('qrCloseBtn').onclick = () => overlay.remove();
         document.getElementById('qrScanConfirmBtn').onclick = () => { overlay.remove(); if (onScan) onScan(); };
         overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
     },
@@ -1206,6 +1208,40 @@ window.FacultyActions = {
                 eq.available += 1;
                 eq.borrowed = Math.max(0, eq.borrowed - 1);
                 this._saveEquipment(equipment);
+            }
+
+            const historyStack = document.querySelector('.history-stack');
+            if (historyStack) {
+                const imgSrc = eq && eq.image ? eq.image : '';
+                const newItem = document.createElement('div');
+                newItem.className = 'history-item';
+                newItem.innerHTML = `
+                    <div class="history-thumbnail">
+                        ${imgSrc ? `<img src="${imgSrc}" alt="${req.item}">` : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#f1f5f9;color:#9ca3af;"><i class="fas fa-box"></i></div>`}
+                    </div>
+                    <div class="history-info">
+                        <div>
+                            <h4>${req.item}</h4>
+                            <p class="owner-trace">Borrowed by ${req.student}</p>
+                            <p class="duration-trace">${req.returnDate}  •  Returned</p>
+                        </div>
+                        <span class="status-pill neutral">Completed</span>
+                    </div>
+                `;
+                historyStack.insertBefore(newItem, historyStack.firstChild);
+                newItem.style.animation = 'fadeIn 0.3s ease';
+
+                const completedBadge = document.querySelector('.card-header .pill-badge');
+                if (completedBadge) {
+                    const currentCount = parseInt(completedBadge.textContent) || 0;
+                    completedBadge.textContent = `${currentCount + 1} Completed`;
+                }
+            }
+
+            const rentalPanel = document.querySelector(`button[onclick*="${rentalId}"]`)?.closest('.rental-item-panel');
+            if (rentalPanel) {
+                rentalPanel.style.animation = 'fadeIn 0.3s ease reverse';
+                setTimeout(() => rentalPanel.remove(), 250);
             }
 
             if (typeof UIUtils !== 'undefined' && UIUtils.showToast) {
