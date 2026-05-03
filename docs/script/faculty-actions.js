@@ -1765,7 +1765,7 @@ window.FacultyActions = {
                         : (daysLeft <= 2 ? '<span class="status-pill warning">Due Soon</span>' : '<span class="status-pill success">Active</span>');
                     
                     const eq = this._getEquipment().find(e => e.name === r.item);
-                    const imgSrc = eq ? eq.image : '../../images/box-placeholder.png';
+                    const imgSrc = eq ? eq.image : '../../images/calc-set.png';
 
                     return `
                     <div class="rental-item-panel">
@@ -1798,7 +1798,7 @@ window.FacultyActions = {
             } else {
                 returnedStack.innerHTML = returned.slice().reverse().map(r => `
                     <div class="history-item">
-                        <div class="history-thumbnail"><img src="../../images/box-placeholder.png" alt="${r.item}"></div>
+                        <div class="history-thumbnail"><img src="../../images/calc-set.png" alt="${r.item}"></div>
                         <div class="history-info">
                             <div><h4>${r.item}</h4><p class="owner-trace">Returned by ${r.student}</p><p class="duration-trace">${r.pickupDate} - ${r.returnDate}</p></div>
                             <span class="status-pill neutral">Completed</span>
