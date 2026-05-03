@@ -174,7 +174,8 @@
             currentFilter = status;
             if (currentTab !== 'borrow') return;
             document.querySelectorAll('#borrowFilters .filter-btn').forEach(b => b.classList.remove('active'));
-            const btnId = status === 'all' ? 'All' : status;
+            const btnMap = { 'all': 'All', 'Pending': 'Pending', 'Approved': 'Approved', 'Picked Up': 'PickedUp', 'Returned': 'Returned', 'Rejected': 'Rejected' };
+            const btnId = btnMap[status] || status;
             const btn = document.getElementById('filter' + btnId);
             if (btn) btn.classList.add('active');
             renderAllRequests();
