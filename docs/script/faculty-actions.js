@@ -1277,10 +1277,10 @@ window.FacultyActions = {
 
         if (req.paymentStatus !== 'Paid') {
             if (confirm('⚠️ Warning: This request is NOT fully paid.\n\nBalance: ₱' + ((req.totalCost || 0) - (req.amountPaid || 0)) + '\n\nDo you still want to confirm pickup?')) {
-                this.confirmPickup(requestId);
+                this.showQRScanner('pickup', requestId, () => { this.confirmPickup(requestId); });
             }
         } else {
-            this.confirmPickup(requestId);
+            this.showQRScanner('pickup', requestId, () => { this.confirmPickup(requestId); });
         }
     },
 
