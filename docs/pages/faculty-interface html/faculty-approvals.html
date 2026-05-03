@@ -191,7 +191,7 @@
                     const pillClass = r.status === 'Approved' ? 'approved-pill' : r.status === 'Rejected' ? 'rejected-pill' : r.status === 'Picked Up' ? 'approved-pill' : r.status === 'Returned' ? 'rejected-pill' : 'warning';
                     let actionsHtml;
                     if (r.status === 'Pending') {
-                        actionsHtml = '<div class="panel-actions"><button class="btn-action-light" onclick="FacultyActions.viewEquipmentDetails(\'' + r.id + '\')"><i class="far fa-eye"></i> View Details</button><button class="btn-action-approve" onclick="FacultyActions.approveRequest(\'' + r.id + '\')"><i class="fas fa-check"></i> Approve</button><button class="btn-action-reject" onclick="FacultyActions.rejectRequest(\'' + r.id + '\')"><i class="fas fa-times"></i> Reject</button></div>';
+                        actionsHtml = '<div class="panel-actions"><button class="btn-action-light" onclick="FacultyActions.viewEquipmentDetails(\'' + r.id + '\')"><i class="far fa-eye"></i> View Details</button><button class="btn-action-approve" onclick="FacultyActions.approveRequest(\'' + r.id + '\')"><i class="fas fa-check"></i> Approve</button><button class="btn-action-reject" onclick="FacultyActions._showRejectionForm(\'' + r.id + '\', \'borrow\')"><i class="fas fa-times"></i> Reject</button></div>';
                     } else if (r.status === 'Approved') {
                         actionsHtml = '<div class="panel-actions"><button class="btn-action-light" onclick="FacultyActions.viewEquipmentDetails(\'' + r.id + '\')"><i class="far fa-eye"></i> View Details</button><button class="btn-action-approve" onclick="FacultyActions.scanPickupQR(\'' + r.id + '\')"><i class="fas fa-qrcode"></i> Scan Pickup QR</button></div>';
                     } else if (r.status === 'Picked Up') {
@@ -256,7 +256,7 @@
                         </div>
                         <div class="panel-actions">
                             ${l.status === 'Pending' 
-                                ? `<button class="btn-action-light" onclick="alert('Viewing ${l.name}')"><i class="far fa-eye"></i> View Photos</button>
+                                ? `<button class="btn-action-light" onclick="FacultyActions.viewListingDetails('${l.id}')"><i class="far fa-eye"></i> View Details</button>
                                    <button class="btn-action-approve" onclick="FacultyActions.approveListing('${l.id}')"><i class="fas fa-check"></i> Verify</button>
                                    <button class="btn-action-reject" onclick="FacultyActions.rejectListing('${l.id}')"><i class="fas fa-times"></i> Reject</button>`
                                 : `<span style="font-size:0.8rem;color:#64748b;padding:8px 16px;background:#f8fafc;border-radius:8px;">Decided on ${l.date}</span>`}

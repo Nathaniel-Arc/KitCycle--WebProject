@@ -173,6 +173,10 @@ window.FacultyActions = {
                         <input type="radio" name="rejectReason" value="Conflicting reservation" style="accent-color:#800000;">
                         Conflicting reservation
                     </label>
+                    <label class="reject-reason-option" style="display:flex;align-items:center;gap:10px;padding:12px;border:1.5px solid #e2e8f0;border-radius:10px;cursor:pointer;transition:0.2s;font-size:0.9rem;" data-reason="Other">
+                        <input type="radio" name="rejectReason" value="Other" style="accent-color:#800000;">
+                        Other: (state the reason for rejection)
+                    </label>
                 </div>
                 <div style="margin-bottom:20px;">
                     <label style="font-weight:700;color:#1e293b;font-size:0.9rem;display:block;margin-bottom:6px;">Additional Notes (Optional)</label>
@@ -722,6 +726,87 @@ window.FacultyActions = {
     },
 
     /* ── Listing Approvals ── */
+    viewListingDetails: function(listId) {
+        const listings = this._getStudentListings();
+        const l = listings.find(x => x.id === listId);
+        if (!l) return;
+
+        const overlay = document.createElement('div');
+        overlay.id = 'listing-details-overlay';
+        overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,23,42,0.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:10000;animation:fadeIn 0.2s ease;';
+        overlay.innerHTML = `
+            <div style="background:#fff;width:95%;max-width:480px;border-radius:20px;padding:25px;box-shadow:0 25px 50px rgba(0,0,0,0.25);animation:modalPop 0.3s cubic-bezier(0.175,0.885,0.32,1.275);max-height:90vh;overflow-y:auto;">
+                <h3 style="margin:0 0 5px;color:#1e293b;text-align:center;">${l.name}</h3>
+                <p style="text-align:center;color:#64748b;font-size:0.85rem;margin-bottom:15px;">Submitted by ${l.student}</p>
+                <div style="width:100%;height:180px;border-radius:12px;overflow:hidden;margin-bottom:15px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;">
+                    ${l.image ? `<img src="${l.image}" style="width:100%;height:100%;object-fit:cover;">` : '<i class="fas fa-camera" style="font-size:3rem;color:#94a3b8;"></i>'}
+                </div>
+                <div style="display:flex;flex-direction:column;gap:8px;">
+                    <div style="display:flex;justify-content:space-between;padding:8px;background:#f8fafc;border-radius:8px;font-size:0.85rem;"><strong>Category:</strong><span>${l.category}</span></div>
+                    <div style="display:flex;justify-content:space-between;padding:8px;background:#f8fafc;border-radius:8px;font-size:0.85rem;"><strong>Condition:</strong><span>${l.condition}</span></div>
+                    <div style="display:flex;justify-content:space-between;padding:8px;background:#f8fafc;border-radius:8px;font-size:0.85rem;"><strong>Price/Day:</strong><span style="color:#800000;font-weight:700;">₱${l.price}</span></div>
+                    <div style="padding:12px;background:#f8fafc;border-radius:8px;font-size:0.85rem;"><strong>Description:</strong><p style="margin:4px 0 0;color:#475569;">${l.description}</p></div>
+                </div>
+                <button onclick="document.getElementById('listing-details-overlay').remove();" style="margin-top:15px;width:100%;padding:10px;background:#f1f5f9;color:#4b5563;border:none;border-radius:8px;font-weight:700;cursor:pointer;">Close</button>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+    },
+
+    rejectListing: function(listId) {
+        this._showRejectionForm(listId, 'listing');
+    },
+
+    _showRejectionForm: function(id, type) {
+        const title = type === 'listing' ? 'Reject Listing' : 'Reject Request';
+        const overlay = document.createElement('div');
+        overlay.id = 'reject-form-overlay';
+        overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,23,42,0.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:10000;animation:fadeIn 0.2s ease;';
+        overlay.innerHTML = `
+            <div style="background:#fff;width:95%;max-width:420px;border-radius:20px;padding:25px;box-shadow:0 25px 50px rgba(0,0,0,0.25);animation:modalPop 0.3s cubic-bezier(0.175,0.885,0.32,1.275);">
+                <h3 style="margin:0 0 5px;color:#1e293b;text-align:center;"><i class="fas fa-ban" style="color:#800000;"></i> ${title}</h3>
+                <p style="text-align:center;color:#64748b;font-size:0.85rem;margin-bottom:15px;">Select a reason for rejection</p>
+                <div style="display:flex;flex-direction:column;gap:12px;">
+                    <select id="rejectReasonSelect" style="padding:10px;border:1px solid #e2e8f0;border-radius:8px;font-size:0.9rem;" onchange="document.getElementById('rejectOtherInput').style.display=this.value==='Other'?'block':'none';">
+                        <option value="Inappropriate Item">Inappropriate Item</option>
+                        <option value="Poor Condition">Poor Condition</option>
+                        <option value="Overpriced">Overpriced</option>
+                        <option value="Incomplete Info">Incomplete Info</option>
+                        <option value="Other">Other:</option>
+                    </select>
+                    <input id="rejectOtherInput" type="text" placeholder="State your reason..." style="display:none;padding:10px;border:1px solid #e2e8f0;border-radius:8px;font-size:0.9rem;">
+                    <textarea id="rejectNotes" rows="2" placeholder="Additional notes..." style="padding:10px;border:1px solid #e2e8f0;border-radius:8px;font-size:0.9rem;"></textarea>
+                </div>
+                <div style="display:flex;gap:10px;margin-top:20px;">
+                    <button onclick="document.getElementById('reject-form-overlay').remove();" style="flex:1;padding:10px;background:#f1f5f9;color:#4b5563;border:none;border-radius:8px;font-weight:700;cursor:pointer;">Cancel</button>
+                    <button id="confirmRejectBtn" style="flex:1;padding:10px;background:#800000;color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;">Reject</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+
+        document.getElementById('confirmRejectBtn').onclick = () => {
+            const reasonSelect = document.getElementById('rejectReasonSelect').value;
+            const reason = reasonSelect === 'Other' ? document.getElementById('rejectOtherInput').value : reasonSelect;
+            const notes = document.getElementById('rejectNotes').value;
+            overlay.remove();
+
+            if (type === 'listing') {
+                const listings = this._getStudentListings();
+                const listing = listings.find(l => l.id === id);
+                if (listing) {
+                    listing.status = 'Rejected';
+                    listing.rejectReason = reason;
+                    listing.rejectNotes = notes;
+                    this._saveStudentListings(listings);
+                    if (typeof renderListings === 'function') renderListings();
+                }
+            } else {
+                this.rejectRequest(id, reason, notes);
+            }
+        };
+    },
+
     approveListing: function(listId) {
         const listings = this._getStudentListings();
         const listing = listings.find(l => l.id === listId);
@@ -781,19 +866,21 @@ window.FacultyActions = {
     },
 
     /* ── Reject Request ── */
-    rejectRequest: function(requestId) {
-        this.showRejectModal(requestId, (reason, notes) => {
-            const requests = this._getRequests();
-            const req = requests.find(r => r.id === requestId);
-            if (!req) return;
+    rejectRequest: function(requestId, reason, notes) {
+        const requests = this._getRequests();
+        const req = requests.find(r => r.id === requestId);
+        if (!req) return;
 
-            req.status = 'Rejected';
-            req.rejectReason = reason;
-            req.rejectNotes = notes;
-            this._saveRequests(requests);
-            this._refreshApprovals();
-            if (typeof UIUtils !== 'undefined' && UIUtils.showToast) UIUtils.showToast(`${req.item} rejected: ${reason}`, 'error');
-        });
+        req.status = 'Rejected';
+        req.rejectReason = reason;
+        req.rejectNotes = notes;
+        this._saveRequests(requests);
+        this._refreshApprovals();
+        if (typeof UIUtils !== 'undefined' && UIUtils.showToast) UIUtils.showToast(`${req.item} rejected: ${reason}`, 'error');
+    },
+
+    showRejectModal: function(requestId, onReject) {
+        this._showRejectionForm(requestId, 'borrow');
     },
 
     /* ── Refresh Approvals UI ── */
