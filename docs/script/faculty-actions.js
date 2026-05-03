@@ -1311,7 +1311,9 @@ window.FacultyActions = {
         const req = requests.find(r => r.id === rentalId);
         if (!req) return;
 
-        this.showReturnInspection(req);
+        this.showQRScanner('return', rentalId, () => {
+            this.showReturnInspection(req);
+        });
     },
 
     showReturnInspection: function(req) {
@@ -1323,7 +1325,7 @@ window.FacultyActions = {
         overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,23,42,0.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:10000;animation:fadeIn 0.2s ease;';
         overlay.innerHTML = `
             <div style="background:#fff;width:95%;max-width:420px;border-radius:20px;padding:25px;box-shadow:0 25px 50px rgba(0,0,0,0.25);animation:modalPop 0.3s cubic-bezier(0.175,0.885,0.32,1.275);max-height:90vh;overflow-y:auto;">
-                <h3 style="margin:0 0 5px;color:#1e293b;text-align:center;"><i class="fas fa-search" style="color:#3b82f6;"></i> Return Inspection</h3>
+                <h3 style="margin:0 0 5px;color:#1e293b;text-align:center;"><i class="fas fa-search" style="color:#800000;"></i> Return Inspection</h3>
                 <p style="text-align:center;color:#64748b;font-size:0.85rem;margin-bottom:15px;">${req.item} | Serial: ${serial}</p>
                 <div style="display:flex;flex-direction:column;gap:12px;">
                     <label style="font-size:0.8rem;font-weight:700;color:#374151;">Asset Tag Verification</label>
@@ -1347,7 +1349,7 @@ window.FacultyActions = {
                 </div>
                 <div style="display:flex;gap:10px;margin-top:20px;">
                     <button onclick="document.getElementById('return-inspection-overlay').remove();" style="flex:1;padding:10px;background:#f1f5f9;color:#4b5563;border:none;border-radius:8px;font-weight:700;cursor:pointer;">Cancel</button>
-                    <button id="confirmReturnBtn" style="flex:1;padding:10px;background:#10b981;color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;">Confirm Return</button>
+                    <button id="confirmReturnBtn" style="flex:1;padding:10px;background:#800000;color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;">Confirm Return</button>
                 </div>
             </div>
         `;
