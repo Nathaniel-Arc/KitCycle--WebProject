@@ -10,7 +10,7 @@ window.FacultyActions = {
         if (!localStorage.getItem('kitcycle_faculty_equipment')) {
             const defaults = [
                 { id: 'eq1', name: 'Engineering Microscope Set', category: 'Laboratory Equipment', quantity: 5, available: 3, borrowed: 2, condition: 'Excellent', location: 'Engineering Lab Room 301', lastMaintained: '2/15/2026', price: 150, serialNumber: 'WMSU-ENG-001', image: '../../images/microscope.jpeg', description: 'High-quality binocular microscope suitable for biology and chemistry lab work.' },
-                { id: 'eq2', name: 'Scientific Calculators', category: 'Academic Tools', quantity: 10, available: 7, borrowed: 3, condition: 'Good', location: 'Engineering Department Office', lastMaintained: '2/20/2026', price: 50, serialNumber: 'WMSU-CALC-002', image: 'https://images.unsplash.com/photo-1587145820266-a5951ee06084?auto=format&fit=crop&w=400&q=80', description: 'TI-84 Plus scientific calculators for advanced mathematics.' },
+                { id: 'eq2', name: 'Scientific Calculators', category: 'Academic Tools', quantity: 10, available: 7, borrowed: 3, condition: 'Good', location: 'Engineering Department Office', lastMaintained: '2/20/2026', price: 50, serialNumber: 'WMSU-CALC-002', image: '../../images/calculator.jpg', description: 'TI-84 Plus scientific calculators for advanced mathematics.' },
                 { id: 'eq3', name: 'Video Recording Equipment', category: 'Media Equipment', quantity: 3, available: 0, borrowed: 3, condition: 'Excellent', location: 'Media Lab Room 205', lastMaintained: '2/10/2026', price: 300, serialNumber: 'WMSU-MEDIA-003', image: '../../images/camera.jpg', description: 'Complete video recording kit with tripod and microphone.' },
                 { id: 'eq4', name: 'Digital Multimeters', category: 'Laboratory Equipment', quantity: 8, available: 5, borrowed: 3, condition: 'Good', location: 'Electronics Lab', lastMaintained: '2/25/2026', price: 80, serialNumber: 'WMSU-ELEC-004', image: '../../images/calc-set.png', description: 'Essential multimeters for electronics and circuit testing.' },
                 { id: 'eq5', name: 'Engineering Reference Books', category: 'Textbooks', quantity: 15, available: 12, borrowed: 3, condition: 'Good', location: 'Department Library', lastMaintained: '1/15/2026', price: 70, serialNumber: 'WMSU-LIB-005', image: '../../images/books.jpeg', description: 'Reference books for mechanical and civil engineering.' },
@@ -896,35 +896,6 @@ window.FacultyActions = {
         }
     },
 
-    rejectListing: function(listId) {
-        const listings = this._getStudentListings();
-        const listing = listings.find(l => l.id === listId);
-        if (!listing) return;
-
-        if (typeof UIUtils !== 'undefined' && UIUtils.showModal) {
-            UIUtils.showModal({
-                title: 'Reject Listing',
-                message: `Reject "${listing.name}"? The student will be notified to fix their listing details.`,
-                type: 'confirm',
-                onConfirm: (val) => {
-                    if (val) {
-                        listing.status = 'Rejected';
-                        this._saveStudentListings(listings);
-                        if (typeof renderListings === 'function') renderListings();
-                        if (typeof UIUtils !== 'undefined' && UIUtils.showToast) UIUtils.showToast(`${listing.name} rejected.`, 'error');
-                    }
-                }
-            });
-        } else {
-            if (confirm(`Reject "${listing.name}"?`)) {
-                listing.status = 'Rejected';
-                this._saveStudentListings(listings);
-                if (typeof renderListings === 'function') renderListings();
-                alert('Listing rejected.');
-            }
-        }
-    },
-
     /* ── Reject Request ── */
     rejectRequest: function(requestId, reason, notes) {
         const requests = this._getRequests();
@@ -1042,6 +1013,7 @@ window.FacultyActions = {
                     <div class="gear-actions">
                         <button class="btn-edit" onclick="FacultyActions.editEquipment('${eq.id}')"><i class="fas fa-edit"></i> Edit</button>
                         <button class="btn-details" onclick="FacultyActions.viewEquipment('${eq.id}')"><i class="far fa-eye"></i> Details</button>
+                        <button class="btn-delete" onclick="FacultyActions.deleteEquipment('${eq.id}', '${eq.name}')" style="background:#fef2f2;color:#dc2626;border:1px solid #fecaca;padding:8px 16px;border-radius:8px;font-weight:600;cursor:pointer;font-size:0.85rem;"><i class="fas fa-trash"></i> Delete</button>
                     </div>
                 </div>
             </div>
@@ -1133,7 +1105,6 @@ window.FacultyActions = {
 
                 <div style="display:flex;gap:10px;margin-top:20px;">
                     <button id="editEqCancelBtn" style="flex:1;padding:12px;background:#f1f5f9;color:#4b5563;border:none;border-radius:10px;font-weight:700;cursor:pointer;">Cancel</button>
-                    <button id="editEqDeleteBtn" style="flex:1;padding:12px;background:#ef4444;color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;"><i class="fas fa-trash"></i> Delete</button>
                     <button id="editEqSaveBtn" style="flex:1;padding:12px;background:#800000;color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;">Save Changes</button>
                 </div>
             </div>
@@ -1156,17 +1127,6 @@ window.FacultyActions = {
 
         document.getElementById('editEqCancelBtn').onclick = () => { overlay.remove(); window._editUploadedPhotos = []; };
         overlay.onclick = (e) => { if (e.target === overlay) { overlay.remove(); window._editUploadedPhotos = []; } };
-
-        document.getElementById('editEqDeleteBtn').onclick = () => {
-            if (confirm(`Delete "${eq.name}"? This action cannot be undone.`)) {
-                const updated = equipment.filter(e => e.id !== id);
-                this._saveEquipment(updated);
-                this.renderEquipmentGrid();
-                overlay.remove();
-                window._editUploadedPhotos = [];
-                if (typeof UIUtils !== 'undefined' && UIUtils.showToast) UIUtils.showToast('Equipment deleted.', 'error');
-            }
-        };
 
         document.getElementById('editEqSaveBtn').onclick = () => {
             const name = document.getElementById('editEqName').value.trim();
@@ -1208,6 +1168,36 @@ window.FacultyActions = {
             overlay.remove();
             window._editUploadedPhotos = [];
             if (typeof UIUtils !== 'undefined' && UIUtils.showToast) UIUtils.showToast('Equipment updated successfully!', 'success');
+        };
+    },
+
+    /* ── Delete Equipment ── */
+    deleteEquipment: function(id, name) {
+        const overlay = document.createElement('div');
+        overlay.id = 'delete-confirm-overlay';
+        overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,23,42,0.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:10000;animation:fadeIn 0.2s ease;';
+
+        overlay.innerHTML = `
+            <div style="background:#fff;width:95%;max-width:420px;border-radius:20px;padding:30px;box-shadow:0 25px 50px rgba(0,0,0,0.25);animation:modalPop 0.3s cubic-bezier(0.175,0.885,0.32,1.275);text-align:center;">
+                <div style="width:60px;height:60px;background:#fef2f2;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;"><i class="fas fa-exclamation-triangle" style="font-size:1.5rem;color:#dc2626;"></i></div>
+                <h3 style="margin:0 0 8px;color:#1e293b;font-size:1.2rem;">Delete Equipment</h3>
+                <p style="color:#374151;font-size:0.95rem;margin-bottom:5px;">Are you sure you want to delete "<strong>${name}</strong>"?</p>
+                <p style="color:#9ca3af;font-size:0.8rem;margin-bottom:20px;">This action cannot be undone</p>
+                <div style="display:flex;gap:10px;">
+                    <button onclick="document.getElementById('delete-confirm-overlay').remove();" style="flex:1;padding:12px;background:#f1f5f9;color:#4b5563;border:none;border-radius:10px;font-weight:700;cursor:pointer;">Cancel</button>
+                    <button id="confirmDeleteBtn" style="flex:1;padding:12px;background:#dc2626;color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;">Delete</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+
+        document.getElementById('confirmDeleteBtn').onclick = () => {
+            const equipment = this._getEquipment();
+            const updated = equipment.filter(e => e.id !== id);
+            this._saveEquipment(updated);
+            this.renderEquipmentGrid();
+            overlay.remove();
+            if (typeof UIUtils !== 'undefined' && UIUtils.showToast) UIUtils.showToast('Equipment deleted.', 'error');
         };
     },
 

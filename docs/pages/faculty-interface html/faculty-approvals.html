@@ -126,16 +126,25 @@
                         </div>
                     </div>
                     <div id="borrowFilters" style="display:flex; gap:10px; align-items:center;">
-                        <input type="text" id="approvalSearch" placeholder="Search student or item..." style="padding:8px 12px; border:1px solid #e2e8f0; border-radius:8px; font-size:0.85rem; outline:none; width:220px;" oninput="filterRequests(currentFilter)">
-                        <div class="status-filter-bar">
-                            <button class="filter-btn active" id="filterAll" onclick="filterRequests('all')">All</button>
-                            <button class="filter-btn" id="filterPending" onclick="filterRequests('Pending')">Pending</button>
-                            <button class="filter-btn" id="filterApproved" onclick="filterRequests('Approved')">Approved</button>
-                            <button class="filter-btn" id="filterPickedUp" onclick="filterRequests('Picked Up')">Picked Up</button>
-                            <button class="filter-btn" id="filterReturned" onclick="filterRequests('Returned')">Returned</button>
-                            <button class="filter-btn" id="filterRejected" onclick="filterRequests('Rejected')">Rejected</button>
-                        </div>
-                    </div>
+                         <input type="text" id="approvalSearch" placeholder="Search student or item..." style="padding:8px 12px; border:1px solid #e2e8f0; border-radius:8px; font-size:0.85rem; outline:none; width:220px;" oninput="filterRequests(currentFilter)">
+                         <div class="status-filter-bar">
+                             <button class="filter-btn active" id="filterAll" onclick="filterRequests('all')">All</button>
+                             <button class="filter-btn" id="filterPending" onclick="filterRequests('Pending')">Pending</button>
+                             <button class="filter-btn" id="filterApproved" onclick="filterRequests('Approved')">Approved</button>
+                             <button class="filter-btn" id="filterPickedUp" onclick="filterRequests('Picked Up')">Picked Up</button>
+                             <button class="filter-btn" id="filterReturned" onclick="filterRequests('Returned')">Returned</button>
+                             <button class="filter-btn" id="filterRejected" onclick="filterRequests('Rejected')">Rejected</button>
+                         </div>
+                     </div>
+                     <div id="listingFilters" style="display:none; gap:10px; align-items:center;">
+                         <input type="text" id="listingSearch" placeholder="Search student or item..." style="padding:8px 12px; border:1px solid #e2e8f0; border-radius:8px; font-size:0.85rem; outline:none; width:220px;" oninput="filterListings(listingFilter)">
+                         <div class="status-filter-bar">
+                             <button class="filter-btn active" id="listingFilterAll" onclick="filterListings('all')">All</button>
+                             <button class="filter-btn" id="listingFilterPending" onclick="filterListings('Pending')">Pending</button>
+                             <button class="filter-btn" id="listingFilterApproved" onclick="filterListings('Approved')">Verified</button>
+                             <button class="filter-btn" id="listingFilterRejected" onclick="filterListings('Rejected')">Rejected</button>
+                         </div>
+                     </div>
                 </div>
                 <div class="requests-stack" id="requestsStack"></div>
                 <div class="requests-stack" id="listingsStack" style="display:none;"></div>
@@ -164,7 +173,7 @@
         function filterRequests(status) {
             currentFilter = status;
             if (currentTab !== 'borrow') return;
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('#borrowFilters .filter-btn').forEach(b => b.classList.remove('active'));
             const btnId = status === 'all' ? 'All' : status;
             const btn = document.getElementById('filter' + btnId);
             if (btn) btn.classList.add('active');
@@ -228,19 +237,38 @@
             document.getElementById('tabBorrow').classList.toggle('active', tab === 'borrow');
             document.getElementById('tabListings').classList.toggle('active', tab === 'listings');
             document.getElementById('borrowFilters').style.display = tab === 'borrow' ? 'flex' : 'none';
+            document.getElementById('listingFilters').style.display = tab === 'listings' ? 'flex' : 'none';
             document.getElementById('requestsStack').style.display = tab === 'borrow' ? 'block' : 'none';
             document.getElementById('listingsStack').style.display = tab === 'listings' ? 'block' : 'none';
             
             if (tab === 'listings') renderListings();
         }
 
+        let listingFilter = 'all';
+
+        function filterListings(status) {
+            listingFilter = status;
+            document.querySelectorAll('#listingFilters .filter-btn').forEach(b => b.classList.remove('active'));
+            const btnId = status === 'all' ? 'All' : status;
+            const btn = document.getElementById('listingFilter' + btnId);
+            if (btn) btn.classList.add('active');
+            renderListings();
+        }
+
         function renderListings() {
             const listings = FacultyActions._getStudentListings();
             const stack = document.getElementById('listingsStack');
-            if (listings.length === 0) {
+            const search = document.getElementById('listingSearch') ? document.getElementById('listingSearch').value.toLowerCase() : '';
+
+            let filtered = listingFilter === 'all' ? listings : listings.filter(l => l.status === listingFilter);
+            if (search) {
+                filtered = filtered.filter(l => l.student.toLowerCase().includes(search) || l.name.toLowerCase().includes(search) || l.studentId.toLowerCase().includes(search));
+            }
+
+            if (filtered.length === 0) {
                 stack.innerHTML = '<div style="text-align:center;padding:40px;color:#64748b;"><i class="fas fa-box-open" style="font-size:3rem;color:#cbd5e1;margin-bottom:15px;display:block;"></i><h4 style="color:#374151;margin-bottom:5px;">No Listings to Verify</h4><p>All student gear is approved.</p></div>';
             } else {
-                stack.innerHTML = listings.map(l => `
+                stack.innerHTML = filtered.map(l => `
                     <div class="request-panel ${l.status === 'Approved' ? 'status-approved' : l.status === 'Rejected' ? 'status-rejected' : ''}">
                         <div class="panel-header"><div><span class="status-pill ${l.status === 'Approved' ? 'approved-pill' : l.status === 'Rejected' ? 'rejected-pill' : 'warning'}">${l.status}</span></div></div>
                         <div class="panel-body">
