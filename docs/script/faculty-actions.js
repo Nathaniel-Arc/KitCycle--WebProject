@@ -759,30 +759,45 @@ window.FacultyActions = {
 
     _showRejectionForm: function(id, type) {
         const title = type === 'listing' ? 'Reject Listing' : 'Reject Request';
+        const isListing = type === 'listing';
+
+        const borrowReasons = [
+            { value: 'Equipment unavailable', label: 'Equipment unavailable for requested dates' },
+            { value: 'Item under maintenance', label: 'Item currently under maintenance' },
+            { value: 'Insufficient student clearance', label: 'Insufficient student clearance/verification' },
+            { value: 'Duration too long', label: 'Rental duration exceeds maximum limit' },
+            { value: 'Conflicting reservation', label: 'Conflicting reservation' }
+        ];
+
+        const listingReasons = [
+            { value: 'Inappropriate Item', label: 'Inappropriate Item' },
+            { value: 'Poor Condition', label: 'Poor Condition' },
+            { value: 'Overpriced', label: 'Overpriced' },
+            { value: 'Incomplete Info', label: 'Incomplete Info' }
+        ];
+
+        const reasons = isListing ? listingReasons : borrowReasons;
+
         const overlay = document.createElement('div');
         overlay.id = 'reject-form-overlay';
         overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,23,42,0.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:10000;animation:fadeIn 0.2s ease;';
+
+        const reasonInputs = reasons.map(r =>
+            `<label style="display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #e2e8f0;border-radius:8px;cursor:pointer;font-size:0.9rem;">
+                <input type="radio" name="rejectReason" value="${r.value}" style="accent-color:#800000;" onchange="document.getElementById('rejectOtherInput').style.display='none';"> ${r.label}
+            </label>`
+        ).join('') +
+            `<label style="display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #e2e8f0;border-radius:8px;cursor:pointer;font-size:0.9rem;">
+                <input type="radio" name="rejectReason" value="Other" style="accent-color:#800000;" onchange="document.getElementById('rejectOtherInput').style.display='block';"> Other:
+            </label>
+            <input id="rejectOtherInput" type="text" placeholder="State your reason..." style="display:none;padding:10px;border:1px solid #e2e8f0;border-radius:8px;font-size:0.9rem;margin-top:5px;">`;
+
         overlay.innerHTML = `
             <div style="background:#fff;width:95%;max-width:420px;border-radius:20px;padding:25px;box-shadow:0 25px 50px rgba(0,0,0,0.25);animation:modalPop 0.3s cubic-bezier(0.175,0.885,0.32,1.275);">
                 <h3 style="margin:0 0 5px;color:#1e293b;text-align:center;"><i class="fas fa-ban" style="color:#800000;"></i> ${title}</h3>
                 <p style="text-align:center;color:#64748b;font-size:0.85rem;margin-bottom:15px;">Select a reason for rejection</p>
                 <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:12px;">
-                    <label style="display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #e2e8f0;border-radius:8px;cursor:pointer;font-size:0.9rem;">
-                        <input type="radio" name="rejectReason" value="Inappropriate Item" style="accent-color:#800000;" onchange="document.getElementById('rejectOtherInput').style.display='none';"> Inappropriate Item
-                    </label>
-                    <label style="display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #e2e8f0;border-radius:8px;cursor:pointer;font-size:0.9rem;">
-                        <input type="radio" name="rejectReason" value="Poor Condition" style="accent-color:#800000;" onchange="document.getElementById('rejectOtherInput').style.display='none';"> Poor Condition
-                    </label>
-                    <label style="display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #e2e8f0;border-radius:8px;cursor:pointer;font-size:0.9rem;">
-                        <input type="radio" name="rejectReason" value="Overpriced" style="accent-color:#800000;" onchange="document.getElementById('rejectOtherInput').style.display='none';"> Overpriced
-                    </label>
-                    <label style="display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #e2e8f0;border-radius:8px;cursor:pointer;font-size:0.9rem;">
-                        <input type="radio" name="rejectReason" value="Incomplete Info" style="accent-color:#800000;" onchange="document.getElementById('rejectOtherInput').style.display='none';"> Incomplete Info
-                    </label>
-                    <label style="display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #e2e8f0;border-radius:8px;cursor:pointer;font-size:0.9rem;">
-                        <input type="radio" name="rejectReason" value="Other" style="accent-color:#800000;" onchange="document.getElementById('rejectOtherInput').style.display='block';"> Other:
-                    </label>
-                    <input id="rejectOtherInput" type="text" placeholder="State your reason..." style="display:none;padding:10px;border:1px solid #e2e8f0;border-radius:8px;font-size:0.9rem;margin-top:5px;">
+                    ${reasonInputs}
                 </div>
                 <textarea id="rejectNotes" rows="2" placeholder="Additional notes..." style="padding:10px;border:1px solid #e2e8f0;border-radius:8px;font-size:0.9rem;width:100%;box-sizing:border-box;"></textarea>
                 <div style="display:flex;gap:10px;margin-top:20px;">
@@ -814,6 +829,7 @@ window.FacultyActions = {
                 }
             } else {
                 this.rejectRequest(id, reason, notes);
+                if (typeof switchApprovalTab === 'function') switchApprovalTab('borrow');
             }
         };
     },
