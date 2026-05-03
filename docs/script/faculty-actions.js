@@ -1275,13 +1275,63 @@ window.FacultyActions = {
         const req = requests.find(r => r.id === requestId);
         if (!req) return;
 
-        if (req.paymentStatus !== 'Paid') {
-            if (confirm('⚠️ Warning: This request is NOT fully paid.\n\nBalance: ₱' + ((req.totalCost || 0) - (req.amountPaid || 0)) + '\n\nDo you still want to confirm pickup?')) {
-                this.showQRScanner('pickup', requestId, () => { this.confirmPickup(requestId); });
+        this.showQRScanner('pickup', requestId, () => {
+            if (req.paymentStatus === 'Paid') {
+                this.confirmPickup(requestId);
+            } else {
+                this.showPickupPayment(req);
             }
-        } else {
-            this.showQRScanner('pickup', requestId, () => { this.confirmPickup(requestId); });
-        }
+        });
+    },
+
+    showPickupPayment: function(req) {
+        const balance = (req.totalCost || 0) - (req.amountPaid || 0);
+        const overlay = document.createElement('div');
+        overlay.id = 'pickup-payment-overlay';
+        overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,23,42,0.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:10000;animation:fadeIn 0.2s ease;';
+        overlay.innerHTML = `
+            <div style="background:#fff;width:95%;max-width:400px;border-radius:20px;padding:25px;box-shadow:0 25px 50px rgba(0,0,0,0.25);animation:modalPop 0.3s cubic-bezier(0.175,0.885,0.32,1.275);">
+                <h3 style="margin:0 0 5px;color:#1e293b;text-align:center;"><i class="fas fa-cash-register" style="color:#ffd700;"></i> Record Payment</h3>
+                <p style="text-align:center;color:#64748b;font-size:0.85rem;margin-bottom:15px;">Balance: <strong style="color:#dc2626;">₱${balance}</strong></p>
+                <div style="display:flex;flex-direction:column;gap:12px;">
+                    <label style="font-size:0.8rem;font-weight:700;color:#374151;">Payment Method</label>
+                    <select id="payMethod" style="padding:10px;border:1px solid #e2e8f0;border-radius:8px;font-size:0.9rem;">
+                        <option value="Cash">Cash</option>
+                        <option value="GCash">GCash</option>
+                        <option value="Maya">Maya</option>
+                        <option value="Bank Transfer">Bank Transfer</option>
+                    </select>
+                    <label style="font-size:0.8rem;font-weight:700;color:#374151;">Amount Paid (₱)</label>
+                    <input id="payAmount" type="number" value="${balance}" style="padding:10px;border:1px solid #e2e8f0;border-radius:8px;font-size:0.9rem;">
+                    <label style="font-size:0.8rem;font-weight:700;color:#374151;">Reference Number (if non-cash)</label>
+                    <input id="payRef" type="text" placeholder="e.g., GC-99887766" style="padding:10px;border:1px solid #e2e8f0;border-radius:8px;font-size:0.9rem;">
+                </div>
+                <div style="display:flex;gap:10px;margin-top:20px;">
+                    <button onclick="document.getElementById('pickup-payment-overlay').remove();" style="flex:1;padding:10px;background:#f1f5f9;color:#4b5563;border:none;border-radius:8px;font-weight:700;cursor:pointer;">Cancel</button>
+                    <button id="confirmPickupPayBtn" style="flex:1;padding:10px;background:#800000;color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;">Confirm & Pickup</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+
+        document.getElementById('confirmPickupPayBtn').onclick = () => {
+            const amt = parseFloat(document.getElementById('payAmount').value) || 0;
+            const method = document.getElementById('payMethod').value;
+            const ref = document.getElementById('payRef').value;
+
+            req.amountPaid = (req.amountPaid || 0) + amt;
+            req.paymentMethod = method;
+            req.proofRef = ref;
+            
+            if (req.amountPaid >= req.totalCost) {
+                req.paymentStatus = 'Paid';
+            } else if (req.amountPaid > 0) {
+                req.paymentStatus = 'Partial';
+            }
+            this._saveRequests(this._getRequests());
+            overlay.remove();
+            this.confirmPickup(req.id);
+        };
     },
 
     confirmPickup: function(requestId) {
