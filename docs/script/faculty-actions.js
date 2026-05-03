@@ -1036,7 +1036,7 @@ window.FacultyActions = {
             ? '<div style="margin-top:12px;padding:12px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;"><strong style="color:#166534;"><i class="fas fa-money-bill-wave"></i> Payment Status: ' + req.paymentStatus + '</strong><div style="display:flex;justify-content:space-between;margin-top:5px;font-size:0.8rem;"><span>Total: ₱' + req.totalCost + '</span><span>Paid: ₱' + (req.amountPaid || 0) + '</span><span style="color:#dc2626;font-weight:700;">Balance: ₱' + ((req.totalCost || 0) - (req.amountPaid || 0)) + '</span></div>' + (req.paymentMethod !== 'Cash' ? '<p style="margin-top:5px;font-size:0.75rem;color:#64748b;">Method: ' + req.paymentMethod + ' | Ref: ' + (req.proofRef || 'N/A') + '</p>' : '') + '</div>' 
             : '';
 
-        const payBtnHtml = req.paymentStatus !== 'Paid' && ['Pending', 'Approved'].includes(req.status)
+        const payBtnHtml = req.paymentStatus !== 'Paid' && req.status === 'Approved'
             ? '<button onclick="FacultyActions.showRecordPayment(\'' + req.id + '\')" style="margin-top:10px;width:100%;padding:10px;background:#ffd700;color:#111827;border:none;border-radius:10px;font-weight:700;cursor:pointer;"><i class="fas fa-cash-register"></i> Record Payment</button>' 
             : '';
 
