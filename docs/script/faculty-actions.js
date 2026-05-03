@@ -1212,7 +1212,10 @@ window.FacultyActions = {
 
             const historyStack = document.querySelector('.history-stack');
             if (historyStack) {
-                const imgSrc = eq && eq.image ? eq.image : '';
+                const rentalPanel = document.querySelector(`button[onclick*="${rentalId}"]`)?.closest('.rental-item-panel');
+                const domImg = rentalPanel ? rentalPanel.querySelector('.rental-thumbnail img')?.src : '';
+                const imgSrc = eq && eq.image ? eq.image : (domImg || '');
+                
                 const newItem = document.createElement('div');
                 newItem.className = 'history-item';
                 newItem.innerHTML = `
