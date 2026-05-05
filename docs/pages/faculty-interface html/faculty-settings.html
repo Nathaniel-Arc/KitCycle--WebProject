@@ -44,9 +44,6 @@
 
         .btn-save { background: #800000; color: #fff; padding: 10px 24px; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; transition: 0.2s; }
         .btn-save:hover { background: #a52a2a; transform: translateY(-2px); }
-
-        .terms-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; font-size: 0.88rem; color: #374151; line-height: 1.7; height: 200px; overflow-y: auto; margin-bottom: 1rem; }
-        .terms-box h4 { color: #800000; margin: 10px 0 5px; font-size: 0.9rem; }
     </style>
 </head>
 
@@ -114,20 +111,6 @@
                     <button class="btn-save" onclick="FacultyActions.saveProfileSettings()"><i class="fas fa-save"></i> Save Profile</button>
                 </div>
 
-                <div class="settings-card">
-                    <div class="settings-header"><i class="fas fa-file-contract"></i><h3>Terms & Conditions</h3></div>
-                    <div class="terms-box">
-                        <h4>1. Rental Agreement</h4>
-                        <p>All rental transactions are agreements between the faculty and the student. Equipment must be returned in the same condition as received.</p>
-                        <h4>2. Payment Terms</h4>
-                        <p>Rental fees are calculated per day/hour as set by the faculty. Advance payment may be required before item pickup.</p>
-                        <h4>3. Lost or Damaged Items</h4>
-                        <p>Lost items must be replaced or fully compensated at current market value. Damaged items will be assessed for repair costs.</p>
-                        <h4>4. Platform Responsibility</h4>
-                        <p>WMSU KitCycle acts as a facilitator and is not liable for disputes between users. All exchanges must occur at designated campus meetup locations.</p>
-                    </div>
-                    <div id="termsStatus" style="display:flex; align-items:center; gap:10px; font-weight:700; color:#10b981;"><i class="fas fa-check-circle"></i> You have accepted the Terms & Conditions</div>
-                </div>
             </div>
         </main>
     </div>
@@ -149,20 +132,6 @@
             if (dept) document.getElementById('settingsDept').value = dept;
             if (office) document.getElementById('settingsOffice').value = office;
             if (name) document.getElementById('sidebarUserName').textContent = name;
-
-            if (!localStorage.getItem('facultyTermsAccepted')) {
-                const termsStatus = document.getElementById('termsStatus');
-                termsStatus.style.color = '#ef4444';
-                termsStatus.innerHTML = '<i class="fas fa-exclamation-circle"></i> You have NOT accepted the Terms & Conditions';
-                
-                if (typeof FacultyActions !== 'undefined') {
-                    FacultyActions.showTermsModal(() => {
-                        const ts = document.getElementById('termsStatus');
-                        ts.style.color = '#10b981';
-                        ts.innerHTML = '<i class="fas fa-check-circle"></i> You have accepted the Terms & Conditions';
-                    });
-                }
-            }
         };
     </script>
 </body>
