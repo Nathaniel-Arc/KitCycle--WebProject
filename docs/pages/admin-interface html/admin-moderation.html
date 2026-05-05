@@ -4,14 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Faculty Moderation | WMSU KitCycle</title>
+    <title>Admin Moderation | WMSU KitCycle</title>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="../../css/style.css">
-    <link rel="stylesheet" href="../../css/faculty-interface/faculty-dashboard.css">
-    <script src="../../script/ui-utils.js"></script>
+    <link rel="stylesheet" href="../../css/admin-interface/admin-dashboard.css">
     <script src="../../script/auth.js" defer></script>
-    <script src="../../script/faculty-actions.js" defer></script>
+    <script src="../../script/ui-utils.js"></script>
 
     <!-- Instant Sidebar State Check -->
     <script>
@@ -249,7 +248,7 @@
         </div>
         <div class="nav-right" style="display: flex; align-items: center; gap: 30px;">
             <ul class="nav-links" style="display: flex; list-style: none; gap: 25px; align-items: center; margin: 0;">
-                <li><a href="faculty-dashboard.html">Home</a></li>
+                <li><a href="admin-dashboard.html">Home</a></li>
                 <li><a href="../marketplace.html">Marketplace</a></li>
                 <li><a href="../howitworks.html">How It Works</a></li>
                 <li><a href="../safety.html">Safety</a></li>
@@ -264,23 +263,21 @@
 
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-profile">
-                <div class="profile-avatar"><img id="sidebarProfileImg" src="../../images/Prof. Ace.jpg" alt="Profile"></div>
+                <div class="profile-avatar"><img id="sidebarProfileImg" src="../../images/nash_profile.png" alt="Profile"></div>
                 <div class="profile-info">
-                    <h4 id="sidebarUserName">Ace Lorenz C. Patongan</h4>
-                    <span id="sidebarUserRole">Faculty</span>
+                    <h4 id="sidebarUserName">Nash Arciaga</h4>
+                    <span id="sidebarUserRole">Admin</span>
                 </div>
             </div>
 
             <ul class="sidebar-nav">
-                <li><a href="faculty-dashboard.html"><i class="fas fa-th-large"></i> <span>Dashboard</span></a></li>
-                <li><a href="faculty-verification.html"><i class="fas fa-user-check"></i> <span>Student Verification</span> <span class="nav-badge-v2" style="display: inline-block;">4</span></a></li>
-                <li class="active"><a href="faculty-moderation.html"><i class="fas fa-user-shield"></i> <span>Moderation</span></a></li>
-                <li><a href="faculty-departmentgear.html"><i class="fas fa-boxes"></i> <span>Departmental Gear</span></a></li>
-                <li><a href="faculty-approvals.html"><i class="fas fa-clipboard-check"></i> <span>Approvals</span> <span class="nav-badge-v2" id="sidebarReqBadge" style="display: inline-block;">5</span></a></li>
-                <li><a href="faculty-messages.html"><i class="fas fa-comments"></i> <span>Messages</span></a></li>
-                <li><a href="faculty-rentals.html"><i class="fas fa-clock"></i> <span>Active Rentals</span></a></li>
-                <li><a href="faculty-reports.html"><i class="fas fa-chart-pie"></i> <span>Reports</span></a></li>
-                <li><a href="faculty-settings.html"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
+                <li><a href="admin-dashboard.html"><i class="fas fa-chart-line"></i> <span>Dashboard</span></a></li>
+                <li><a href="admin-verification.html"><i class="fas fa-user-check"></i> <span>User Verification</span> <span class="nav-badge-v2" style="display: inline-block;">3</span></a></li>
+                <li class="active"><a href="admin-moderation.html"><i class="fas fa-user-shield"></i> <span>Moderation</span></a></li>
+                <li><a href="admin-analytics.html"><i class="fas fa-poll"></i> <span>Analytics</span></a></li>
+                <li><a href="admin-disputes.html"><i class="fas fa-exclamation-triangle"></i> <span>Disputes</span></a></li>
+                <li><a href="admin-approvals.html"><i class="fas fa-clipboard-check"></i> <span>Approvals</span></a></li>
+                <li><a href="admin-settings.html"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
             </ul>
 
             <a href="javascript:void(0)" onclick="AuthSystem.confirmLogout(); return false;" class="sidebar-logout"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
@@ -290,7 +287,7 @@
 
             <div class="dashboard-banner">
                 <h2><i class="fas fa-user-shield"></i> Content Moderation</h2>
-                <p>Review and moderate student listings and reports</p>
+                <p>Review and moderate user-generated content and reports</p>
             </div>
 
             <div class="stat-cards-grid three-cols">
@@ -298,21 +295,21 @@
                     <div class="stat-icon orange-light"><i class="fas fa-flag"></i></div>
                     <div class="stat-numbers">
                         <span class="stat-label">Pending Reports</span>
-                        <h3 class="warning-text" id="pendingReports">3</h3>
+                        <h3 class="warning-text" id="pendingReports">5</h3>
                     </div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon red-light"><i class="fas fa-exclamation-triangle"></i></div>
                     <div class="stat-numbers">
-                        <span class="stat-label">Flagged Listings</span>
-                        <h3 class="danger-text" id="flaggedListings">2</h3>
+                        <span class="stat-label">Flagged Content</span>
+                        <h3 class="danger-text" id="flaggedContent">3</h3>
                     </div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon green-light"><i class="fas fa-check-circle"></i></div>
                     <div class="stat-numbers">
                         <span class="stat-label">Resolved Today</span>
-                        <h3 class="success-text" id="resolvedToday">5</h3>
+                        <h3 class="success-text" id="resolvedToday">12</h3>
                     </div>
                 </div>
             </div>
@@ -320,7 +317,7 @@
             <div class="content-card full-width-card">
                 <div class="card-header">
                     <h3>Content Moderation Queue</h3>
-                    <span class="pill-badge warning-bg" id="queueBadge">3 Pending</span>
+                    <span class="pill-badge warning-bg" id="queueBadge">5 Pending</span>
                 </div>
 
                 <div class="filter-tabs">
@@ -342,18 +339,19 @@
         let currentModFilter = 'All';
 
         // Initialize moderation data
-        if (!localStorage.getItem('facultyModeration')) {
+        if (!localStorage.getItem('adminModeration')) {
             const initialModeration = [
-                { id: 'fm001', type: 'Inappropriate Listing', reporter: 'Student Report', reportedUser: 'John Smith', content: 'Lab Coat - Suspicious pricing', date: '3/5/2026', status: 'Pending' },
-                { id: 'fm002', type: 'Fake Review', reporter: 'System Auto-Detect', reportedUser: 'Jane Doe', content: 'Posted fake 5-star review', date: '3/5/2026', status: 'Pending' },
-                { id: 'fm003', type: 'Spam Listing', reporter: 'Faculty Review', reportedUser: 'Bob Wilson', content: 'Multiple identical listings posted', date: '3/4/2026', status: 'Under Review' },
-                { id: 'fm004', type: 'Prohibited Item', reporter: 'Student Report', reportedUser: 'Alice Brown', content: 'Listed restricted equipment', date: '3/3/2026', status: 'Resolved' }
+                { id: 'm001', type: 'Inappropriate Listing', reporter: 'John Doe', reportedUser: 'Jane Smith', content: 'Chemistry Lab Kit - Suspicious pricing', date: '3/5/2026', status: 'Pending' },
+                { id: 'm002', type: 'Fake Review', reporter: 'Alice Johnson', reportedUser: 'Bob Wilson', content: 'Posted fake 5-star review', date: '3/5/2026', status: 'Pending' },
+                { id: 'm003', type: 'Spam Listing', reporter: 'System Auto-Detect', reportedUser: 'SpamUser123', content: 'Multiple identical listings posted', date: '3/4/2026', status: 'Under Review' },
+                { id: 'm004', type: 'Harassment Report', reporter: 'Charlie Brown', reportedUser: 'Lucy van Pelt', content: 'Inappropriate messages sent', date: '3/4/2026', status: 'Pending' },
+                { id: 'm005', type: 'Prohibited Item', reporter: 'Diana Prince', reportedUser: 'Bruce Wayne', content: 'Listed restricted equipment', date: '3/3/2026', status: 'Resolved' }
             ];
-            localStorage.setItem('facultyModeration', JSON.stringify(initialModeration));
+            localStorage.setItem('adminModeration', JSON.stringify(initialModeration));
         }
 
         function loadModeration() {
-            const items = JSON.parse(localStorage.getItem('facultyModeration') || '[]');
+            const items = JSON.parse(localStorage.getItem('adminModeration') || '[]');
             const container = document.getElementById('moderationStack');
             if (!container) return;
 
@@ -416,11 +414,11 @@
         }
 
         function resolveModeration(id) {
-            const items = JSON.parse(localStorage.getItem('facultyModeration') || '[]');
+            const items = JSON.parse(localStorage.getItem('adminModeration') || '[]');
             const index = items.findIndex(item => item.id === id);
             if (index !== -1) {
                 items[index].status = 'Resolved';
-                localStorage.setItem('facultyModeration', JSON.stringify(items));
+                localStorage.setItem('adminModeration', JSON.stringify(items));
 
                 if (typeof UIUtils !== 'undefined' && UIUtils.showToast) {
                     UIUtils.showToast('Moderation item resolved successfully!', 'success');
@@ -434,9 +432,9 @@
 
         function dismissModeration(id) {
             if (confirm('Are you sure you want to dismiss this report?')) {
-                const items = JSON.parse(localStorage.getItem('facultyModeration') || '[]');
+                const items = JSON.parse(localStorage.getItem('adminModeration') || '[]');
                 const filtered = items.filter(item => item.id !== id);
-                localStorage.setItem('facultyModeration', JSON.stringify(filtered));
+                localStorage.setItem('adminModeration', JSON.stringify(filtered));
 
                 const panel = document.getElementById('mod-' + id);
                 if (panel) panel.remove();
@@ -460,12 +458,6 @@
             localStorage.setItem('sidebarMinimized', isMinimized);
         }
 
-        function toggleNotifs() {}
-
-        window.onclick = function(event) {
-            if (!event.target.closest('.nav-notification-btn')) {}
-        }
-
         window.onload = function() {
             const isMinimized = localStorage.getItem('sidebarMinimized') === 'true';
             if (isMinimized) {
@@ -474,13 +466,6 @@
             }
             
             loadModeration();
-            
-            if (typeof FacultyActions !== 'undefined' && FacultyActions._getRequests) {
-                const requests = FacultyActions._getRequests();
-                const pending = requests.filter(r => r.status === 'Pending');
-                const badge = document.getElementById('sidebarReqBadge');
-                if (badge) badge.textContent = pending.length;
-            }
         };
     </script>
 
