@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="../../css/admin-interface/admin-dashboard.css">
+    <script src="../../script/auth.js" defer></script>
     
     <!-- Instant Sidebar State Check -->
     <script>
@@ -317,7 +318,7 @@
 
 <body>
 
-    <header class="navbar" style="height: 60px;">
+    <header class="navbar">
         <div class="nav-left-group">
             <div class="sidebar-toggle" onclick="toggleSidebar()">
                 <i class="fas fa-bars"></i>
@@ -334,31 +335,8 @@
                 <li><a href="../howitworks.html">How It Works</a></li>
                 <li><a href="../safety.html">Safety</a></li>
             </ul>
-            <div class="auth-buttons" style="display: flex; align-items: center; gap: 15px;">
-                <div class="nav-notification-container">
-                    <button class="nav-notification-btn" onclick="toggleNotifs()">
-                        <i class="far fa-bell"></i>
-                        <div class="notif-badge" id="navNotifBadge" style="display: block;"></div>
-                    </button>
-                    <div class="notif-dropdown" id="notifDropdown">
-                        <div class="notif-header">Notifications</div>
-                        <div class="notif-item">
-                            <p>New user registration pending verification.</p>
-                            <span>10 mins ago</span>
-                        </div>
-                        <div class="notif-item">
-                            <p>System update scheduled for 2:00 AM.</p>
-                            <span>4 hours ago</span>
-                        </div>
-                        <div class="notif-view-all">View All Notifications</div>
-                    </div>
-                </div>
-
-                <span class="user-profile-nav" style="display: flex; align-items: center; font-weight: 600; color: #111827;">
-                    <img src="../../images/nash_profile.png" alt="Admin" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; margin-right: 10px; border: 1.5px solid #800000;"> 
-                    Nash Arciaga
-                </span>
-                <a href="../login.html" class="btn-login" style="padding: 6px 15px; font-size: 0.85rem;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            <div class="auth-buttons">
+                <!-- Injected by auth.js -->
             </div>
         </div>
     </header>
@@ -665,6 +643,347 @@
     </div>
 
     <script>
+        // Initialize admin escalation data
+        if (!localStorage.getItem('adminEscalations')) {
+            const escalations = [
+                { id: 'esc001', name: 'James Robert Cruz', email: 'j.cruz@wmsu.edu.ph', studentId: '2024-15803', violationType: 'Major Violation', details: 'Lost borrowed equipment (Video Recording Equipment)', escalatedBy: 'Prof. Ace Lorenz C. Patongan', dateEscalated: '3/5/2026', recommendedAction: 'Account deactivation for 30 days', status: 'Pending' },
+                { id: 'esc002', name: 'Miguel Antonio Santos', email: 'm.santos@wmsu.edu.ph', studentId: '2024-15804', violationType: 'Major Violation', details: 'Unauthorized selling of borrowed equipment - 2nd offense', escalatedBy: 'Prof. Maria Santos', dateEscalated: '3/4/2026', recommendedAction: 'Permanent account deactivation', status: 'Pending' },
+                { id: 'esc003', name: 'Elena Marie Garcia', email: 'e.garcia@wmsu.edu.ph', studentId: '2024-15805', violationType: 'Multiple Violations', details: '4th offense within semester', escalatedBy: 'Prof. Juan Dela Cruz', dateEscalated: '3/3/2026', recommendedAction: 'Account deactivation for 60 days', status: 'Pending' }
+            ];
+            localStorage.setItem('adminEscalations', JSON.stringify(escalations));
+        }
+
+        if (!localStorage.getItem('deactivatedAccounts')) {
+            const deactivated = [
+                { id: 'deact001', name: 'Rafael Domingo', email: 'r.domingo@wmsu.edu.ph', studentId: '2024-15790', dateDeactivated: '3/1/2026', deactivatedBy: 'Admin Nash Arciaga', reason: 'Repeated late returns and damaged equipment (3 violations)', duration: '30 days (Until 3/31/2026)', status: 'Deactivated' },
+                { id: 'deact002', name: 'Sofia Elena Martinez', email: 's.martinez@wmsu.edu.ph', studentId: '2024-15791', dateDeactivated: '2/28/2026', deactivatedBy: 'Admin Nash Arciaga', reason: 'Lost departmental equipment (Lab Equipment Set)', duration: '60 days (Until 4/28/2026)', status: 'Deactivated' },
+                { id: 'deact003', name: 'Carlos Miguel Garcia', email: 'c.garcia@wmsu.edu.ph', studentId: '2024-15792', dateDeactivated: '2/25/2026', deactivatedBy: 'Admin Nash Arciaga', reason: 'Multiple violations including unauthorized transfer of borrowed equipment', duration: 'Permanent', status: 'Deactivated' }
+            ];
+            localStorage.setItem('deactivatedAccounts', JSON.stringify(deactivated));
+        }
+
+        if (!localStorage.getItem('adminModerationHistory')) {
+            const history = [
+                { name: 'James Cruz', studentId: '2024-15803', action: 'DEACTIVATED', details: 'Deactivated for 30 days', date: '3/5/2026', handledBy: 'Admin' },
+                { name: 'Miguel Santos', studentId: '2024-15804', action: 'PERMANENTLY BANNED', details: 'Permanent ban for unauthorized selling', date: '3/4/2026', handledBy: 'Admin' },
+                { name: 'Elena Garcia', studentId: '2024-15805', action: 'TEMPORARY SUSPENSION', details: 'Suspended for 60 days', date: '3/3/2026', handledBy: 'Admin' },
+                { name: 'Rafael Domingo', studentId: '2024-15790', action: 'REACTIVATED', details: 'Early reactivation after appeal', date: '3/1/2026', handledBy: 'Admin' },
+                { name: 'Sofia Martinez', studentId: '2024-15791', action: 'DEACTIVATED', details: 'Deactivated for 60 days', date: '2/28/2026', handledBy: 'Admin' }
+            ];
+            localStorage.setItem('adminModerationHistory', JSON.stringify(history));
+        }
+
+        function loadEscalations() {
+            const escalations = JSON.parse(localStorage.getItem('adminEscalations') || '[]');
+            const container = document.getElementById('escalationsStack');
+            if (!container) return;
+
+            const pending = escalations.filter(e => e.status === 'Pending');
+
+            if (pending.length === 0) {
+                container.innerHTML = '<p style="text-align:center;padding:30px;color:#64748b;"><i class="fas fa-check-circle" style="font-size:2rem;color:#10b981;margin-bottom:10px;display:block;"></i>All caught up! No pending escalations.</p>';
+            } else {
+                container.innerHTML = pending.map(e => `
+                    <div class="account-item" id="escalation-${e.id}">
+                        <div class="account-top">
+                            <div class="account-user-meta">
+                                <h4>${e.name}</h4>
+                                <p>${e.email}</p>
+                                <span>Student ID: ${e.studentId} • Escalated by: ${e.escalatedBy}</span>
+                            </div>
+                            <span class="status-pill ${e.violationType === 'Major Violation' ? 'danger' : 'warning'}">${e.violationType}</span>
+                        </div>
+                        <div class="account-body">
+                            <div class="account-details">
+                                <p><strong>Violation:</strong> ${e.details}</p>
+                                <p><strong>Date Escalated:</strong> ${e.dateEscalated}</p>
+                                <p><strong>Recommended Action:</strong> ${e.recommendedAction}</p>
+                            </div>
+                        </div>
+                        <div class="account-footer">
+                            <button class="btn-subtle" onclick="viewEscalation('${e.id}')">View Full Details</button>
+                            <div class="action-trigger-grp">
+                                <button class="btn-circle-success" onclick="deactivateAccount('${e.id}')" title="Deactivate Account"><i class="fas fa-user-slash"></i></button>
+                                <button class="btn-circle-warning" onclick="temporarySuspend('${e.id}')" title="Temporary Suspension"><i class="fas fa-clock"></i></button>
+                                <button class="btn-circle-info" onclick="requestMoreInfo('${e.id}')" title="Request More Info"><i class="fas fa-info"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            document.getElementById('activeEscalationsCount').textContent = pending.length;
+            document.getElementById('escalationsBadge').textContent = pending.length + ' Pending';
+        }
+
+        function loadDeactivatedAccounts() {
+            const deactivated = JSON.parse(localStorage.getItem('deactivatedAccounts') || '[]');
+            const container = document.getElementById('deactivatedStack');
+            if (!container) return;
+
+            if (deactivated.length === 0) {
+                container.innerHTML = '<p style="text-align:center;padding:30px;color:#64748b;"><i class="fas fa-check-circle" style="font-size:2rem;color:#10b981;margin-bottom:10px;display:block;"></i>No deactivated accounts.</p>';
+            } else {
+                container.innerHTML = deactivated.map(d => `
+                    <div class="deactivated-item" id="deactivated-${d.id}">
+                        <div class="deactivated-top">
+                            <div class="deactivated-user-meta">
+                                <h4>${d.name}</h4>
+                                <p>${d.email}</p>
+                                <span>Student ID: ${d.studentId} • Deactivated: ${d.dateDeactivated}</span>
+                            </div>
+                            <span class="status-pill gray">Deactivated</span>
+                        </div>
+                        <div class="deactivated-body">
+                            <div class="account-details">
+                                <p><strong>Reason:</strong> ${d.reason}</p>
+                                <p><strong>Deactivated by:</strong> ${d.deactivatedBy}</p>
+                                <p><strong>Duration:</strong> ${d.duration}</p>
+                                <p><strong>Status:</strong> Cannot login or borrow equipment</p>
+                            </div>
+                        </div>
+                        <div class="deactivated-footer">
+                            <button class="btn-subtle" onclick="viewDeactivatedHistory('${d.id}')">View Violation History</button>
+                            <div class="action-trigger-grp">
+                                <button class="btn-reactivate" onclick="reactivateAccount('${d.id}')">Reactivate Account</button>
+                                <button class="btn-permanent" onclick="permanentBan('${d.id}')" ${d.duration === 'Permanent' ? 'disabled style="opacity:0.5;cursor:not-allowed;"' : ''}>Permanent Ban</button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            document.getElementById('deactivatedCount').textContent = deactivated.length;
+            document.getElementById('deactivatedBadge').textContent = deactivated.length + ' Accounts';
+        }
+
+        function loadAdminModerationHistory() {
+            const history = JSON.parse(localStorage.getItem('adminModerationHistory') || '[]');
+            const container = document.getElementById('adminModerationHistory');
+            if (!container) return;
+
+            container.innerHTML = history.map(h => `
+                <div class="history-log-item">
+                    <div class="log-left">
+                        <h4>${h.name} <span class="status-pill ${getAdminStatusClass(h.action)}">${h.action}</span></h4>
+                        <p>Student ID: ${h.studentId} • ${h.details}</p>
+                        <span>${h.date} • ${h.handledBy}</span>
+                    </div>
+                    <i class="fas ${getAdminActionIcon(h.action)}"></i>
+                </div>
+            `).join('');
+        }
+
+        function getAdminStatusClass(action) {
+            if (action === 'REACTIVATED') return 'success';
+            if (action === 'PERMANENTLY BANNED') return 'danger';
+            if (action === 'TEMPORARY SUSPENSION' || action === 'DEACTIVATED') return 'danger';
+            return 'warning';
+        }
+
+        function getAdminActionIcon(action) {
+            if (action === 'REACTIVATED') return 'fa-check-circle success-text';
+            if (action === 'PERMANENTLY BANNED') return 'fa-ban danger-text';
+            if (action === 'DEACTIVATED') return 'fa-user-slash danger-text';
+            if (action === 'TEMPORARY SUSPENSION') return 'fa-clock warning-text';
+            return 'fa-info-circle';
+        }
+
+        function deactivateAccount(id) {
+            const escalations = JSON.parse(localStorage.getItem('adminEscalations') || '[]');
+            const index = escalations.findIndex(e => e.id === id);
+            if (index !== -1) {
+                const escalated = escalations[index];
+                
+                // Add to deactivated accounts
+                const deactivated = JSON.parse(localStorage.getItem('deactivatedAccounts') || '[]');
+                deactivated.push({
+                    id: 'deact' + Date.now(),
+                    name: escalated.name,
+                    email: escalated.email,
+                    studentId: escalated.studentId,
+                    dateDeactivated: new Date().toLocaleDateString(),
+                    deactivatedBy: 'Admin',
+                    reason: escalated.details,
+                    duration: escalated.recommendedAction,
+                    status: 'Deactivated'
+                });
+                localStorage.setItem('deactivatedAccounts', JSON.stringify(deactivated));
+
+                // Remove from escalations
+                escalations.splice(index, 1);
+                localStorage.setItem('adminEscalations', JSON.stringify(escalations));
+
+                // Add to history
+                const history = JSON.parse(localStorage.getItem('adminModerationHistory') || '[]');
+                history.unshift({
+                    name: escalated.name,
+                    studentId: escalated.studentId,
+                    action: 'DEACTIVATED',
+                    details: escalated.recommendedAction,
+                    date: new Date().toLocaleDateString(),
+                    handledBy: 'Admin'
+                });
+                localStorage.setItem('adminModerationHistory', JSON.stringify(history));
+
+                // Remove from display
+                const panel = document.getElementById('escalation-' + id);
+                if (panel) panel.remove();
+
+                if (typeof UIUtils !== 'undefined' && UIUtils.showToast) {
+                    UIUtils.showToast('Account deactivated successfully!', 'warning');
+                } else {
+                    alert('Account deactivated successfully!');
+                }
+
+                loadEscalations();
+                loadDeactivatedAccounts();
+                loadAdminModerationHistory();
+            }
+        }
+
+        function temporarySuspend(id) {
+            const escalations = JSON.parse(localStorage.getItem('adminEscalations') || '[]');
+            const index = escalations.findIndex(e => e.id === id);
+            if (index !== -1) {
+                const escalated = escalations[index];
+                
+                // Add to deactivated accounts
+                const deactivated = JSON.parse(localStorage.getItem('deactivatedAccounts') || '[]');
+                deactivated.push({
+                    id: 'deact' + Date.now(),
+                    name: escalated.name,
+                    email: escalated.email,
+                    studentId: escalated.studentId,
+                    dateDeactivated: new Date().toLocaleDateString(),
+                    deactivatedBy: 'Admin',
+                    reason: escalated.details,
+                    duration: '30 days',
+                    status: 'Deactivated'
+                });
+                localStorage.setItem('deactivatedAccounts', JSON.stringify(deactivated));
+
+                // Remove from escalations
+                escalations.splice(index, 1);
+                localStorage.setItem('adminEscalations', JSON.stringify(escalations));
+
+                // Add to history
+                const history = JSON.parse(localStorage.getItem('adminModerationHistory') || '[]');
+                history.unshift({
+                    name: escalated.name,
+                    studentId: escalated.studentId,
+                    action: 'TEMPORARY SUSPENSION',
+                    details: 'Suspended for 30 days',
+                    date: new Date().toLocaleDateString(),
+                    handledBy: 'Admin'
+                });
+                localStorage.setItem('adminModerationHistory', JSON.stringify(history));
+
+                // Remove from display
+                const panel = document.getElementById('escalation-' + id);
+                if (panel) panel.remove();
+
+                if (typeof UIUtils !== 'undefined' && UIUtils.showToast) {
+                    UIUtils.showToast('Account temporarily suspended!', 'warning');
+                } else {
+                    alert('Account temporarily suspended!');
+                }
+
+                loadEscalations();
+                loadDeactivatedAccounts();
+                loadAdminModerationHistory();
+            }
+        }
+
+        function reactivateAccount(id) {
+            const deactivated = JSON.parse(localStorage.getItem('deactivatedAccounts') || '[]');
+            const index = deactivated.findIndex(d => d.id === id);
+            if (index !== -1) {
+                const reactivated = deactivated[index];
+                deactivated.splice(index, 1);
+                localStorage.setItem('deactivatedAccounts', JSON.stringify(deactivated));
+
+                // Add to history
+                const history = JSON.parse(localStorage.getItem('adminModerationHistory') || '[]');
+                history.unshift({
+                    name: reactivated.name,
+                    studentId: reactivated.studentId,
+                    action: 'REACTIVATED',
+                    details: 'Account reactivated after appeal',
+                    date: new Date().toLocaleDateString(),
+                    handledBy: 'Admin'
+                });
+                localStorage.setItem('adminModerationHistory', JSON.stringify(history));
+
+                // Remove from display
+                const panel = document.getElementById('deactivated-' + id);
+                if (panel) panel.remove();
+
+                if (typeof UIUtils !== 'undefined' && UIUtils.showToast) {
+                    UIUtils.showToast('Account reactivated successfully!', 'success');
+                } else {
+                    alert('Account reactivated successfully!');
+                }
+
+                loadDeactivatedAccounts();
+                loadAdminModerationHistory();
+            }
+        }
+
+        function permanentBan(id) {
+            const deactivated = JSON.parse(localStorage.getItem('deactivatedAccounts') || '[]');
+            const index = deactivated.findIndex(d => d.id === id);
+            if (index !== -1) {
+                deactivated[index].duration = 'Permanent';
+                localStorage.setItem('deactivatedAccounts', JSON.stringify(deactivated));
+
+                // Add to history
+                const history = JSON.parse(localStorage.getItem('adminModerationHistory') || '[]');
+                history.unshift({
+                    name: deactivated[index].name,
+                    studentId: deactivated[index].studentId,
+                    action: 'PERMANENTLY BANNED',
+                    details: 'Permanent ban - no appeal possible',
+                    date: new Date().toLocaleDateString(),
+                    handledBy: 'Admin'
+                });
+                localStorage.setItem('adminModerationHistory', JSON.stringify(history));
+
+                if (typeof UIUtils !== 'undefined' && UIUtils.showToast) {
+                    UIUtils.showToast('Account permanently banned!', 'danger');
+                } else {
+                    alert('Account permanently banned!');
+                }
+
+                loadDeactivatedAccounts();
+                loadAdminModerationHistory();
+            }
+        }
+
+        function requestMoreInfo(id) {
+            if (typeof UIUtils !== 'undefined' && UIUtils.showToast) {
+                UIUtils.showToast('Requesting more information...', 'info');
+            } else {
+                alert('Requesting more information...');
+            }
+        }
+
+        function viewEscalation(id) {
+            if (typeof UIUtils !== 'undefined' && UIUtils.showToast) {
+                UIUtils.showToast('Opening escalation details...', 'info');
+            } else {
+                alert('Opening escalation details...');
+            }
+        }
+
+        function viewDeactivatedHistory(id) {
+            if (typeof UIUtils !== 'undefined' && UIUtils.showToast) {
+                UIUtils.showToast('Opening violation history...', 'info');
+            } else {
+                alert('Opening violation history...');
+            }
+        }
+
         function toggleSidebar() {
             document.documentElement.classList.remove('sidebar-is-minimized');
             const sidebar = document.getElementById('sidebar');
@@ -692,14 +1011,10 @@
             event.target.classList.add('active');
         }
 
-        function toggleNotifs() {
-            // Handled by auth.js
-        }
+        function toggleNotifs() {}
 
         window.onclick = function(event) {
-            if (!event.target.closest('.nav-notification-btn')) {
-                // Handled by auth.js
-            }
+            if (!event.target.closest('.nav-notification-btn')) {}
         }
 
         window.onload = function() {
@@ -708,6 +1023,10 @@
                 document.getElementById('sidebar').classList.add('minimized');
                 document.getElementById('mainContent').classList.add('expanded');
             }
+            
+            loadEscalations();
+            loadDeactivatedAccounts();
+            loadAdminModerationHistory();
         };
     </script>
 

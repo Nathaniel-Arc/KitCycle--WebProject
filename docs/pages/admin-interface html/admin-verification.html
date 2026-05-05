@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="../../css/admin-interface/admin-dashboard.css">
     <link rel="stylesheet" href="../../css/admin-interface/admin-verification.css">
+    <script src="../../script/auth.js" defer></script>
     <!-- Instant Sidebar State Check -->
     <script>
         (function() {
@@ -30,7 +31,7 @@
 </head>
 <body>
 
-    <header class="navbar" style="height: 60px;">
+    <header class="navbar">
         <div class="nav-left-group">
             <div class="sidebar-toggle" onclick="toggleSidebar()">
                 <i class="fas fa-bars"></i>
@@ -47,32 +48,8 @@
                 <li><a href="../howitworks.html">How It Works</a></li>
                 <li><a href="../safety.html">Safety</a></li>
             </ul>
-            <div class="auth-buttons" style="display: flex; align-items: center; gap: 15px;">
-                <!-- Notifications -->
-                <div class="nav-notification-container">
-                    <button class="nav-notification-btn" onclick="toggleNotifs()">
-                        <i class="far fa-bell"></i>
-                        <div class="notif-badge" id="navNotifBadge" style="display: block;"></div>
-                    </button>
-                    <div class="notif-dropdown" id="notifDropdown">
-                        <div class="notif-header">Notifications</div>
-                        <div class="notif-item">
-                            <p>New user registration pending verification.</p>
-                            <span>10 mins ago</span>
-                        </div>
-                        <div class="notif-item">
-                            <p>System update scheduled for 2:00 AM.</p>
-                            <span>4 hours ago</span>
-                        </div>
-                        <div class="notif-view-all">View All Notifications</div>
-                    </div>
-                </div>
-
-                <span class="user-profile-nav" style="display: flex; align-items: center; font-weight: 600; color: #111827;">
-                    <img src="../../images/nash_profile.png" alt="Admin" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; margin-right: 10px; border: 1.5px solid #800000;"> 
-                    Nash Arciaga
-                </span>
-                <a href="../login.html" class="btn-login" style="padding: 6px 15px; font-size: 0.85rem;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            <div class="auth-buttons">
+                <!-- Injected by auth.js -->
             </div>
         </div>
     </header>

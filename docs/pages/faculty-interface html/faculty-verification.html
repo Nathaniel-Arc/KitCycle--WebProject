@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -324,35 +323,24 @@
     </div>
 
     <script>
-        function toggleSidebar() {
-            document.documentElement.classList.remove('sidebar-is-minimized');
-            const sidebar = document.getElementById('sidebar');
-            const mainContent = document.getElementById('mainContent');
-            const isMinimized = sidebar.classList.toggle('minimized');
-            mainContent.classList.toggle('expanded');
-            localStorage.setItem('sidebarMinimized', isMinimized);
+        // Initialize verification data
+        if (!localStorage.getItem('facultyVerifications')) {
+            const initialVerifications = [
+                { id: 'v001', name: 'John Michael Torres', email: 'j.torres@wmsu.edu.ph', studentId: '2024-15781', department: 'Engineering', yearLevel: '2nd Year', date: '3/5/2026', documents: 2, status: 'Pending' },
+                { id: 'v002', name: 'Sarah Jensen Alfonso', email: 's.alfonso@wmsu.edu.ph', studentId: '2024-15782', department: 'Computer Science', yearLevel: '3rd Year', date: '3/4/2026', documents: 2, status: 'Pending' },
+                { id: 'v003', name: 'David Christopher Lee', email: 'd.lee@wmsu.edu.ph', studentId: '2024-15783', department: 'Business Administration', yearLevel: '4th Year', date: '3/4/2026', documents: 2, status: 'Pending' },
+                { id: 'v004', name: 'Angela Marie Santos', email: 'a.santos@wmsu.edu.ph', studentId: '2024-15784', department: 'Nursing', yearLevel: '1st Year', date: '3/3/2026', documents: 2, status: 'Pending' }
+            ];
+            localStorage.setItem('facultyVerifications', JSON.stringify(initialVerifications));
         }
 
-        // Initialize verification data
-        function initVerificationData() {
-            if (!localStorage.getItem('facultyVerifications')) {
-                const initialVerifications = [
-                    { id: 'v001', name: 'John Michael Torres', email: 'j.torres@wmsu.edu.ph', studentId: '2024-15781', department: 'Engineering', yearLevel: '2nd Year', date: '3/5/2026', documents: 2, status: 'Pending' },
-                    { id: 'v002', name: 'Sarah Jensen Alfonso', email: 's.alfonso@wmsu.edu.ph', studentId: '2024-15782', department: 'Computer Science', yearLevel: '3rd Year', date: '3/4/2026', documents: 2, status: 'Pending' },
-                    { id: 'v003', name: 'David Christopher Lee', email: 'd.lee@wmsu.edu.ph', studentId: '2024-15783', department: 'Business Administration', yearLevel: '4th Year', date: '3/4/2026', documents: 2, status: 'Pending' },
-                    { id: 'v004', name: 'Angela Marie Santos', email: 'a.santos@wmsu.edu.ph', studentId: '2024-15784', department: 'Nursing', yearLevel: '1st Year', date: '3/3/2026', documents: 2, status: 'Pending' }
-                ];
-                localStorage.setItem('facultyVerifications', JSON.stringify(initialVerifications));
-            }
-
-            if (!localStorage.getItem('verificationHistory')) {
-                const history = [
-                    { name: 'Kevin James Cruz', studentId: '2024-15770', status: 'APPROVED', date: '3/5/2026', decidedBy: 'Faculty' },
-                    { name: 'Michelle Ann Reyes', studentId: '2024-15771', status: 'APPROVED', date: '3/4/2026', decidedBy: 'Faculty' },
-                    { name: 'Robert James Garcia', studentId: '2024-15772', status: 'REJECTED', date: '3/4/2026', decidedBy: 'Faculty' }
-                ];
-                localStorage.setItem('verificationHistory', JSON.stringify(history));
-            }
+        if (!localStorage.getItem('verificationHistory')) {
+            const history = [
+                { name: 'Kevin James Cruz', studentId: '2024-15770', status: 'APPROVED', date: '3/5/2026', decidedBy: 'Faculty' },
+                { name: 'Michelle Ann Reyes', studentId: '2024-15771', status: 'APPROVED', date: '3/4/2026', decidedBy: 'Faculty' },
+                { name: 'Robert James Garcia', studentId: '2024-15772', status: 'REJECTED', date: '3/4/2026', decidedBy: 'Faculty' }
+            ];
+            localStorage.setItem('verificationHistory', JSON.stringify(history));
         }
 
         function loadVerifications() {
@@ -362,37 +350,40 @@
 
             const pending = verifications.filter(v => v.status === 'Pending');
             
-            container.innerHTML = pending.map(v => `
-                <div class="verify-item-panel" id="panel-${v.id}">
-                    <div class="verify-panel-top">
-                        <div class="verify-user-meta">
-                            <h4>${v.name}</h4>
-                            <p>${v.email}</p>
-                            <span>Student ID: ${v.studentId}</span>
+            if (pending.length === 0) {
+                container.innerHTML = '<p style="text-align:center;padding:30px;color:#64748b;"><i class="fas fa-check-circle" style="font-size:2rem;color:#10b981;margin-bottom:10px;display:block;"></i>All caught up! No pending verifications.</p>';
+            } else {
+                container.innerHTML = pending.map(v => `
+                    <div class="verify-item-panel" id="panel-${v.id}">
+                        <div class="verify-panel-top">
+                            <div class="verify-user-meta">
+                                <h4>${v.name}</h4>
+                                <p>${v.email}</p>
+                                <span>Student ID: ${v.studentId}</span>
+                            </div>
+                            <span class="status-pill warning">Pending Review</span>
                         </div>
-                        <span class="status-pill warning">Pending Review</span>
+                        <div class="verify-panel-body">
+                            <div class="specs-grid">
+                                <p>Department: <strong>${v.department}</strong></p>
+                                <p><i class="far fa-clock"></i> ${v.date}</p>
+                            </div>
+                            <div class="specs-grid">
+                                <p>Year Level: <strong>${v.yearLevel}</strong></p>
+                                <p>${v.documents} documents submitted</p>
+                            </div>
+                        </div>
+                        <div class="verify-panel-footer">
+                            <button class="btn-subtle" onclick="viewDetails('${v.id}')">Review Details</button>
+                            <div class="action-trigger-grp">
+                                <button class="btn-circle-success" onclick="approveVerification('${v.id}')" title="Approve"><i class="fas fa-check"></i></button>
+                                <button class="btn-circle-danger" onclick="rejectVerification('${v.id}')" title="Reject"><i class="fas fa-times"></i></button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="verify-panel-body">
-                        <div class="specs-grid">
-                            <p>Department: <strong>${v.department}</strong></p>
-                            <p><i class="far fa-clock"></i> ${v.date}</p>
-                        </div>
-                        <div class="specs-grid">
-                            <p>Year Level: <strong>${v.yearLevel}</strong></p>
-                            <p>${v.documents} documents submitted</p>
-                        </div>
-                    </div>
-                    <div class="verify-panel-footer">
-                        <button class="btn-subtle" onclick="viewDetails('${v.id}')">Review Details</button>
-                        <div class="action-trigger-grp">
-                            <button class="btn-circle-success" onclick="approveVerification('${v.id}')" title="Approve"><i class="fas fa-check"></i></button>
-                            <button class="btn-circle-danger" onclick="rejectVerification('${v.id}')" title="Reject"><i class="fas fa-times"></i></button>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
+                `).join('');
+            }
 
-            // Update counts and badges
             document.getElementById('pendingCount').textContent = pending.length;
             document.getElementById('pendingBadge').textContent = pending.length + ' Pending';
             const badge = document.getElementById('verifyBadge');
@@ -424,7 +415,6 @@
                 verifications[index].decisionDate = new Date().toLocaleDateString();
                 localStorage.setItem('facultyVerifications', JSON.stringify(verifications));
 
-                // Add to history
                 const history = JSON.parse(localStorage.getItem('verificationHistory') || '[]');
                 history.unshift({
                     name: verifications[index].name,
@@ -435,11 +425,9 @@
                 });
                 localStorage.setItem('verificationHistory', JSON.stringify(history));
 
-                // Remove panel
                 const panel = document.getElementById('panel-' + id);
                 if (panel) panel.remove();
 
-                // Update verified today count
                 const verifiedToday = parseInt(document.getElementById('verifiedToday').textContent) + 1;
                 document.getElementById('verifiedToday').textContent = verifiedToday;
 
@@ -462,7 +450,6 @@
                 verifications[index].decisionDate = new Date().toLocaleDateString();
                 localStorage.setItem('facultyVerifications', JSON.stringify(verifications));
 
-                // Add to history
                 const history = JSON.parse(localStorage.getItem('verificationHistory') || '[]');
                 history.unshift({
                     name: verifications[index].name,
@@ -473,7 +460,6 @@
                 });
                 localStorage.setItem('verificationHistory', JSON.stringify(history));
 
-                // Remove panel
                 const panel = document.getElementById('panel-' + id);
                 if (panel) panel.remove();
 
@@ -496,31 +482,39 @@
             }
         }
 
+        function toggleSidebar() {
+            document.documentElement.classList.remove('sidebar-is-minimized');
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            const isMinimized = sidebar.classList.toggle('minimized');
+            mainContent.classList.toggle('expanded');
+            localStorage.setItem('sidebarMinimized', isMinimized);
+        }
+
         function toggleNotifs() {}
 
         window.onclick = function(event) {
             if (!event.target.closest('.nav-notification-btn')) {}
         }
 
-        window.onload = function() {
+        // Initialize after auth.js has run
+        window.addEventListener('load', function() {
             const isMinimized = localStorage.getItem('sidebarMinimized') === 'true';
             if (isMinimized) {
                 document.getElementById('sidebar').classList.add('minimized');
                 document.getElementById('mainContent').classList.add('expanded');
             }
             
-            initVerificationData();
             loadVerifications();
             loadHistory();
             
-            // Load sidebar badge for requests
-            if (typeof FacultyActions !== 'undefined') {
-                const requests = FacultyActions._getRequests ? FacultyActions._getRequests() : [];
+            if (typeof FacultyActions !== 'undefined' && FacultyActions._getRequests) {
+                const requests = FacultyActions._getRequests();
                 const pending = requests.filter(r => r.status === 'Pending');
                 const badge = document.getElementById('sidebarReqBadge');
                 if (badge) badge.textContent = pending.length;
             }
-        };
+        });
     </script>
 
 </body>
