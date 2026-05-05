@@ -119,104 +119,91 @@
             border-color: #800000;
         }
 
-        .moderation-item {
+        .request-panel {
             border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 1.2rem;
-            margin-bottom: 15px;
+            border-left: 4px solid #f59e0b;
+            border-radius: 10px;
+            padding: 1rem;
             background: #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            margin-bottom: 15px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
-        .mod-item-top {
+        .request-panel:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .request-panel.status-resolved { border-left-color: #10b981; }
+
+        .panel-header {
             display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
+            justify-content: flex-end;
             margin-bottom: 12px;
         }
 
-        .mod-user-meta h4 { font-size: 1rem; color: #1e293b; margin: 0 0 4px; }
-        .mod-user-meta p { font-size: 0.85rem; color: #64748b; margin: 0 0 4px; }
-        .mod-user-meta span { font-size: 0.78rem; color: #94a3b8; }
-
-        .status-pill {
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 700;
-        }
-
-        .status-pill.warning { background: #fff7ed; color: #f59e0b; }
-        .status-pill.success { background: #f0fdf4; color: #10b981; }
-        .status-pill.danger { background: #fee2e2; color: #ef4444; }
-        .status-pill.info { background: #eff6ff; color: #3b82f6; }
-
-        .mod-item-body { margin-bottom: 15px; }
-
-        .mod-details {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            font-size: 0.85rem;
-            color: #64748b;
-            margin-bottom: 8px;
-        }
-
-        .mod-details p { margin: 0; }
-
-        .mod-item-footer {
+        .panel-body {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #f3f4f6;
+            gap: 20px;
+        }
+
+        .student-meta { flex: 0.8; }
+        .student-meta h4 { font-size: 0.95rem; color: #111827; margin-bottom: 4px; }
+        .student-meta p { font-size: 0.8rem; color: #6b7280; }
+        .student-meta p span { font-weight: 700; color: #111827; }
+
+        .item-specs { flex: 1.2; }
+        .item-specs p { font-size: 0.85rem; color: #4b5563; margin-bottom: 4px; }
+        .item-specs p strong { color: #111827; }
+        .item-specs .timestamp { font-size: 0.75rem; color: #9ca3af; margin-top: 8px; display: block; }
+
+        .panel-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 1rem;
             padding-top: 12px;
-            border-top: 1px solid #f1f5f9;
+            border-top: 1px solid #f3f4f6;
+            justify-content: flex-start;
         }
 
-        .btn-subtle {
-            background: transparent;
-            border: 1px solid #e2e8f0;
-            padding: 8px 16px;
+        .panel-actions button {
+            padding: 8px 14px;
             border-radius: 8px;
-            font-size: 0.85rem;
             font-weight: 600;
-            color: #64748b;
-            cursor: pointer;
-        }
-
-        .btn-subtle:hover { background: #f8fafc; }
-
-        .action-trigger-grp { display: flex; gap: 8px; }
-
-        .btn-circle-success {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: #10b981;
-            color: #fff;
-            border: none;
+            font-size: 0.8rem;
             cursor: pointer;
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: 0.9rem;
+            gap: 6px;
+            transition: 0.2s;
         }
 
-        .btn-circle-success:hover { background: #059669; }
+        .btn-action-light { background: #f8fafc; border: 1px solid #e2e8f0; color: #4b5563; }
+        .btn-action-light:hover { background: #e2e8f0; color: #111827; }
 
-        .btn-circle-danger {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: #ef4444;
-            color: #fff;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.9rem;
+        .btn-action-approve { background: #10b981; border: none; color: #fff; }
+        .btn-action-approve:hover { background: #059669; }
+
+        .btn-action-reject { background: #fff; border: 1px solid #dc2626; color: #dc2626; }
+        .btn-action-reject:hover { background: #fef2f2; }
+
+        .status-pill {
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 4px;
+            margin-left: 5px;
         }
 
-        .btn-circle-danger:hover { background: #dc2626; }
+        .status-pill.warning { background: #fffbeb; color: #b45309; }
+        .status-pill.success { background: #f0fdf4; color: #15803d; }
+        .status-pill.danger { background: #fef2f2; color: #dc2626; }
+        .status-pill.info { background: #eff6ff; color: #1d4ed8; }
 
         .margin-top { margin-top: 25px; }
 
@@ -344,10 +331,10 @@
         // Initialize moderation data
         if (!localStorage.getItem('facultyModeration')) {
             const initialModeration = [
-                { id: 'fm001', type: 'Inappropriate Listing', reporter: 'Student Report', reportedUser: 'John Smith', content: 'Lab Coat - Suspicious pricing', date: '3/5/2026', status: 'Pending' },
-                { id: 'fm002', type: 'Fake Review', reporter: 'System Auto-Detect', reportedUser: 'Jane Doe', content: 'Posted fake 5-star review', date: '3/5/2026', status: 'Pending' },
-                { id: 'fm003', type: 'Spam Listing', reporter: 'Faculty Review', reportedUser: 'Bob Wilson', content: 'Multiple identical listings posted', date: '3/4/2026', status: 'Under Review' },
-                { id: 'fm004', type: 'Prohibited Item', reporter: 'Student Report', reportedUser: 'Alice Brown', content: 'Listed restricted equipment', date: '3/3/2026', status: 'Resolved' }
+                { id: 'fm001', type: 'Inappropriate Listing', reporter: 'Student Report', reportedUser: 'John Smith', content: 'Lab Coat - Suspicious pricing', date: '3/5/2026', status: 'Pending', details: 'Listing contains misleading pricing information that appears to be significantly below market value, potentially indicating fraudulent intent.' },
+                { id: 'fm002', type: 'Fake Review', reporter: 'System Auto-Detect', reportedUser: 'Jane Doe', content: 'Posted fake 5-star review', date: '3/5/2026', status: 'Pending', details: 'Multiple 5-star reviews posted in rapid succession with identical wording, indicating potential review manipulation.' },
+                { id: 'fm003', type: 'Spam Listing', reporter: 'Faculty Review', reportedUser: 'Bob Wilson', content: 'Multiple identical listings posted', date: '3/4/2026', status: 'Under Review', details: 'User has created 5 identical listings for the same item within 24 hours, flooding the marketplace.' },
+                { id: 'fm004', type: 'Prohibited Item', reporter: 'Student Report', reportedUser: 'Alice Brown', content: 'Listed restricted equipment', date: '3/3/2026', status: 'Resolved', details: 'Attempted to list laboratory chemicals that are restricted under university policy.' }
             ];
             localStorage.setItem('facultyModeration', JSON.stringify(initialModeration));
         }
@@ -366,32 +353,41 @@
                 container.innerHTML = '<div class="empty-state"><i class="fas fa-check-circle"></i><p>No items found in this category.</p></div>';
             } else {
                 container.innerHTML = filtered.map(item => `
-                    <div class="moderation-item" id="mod-${item.id}">
-                        <div class="mod-item-top">
-                            <div class="mod-user-meta">
+                    <div class="request-panel ${item.status === 'Resolved' ? 'status-resolved' : ''}" id="mod-${item.id}">
+                        <div class="panel-header">
+                            <div><span class="status-pill ${item.status === 'Pending' ? 'warning' : item.status === 'Under Review' ? 'info' : 'success'}">${item.status}</span></div>
+                        </div>
+                        <div class="panel-body">
+                            <div class="student-meta">
                                 <h4>${item.type}</h4>
-                                <p>Reported by: ${item.reporter}</p>
-                                <span>Reported user: ${item.reportedUser} • ${item.date}</span>
+                                <p>Reported User: <span>${item.reportedUser}</span></p>
                             </div>
-                            <span class="status-pill ${item.status === 'Pending' ? 'warning' : item.status === 'Under Review' ? 'info' : 'success'}">${item.status}</span>
-                        </div>
-                        <div class="mod-item-body">
-                            <div class="mod-details">
-                                <p>Content: <strong>${item.content}</strong></p>
-                                <p><i class="far fa-clock"></i> ${item.date}</p>
+                            <div class="item-specs">
+                                <p><strong>Reporter:</strong> ${item.reporter}</p>
+                                <p><strong>Content:</strong> ${item.content}</p>
+                                <p class="timestamp"><i class="far fa-clock"></i> Reported on ${item.date}</p>
                             </div>
                         </div>
-                        <div class="mod-item-footer">
-                            <button class="btn-subtle" onclick="viewModerationDetails('${item.id}')">View Details</button>
+                        <div class="panel-actions">
+                            <button class="btn-action-light" data-action="view" data-id="${item.id}"><i class="far fa-eye"></i> View Details</button>
                             ${item.status !== 'Resolved' ? `
-                            <div class="action-trigger-grp">
-                                <button class="btn-circle-success" onclick="resolveModeration('${item.id}')" title="Resolve"><i class="fas fa-check"></i></button>
-                                <button class="btn-circle-danger" onclick="dismissModeration('${item.id}')" title="Dismiss"><i class="fas fa-times"></i></button>
-                            </div>
-                            ` : `<span style="font-size:0.85rem;color:#64748b;">Resolved</span>`}
+                            <button class="btn-action-approve" data-action="resolve" data-id="${item.id}"><i class="fas fa-check"></i> Resolve</button>
+                            <button class="btn-action-reject" data-action="dismiss" data-id="${item.id}"><i class="fas fa-times"></i> Dismiss</button>
+                            ` : `<span style="font-size:0.8rem;color:#64748b;padding:8px 16px;background:#f8fafc;border-radius:8px;">Resolved on ${item.date}</span>`}
                         </div>
                     </div>
                 `).join('');
+
+                // Add event listeners
+                container.querySelectorAll('[data-action]').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const action = this.getAttribute('data-action');
+                        const id = this.getAttribute('data-id');
+                        if (action === 'view') viewModerationDetails(id);
+                        else if (action === 'resolve') resolveModeration(id);
+                        else if (action === 'dismiss') dismissModeration(id);
+                    });
+                });
             }
 
             const pending = items.filter(item => item.status === 'Pending');
@@ -408,11 +404,38 @@
         }
 
         function viewModerationDetails(id) {
-            if (typeof UIUtils !== 'undefined' && UIUtils.showToast) {
-                UIUtils.showToast('Opening moderation details...', 'info');
-            } else {
-                alert('Opening moderation details...');
-            }
+            const items = JSON.parse(localStorage.getItem('facultyModeration') || '[]');
+            const item = items.find(i => i.id === id);
+            if (!item) return;
+
+            // Create and show details modal
+            const existing = document.getElementById('moderation-details-overlay');
+            if (existing) existing.remove();
+
+            const overlay = document.createElement('div');
+            overlay.id = 'moderation-details-overlay';
+            overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,23,42,0.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:10000;animation:fadeIn 0.2s ease;';
+
+            overlay.innerHTML = `
+                <div style="background:#fff;width:95%;max-width:500px;border-radius:20px;padding:30px;box-shadow:0 25px 50px rgba(0,0,0,0.25);animation:modalPop 0.3s cubic-bezier(0.175,0.885,0.32,1.275);">
+                    <div style="text-align:center;margin-bottom:20px;">
+                        <div style="width:60px;height:60px;background:#eff6ff;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;"><i class="fas fa-user-shield" style="font-size:1.5rem;color:#3b82f6;"></i></div>
+                        <h3 style="margin:0;color:#1e293b;font-size:1.2rem;">Moderation Details</h3>
+                    </div>
+                    <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:20px;margin-bottom:20px;">
+                        <p style="margin:0 0 8px;font-size:0.9rem;"><strong>Type:</strong> ${item.type}</p>
+                        <p style="margin:0 0 8px;font-size:0.9rem;"><strong>Reported User:</strong> ${item.reportedUser}</p>
+                        <p style="margin:0 0 8px;font-size:0.9rem;"><strong>Reporter:</strong> ${item.reporter}</p>
+                        <p style="margin:0 0 8px;font-size:0.9rem;"><strong>Content:</strong> ${item.content}</p>
+                        <p style="margin:0 0 8px;font-size:0.9rem;"><strong>Status:</strong> <span class="status-pill ${item.status === 'Pending' ? 'warning' : item.status === 'Under Review' ? 'info' : 'success'}" style="font-size:0.75rem;">${item.status}</span></p>
+                        <p style="margin:0 0 8px;font-size:0.9rem;"><strong>Date:</strong> ${item.date}</p>
+                        ${item.details ? `<p style="margin:8px 0 0;font-size:0.85rem;color:#4b5563;padding:10px;background:#fff;border-radius:8px;border-left:3px solid #3b82f6;"><strong>Details:</strong> ${item.details}</p>` : ''}
+                    </div>
+                    <button onclick="document.getElementById('moderation-details-overlay').remove()" style="width:100%;padding:12px;background:#800000;color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-size:0.9rem;">Close</button>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+            overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
         }
 
         function resolveModeration(id) {

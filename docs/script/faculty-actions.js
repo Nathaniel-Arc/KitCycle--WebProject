@@ -760,83 +760,6 @@ window.FacultyActions = {
         this._showRejectionForm(listId, 'listing');
     },
 
-    _showRejectionForm: function(id, type) {
-        const title = type === 'listing' ? 'Reject Listing' : 'Reject Request';
-        const isListing = type === 'listing';
-
-        const borrowReasons = [
-            { value: 'Equipment unavailable', label: 'Equipment unavailable for requested dates' },
-            { value: 'Item under maintenance', label: 'Item currently under maintenance' },
-            { value: 'Insufficient student clearance', label: 'Insufficient student clearance/verification' },
-            { value: 'Duration too long', label: 'Rental duration exceeds maximum limit' },
-            { value: 'Conflicting reservation', label: 'Conflicting reservation' }
-        ];
-
-        const listingReasons = [
-            { value: 'Inappropriate Item', label: 'Inappropriate Item' },
-            { value: 'Poor Condition', label: 'Poor Condition' },
-            { value: 'Overpriced', label: 'Overpriced' },
-            { value: 'Incomplete Info', label: 'Incomplete Info' }
-        ];
-
-        const reasons = isListing ? listingReasons : borrowReasons;
-
-        const overlay = document.createElement('div');
-        overlay.id = 'reject-form-overlay';
-        overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,23,42,0.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:10000;animation:fadeIn 0.2s ease;';
-
-        const reasonInputs = reasons.map(r =>
-            `<label style="display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #e2e8f0;border-radius:8px;cursor:pointer;font-size:0.9rem;">
-                <input type="radio" name="rejectReason" value="${r.value}" style="accent-color:#800000;" onchange="document.getElementById('rejectOtherInput').style.display='none';"> ${r.label}
-            </label>`
-        ).join('') +
-            `<label style="display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #e2e8f0;border-radius:8px;cursor:pointer;font-size:0.9rem;">
-                <input type="radio" name="rejectReason" value="Other" style="accent-color:#800000;" onchange="document.getElementById('rejectOtherInput').style.display='block';"> Other:
-            </label>
-            <input id="rejectOtherInput" type="text" placeholder="State your reason..." style="display:none;padding:10px;border:1px solid #e2e8f0;border-radius:8px;font-size:0.9rem;margin-top:5px;">`;
-
-        overlay.innerHTML = `
-            <div style="background:#fff;width:95%;max-width:420px;border-radius:20px;padding:25px;box-shadow:0 25px 50px rgba(0,0,0,0.25);animation:modalPop 0.3s cubic-bezier(0.175,0.885,0.32,1.275);">
-                <h3 style="margin:0 0 5px;color:#1e293b;text-align:center;"><i class="fas fa-ban" style="color:#800000;"></i> ${title}</h3>
-                <p style="text-align:center;color:#64748b;font-size:0.85rem;margin-bottom:15px;">Select a reason for rejection</p>
-                <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:12px;">
-                    ${reasonInputs}
-                </div>
-                <textarea id="rejectNotes" rows="2" placeholder="Additional notes..." style="padding:10px;border:1px solid #e2e8f0;border-radius:8px;font-size:0.9rem;width:100%;box-sizing:border-box;"></textarea>
-                <div style="display:flex;gap:10px;margin-top:20px;">
-                    <button onclick="document.getElementById('reject-form-overlay').remove();" style="flex:1;padding:10px;background:#f1f5f9;color:#4b5563;border:none;border-radius:8px;font-weight:700;cursor:pointer;">Cancel</button>
-                    <button id="confirmRejectBtn" style="flex:1;padding:10px;background:#800000;color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;">Reject</button>
-                </div>
-            </div>
-        `;
-        document.body.appendChild(overlay);
-
-        document.getElementById('confirmRejectBtn').onclick = () => {
-            const reasonRadio = document.querySelector('input[name="rejectReason"]:checked');
-            if (!reasonRadio) { alert('Please select a rejection reason.'); return; }
-            const reason = reasonRadio.value === 'Other' ? document.getElementById('rejectOtherInput').value : reasonRadio.value;
-            if (reasonRadio.value === 'Other' && !reason.trim()) { alert('Please specify your reason.'); return; }
-            const notes = document.getElementById('rejectNotes').value;
-            overlay.remove();
-
-            if (type === 'listing') {
-                const listings = this._getStudentListings();
-                const listing = listings.find(l => l.id === id);
-                if (listing) {
-                    listing.status = 'Rejected';
-                    listing.rejectReason = reason;
-                    listing.rejectNotes = notes;
-                    this._saveStudentListings(listings);
-                    if (typeof renderListings === 'function') renderListings();
-                    if (typeof switchApprovalTab === 'function') switchApprovalTab('listings');
-                }
-            } else {
-                this.rejectRequest(id, reason, notes);
-                if (typeof switchApprovalTab === 'function') switchApprovalTab('borrow');
-            }
-        };
-    },
-
     viewListingDetails: function(listId) {
         const listings = this._getStudentListings();
         const l = listings.find(x => x.id === listId);
@@ -914,7 +837,99 @@ window.FacultyActions = {
     },
 
     showRejectModal: function(requestId, onReject) {
-        this._showRejectionForm(requestId, 'borrow');
+        // Store callback for verification rejections
+        this._rejectCallback = onReject;
+        this._showRejectionForm(requestId, 'verification');
+    },
+
+    _showRejectionForm: function(id, type) {
+        const title = type === 'listing' ? 'Reject Listing' : type === 'verification' ? 'Reject Verification' : 'Reject Request';
+        const isListing = type === 'listing';
+        const isVerification = type === 'verification';
+
+        const borrowReasons = [
+            { value: 'Equipment unavailable', label: 'Equipment unavailable for requested dates' },
+            { value: 'Item under maintenance', label: 'Item currently under maintenance' },
+            { value: 'Insufficient student clearance', label: 'Insufficient student clearance/verification' },
+            { value: 'Duration too long', label: 'Rental duration exceeds maximum limit' },
+            { value: 'Conflicting reservation', label: 'Conflicting reservation' }
+        ];
+
+        const listingReasons = [
+            { value: 'Inappropriate Item', label: 'Inappropriate Item' },
+            { value: 'Poor Condition', label: 'Poor Condition' },
+            { value: 'Overpriced', label: 'Overpriced' },
+            { value: 'Incomplete Info', label: 'Incomplete Info' }
+        ];
+
+        const verificationReasons = [
+            { value: 'Incomplete documents', label: 'Incomplete documents submitted' },
+            { value: 'Invalid student ID', label: 'Invalid student ID' },
+            { value: 'Not a WMSU student', label: 'Not a registered WMSU student' },
+            { value: 'Blurry document photos', label: 'Document photos are unclear/blurry' },
+            { value: 'Other', label: 'Other (specify below)' }
+        ];
+
+        const reasons = isListing ? listingReasons : isVerification ? verificationReasons : borrowReasons;
+
+        const overlay = document.createElement('div');
+        overlay.id = 'reject-form-overlay';
+        overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,23,42,0.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:10000;animation:fadeIn 0.2s ease;';
+
+        const reasonInputs = reasons.map(r =>
+            `<label style="display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #e2e8f0;border-radius:8px;cursor:pointer;font-size:0.9rem;transition:0.2s;" onmouseover="this.style.borderColor='#800000';this.style.background='#fef2f2';" onmouseout="this.style.borderColor='#e2e8f0';this.style.background='#fff';">
+                <input type="radio" name="rejectReason" value="${r.value}" style="accent-color:#800000;" onchange="if(this.value==='Other'){document.getElementById('rejectOtherInput').style.display='block';}else{document.getElementById('rejectOtherInput').style.display='none';}"> ${r.label}
+            </label>`
+        ).join('') +
+            `<input id="rejectOtherInput" type="text" placeholder="State your reason..." style="display:none;padding:10px;border:1px solid #e2e8f0;border-radius:8px;font-size:0.9rem;margin-top:5px;width:100%;">`;
+
+        overlay.innerHTML = `
+            <div style="background:#fff;width:95%;max-width:420px;border-radius:20px;padding:25px;box-shadow:0 25px 50px rgba(0,0,0,0.25);animation:modalPop 0.3s cubic-bezier(0.175,0.885,0.32,1.275);">
+                <div style="text-align:center;margin-bottom:15px;">
+                    <div style="width:60px;height:60px;background:#fef2f2;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;"><i class="fas fa-times-circle" style="font-size:1.5rem;color:#800000;"></i></div>
+                    <h3 style="margin:0;color:#1e293b;font-size:1.2rem;">${title}</h3>
+                    <p style="color:#64748b;font-size:0.85rem;margin-top:5px;">Select a reason for rejection</p>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:15px;">
+                    ${reasonInputs}
+                </div>
+                <textarea id="rejectNotes" rows="2" placeholder="Additional notes (optional)..." style="padding:10px;border:1px solid #e2e8f0;border-radius:8px;font-size:0.9rem;width:100%;box-sizing:border-box;resize:vertical;font-family:inherit;"></textarea>
+                <div style="display:flex;gap:10px;margin-top:20px;">
+                    <button onclick="document.getElementById('reject-form-overlay').remove();" style="flex:1;padding:10px;background:#f1f5f9;color:#4b5563;border:none;border-radius:8px;font-weight:700;cursor:pointer;font-size:0.9rem;">Cancel</button>
+                    <button id="confirmRejectBtn" style="flex:1;padding:10px;background:#800000;color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;font-size:0.9rem;">Reject</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+
+        document.getElementById('confirmRejectBtn').onclick = () => {
+            const reasonRadio = document.querySelector('input[name="rejectReason"]:checked');
+            if (!reasonRadio) { alert('Please select a rejection reason.'); return; }
+            const reason = reasonRadio.value === 'Other' ? document.getElementById('rejectOtherInput').value : reasonRadio.value;
+            if (reasonRadio.value === 'Other' && !reason.trim()) { alert('Please specify your reason.'); return; }
+            const notes = document.getElementById('rejectNotes').value;
+            overlay.remove();
+
+            if (type === 'listing') {
+                const listings = this._getStudentListings();
+                const listing = listings.find(l => l.id === id);
+                if (listing) {
+                    listing.status = 'Rejected';
+                    listing.rejectReason = reason;
+                    listing.rejectNotes = notes;
+                    this._saveStudentListings(listings);
+                    if (typeof renderListings === 'function') renderListings();
+                    if (typeof switchApprovalTab === 'function') switchApprovalTab('listings');
+                }
+            } else if (type === 'verification') {
+                if (this._rejectCallback) {
+                    this._rejectCallback(reason, notes);
+                }
+            } else {
+                this.rejectRequest(id, reason, notes);
+                if (typeof switchApprovalTab === 'function') switchApprovalTab('borrow');
+            }
+        };
     },
 
     /* ── Refresh Approvals UI ── */
