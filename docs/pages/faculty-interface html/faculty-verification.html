@@ -324,8 +324,23 @@
         }
 
         function showApproveModal(id) {
-            if (confirm('Confirm Student Verification?\n\nThe user will be notified about the verification approval.')) {
-                approveVerification(id);
+            const verifications = JSON.parse(localStorage.getItem('facultyVerifications') || '[]');
+            const v = verifications.find(ver => ver.id === id);
+            if (!v) return;
+
+            if (typeof UIUtils !== 'undefined' && UIUtils.showModal) {
+                UIUtils.showModal({
+                    title: 'Approve Verification',
+                    message: `Approve verification for "${v.name}"?\n\nThis will notify the student that their verification has been approved.`,
+                    type: 'confirm',
+                    onConfirm: (val) => {
+                        if (val) approveVerification(id);
+                    }
+                });
+            } else {
+                if (confirm('Confirm Student Verification?\n\nThe user will be notified about the verification approval.')) {
+                    approveVerification(id);
+                }
             }
         }
 

@@ -440,18 +440,36 @@
 
         function resolveModeration(id) {
             const items = JSON.parse(localStorage.getItem('facultyModeration') || '[]');
-            const index = items.findIndex(item => item.id === id);
-            if (index !== -1) {
-                items[index].status = 'Resolved';
-                localStorage.setItem('facultyModeration', JSON.stringify(items));
+            const item = items.find(i => i.id === id);
+            if (!item) return;
 
-                if (typeof UIUtils !== 'undefined' && UIUtils.showToast) {
-                    UIUtils.showToast('Moderation item resolved successfully!', 'success');
-                } else {
+            if (typeof UIUtils !== 'undefined' && UIUtils.showModal) {
+                UIUtils.showModal({
+                    title: 'Resolve Moderation',
+                    message: `Resolve "${item.type}" reported by ${item.reporter}?\n\nThis will mark the moderation item as resolved.`,
+                    type: 'confirm',
+                    onConfirm: (val) => {
+                        if (val) {
+                            item.status = 'Resolved';
+                            localStorage.setItem('facultyModeration', JSON.stringify(items));
+
+                            if (typeof UIUtils !== 'undefined' && UIUtils.showToast) {
+                                UIUtils.showToast('Moderation item resolved successfully!', 'success');
+                            } else {
+                                alert('Moderation item resolved successfully!');
+                            }
+
+                            loadModeration();
+                        }
+                    }
+                });
+            } else {
+                if (confirm(`Resolve "${item.type}"?\n\nThis will mark the moderation item as resolved.`)) {
+                    item.status = 'Resolved';
+                    localStorage.setItem('facultyModeration', JSON.stringify(items));
                     alert('Moderation item resolved successfully!');
+                    loadModeration();
                 }
-
-                loadModeration();
             }
         }
 
