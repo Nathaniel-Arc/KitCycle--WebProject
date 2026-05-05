@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Moderation | WMSU KitCycle</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/admin-interface/admin-dashboard.css">
+    
+    <!-- Instant Sidebar State Check -->
+    <script>
+        (function() {
+            const isMinimized = localStorage.getItem('sidebarMinimized') === 'true';
+            if (isMinimized) {
+                document.documentElement.classList.add('sidebar-is-minimized');
+            }
+        })();
+    </script>
+    <style>
+        .sidebar-is-minimized .sidebar { width: 80px !important; padding: 2rem 0.5rem !important; transition: none !important; }
+        .sidebar-is-minimized .dashboard-content { margin-left: 80px !important; transition: none !important; }
+        .sidebar-is-minimized .profile-info, .sidebar-is-minimized .sidebar-nav span, .sidebar-is-minimized .sidebar-logout span { display: none !important; }
+        .sidebar-is-minimized .sidebar-nav a { justify-content: center !important; padding: 12px 0 !important; }
+        .sidebar-is-minimized .sidebar-nav i { font-size: 1.2rem !important; margin: 0 !important; }
+        .sidebar-is-minimized .sidebar-profile { justify-content: center !important; padding-bottom: 1.5rem !important; }
+
+        .stat-cards-grid.three-cols {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 1px solid #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .stat-icon.red-light { background: #fee2e2; color: #ef4444; }
+        .stat-icon.orange-light { background: #fff7ed; color: #f59e0b; }
+        .stat-icon.gray-light { background: #f3f4f6; color: #6b7280; }
+
+        .stat-numbers { flex: 1; }
+        .stat-label { font-size: 0.78rem; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .stat-numbers h3 { font-size: 1.8rem; font-weight: 800; color: #1e293b; margin: 5px 0 0; }
+        .danger-text { color: #ef4444; }
+        .warning-text { color: #f59e0b; }
+        .info-text { color: #6b7280; }
+
+        .content-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 1px solid #f1f5f9;
+            margin-bottom: 25px;
+        }
+
+        .full-width-card { width: 100%; }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.2rem;
+            border-bottom: 1px solid #f1f5f9;
+            padding-bottom: 0.8rem;
+        }
+
+        .card-header h3 { font-size: 1.05rem; color: #1e293b; margin: 0; }
+
+        .pill-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .pill-badge.danger-bg { background: #fee2e2; color: #ef4444; }
+        .pill-badge.warning-bg { background: #fff7ed; color: #f59e0b; }
+        .pill-badge.gray-bg { background: #f3f4f6; color: #6b7280; }
+
+        .account-item {
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1.2rem;
+            margin-bottom: 15px;
+            background: #fff;
+        }
+
+        .account-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .account-user-meta h4 { font-size: 1rem; color: #1e293b; margin: 0 0 4px; }
+        .account-user-meta p { font-size: 0.85rem; color: #64748b; margin: 0 0 4px; }
+        .account-user-meta span { font-size: 0.78rem; color: #94a3b8; }
+
+        .status-pill {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .status-pill.warning { background: #fff7ed; color: #f59e0b; }
+        .status-pill.success { background: #f0fdf4; color: #10b981; }
+        .status-pill.danger { background: #fee2e2; color: #ef4444; }
+        .status-pill.info { background: #eff6ff; color: #3b82f6; }
+        .status-pill.gray { background: #f3f4f6; color: #6b7280; }
+
+        .account-body { margin-bottom: 15px; }
+
+        .account-details {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 10px;
+        }
+
+        .account-details p { font-size: 0.85rem; color: #64748b; margin: 0 0 8px; }
+        .account-details p:last-child { margin-bottom: 0; }
+
+        .account-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 12px;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .btn-subtle {
+            background: transparent;
+            border: 1px solid #e2e8f0;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #64748b;
+            cursor: pointer;
+        }
+
+        .btn-subtle:hover { background: #f8fafc; }
+
+        .action-trigger-grp { display: flex; gap: 8px; }
+
+        .btn-circle-success {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #10b981;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        .btn-circle-danger {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #ef4444;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        .btn-circle-warning {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #f59e0b;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        .btn-circle-info {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #3b82f6;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        .deactivated-item {
+            border: 1px solid #fecaca;
+            border-radius: 12px;
+            padding: 1.2rem;
+            margin-bottom: 15px;
+            background: #fef2f2;
+        }
+
+        .deactivated-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .deactivated-user-meta h4 { font-size: 1rem; color: #991b1b; margin: 0 0 4px; }
+        .deactivated-user-meta p { font-size: 0.85rem; color: #64748b; margin: 0 0 4px; }
+        .deactivated-user-meta span { font-size: 0.78rem; color: #94a3b8; }
+
+        .deactivated-body { margin-bottom: 15px; }
+
+        .deactivated-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 12px;
+            border-top: 1px solid #fecaca;
+        }
+
+        .btn-reactivate {
+            background: #10b981;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-permanent {
+            background: #dc2626;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .history-log-stack { display: flex; flex-direction: column; gap: 12px; }
+
+        .history-log-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            border: 1px solid #f1f5f9;
+            border-radius: 10px;
+        }
+
+        .log-left h4 { font-size: 0.95rem; margin: 0 0 4px; color: #1e293b; }
+        .log-left p { font-size: 0.85rem; color: #64748b; margin: 0 0 4px; }
+        .log-left span { font-size: 0.78rem; color: #94a3b8; }
+
+        .margin-top { margin-top: 25px; }
+
+        .tab-container { display: flex; gap: 10px; margin-bottom: 20px; }
+
+        .tab-btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            background: #fff;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            background: #800000;
+            color: #fff;
+            border-color: #800000;
+        }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+    </style>
+</head>
+
+<body>
+
+    <header class="navbar" style="height: 60px;">
+        <div class="nav-left-group">
+            <div class="sidebar-toggle" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </div>
+            <div class="logo">
+                <img src="../../images/wmsulogo.png" alt="Logo" style="height: 35px; margin-right: 10px;">
+                WMSU<span>KitCycle</span>
+            </div>
+        </div>
+        <div class="nav-right" style="display: flex; align-items: center; gap: 30px;">
+            <ul class="nav-links" style="display: flex; list-style: none; gap: 25px; align-items: center; margin: 0;">
+                <li><a href="admin-dashboard.html">Home</a></li>
+                <li><a href="../marketplace.html">Marketplace</a></li>
+                <li><a href="../howitworks.html">How It Works</a></li>
+                <li><a href="../safety.html">Safety</a></li>
+            </ul>
+            <div class="auth-buttons" style="display: flex; align-items: center; gap: 15px;">
+                <div class="nav-notification-container">
+                    <button class="nav-notification-btn" onclick="toggleNotifs()">
+                        <i class="far fa-bell"></i>
+                        <div class="notif-badge" id="navNotifBadge" style="display: block;"></div>
+                    </button>
+                    <div class="notif-dropdown" id="notifDropdown">
+                        <div class="notif-header">Notifications</div>
+                        <div class="notif-item">
+                            <p>New user registration pending verification.</p>
+                            <span>10 mins ago</span>
+                        </div>
+                        <div class="notif-item">
+                            <p>System update scheduled for 2:00 AM.</p>
+                            <span>4 hours ago</span>
+                        </div>
+                        <div class="notif-view-all">View All Notifications</div>
+                    </div>
+                </div>
+
+                <span class="user-profile-nav" style="display: flex; align-items: center; font-weight: 600; color: #111827;">
+                    <img src="../../images/nash_profile.png" alt="Admin" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; margin-right: 10px; border: 1.5px solid #800000;"> 
+                    Nash Arciaga
+                </span>
+                <a href="../login.html" class="btn-login" style="padding: 6px 15px; font-size: 0.85rem;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="dashboard-layout">
+
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-profile">
+                <div class="profile-avatar admin-bg"><img src="../../images/nash_profile.png" alt="Nash Arciaga"></div>
+                <div class="profile-info">
+                    <h4>Nash Arciaga</h4>
+                    <span>Admin</span>
+                </div>
+            </div>
+
+            <ul class="sidebar-nav">
+                <li><a href="admin-dashboard.html"><i class="fas fa-chart-line"></i> <span>Dashboard</span></a></li>
+                <li><a href="admin-verification.html"><i class="fas fa-user-check"></i> <span>User Verification</span> <span class="nav-badge-v2" style="display: inline-block;">3</span></a></li>
+                <li class="active"><a href="admin-moderation.html"><i class="fas fa-user-shield"></i> <span>Moderation</span></a></li>
+                <li><a href="admin-analytics.html"><i class="fas fa-poll"></i> <span>Analytics</span></a></li>
+                <li><a href="admin-disputes.html"><i class="fas fa-exclamation-triangle"></i> <span>Disputes</span></a></li>
+                <li><a href="admin-approvals.html"><i class="fas fa-clipboard-check"></i> <span>Approvals</span></a></li>
+                <li><a href="admin-settings.html"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
+            </ul>
+
+            <a href="javascript:void(0)" onclick="AuthSystem.confirmLogout(); return false;" class="sidebar-logout"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
+        </aside>
+
+        <main class="dashboard-content">
+
+            <div class="dashboard-banner">
+                <h2><i class="fas fa-user-shield"></i> Account Moderation</h2>
+                <p>Deactivate or disable student accounts for major violations</p>
+            </div>
+
+            <div class="stat-cards-grid three-cols">
+                <div class="stat-card">
+                    <div class="stat-icon red-light"><i class="fas fa-user-slash"></i></div>
+                    <div class="stat-numbers">
+                        <span class="stat-label">Deactivated Accounts</span>
+                        <h3 class="danger-text">8</h3>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon orange-light"><i class="fas fa-exclamation-circle"></i></div>
+                    <div class="stat-numbers">
+                        <span class="stat-label">Pending Review</span>
+                        <h3 class="warning-text">3</h3>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon gray-light"><i class="fas fa-history"></i></div>
+                    <div class="stat-numbers">
+                        <span class="stat-label">Reactivated</span>
+                        <h3 class="info-text">5</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-container">
+                <button class="tab-btn active" onclick="switchTab('deactivate')">Accounts to Deactivate</button>
+                <button class="tab-btn" onclick="switchTab('deactivated')">Deactivated Accounts</button>
+                <button class="tab-btn" onclick="switchTab('history')">Moderation History</button>
+            </div>
+
+            <!-- Accounts to Deactivate Tab -->
+            <div id="deactivate-tab" class="tab-content active">
+                <div class="content-card full-width-card">
+                    <div class="card-header">
+                        <h3>Escalated Accounts for Deactivation</h3>
+                        <span class="pill-badge danger-bg">3 Pending</span>
+                    </div>
+
+                    <div class="account-item">
+                        <div class="account-top">
+                            <div class="account-user-meta">
+                                <h4>James Robert Cruz</h4>
+                                <p>j.cruz@wmsu.edu.ph</p>
+                                <span>Student ID: 2024-15803 • Escalated by: Prof. Ace Lorenz C. Patongan</span>
+                            </div>
+                            <span class="status-pill danger">Major Violation</span>
+                        </div>
+                        <div class="account-body">
+                            <div class="account-details">
+                                <p><strong>Violation:</strong> Lost departmental equipment (Video Recording Equipment) - 3rd offense</p>
+                                <p><strong>Date Escalated:</strong> 3/5/2026</p>
+                                <p><strong>Violation History:</strong> Late return (1/15/2026), Damaged equipment (2/20/2026), Lost equipment (3/3/2026)</p>
+                                <p><strong>Recommended Action:</strong> Account deactivation for 30 days</p>
+                            </div>
+                        </div>
+                        <div class="account-footer">
+                            <button class="btn-subtle">View Full History</button>
+                            <div class="action-trigger-grp">
+                                <button class="btn-circle-danger" title="Deactivate Account"><i class="fas fa-user-slash"></i></button>
+                                <button class="btn-circle-warning" title="Temporary Suspension"><i class="fas fa-clock"></i></button>
+                                <button class="btn-circle-info" title="Request More Info"><i class="fas fa-info"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="account-item">
+                        <div class="account-top">
+                            <div class="account-user-meta">
+                                <h4>Miguel Antonio Santos</h4>
+                                <p>m.santos@wmsu.edu.ph</p>
+                                <span>Student ID: 2024-15804 • Escalated by: Prof. Maria Santos</span>
+                            </div>
+                            <span class="status-pill danger">Major Violation</span>
+                        </div>
+                        <div class="account-body">
+                            <div class="account-details">
+                                <p><strong>Violation:</strong> Unauthorized selling of borrowed equipment - 2nd offense</p>
+                                <p><strong>Date Escalated:</strong> 3/4/2026</p>
+                                <p><strong>Violation History:</strong> Unauthorized transfer (2/10/2026), Unauthorized selling (3/4/2026)</p>
+                                <p><strong>Recommended Action:</strong> Permanent account deactivation</p>
+                            </div>
+                        </div>
+                        <div class="account-footer">
+                            <button class="btn-subtle">View Full History</button>
+                            <div class="action-trigger-grp">
+                                <button class="btn-circle-danger" title="Deactivate Account"><i class="fas fa-user-slash"></i></button>
+                                <button class="btn-circle-warning" title="Temporary Suspension"><i class="fas fa-clock"></i></button>
+                                <button class="btn-circle-info" title="Request More Info"><i class="fas fa-info"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="account-item">
+                        <div class="account-top">
+                            <div class="account-user-meta">
+                                <h4>Elena Marie Garcia</h4>
+                                <p>e.garcia@wmsu.edu.ph</p>
+                                <span>Student ID: 2024-15805 • Escalated by: Prof. Juan Dela Cruz</span>
+                            </div>
+                            <span class="status-pill warning">Multiple Violations</span>
+                        </div>
+                        <div class="account-body">
+                            <div class="account-details">
+                                <p><strong>Violation:</strong> Repeated violations - 4th offense within semester</p>
+                                <p><strong>Date Escalated:</strong> 3/3/2026</p>
+                                <p><strong>Violation History:</strong> Late returns (3x), Damaged equipment, False reporting</p>
+                                <p><strong>Recommended Action:</strong> Account deactivation for 60 days</p>
+                            </div>
+                        </div>
+                        <div class="account-footer">
+                            <button class="btn-subtle">View Full History</button>
+                            <div class="action-trigger-grp">
+                                <button class="btn-circle-danger" title="Deactivate Account"><i class="fas fa-user-slash"></i></button>
+                                <button class="btn-circle-warning" title="Temporary Suspension"><i class="fas fa-clock"></i></button>
+                                <button class="btn-circle-info" title="Request More Info"><i class="fas fa-info"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Deactivated Accounts Tab -->
+            <div id="deactivated-tab" class="tab-content">
+                <div class="content-card full-width-card">
+                    <div class="card-header">
+                        <h3>Currently Deactivated Accounts</h3>
+                        <span class="pill-badge gray-bg">8 Accounts</span>
+                    </div>
+
+                    <div class="deactivated-item">
+                        <div class="deactivated-top">
+                            <div class="deactivated-user-meta">
+                                <h4>Rafael Domingo</h4>
+                                <p>r.domingo@wmsu.edu.ph</p>
+                                <span>Student ID: 2024-15790 • Deactivated: 3/1/2026</span>
+                            </div>
+                            <span class="status-pill gray">Deactivated</span>
+                        </div>
+                        <div class="deactivated-body">
+                            <div class="account-details">
+                                <p><strong>Reason:</strong> Repeated late returns and damaged equipment (3 violations)</p>
+                                <p><strong>Deactivated by:</strong> Admin Nash Arciaga</p>
+                                <p><strong>Duration:</strong> 30 days (Until 3/31/2026)</p>
+                                <p><strong>Status:</strong> Cannot login or borrow equipment</p>
+                            </div>
+                        </div>
+                        <div class="deactivated-footer">
+                            <button class="btn-subtle">View Violation History</button>
+                            <div class="action-trigger-grp">
+                                <button class="btn-reactivate">Reactivate Account</button>
+                                <button class="btn-permanent">Permanent Ban</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="deactivated-item">
+                        <div class="deactivated-top">
+                            <div class="deactivated-user-meta">
+                                <h4>Sofia Elena Martinez</h4>
+                                <p>s.martinez@wmsu.edu.ph</p>
+                                <span>Student ID: 2024-15791 • Deactivated: 2/28/2026</span>
+                            </div>
+                            <span class="status-pill gray">Deactivated</span>
+                        </div>
+                        <div class="deactivated-body">
+                            <div class="account-details">
+                                <p><strong>Reason:</strong> Lost departmental equipment (Lab Equipment Set)</p>
+                                <p><strong>Deactivated by:</strong> Admin Nash Arciaga</p>
+                                <p><strong>Duration:</strong> 60 days (Until 4/28/2026)</p>
+                                <p><strong>Status:</strong> Cannot login or borrow equipment</p>
+                            </div>
+                        </div>
+                        <div class="deactivated-footer">
+                            <button class="btn-subtle">View Violation History</button>
+                            <div class="action-trigger-grp">
+                                <button class="btn-reactivate">Reactivate Account</button>
+                                <button class="btn-permanent">Permanent Ban</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="deactivated-item">
+                        <div class="deactivated-top">
+                            <div class="deactivated-user-meta">
+                                <h4>Carlos Miguel Garcia</h4>
+                                <p>c.garcia@wmsu.edu.ph</p>
+                                <span>Student ID: 2024-15792 • Deactivated: 2/25/2026</span>
+                            </div>
+                            <span class="status-pill gray">Deactivated</span>
+                        </div>
+                        <div class="deactivated-body">
+                            <div class="account-details">
+                                <p><strong>Reason:</strong> Multiple violations including unauthorized transfer of borrowed equipment</p>
+                                <p><strong>Deactivated by:</strong> Admin Nash Arciaga</p>
+                                <p><strong>Duration:</strong> Permanent</p>
+                                <p><strong>Status:</strong> Permanently banned from platform</p>
+                            </div>
+                        </div>
+                        <div class="deactivated-footer">
+                            <button class="btn-subtle">View Violation History</button>
+                            <div class="action-trigger-grp">
+                                <button class="btn-reactivate">Reactivate Account</button>
+                                <button class="btn-permanent" disabled style="opacity:0.5;cursor:not-allowed;">Already Permanent</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- History Tab -->
+            <div id="history-tab" class="tab-content">
+                <div class="content-card full-width-card">
+                    <div class="card-header">
+                        <h3>Moderation History</h3>
+                    </div>
+
+                    <div class="history-log-stack">
+                        <div class="history-log-item">
+                            <div class="log-left">
+                                <h4>James Cruz <span class="status-pill danger">DEACTIVATED</span></h4>
+                                <p>Student ID: 2024-15803 • Deactivated for 30 days</p>
+                                <span>3/5/2026 • Action by Admin</span>
+                            </div>
+                            <i class="fas fa-user-slash danger-text"></i>
+                        </div>
+
+                        <div class="history-log-item">
+                            <div class="log-left">
+                                <h4>Miguel Santos <span class="status-pill danger">PERMANENTLY BANNED</span></h4>
+                                <p>Student ID: 2024-15804 • Permanent ban for unauthorized selling</p>
+                                <span>3/4/2026 • Action by Admin</span>
+                            </div>
+                            <i class="fas fa-ban danger-text"></i>
+                        </div>
+
+                        <div class="history-log-item">
+                            <div class="log-left">
+                                <h4>Elena Garcia <span class="status-pill warning">TEMPORARY SUSPENSION</span></h4>
+                                <p>Student ID: 2024-15805 • Suspended for 60 days</p>
+                                <span>3/3/2026 • Action by Admin</span>
+                            </div>
+                            <i class="fas fa-clock warning-text"></i>
+                        </div>
+
+                        <div class="history-log-item">
+                            <div class="log-left">
+                                <h4>Rafael Domingo <span class="status-pill success">REACTIVATED</span></h4>
+                                <p>Student ID: 2024-15790 • Early reactivation after appeal</p>
+                                <span>3/1/2026 • Action by Admin</span>
+                            </div>
+                            <i class="fas fa-user-check success-text"></i>
+                        </div>
+
+                        <div class="history-log-item">
+                            <div class="log-left">
+                                <h4>Sofia Martinez <span class="status-pill danger">DEACTIVATED</span></h4>
+                                <p>Student ID: 2024-15791 • Deactivated for 60 days</p>
+                                <span>2/28/2026 • Action by Admin</span>
+                            </div>
+                            <i class="fas fa-user-slash danger-text"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            document.documentElement.classList.remove('sidebar-is-minimized');
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            const isMinimized = sidebar.classList.toggle('minimized');
+            mainContent.classList.toggle('expanded');
+            localStorage.setItem('sidebarMinimized', isMinimized);
+        }
+
+        function switchTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName + '-tab').classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        function toggleNotifs() {
+            // Handled by auth.js
+        }
+
+        window.onclick = function(event) {
+            if (!event.target.closest('.nav-notification-btn')) {
+                // Handled by auth.js
+            }
+        }
+
+        window.onload = function() {
+            const isMinimized = localStorage.getItem('sidebarMinimized') === 'true';
+            if (isMinimized) {
+                document.getElementById('sidebar').classList.add('minimized');
+                document.getElementById('mainContent').classList.add('expanded');
+            }
+        };
+    </script>
+
+</body>
+</html>

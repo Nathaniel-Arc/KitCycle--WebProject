@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Moderation | WMSU KitCycle</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/faculty-interface/faculty-dashboard.css">
+    
+    <!-- Instant Sidebar State Check -->
+    <script>
+        (function() {
+            const isMinimized = localStorage.getItem('sidebarMinimized') === 'true';
+            if (isMinimized) {
+                document.documentElement.classList.add('sidebar-is-minimized');
+            }
+        })();
+    </script>
+    <style>
+        .sidebar-is-minimized .sidebar { width: 80px !important; padding: 2rem 0.5rem !important; transition: none !important; }
+        .sidebar-is-minimized .dashboard-content { margin-left: 80px !important; transition: none !important; }
+        .sidebar-is-minimized .profile-info, .sidebar-is-minimized .sidebar-nav span, .sidebar-is-minimized .sidebar-logout span { display: none !important; }
+        .sidebar-is-minimized .sidebar-nav a { justify-content: center !important; padding: 12px 0 !important; }
+        .sidebar-is-minimized .sidebar-nav i { font-size: 1.2rem !important; margin: 0 !important; }
+        .sidebar-is-minimized .sidebar-profile { justify-content: center !important; padding-bottom: 1.5rem !important; }
+
+        .stat-cards-grid.three-cols {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 1px solid #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .stat-icon.red-light { background: #fee2e2; color: #ef4444; }
+        .stat-icon.orange-light { background: #fff7ed; color: #f59e0b; }
+        .stat-icon.purple-light { background: #f5f3ff; color: #8b5cf6; }
+
+        .stat-numbers { flex: 1; }
+        .stat-label { font-size: 0.78rem; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .stat-numbers h3 { font-size: 1.8rem; font-weight: 800; color: #1e293b; margin: 5px 0 0; }
+        .danger-text { color: #ef4444; }
+        .warning-text { color: #f59e0b; }
+        .info-text { color: #8b5cf6; }
+
+        .content-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 1px solid #f1f5f9;
+            margin-bottom: 25px;
+        }
+
+        .full-width-card { width: 100%; }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.2rem;
+            border-bottom: 1px solid #f1f5f9;
+            padding-bottom: 0.8rem;
+        }
+
+        .card-header h3 { font-size: 1.05rem; color: #1e293b; margin: 0; }
+
+        .pill-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .pill-badge.danger-bg { background: #fee2e2; color: #ef4444; }
+        .pill-badge.warning-bg { background: #fff7ed; color: #f59e0b; }
+
+        .violation-item {
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1.2rem;
+            margin-bottom: 15px;
+            background: #fff;
+        }
+
+        .violation-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .violation-user-meta h4 { font-size: 1rem; color: #1e293b; margin: 0 0 4px; }
+        .violation-user-meta p { font-size: 0.85rem; color: #64748b; margin: 0 0 4px; }
+        .violation-user-meta span { font-size: 0.78rem; color: #94a3b8; }
+
+        .status-pill {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .status-pill.warning { background: #fff7ed; color: #f59e0b; }
+        .status-pill.success { background: #f0fdf4; color: #10b981; }
+        .status-pill.danger { background: #fee2e2; color: #ef4444; }
+        .status-pill.info { background: #eff6ff; color: #3b82f6; }
+
+        .violation-body { margin-bottom: 15px; }
+
+        .violation-details {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 10px;
+        }
+
+        .violation-details p { font-size: 0.85rem; color: #64748b; margin: 0 0 8px; }
+        .violation-details p:last-child { margin-bottom: 0; }
+
+        .violation-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 12px;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .btn-subtle {
+            background: transparent;
+            border: 1px solid #e2e8f0;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #64748b;
+            cursor: pointer;
+        }
+
+        .btn-subtle:hover { background: #f8fafc; }
+
+        .action-trigger-grp { display: flex; gap: 8px; }
+
+        .btn-circle-success {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #10b981;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        .btn-circle-danger {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #ef4444;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        .btn-circle-warning {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #f59e0b;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        .negative-list-item {
+            border: 1px solid #fecaca;
+            border-radius: 12px;
+            padding: 1.2rem;
+            margin-bottom: 15px;
+            background: #fef2f2;
+        }
+
+        .negative-list-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .negative-user-meta h4 { font-size: 1rem; color: #991b1b; margin: 0 0 4px; }
+        .negative-user-meta p { font-size: 0.85rem; color: #64748b; margin: 0 0 4px; }
+        .negative-user-meta span { font-size: 0.78rem; color: #94a3b8; }
+
+        .negative-body { margin-bottom: 15px; }
+
+        .negative-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 12px;
+            border-top: 1px solid #fecaca;
+        }
+
+        .btn-remove {
+            background: #10b981;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .history-log-stack { display: flex; flex-direction: column; gap: 12px; }
+
+        .history-log-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            border: 1px solid #f1f5f9;
+            border-radius: 10px;
+        }
+
+        .log-left h4 { font-size: 0.95rem; margin: 0 0 4px; color: #1e293b; }
+        .log-left p { font-size: 0.85rem; color: #64748b; margin: 0 0 4px; }
+        .log-left span { font-size: 0.78rem; color: #94a3b8; }
+
+        .margin-top { margin-top: 25px; }
+
+        .tab-container { display: flex; gap: 10px; margin-bottom: 20px; }
+
+        .tab-btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            background: #fff;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            background: #800000;
+            color: #fff;
+            border-color: #800000;
+        }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+    </style>
+</head>
+
+<body>
+
+    <header class="navbar">
+        <div class="nav-left-group">
+            <div class="sidebar-toggle" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </div>
+            <div class="logo">
+                <img src="../../images/wmsulogo.png" alt="WMSU Logo" class="nav-logo-img">
+                <div class="logo-text">WMSU<span>KitCycle</span></div>
+            </div>
+        </div>
+        <div class="nav-right" style="display: flex; align-items: center; gap: 30px;">
+            <ul class="nav-links" style="display: flex; list-style: none; gap: 25px; align-items: center; margin: 0;">
+                <li><a href="faculty-dashboard.html">Home</a></li>
+                <li><a href="../marketplace.html">Marketplace</a></li>
+                <li><a href="../howitworks.html">How It Works</a></li>
+                <li><a href="../safety.html">Safety</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <!-- Injected by auth.js -->
+            </div>
+        </div>
+    </header>
+
+    <div class="dashboard-layout">
+
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-profile">
+                <div class="profile-avatar"><img id="sidebarProfileImg" src="../../images/Prof. Ace.jpg" alt="Profile"></div>
+                <div class="profile-info">
+                    <h4 id="sidebarUserName">Ace Lorenz C. Patongan</h4>
+                    <span id="sidebarUserRole">Faculty</span>
+                </div>
+            </div>
+
+            <ul class="sidebar-nav">
+                <li><a href="faculty-dashboard.html"><i class="fas fa-th-large"></i> <span>Dashboard</span></a></li>
+                <li><a href="faculty-verification.html"><i class="fas fa-user-check"></i> <span>Student Verification</span> <span class="nav-badge-v2" style="display: inline-block;">4</span></a></li>
+                <li class="active"><a href="faculty-moderation.html"><i class="fas fa-user-shield"></i> <span>Moderation</span></a></li>
+                <li><a href="faculty-departmentgear.html"><i class="fas fa-boxes"></i> <span>Departmental Gear</span></a></li>
+                <li><a href="faculty-approvals.html"><i class="fas fa-clipboard-check"></i> <span>Approvals</span> <span class="nav-badge-v2" id="sidebarReqBadge" style="display: inline-block;">5</span></a></li>
+                <li><a href="faculty-messages.html"><i class="fas fa-comments"></i> <span>Messages</span></a></li>
+                <li><a href="faculty-rentals.html"><i class="fas fa-clock"></i> <span>Active Rentals</span></a></li>
+                <li><a href="faculty-reports.html"><i class="fas fa-chart-pie"></i> <span>Reports</span></a></li>
+                <li><a href="faculty-settings.html"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
+            </ul>
+
+            <a href="javascript:void(0)" onclick="AuthSystem.confirmLogout(); return false;" class="sidebar-logout"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
+        </aside>
+
+        <main class="dashboard-content">
+
+            <div class="dashboard-banner">
+                <h2><i class="fas fa-user-shield"></i> Student Moderation</h2>
+                <p>Manage student violations and registrar negative list</p>
+            </div>
+
+            <div class="stat-cards-grid three-cols">
+                <div class="stat-card">
+                    <div class="stat-icon red-light"><i class="fas fa-exclamation-circle"></i></div>
+                    <div class="stat-numbers">
+                        <span class="stat-label">Active Violations</span>
+                        <h3 class="danger-text">6</h3>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon orange-light"><i class="fas fa-user-times"></i></div>
+                    <div class="stat-numbers">
+                        <span class="stat-label">On Negative List</span>
+                        <h3 class="warning-text">3</h3>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon purple-light"><i class="fas fa-history"></i></div>
+                    <div class="stat-numbers">
+                        <span class="stat-label">Resolved This Month</span>
+                        <h3 class="info-text">12</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-container">
+                <button class="tab-btn active" onclick="switchTab('violations')">Active Violations</button>
+                <button class="tab-btn" onclick="switchTab('negative-list')">Negative List</button>
+                <button class="tab-btn" onclick="switchTab('history')">Moderation History</button>
+            </div>
+
+            <!-- Active Violations Tab -->
+            <div id="violations-tab" class="tab-content active">
+                <div class="content-card full-width-card">
+                    <div class="card-header">
+                        <h3>Students with Violations</h3>
+                        <span class="pill-badge danger-bg">6 Active</span>
+                    </div>
+
+                    <div class="violation-item">
+                        <div class="violation-top">
+                            <div class="violation-user-meta">
+                                <h4>Marco Antonio Reyes</h4>
+                                <p>m.reyes@wmsu.edu.ph</p>
+                                <span>Student ID: 2024-15801 • 2nd Offense</span>
+                            </div>
+                            <span class="status-pill warning">Minor Violation</span>
+                        </div>
+                        <div class="violation-body">
+                            <div class="violation-details">
+                                <p><strong>Violation:</strong> Late return of equipment (Scientific Calculator TI-84) by 3 days</p>
+                                <p><strong>Date Reported:</strong> 3/5/2026</p>
+                                <p><strong>Previous Violations:</strong> 1 (Late return - 2/15/2026)</p>
+                            </div>
+                        </div>
+                        <div class="violation-footer">
+                            <button class="btn-subtle">View Full History</button>
+                            <div class="action-trigger-grp">
+                                <button class="btn-circle-success" title="Resolve"><i class="fas fa-check"></i></button>
+                                <button class="btn-circle-warning" title="Add to Negative List"><i class="fas fa-user-minus"></i></button>
+                                <button class="btn-circle-danger" title="Escalate to Admin"><i class="fas fa-arrow-up"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="violation-item">
+                        <div class="violation-top">
+                            <div class="violation-user-meta">
+                                <h4>Anna Marie Torres</h4>
+                                <p>a.torres@wmsu.edu.ph</p>
+                                <span>Student ID: 2024-15802 • 1st Offense</span>
+                            </div>
+                            <span class="status-pill warning">Minor Violation</span>
+                        </div>
+                        <div class="violation-body">
+                            <div class="violation-details">
+                                <p><strong>Violation:</strong> Returned equipment with minor damage (Engineering Microscope Set)</p>
+                                <p><strong>Date Reported:</strong> 3/4/2026</p>
+                                <p><strong>Previous Violations:</strong> None</p>
+                            </div>
+                        </div>
+                        <div class="violation-footer">
+                            <button class="btn-subtle">View Full History</button>
+                            <div class="action-trigger-grp">
+                                <button class="btn-circle-success" title="Resolve"><i class="fas fa-check"></i></button>
+                                <button class="btn-circle-warning" title="Add to Negative List"><i class="fas fa-user-minus"></i></button>
+                                <button class="btn-circle-danger" title="Escalate to Admin"><i class="fas fa-arrow-up"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="violation-item">
+                        <div class="violation-top">
+                            <div class="violation-user-meta">
+                                <h4>James Robert Cruz</h4>
+                                <p>j.cruz@wmsu.edu.ph</p>
+                                <span>Student ID: 2024-15803 • 3rd Offense</span>
+                            </div>
+                            <span class="status-pill danger">Major Violation</span>
+                        </div>
+                        <div class="violation-body">
+                            <div class="violation-details">
+                                <p><strong>Violation:</strong> Lost borrowed equipment (Video Recording Equipment)</p>
+                                <p><strong>Date Reported:</strong> 3/3/2026</p>
+                                <p><strong>Previous Violations:</strong> 2 (Late return, Damaged equipment)</p>
+                            </div>
+                        </div>
+                        <div class="violation-footer">
+                            <button class="btn-subtle">View Full History</button>
+                            <div class="action-trigger-grp">
+                                <button class="btn-circle-success" title="Resolve"><i class="fas fa-check"></i></button>
+                                <button class="btn-circle-warning" title="Add to Negative List"><i class="fas fa-user-minus"></i></button>
+                                <button class="btn-circle-danger" title="Escalate to Admin"><i class="fas fa-arrow-up"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Negative List Tab -->
+            <div id="negative-list-tab" class="tab-content">
+                <div class="content-card full-width-card">
+                    <div class="card-header">
+                        <h3>Registrar's Negative List</h3>
+                        <span class="pill-badge warning-bg">3 Students</span>
+                    </div>
+
+                    <div class="negative-list-item">
+                        <div class="negative-list-top">
+                            <div class="negative-user-meta">
+                                <h4>Rafael Domingo</h4>
+                                <p>r.domingo@wmsu.edu.ph</p>
+                                <span>Student ID: 2024-15790 • Added: 3/1/2026</span>
+                            </div>
+                            <span class="status-pill danger">Negative List</span>
+                        </div>
+                        <div class="negative-body">
+                            <div class="violation-details">
+                                <p><strong>Reason:</strong> Repeated late returns and damaged equipment (3 violations)</p>
+                                <p><strong>Added by:</strong> Prof. Ace Lorenz C. Patongan</p>
+                                <p><strong>Status:</strong> Cannot borrow equipment until removed from list</p>
+                            </div>
+                        </div>
+                        <div class="negative-footer">
+                            <button class="btn-subtle">View Violation History</button>
+                            <button class="btn-remove">Remove from List</button>
+                        </div>
+                    </div>
+
+                    <div class="negative-list-item">
+                        <div class="negative-list-top">
+                            <div class="negative-user-meta">
+                                <h4>Sofia Elena Martinez</h4>
+                                <p>s.martinez@wmsu.edu.ph</p>
+                                <span>Student ID: 2024-15791 • Added: 2/28/2026</span>
+                            </div>
+                            <span class="status-pill danger">Negative List</span>
+                        </div>
+                        <div class="negative-body">
+                            <div class="violation-details">
+                                <p><strong>Reason:</strong> Lost departmental equipment (Lab Equipment Set)</p>
+                                <p><strong>Added by:</strong> Prof. Maria Santos</p>
+                                <p><strong>Status:</strong> Cannot borrow equipment until removed from list</p>
+                            </div>
+                        </div>
+                        <div class="negative-footer">
+                            <button class="btn-subtle">View Violation History</button>
+                            <button class="btn-remove">Remove from List</button>
+                        </div>
+                    </div>
+
+                    <div class="negative-list-item">
+                        <div class="negative-list-top">
+                            <div class="negative-user-meta">
+                                <h4>Carlos Miguel Garcia</h4>
+                                <p>c.garcia@wmsu.edu.ph</p>
+                                <span>Student ID: 2024-15792 • Added: 2/25/2026</span>
+                            </div>
+                            <span class="status-pill danger">Negative List</span>
+                        </div>
+                        <div class="negative-body">
+                            <div class="violation-details">
+                                <p><strong>Reason:</strong> Multiple violations including unauthorized transfer of borrowed equipment</p>
+                                <p><strong>Added by:</strong> Prof. Juan Dela Cruz</p>
+                                <p><strong>Status:</strong> Cannot borrow equipment until removed from list</p>
+                            </div>
+                        </div>
+                        <div class="negative-footer">
+                            <button class="btn-subtle">View Violation History</button>
+                            <button class="btn-remove">Remove from List</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- History Tab -->
+            <div id="history-tab" class="tab-content">
+                <div class="content-card full-width-card">
+                    <div class="card-header">
+                        <h3>Moderation History</h3>
+                    </div>
+
+                    <div class="history-log-stack">
+                        <div class="history-log-item">
+                            <div class="log-left">
+                                <h4>Marco Reyes <span class="status-pill success">RESOLVED</span></h4>
+                                <p>Student ID: 2024-15801 • Violation resolved with warning</p>
+                                <span>3/5/2026 • Handled by Faculty</span>
+                            </div>
+                            <i class="fas fa-check-circle success-text"></i>
+                        </div>
+
+                        <div class="history-log-item">
+                            <div class="log-left">
+                                <h4>Anna Torres <span class="status-pill info">ADDED TO NEGATIVE LIST</span></h4>
+                                <p>Student ID: 2024-15802 • 2nd violation within 30 days</p>
+                                <span>3/4/2026 • Added by Faculty</span>
+                            </div>
+                            <i class="fas fa-user-minus danger-text"></i>
+                        </div>
+
+                        <div class="history-log-item">
+                            <div class="log-left">
+                                <h4>James Cruz <span class="status-pill danger">ESCALATED</span></h4>
+                                <p>Student ID: 2024-15803 • Major violation - referred to admin</p>
+                                <span>3/3/2026 • Escalated by Faculty</span>
+                            </div>
+                            <i class="fas fa-arrow-up danger-text"></i>
+                        </div>
+
+                        <div class="history-log-item">
+                            <div class="log-left">
+                                <h4>Rafael Domingo <span class="status-pill success">REMOVED FROM LIST</span></h4>
+                                <p>Student ID: 2024-15790 • Completed disciplinary requirements</p>
+                                <span>3/1/2026 • Removed by Faculty</span>
+                            </div>
+                            <i class="fas fa-user-plus success-text"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            document.documentElement.classList.remove('sidebar-is-minimized');
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            const isMinimized = sidebar.classList.toggle('minimized');
+            mainContent.classList.toggle('expanded');
+            localStorage.setItem('sidebarMinimized', isMinimized);
+        }
+
+        function switchTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName + '-tab').classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        function toggleNotifs() {}
+
+        window.onclick = function(event) {
+            if (!event.target.closest('.nav-notification-btn')) {}
+        }
+
+        window.onload = function() {
+            const isMinimized = localStorage.getItem('sidebarMinimized') === 'true';
+            if (isMinimized) {
+                document.getElementById('sidebar').classList.add('minimized');
+                document.getElementById('mainContent').classList.add('expanded');
+            }
+        };
+    </script>
+
+</body>
+</html>
