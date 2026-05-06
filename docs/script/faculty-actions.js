@@ -1756,7 +1756,7 @@ window.FacultyActions = {
 
         if (activeStack) {
             if (active.length === 0) {
-                activeStack.innerHTML = '<div style="text-align:center;padding:40px;color:#64748b;"><i class="fas fa-box-open" style="font-size:3rem;color:#cbd5e1;margin-bottom:15px;display:block;"></i><h4 style="color:#374151;margin-bottom:5px;">No Active Rentals</h4><p>All equipment is currently in storage.</p></div>';
+                activeStack.innerHTML = '<div style="text-align:center;padding:40px;color:#64748b;"><i class="fas fa-box-open" style="font-size:3rem;color:#cbd5e1;margin-bottom:15px;display:block;"></i><h4 style="color:#374151;margin-bottom:5px;">No Equipment Active</h4><p>All equipment is currently in storage.</p></div>';
             } else {
                 const today = new Date();
                 activeStack.innerHTML = active.map(r => {

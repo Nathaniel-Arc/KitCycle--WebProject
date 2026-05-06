@@ -104,11 +104,9 @@
                 <li class="active"><a href="faculty-dashboard.html"><i class="fas fa-th-large"></i> <span>Dashboard</span></a></li>
                 <li><a href="faculty-verification.html"><i class="fas fa-user-check"></i> <span>Student Verification</span> <span class="nav-badge-v2" style="display: inline-block;">4</span></a></li>
                 <li><a href="faculty-moderation.html"><i class="fas fa-user-shield"></i> <span>Moderation</span></a></li>
-                <li><a href="faculty-departmentgear.html"><i class="fas fa-boxes"></i> <span>Departmental Gear</span></a></li>
-                <li><a href="faculty-approvals.html"><i class="fas fa-clipboard-check"></i> <span>Approvals</span> <span class="nav-badge-v2" id="sidebarReqBadge" style="display: inline-block;">5</span></a></li>
-                <li><a href="faculty-messages.html"><i class="fas fa-comments"></i> <span>Messages</span></a></li>
-                <li><a href="faculty-rentals.html"><i class="fas fa-clock"></i> <span>Active Rentals</span></a></li>
-                <li><a href="faculty-reports.html"><i class="fas fa-chart-pie"></i> <span>Reports</span></a></li>
+<li><a href="faculty-approvals.html"><i class="fas fa-clipboard-check"></i> <span>Approvals</span> <span class="nav-badge-v2" id="sidebarReqBadge" style="display: inline-block;">5</span></a></li>
+                 <li><a href="faculty-messages.html"><i class="fas fa-comments"></i> <span>Messages</span></a></li>
+                 <li><a href="faculty-reports.html"><i class="fas fa-chart-pie"></i> <span>Reports</span></a></li>
                 <li><a href="faculty-settings.html"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
             </ul>
 
@@ -165,12 +163,10 @@
                         </div>
                     </div>
 
-                    <div class="content-card margin-top">
-                        <div class="card-header">
-                            <h3>Recently Borrowed Gear</h3>
-                            <a href="faculty-rentals.html" style="font-size: 0.85rem; color: #800000; font-weight: 700; text-decoration: none;">View All <i class="fas fa-arrow-right"></i></a>
-                        </div>
-                        <div class="recent-borrowed-list">
+<div class="content-card margin-top">
+                             <h3>Recently Borrowed Gear</h3>
+                         </div>
+                         <div class="recent-borrowed-list">
                             <div class="pending-request-mini">
                                 <div class="req-avatar" style="background:linear-gradient(135deg,#3b82f6,#2563eb);">M</div>
                                 <div class="req-info">
@@ -204,9 +200,8 @@
                         <h3 style="font-size:1.05rem;margin-bottom:1.2rem;">Quick Actions</h3>
                         <div class="action-stack">
                             <button style="background:#ffd700;color:#111827;box-shadow:0 4px 12px rgba(255,215,0,0.3);" onclick="FacultyActions.showAddEquipmentModal((eq) => { const eqList = FacultyActions._getEquipment(); eqList.push(eq); FacultyActions._saveEquipment(eqList); if(typeof UIUtils!=='undefined'&&UIUtils.showToast)UIUtils.showToast(eq.name+' added successfully!','success'); })"><i class="fas fa-plus-circle"></i> List New Item</button>
-                            <button style="background:#fff;border:2px solid #800000;color:#800000;" onclick="location.href='faculty-approvals.html'"><i class="fas fa-clipboard-check"></i> Review Approvals</button>
-                            <button style="background:#111827;color:#fff;" onclick="location.href='faculty-departmentgear.html'"><i class="fas fa-boxes"></i> Manage Gear</button>
-                            <button style="background:#f1f5f9;color:#4b5563;" onclick="location.href='faculty-reports.html'"><i class="fas fa-chart-pie"></i> View Reports</button>
+<button style="background:#fff;border:2px solid #800000;color:#800000;" onclick="location.href='faculty-approvals.html'"><i class="fas fa-clipboard-check"></i> Review Approvals</button>
+                             <button style="background:#f1f5f9;color:#4b5563;" onclick="location.href='faculty-reports.html'"><i class="fas fa-chart-pie"></i> View Reports</button>
                         </div>
                     </div>
 
