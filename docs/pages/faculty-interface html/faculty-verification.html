@@ -538,13 +538,13 @@
             loadVerifications();
             loadHistory();
             
-            if (typeof FacultyActions !== 'undefined' && FacultyActions._getRequests) {
-                const requests = FacultyActions._getRequests();
-                const pending = requests.filter(r => r.status === 'Pending');
+            if (typeof FacultyActions !== 'undefined' && FacultyActions._getStudentListings) {
+                const listings = FacultyActions._getStudentListings();
+                const pending = listings.filter(l => l.status === 'Pending').length;
                 const badge = document.getElementById('sidebarReqBadge');
                 if (badge) {
-                    badge.textContent = pending.length;
-                    badge.style.display = pending.length > 0 ? 'inline-block' : 'none';
+                    badge.textContent = pending;
+                    badge.style.display = pending > 0 ? 'inline-block' : 'none';
                 }
             }
         });
