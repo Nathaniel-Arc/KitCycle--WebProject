@@ -218,10 +218,10 @@ window.AuthSystem = {
                             ${userPic ? `<img src="${imgPath}" alt="${userName}" class="nav-profile-img-circle">` : `<i class="fas fa-user"></i>`}
                         </span>
                     </a>
-                    <div class="user-meta">
-                        <span class="user-display-name">Nash Arciaga${verifiedBadge}</span>
-                        <span class="user-role-badge">Student</span>
-                    </div>
+<div class="user-meta">
+                         <span class="user-display-name">${userName}${verifiedBadge}</span>
+                         <span class="user-role-badge">${userRole.charAt(0).toUpperCase() + userRole.slice(1)}</span>
+                     </div>
                     <button id="logoutBtn" class="btn-logout-nav" title="Logout">
                         <i class="fas fa-sign-out-alt"></i>
                     </button>
