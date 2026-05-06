@@ -907,70 +907,41 @@ window.FacultyActions = {
 
     /* ── Refresh Approvals UI ── */
     _refreshApprovals: function() {
-        const requests = this._getRequests();
-        const pending = requests.filter(r => r.status === 'Pending');
-        const approved = requests.filter(r => r.status === 'Approved');
-        const rejected = requests.filter(r => r.status === 'Rejected');
-
-        const requestsStack = document.querySelector('.requests-stack');
-        if (requestsStack) {
-            if (pending.length === 0) {
-                requestsStack.innerHTML = '<div style="text-align:center;padding:40px;color:#64748b;"><i class="fas fa-check-circle" style="font-size:3rem;color:#10b981;margin-bottom:15px;display:block;"></i><h4 style="color:#374151;margin-bottom:5px;">All Caught Up!</h4><p>No pending requests at this time.</p></div>';
+        const listings = this._getStudentListings();
+        const pendingListings = listings.filter(l => l.status === 'Pending');
+        
+        // Update listing verifications stack if on that page
+        const listingsStack = document.getElementById('listingsStack');
+        if (listingsStack) {
+            if (pendingListings.length === 0) {
+                listingsStack.innerHTML = '<div style="text-align:center;padding:40px;color:#64748b;grid-column:1/-1;"><i class="fas fa-box-open" style="font-size:3rem;color:#cbd5e1;margin-bottom:15px;display:block;"></i><h4 style="color:#374151;margin-bottom:5px;">No Listings to Verify</h4><p>No pending requests at this time.</p></div>';
             } else {
-                requestsStack.innerHTML = pending.map(r => `
-                    <div class="request-panel" id="${r.id}">
-                        <div class="panel-header">
-                            <div>
-                                <span class="priority-pill ${r.priority === 'HIGH' ? 'high' : r.priority === 'MEDIUM' ? 'medium' : 'low'}">${r.priority}</span>
-                                <span class="status-pill warning">Pending</span>
-                            </div>
+                listingsStack.innerHTML = pendingListings.map(l => `
+                    <div class="listing-card ${l.status === 'Approved' ? 'status-approved' : l.status === 'Rejected' ? 'status-rejected' : ''}">
+                        <div class="listing-card-header"><span class="status-pill ${l.status === 'Approved' ? 'approved-pill' : l.status === 'Rejected' ? 'rejected-pill' : 'warning'}">${l.status}</span></div>
+                        <div class="listing-card-body">
+                            <h4>${l.name}</h4>
+                            <p><strong>Student:</strong> ${l.student}</p>
+                            <p><strong>Category:</strong> ${l.category}</p>
+                            <p><strong>Condition:</strong> ${l.condition}</p>
+                            <p><strong>Price/Day:</strong> ₱${l.price}</p>
+                            <p class="timestamp"><i class="far fa-clock"></i> ${l.date}</p>
                         </div>
-                        <div class="panel-body">
-                            <div class="student-meta">
-                                <h4>${r.student}</h4>
-                                <p>Student ID: <span>${r.studentId}</span></p>
-                            </div>
-                            <div class="item-specs">
-                                <p><strong>Item:</strong> ${r.item}</p>
-                                <p><strong>Duration:</strong> ${r.duration}</p>
-                                <p><strong>Purpose:</strong> ${r.purpose}</p>
-                                <p class="timestamp"><i class="far fa-clock"></i> Requested on ${r.date}</p>
-                            </div>
-                        </div>
-                        <div class="panel-actions">
-                            <button class="btn-action-light" onclick="FacultyActions.viewEquipmentDetails('${r.id}')"><i class="far fa-eye"></i> View Details</button>
-                            <button class="btn-action-approve" onclick="FacultyActions.approveRequest('${r.id}')"><i class="fas fa-check"></i> Approve</button>
-                            <button class="btn-action-reject" onclick="FacultyActions.rejectRequest('${r.id}')"><i class="fas fa-times"></i> Reject</button>
+                        <div class="listing-card-actions">
+                            ${l.status === 'Pending' 
+                                ? `<button class="btn-action-light" onclick="FacultyActions.viewListingDetails('${l.id}')"><i class="far fa-eye"></i> View</button>
+                                       <button class="btn-action-approve" onclick="FacultyActions.approveListing('${l.id}')"><i class="fas fa-check"></i> Verify</button>
+                                       <button class="btn-action-reject" onclick="FacultyActions.rejectListing('${l.id}')"><i class="fas fa-times"></i> Reject</button>`
+                                : `<span style="font-size:0.75rem;color:#64748b;">Decided on ${l.date}</span>`}
                         </div>
                     </div>
                 `).join('');
             }
         }
-
-        const pendingCount = document.querySelector('.stat-cards-grid .stat-card:first-child h3');
-        if (pendingCount) pendingCount.textContent = pending.length;
-
-        const decisionsStack = document.querySelector('.decisions-stack');
-        if (decisionsStack) {
-            const recent = [...approved, ...rejected].slice(-5).reverse();
-            decisionsStack.innerHTML = recent.map(d => `
-                <div class="decision-log">
-                    <div class="log-info">
-                        <h4>${d.student} <span class="status-pill ${d.status === 'Approved' ? 'success' : 'danger'}">${d.status.toUpperCase()}</span></h4>
-                        <p>Item: ${d.item}</p>
-                        ${d.rejectReason ? `<span class="reason-note">Reason: ${d.rejectReason}</span>` : ''}
-                        <span class="timestamp">${d.date} • Decided by You</span>
-                    </div>
-                    <i class="fas fa-${d.status === 'Approved' ? 'check-circle success-text' : 'times-circle danger-text'} log-icon"></i>
-                </div>
-            `).join('') || '<p style="text-align:center;color:#9ca3af;padding:20px;">No decisions yet.</p>';
-        }
-
+        
+        // Update sidebar badge
         const badge = document.getElementById('sidebarReqBadge');
-        if (badge) badge.textContent = pending.length;
-
-        const renderFn = window.renderAllRequests;
-        if (typeof renderFn === 'function') renderFn();
+        if (badge) badge.textContent = pendingListings.length;
     },
 
     /* ── Render Equipment Grid ── */

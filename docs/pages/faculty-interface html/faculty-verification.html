@@ -337,25 +337,6 @@
                 });
             }
 
-                    return '<div class="request-panel ' + borderClass + '" data-id="' + v.id + '">' +
-                        '<div class="panel-header"><div><span class="status-pill ' + pillClass + '">' + v.status + '</span></div></div>' +
-                        '<div class="panel-body"><div class="student-meta"><h4>' + v.name + '</h4><p>Student ID: <span>' + v.studentId + '</span></p><p>Email: <span>' + v.email + '</span></p></div><div class="item-specs"><p><strong>Department:</strong> ' + v.department + '</p><p><strong>Year Level:</strong> ' + v.yearLevel + '</p><p><strong>Documents:</strong> ' + v.documents + ' submitted</p><p class="timestamp"><i class="far fa-clock"></i> Submitted on ' + v.date + '</p>' + (v.rejectReason ? '<p style="font-size:0.82rem;color:#800000;margin-top:6px;"><strong>Reason:</strong> ' + v.rejectReason + '</p>' : '') + '</div></div>' +
-                        actionsHtml +
-                        '</div>';
-                }).join('');
-                
-                // Add event listeners after rendering
-                container.querySelectorAll('[data-action]').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const action = this.getAttribute('data-action');
-                        const id = this.getAttribute('data-id');
-                        if (action === 'view') viewDetails(id);
-                        else if (action === 'approve') showApproveModal(id);
-                        else if (action === 'reject') showRejectModal(id);
-                    });
-                });
-            }
-
             const pending = verifications.filter(v => v.status === 'Pending');
             document.getElementById('pendingCount').textContent = pending.length;
             const badge = document.getElementById('verifyBadge');
@@ -367,16 +348,22 @@
             const container = document.getElementById('historyStack');
             if (!container) return;
 
-            container.innerHTML = history.map(h => `
-                <div class="history-log-item">
-                    <div class="log-left">
-                        <h4>${h.name} <span class="status-pill ${h.status === 'APPROVED' ? 'success' : 'danger'}">${h.status}</span></h4>
-                        <p>Student ID: ${h.studentId}</p>
-                        <span>${h.date} • Decided by ${h.decidedBy}</span>
+            if (history.length === 0) {
+                container.innerHTML = '<div style="text-align:center;padding:40px;color:#64748b;grid-column:1/-1;"><i class="fas fa-history" style="font-size:3rem;color:#cbd5e1;margin-bottom:15px;display:block;"></i><h4 style="color:#374151;margin-bottom:5px;">No Verification History</h4><p>No past verification decisions.</p></div>';
+            } else {
+                container.innerHTML = history.map(h => `
+                    <div class="verification-card ${h.status === 'APPROVED' ? 'status-approved' : 'status-rejected'}">
+                        <div class="verification-card-header">
+                            <span class="status-pill ${h.status === 'APPROVED' ? 'approved-pill' : 'rejected-pill'}">${h.status}</span>
+                        </div>
+                        <div class="verification-card-body">
+                            <h4>${h.name}</h4>
+                            <p><strong>Student ID:</strong> ${h.studentId}</p>
+                            <p class="timestamp"><i class="far fa-clock"></i> ${h.date} • ${h.decidedBy}</p>
+                        </div>
                     </div>
-                    <i class="fas ${h.status === 'APPROVED' ? 'fa-check-circle success-text' : 'fa-times-circle danger-text'}"></i>
-                </div>
-            `).join('');
+                `).join('');
+            }
         }
 
         function viewDetails(id) {
