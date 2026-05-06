@@ -125,28 +125,28 @@
                     <div class="stat-icon blue"><i class="fas fa-cubes"></i></div>
                     <div class="stat-numbers">
                         <span class="stat-label">Total Equipment</span>
-                        <h3>45</h3>
+                        <h3 id="statTotalEquip">45</h3>
                     </div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon green"><i class="fas fa-check-circle"></i></div>
                     <div class="stat-numbers">
                         <span class="stat-label">Available Now</span>
-                        <h3 class="success-text">29</h3>
+                        <h3 class="success-text" id="statAvailable">29</h3>
                     </div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon orange"><i class="fas fa-hourglass-half"></i></div>
                     <div class="stat-numbers">
                         <span class="stat-label">Currently Borrowed</span>
-                        <h3 class="warning-text">16</h3>
+                        <h3 class="warning-text" id="statBorrowed">16</h3>
                     </div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon red"><i class="fas fa-clipboard-list"></i></div>
                     <div class="stat-numbers">
-                        <span class="stat-label">Pending Requests</span>
-                        <h3 class="danger-text">5</h3>
+                        <span class="stat-label">Pending Verifications</span>
+                        <h3 class="danger-text" id="statPending">5</h3>
                     </div>
                 </div>
             </div>
@@ -163,35 +163,12 @@
                         </div>
                     </div>
 
-<div class="content-card margin-top">
+                    <div class="content-card margin-top">
                              <h3>Recently Borrowed Gear</h3>
                          </div>
-                         <div class="recent-borrowed-list">
-                            <div class="pending-request-mini">
-                                <div class="req-avatar" style="background:linear-gradient(135deg,#3b82f6,#2563eb);">M</div>
-                                <div class="req-info">
-                                    <h4>Engineering Microscope Set</h4>
-                                    <p>Maria Santos • Due: 3/12/2026</p>
-                                </div>
-                                <span style="font-size:0.75rem;font-weight:700;color:#10b981;background:#f0fdf4;padding:4px 10px;border-radius:20px;">Active</span>
-                            </div>
-                            <div class="pending-request-mini">
-                                <div class="req-avatar" style="background:linear-gradient(135deg,#8b5cf6,#7c3aed);">J</div>
-                                <div class="req-info">
-                                    <h4>Scientific Calculator TI-84</h4>
-                                    <p>Juan Reyes • Due: 3/9/2026</p>
-                                </div>
-                                <span style="font-size:0.75rem;font-weight:700;color:#10b981;background:#f0fdf4;padding:4px 10px;border-radius:20px;">Active</span>
-                            </div>
-                            <div class="pending-request-mini">
-                                <div class="req-avatar" style="background:linear-gradient(135deg,#f59e0b,#d97706);">A</div>
-                                <div class="req-info">
-                                    <h4>Video Recording Equipment</h4>
-                                    <p>Anna Cruz • Due: 3/8/2026</p>
-                                </div>
-                                <span style="font-size:0.75rem;font-weight:700;color:#f59e0b;background:#fffbeb;padding:4px 10px;border-radius:20px;">Due Soon</span>
-                            </div>
-                        </div>
+                         <div class="recent-borrowed-list" id="recentBorrowedList">
+                            <!-- Populated by JavaScript -->
+                         </div>
                     </div>
                 </div>
 
@@ -252,24 +229,24 @@
                 document.getElementById('mainContent').classList.add('expanded');
             }
 
-            // Render pending requests widget
-            const requests = FacultyActions._getRequests();
-            const pending = requests.filter(r => r.status === 'Pending').slice(0, 3);
+            // Render listing verifications widget
+            const listings = FacultyActions._getStudentListings();
+            const pendingListings = listings.filter(l => l.status === 'Pending').slice(0, 3);
             const widget = document.getElementById('pendingRequestsWidget');
             if (widget) {
-                if (pending.length === 0) {
-                    widget.innerHTML = '<p style="text-align:center;padding:30px;color:#64748b;"><i class="fas fa-check-circle" style="font-size:2rem;color:#10b981;margin-bottom:10px;display:block;"></i>All caught up! No pending requests.</p>';
+                if (pendingListings.length === 0) {
+                    widget.innerHTML = '<p style="text-align:center;padding:30px;color:#64748b;"><i class="fas fa-check-circle" style="font-size:2rem;color:#10b981;margin-bottom:10px;display:block;"></i>All caught up! No pending verifications.</p>';
                 } else {
-                    widget.innerHTML = pending.map(r => `
+                    widget.innerHTML = pendingListings.map(l => `
                         <div class="pending-request-mini">
-                            <div class="req-avatar">${r.student.charAt(0)}</div>
+                            <div class="req-avatar">${l.student.charAt(0)}</div>
                             <div class="req-info">
-                                <h4>${r.student}</h4>
-                                <p>${r.item} • ${r.duration} • <span style="font-weight:700;color:#800000;">${r.priority}</span></p>
+                                <h4>${l.student}</h4>
+                                <p>${l.name} • ${l.category} • <span style="font-weight:700;color:#800000;">${l.condition}</span></p>
                             </div>
                             <div class="req-actions">
-                                <button class="btn-mini-approve" onclick="FacultyActions.approveRequest('${r.id}', this)"><i class="fas fa-check"></i></button>
-                                <button class="btn-mini-reject" onclick="FacultyActions.rejectRequest('${r.id}', this)"><i class="fas fa-times"></i></button>
+                                <button class="btn-mini-approve" onclick="FacultyActions.approveListing('${l.id}')"><i class="fas fa-check"></i></button>
+                                <button class="btn-mini-reject" onclick="FacultyActions.rejectListing('${l.id}')"><i class="fas fa-times"></i></button>
                             </div>
                         </div>
                     `).join('');
@@ -278,7 +255,7 @@
 
             // Update sidebar badge
             const badge = document.getElementById('sidebarReqBadge');
-            if (badge) badge.textContent = pending.length;
+            if (badge) badge.textContent = pendingListings.length;
 
             FacultyActions.initDashboard();
         };

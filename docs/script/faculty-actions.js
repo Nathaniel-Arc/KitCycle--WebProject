@@ -729,33 +729,6 @@ window.FacultyActions = {
     },
 
     /* ── Listing Approvals ── */
-    viewListingDetails: function(listId) {
-        const listings = this._getStudentListings();
-        const l = listings.find(x => x.id === listId);
-        if (!l) return;
-
-        const overlay = document.createElement('div');
-        overlay.id = 'listing-details-overlay';
-        overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,23,42,0.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:10000;animation:fadeIn 0.2s ease;';
-        overlay.innerHTML = `
-            <div style="background:#fff;width:95%;max-width:480px;border-radius:20px;padding:25px;box-shadow:0 25px 50px rgba(0,0,0,0.25);animation:modalPop 0.3s cubic-bezier(0.175,0.885,0.32,1.275);max-height:90vh;overflow-y:auto;">
-                <h3 style="margin:0 0 5px;color:#1e293b;text-align:center;">${l.name}</h3>
-                <p style="text-align:center;color:#64748b;font-size:0.85rem;margin-bottom:15px;">Submitted by ${l.student}</p>
-                <div style="width:100%;height:180px;border-radius:12px;overflow:hidden;margin-bottom:15px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;">
-                    ${l.image ? `<img src="${l.image}" style="width:100%;height:100%;object-fit:cover;">` : '<i class="fas fa-camera" style="font-size:3rem;color:#94a3b8;"></i>'}
-                </div>
-                <div style="display:flex;flex-direction:column;gap:8px;">
-                    <div style="display:flex;justify-content:space-between;padding:8px;background:#f8fafc;border-radius:8px;font-size:0.85rem;"><strong>Category:</strong><span>${l.category}</span></div>
-                    <div style="display:flex;justify-content:space-between;padding:8px;background:#f8fafc;border-radius:8px;font-size:0.85rem;"><strong>Condition:</strong><span>${l.condition}</span></div>
-                    <div style="display:flex;justify-content:space-between;padding:8px;background:#f8fafc;border-radius:8px;font-size:0.85rem;"><strong>Price/Day:</strong><span style="color:#800000;font-weight:700;">₱${l.price}</span></div>
-                    <div style="padding:12px;background:#f8fafc;border-radius:8px;font-size:0.85rem;"><strong>Description:</strong><p style="margin:4px 0 0;color:#475569;">${l.description}</p></div>
-                </div>
-                <button onclick="document.getElementById('listing-details-overlay').remove();" style="margin-top:15px;width:100%;padding:10px;background:#f1f5f9;color:#4b5563;border:none;border-radius:8px;font-weight:700;cursor:pointer;">Close</button>
-            </div>
-        `;
-        document.body.appendChild(overlay);
-    },
-
     rejectListing: function(listId) {
         this._showRejectionForm(listId, 'listing');
     },
@@ -1869,6 +1842,59 @@ window.FacultyActions = {
 
     initDashboard: function() {
         this.renderDashboard();
+    },
+
+    renderDashboard: function() {
+        const equipment = this._getEquipment();
+        const listings = this._getStudentListings();
+        const requests = this._getRequests();
+        
+        // Calculate stats
+        const totalEquip = equipment.length;
+        const available = equipment.reduce((sum, eq) => sum + (eq.available || 0), 0);
+        const borrowed = equipment.reduce((sum, eq) => sum + (eq.borrowed || 0), 0);
+        const pendingVerifications = listings.filter(l => l.status === 'Pending').length;
+        
+        // Update stat cards
+        const el = (id) => document.getElementById(id);
+        if (el('statTotalEquip')) el('statTotalEquip').textContent = totalEquip;
+        if (el('statAvailable')) el('statAvailable').textContent = available;
+        if (el('statBorrowed')) el('statBorrowed').textContent = borrowed;
+        if (el('statPending')) el('statPending').textContent = pendingVerifications;
+        
+        // Update sidebar badge
+        const sidebarBadge = document.getElementById('sidebarReqBadge');
+        if (sidebarBadge) sidebarBadge.textContent = pendingVerifications;
+        
+        // Render recently borrowed gear
+        const recentBorrowed = requests.filter(r => ['Picked Up', 'Approved'].includes(r.status)).slice(0, 3);
+        const recentList = document.getElementById('recentBorrowedList');
+        if (recentList) {
+            if (recentBorrowed.length === 0) {
+                recentList.innerHTML = '<p style="text-align:center;padding:20px;color:#64748b;">No recently borrowed gear.</p>';
+            } else {
+                recentList.innerHTML = recentBorrowed.map(r => {
+                    const initial = r.student.charAt(0);
+                    const colors = ['#3b82f6', '#8b5cf6', '#f59e0b', '#10b981', '#ef4444'];
+                    const color = colors[Math.floor(Math.random() * colors.length)];
+                    const dueDate = r.dueDate || 'TBD';
+                    const status = r.status === 'Picked Up' ? 'Active' : 'Due Soon';
+                    const statusColor = r.status === 'Picked Up' ? '#10b981' : '#f59e0b';
+                    const statusBg = r.status === 'Picked Up' ? '#f0fdf4' : '#fffbeb';
+                    
+                    return `
+                        <div class="pending-request-mini">
+                            <div class="req-avatar" style="background:linear-gradient(135deg,${color},${color}88);">${initial}</div>
+                            <div class="req-info">
+                                <h4>${r.item}</h4>
+                                <p>${r.student} • Due: ${dueDate}</p>
+                            </div>
+                            <span style="font-size:0.75rem;font-weight:700;color:${statusColor};background:${statusBg};padding:4px 10px;border-radius:20px;">${status}</span>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
     }
 };
 
