@@ -30,6 +30,89 @@
         .sidebar-is-minimized .sidebar-nav i { font-size: 1.2rem !important; margin: 0 !important; }
         .sidebar-is-minimized .sidebar-profile { justify-content: center !important; padding-bottom: 1.5rem !important; }
 
+        .moderation-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            padding: 20px 0;
+        }
+
+        @media (max-width: 1024px) {
+            .moderation-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .moderation-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .moderation-card {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 16px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border-left: 4px solid #f59e0b;
+        }
+
+        .moderation-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .moderation-card.status-resolved { border-left-color: #10b981; }
+
+        .moderation-card-header {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 10px;
+        }
+
+        .moderation-card-body {
+            margin-bottom: 12px;
+        }
+
+        .moderation-card-body h4 {
+            font-size: 0.95rem;
+            color: #1e293b;
+            margin: 0 0 8px 0;
+        }
+
+        .moderation-card-body p {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin: 4px 0;
+        }
+
+        .moderation-card-body strong {
+            color: #374151;
+        }
+
+        .moderation-card-actions {
+            display: flex;
+            gap: 6px;
+            padding-top: 10px;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .moderation-card-actions button {
+            flex: 1;
+            padding: 6px 10px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+
+
         .stat-cards-grid.three-cols {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -303,19 +386,22 @@
             </div>
 
             <div class="content-card full-width-card">
-                <div class="card-header">
-                    <h3>Content Moderation Queue</h3>
-                    <span class="pill-badge warning-bg" id="queueBadge">3 Pending</span>
+                <div class="card-header" style="flex-direction:column; align-items:stretch; gap:10px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <h3 style="margin:0;">Content Moderation Queue</h3>
+                        <span class="pill-badge warning-bg" id="queueBadge">3 Pending</span>
+                    </div>
+                    <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+                        <input type="text" id="moderationSearch" placeholder="Search reports, users..." style="padding:8px 12px; border:1px solid #e2e8f0; border-radius:8px; font-size:0.85rem; outline:none; flex:1; min-width:200px;" oninput="filterModeration(currentModFilter)">
+                        <div class="filter-tabs">
+                            <button class="filter-tab active" data-filter="All" onclick="filterModeration('All')">All</button>
+                            <button class="filter-tab" data-filter="Pending" onclick="filterModeration('Pending')">Pending</button>
+                            <button class="filter-tab" data-filter="Under Review" onclick="filterModeration('Under Review')">Under Review</button>
+                            <button class="filter-tab" data-filter="Resolved" onclick="filterModeration('Resolved')">Resolved</button>
+                        </div>
+                    </div>
                 </div>
-
-                <div class="filter-tabs">
-                    <button class="filter-tab active" data-filter="All" onclick="filterModeration('All')">All</button>
-                    <button class="filter-tab" data-filter="Pending" onclick="filterModeration('Pending')">Pending</button>
-                    <button class="filter-tab" data-filter="Under Review" onclick="filterModeration('Under Review')">Under Review</button>
-                    <button class="filter-tab" data-filter="Resolved" onclick="filterModeration('Resolved')">Resolved</button>
-                </div>
-
-                <div class="moderation-stack" id="moderationStack">
+                <div class="moderation-grid" id="moderationStack">
                     <!-- Populated by JavaScript -->
                 </div>
             </div>
@@ -340,38 +426,38 @@
         function loadModeration() {
             const items = JSON.parse(localStorage.getItem('facultyModeration') || '[]');
             const container = document.getElementById('moderationStack');
+            const search = document.getElementById('moderationSearch') ? document.getElementById('moderationSearch').value.toLowerCase() : '';
             if (!container) return;
 
             let filtered = items;
             if (currentModFilter !== 'All') {
                 filtered = items.filter(item => item.status === currentModFilter);
             }
+            if (search) {
+                filtered = filtered.filter(item => item.type.toLowerCase().includes(search) || item.reportedUser.toLowerCase().includes(search) || item.reporter.toLowerCase().includes(search) || item.content.toLowerCase().includes(search));
+            }
 
             if (filtered.length === 0) {
-                container.innerHTML = '<div class="empty-state"><i class="fas fa-check-circle"></i><p>No items found in this category.</p></div>';
+                container.innerHTML = '<div style="text-align:center;padding:40px;color:#64748b;grid-column:1/-1;"><i class="fas fa-check-circle" style="font-size:3rem;color:#10b981;margin-bottom:15px;display:block;"></i><p>No items found in this category.</p></div>';
             } else {
                 container.innerHTML = filtered.map(item => `
-                    <div class="request-panel ${item.status === 'Resolved' ? 'status-resolved' : ''}" id="mod-${item.id}">
-                        <div class="panel-header">
-                            <div><span class="status-pill ${item.status === 'Pending' ? 'warning' : item.status === 'Under Review' ? 'info' : 'success'}">${item.status}</span></div>
+                    <div class="moderation-card ${item.status === 'Resolved' ? 'status-resolved' : ''}" id="mod-${item.id}">
+                        <div class="moderation-card-header">
+                            <span class="status-pill ${item.status === 'Pending' ? 'warning' : item.status === 'Under Review' ? 'info' : 'success'}">${item.status}</span>
                         </div>
-                        <div class="panel-body">
-                            <div class="student-meta">
-                                <h4>${item.type}</h4>
-                                <p>Reported User: <span>${item.reportedUser}</span></p>
-                            </div>
-                            <div class="item-specs">
-                                <p><strong>Reporter:</strong> ${item.reporter}</p>
-                                <p><strong>Content:</strong> ${item.content}</p>
-                                <p class="timestamp"><i class="far fa-clock"></i> Reported on ${item.date}</p>
-                            </div>
+                        <div class="moderation-card-body">
+                            <h4>${item.type}</h4>
+                            <p><strong>Reported User:</strong> ${item.reportedUser}</p>
+                            <p><strong>Reporter:</strong> ${item.reporter}</p>
+                            <p><strong>Content:</strong> ${item.content}</p>
+                            <p class="timestamp"><i class="far fa-clock"></i> ${item.date}</p>
                         </div>
-                        <div class="panel-actions">
-                            <button class="btn-action-light" data-action="view" data-id="${item.id}"><i class="far fa-eye"></i> View Details</button>
+                        <div class="moderation-card-actions">
+                            <button class="btn-action-light" data-action="view" data-id="${item.id}"><i class="far fa-eye"></i> View</button>
                             ${item.status !== 'Resolved' ? `
                             <button class="btn-action-approve" data-action="resolve" data-id="${item.id}"><i class="fas fa-check"></i> Resolve</button>
                             <button class="btn-action-reject" data-action="dismiss" data-id="${item.id}"><i class="fas fa-times"></i> Dismiss</button>
-                            ` : `<span style="font-size:0.8rem;color:#64748b;padding:8px 16px;background:#f8fafc;border-radius:8px;">Resolved on ${item.date}</span>`}
+                            ` : `<span style="font-size:0.75rem;color:#64748b;">Resolved on ${item.date}</span>`}
                         </div>
                     </div>
                 `).join('');

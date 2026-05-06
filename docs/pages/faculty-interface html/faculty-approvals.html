@@ -27,6 +27,90 @@
         .sidebar-is-minimized .sidebar-nav i { font-size: 1.2rem !important; margin: 0 !important; }
         .sidebar-is-minimized .sidebar-profile { justify-content: center !important; padding-bottom: 1.5rem !important; }
 
+        .listings-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            padding: 20px 0;
+        }
+
+        @media (max-width: 1024px) {
+            .listings-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .listings-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .listing-card {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 16px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border-left: 4px solid #f59e0b;
+        }
+
+        .listing-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .listing-card.status-approved { border-left-color: #10b981; }
+        .listing-card.status-rejected { border-left-color: #ef4444; }
+
+        .listing-card-header {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 10px;
+        }
+
+        .listing-card-body {
+            margin-bottom: 12px;
+        }
+
+        .listing-card-body h4 {
+            font-size: 0.95rem;
+            color: #1e293b;
+            margin: 0 0 8px 0;
+        }
+
+        .listing-card-body p {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin: 4px 0;
+        }
+
+        .listing-card-body strong {
+            color: #374151;
+        }
+
+        .listing-card-actions {
+            display: flex;
+            gap: 6px;
+            padding-top: 10px;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .listing-card-actions button {
+            flex: 1;
+            padding: 6px 10px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+
+
         .stat-cards-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -128,8 +212,8 @@
                     <div style="display:flex; justify-content:space-between; align-items:center;">
                         <h3 style="margin:0;">Listing Verifications</h3>
                     </div>
-                    <div id="listingFilters" style="display:flex; gap:10px; align-items:center;">
-                        <input type="text" id="listingSearch" placeholder="Search student or item..." style="padding:8px 12px; border:1px solid #e2e8f0; border-radius:8px; font-size:0.85rem; outline:none; width:220px;" oninput="filterListings(listingFilter)">
+                    <div id="listingFilters" style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+                        <input type="text" id="listingSearch" placeholder="Search student or item..." style="padding:8px 12px; border:1px solid #e2e8f0; border-radius:8px; font-size:0.85rem; outline:none; flex:1; min-width:200px;" oninput="filterListings(listingFilter)">
                         <div class="status-filter-bar">
                             <button class="filter-btn active" id="listingFilterAll" onclick="filterListings('all')">All</button>
                             <button class="filter-btn" id="listingFilterPending" onclick="filterListings('Pending')">Pending</button>
@@ -138,7 +222,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="requests-stack" id="listingsStack"></div>
+                <div class="listings-grid" id="listingsStack"></div>
             </div>
         </main>
     </div>
@@ -168,35 +252,32 @@
             const listings = FacultyActions._getStudentListings();
             const stack = document.getElementById('listingsStack');
             const search = document.getElementById('listingSearch') ? document.getElementById('listingSearch').value.toLowerCase() : '';
-            
+
             let filtered = listingFilter === 'all' ? listings : listings.filter(l => l.status === listingFilter);
             if (search) {
                 filtered = filtered.filter(l => l.student.toLowerCase().includes(search) || l.name.toLowerCase().includes(search) || l.studentId.toLowerCase().includes(search));
             }
-            
+
             if (filtered.length === 0) {
-                stack.innerHTML = '<div style="text-align:center;padding:40px;color:#64748b;"><i class="fas fa-box-open" style="font-size:3rem;color:#cbd5e1;margin-bottom:15px;display:block;"></i><h4 style="color:#374151;margin-bottom:5px;">No Listings to Verify</h4><p>No pending requests at this time.</p></div>';
+                stack.innerHTML = '<div style="text-align:center;padding:40px;color:#64748b;grid-column:1/-1;"><i class="fas fa-box-open" style="font-size:3rem;color:#cbd5e1;margin-bottom:15px;display:block;"></i><h4 style="color:#374151;margin-bottom:5px;">No Listings to Verify</h4><p>No pending requests at this time.</p></div>';
             } else {
                 stack.innerHTML = filtered.map(l => `
-                    <div class="request-panel ${l.status === 'Approved' ? 'status-approved' : l.status === 'Rejected' ? 'status-rejected' : ''}">
-                        <div class="panel-header"><div><span class="status-pill ${l.status === 'Approved' ? 'approved-pill' : l.status === 'Rejected' ? 'rejected-pill' : 'warning'}">${l.status}</span></div></div>
-                        <div class="panel-body">
-                            <div class="student-meta"><h4>${l.student}</h4><p>Student ID: <span>${l.studentId}</span></p></div>
-                            <div class="item-specs">
-                                <p><strong>Item:</strong> ${l.name}</p>
-                                <p><strong>Category:</strong> ${l.category}</p>
-                                <p><strong>Condition:</strong> ${l.condition}</p>
-                                <p><strong>Price/Day:</strong> ₱${l.price}</p>
-                                <p><strong>Description:</strong> ${l.description}</p>
-                                <p class="timestamp"><i class="far fa-clock"></i> Listed on ${l.date}</p>
-                            </div>
+                    <div class="listing-card ${l.status === 'Approved' ? 'status-approved' : l.status === 'Rejected' ? 'status-rejected' : ''}">
+                        <div class="listing-card-header"><span class="status-pill ${l.status === 'Approved' ? 'approved-pill' : l.status === 'Rejected' ? 'rejected-pill' : 'warning'}">${l.status}</span></div>
+                        <div class="listing-card-body">
+                            <h4>${l.name}</h4>
+                            <p><strong>Student:</strong> ${l.student}</p>
+                            <p><strong>Category:</strong> ${l.category}</p>
+                            <p><strong>Condition:</strong> ${l.condition}</p>
+                            <p><strong>Price/Day:</strong> ₱${l.price}</p>
+                            <p class="timestamp"><i class="far fa-clock"></i> ${l.date}</p>
                         </div>
-                        <div class="panel-actions">
-                            ${l.status === 'Pending' 
-                                ? `<button class="btn-action-light" onclick="FacultyActions.viewListingDetails('${l.id}')"><i class="far fa-eye"></i> View Details</button>
+                        <div class="listing-card-actions">
+                            ${l.status === 'Pending'
+                                ? `<button class="btn-action-light" onclick="FacultyActions.viewListingDetails('${l.id}')"><i class="far fa-eye"></i> View</button>
                                        <button class="btn-action-approve" onclick="FacultyActions.approveListing('${l.id}')"><i class="fas fa-check"></i> Verify</button>
                                        <button class="btn-action-reject" onclick="FacultyActions.rejectListing('${l.id}')"><i class="fas fa-times"></i> Reject</button>`
-                                : `<span style="font-size:0.8rem;color:#64748b;padding:8px 16px;background:#f8fafc;border-radius:8px;">Decided on ${l.date}</span>`}
+                                : `<span style="font-size:0.75rem;color:#64748b;">Decided on ${l.date}</span>`}
                         </div>
                     </div>
                 `).join('');
