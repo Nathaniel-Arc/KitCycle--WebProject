@@ -1,83 +1,192 @@
-/* --- APPROVAL QUEUE ADAPTATIONS --- */
+/* --- Admin Table/Grid Styling --- */
 
-.approvals-stack {
+/* Header Controls */
+.card-header.border-bottom {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
     gap: 15px;
 }
 
-.approval-item-panel {
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
-    padding: 1.5rem;
-    background: #fff;
-}
-
-.approval-panel-header {
+.header-title-area {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 1rem;
+    align-items: center;
+    gap: 12px;
 }
 
-.approval-panel-header h4 {
-    font-size: 1rem;
-    color: #111827;
-    margin-bottom: 4px;
-}
-
-.approval-panel-header p {
-    font-size: 0.85rem;
-    color: #4b5563;
-}
-
-.header-status {
+.header-actions {
     display: flex;
-    gap: 8px;
+    gap: 10px;
     align-items: center;
 }
 
-.approval-panel-body {
-    padding: 1rem 0;
-    border-top: 1px solid #f3f4f6;
-    border-bottom: 1px solid #f3f4f6;
+.search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
 }
 
-.approval-panel-body p {
-    font-size: 0.85rem;
-    color: #374151;
-    margin-bottom: 6px;
+.search-box i {
+    position: absolute;
+    left: 10px;
+    color: #888;
 }
 
-.approval-panel-body .timestamp {
-    display: block;
-    font-size: 0.8rem;
-    color: #6b7280;
+.search-box input {
+    padding: 8px 12px 8px 35px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    outline: none;
+    font-size: 0.9rem;
+    width: 250px;
+}
+
+/* Grid Design */
+.table-responsive {
+    overflow-x: auto;
+}
+
+.approval-grid {
+    width: 100%;
+    border-collapse: collapse;
     margin-top: 10px;
 }
 
-.approval-panel-footer {
+.approval-grid thead th {
+    background-color: #f9fafb;
+    padding: 15px;
+    text-align: left;
+    font-weight: 600;
+    color: #444;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid #edf2f7;
+}
+
+.approval-grid tbody td {
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
+    font-size: 0.95rem;
+}
+
+.approval-grid tbody tr:hover {
+    background-color: #f8faff;
+}
+
+/* Cell Specifics */
+.student-info .name {
+    display: block;
+    font-weight: 600;
+    color: #2d3748;
+}
+
+.student-info .id {
+    display: block;
+    font-size: 0.8rem;
+    color: #718096;
+}
+
+.item-cell .item-name {
+    display: block;
+    font-weight: 500;
+    color: #333;
+}
+
+.item-cell .purpose {
+    display: block;
+    font-size: 0.8rem;
+    color: #888;
+    font-style: italic;
+}
+
+/* Action Buttons */
+.grid-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+
+.icon-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 6px;
+    border: 1px solid #eee;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-btn.approve { color: #2ecc71; border-color: #2ecc71; }
+.icon-btn.approve:hover { background: #2ecc71; color: white; }
+
+.icon-btn.reject { color: #e74c3c; border-color: #e74c3c; }
+.icon-btn.reject:hover { background: #e74c3c; color: white; }
+
+.icon-btn.view { color: #3498db; border-color: #3498db; }
+.icon-btn.view:hover { background: #3498db; color: white; }
+
+/* Pagination & Footer */
+.card-footer {
+    padding: 15px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 1rem;
+    color: #718096;
+    font-size: 0.85rem;
 }
 
-.btn-primary-red-outline {
-    background: #fff;
-    color: #dc2626;
-    border: 1px solid #dc2626;
-    padding: 8px 15px;
-    border-radius: 6px;
-    font-size: 0.85rem;
-    font-weight: 600;
+.pagination {
+    display: flex;
+    gap: 5px;
+}
+
+.pagination button {
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    background: white;
     cursor: pointer;
+    border-radius: 4px;
+}
+
+.pagination button.active {
+    background: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+/* History Grid Style */
+.history-grid-stack {
+    display: flex;
+    flex-direction: column;
+}
+
+.history-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px;
+    border-bottom: 1px solid #f5f5f5;
+}
+
+.history-main {
     display: flex;
     align-items: center;
-    gap: 8px;
-    transition: 0.2s;
+    gap: 15px;
 }
 
-.btn-primary-red-outline:hover {
-    background: #fef2f2;
+.history-main i {
+    font-size: 1.2rem;
+}
+
+.history-main small {
+    display: block;
+    color: #999;
 }

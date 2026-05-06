@@ -216,3 +216,24 @@
     font-size: 0.9rem;
     cursor: pointer;
 }
+
+.sidebar-toggle {
+    font-size: 1.2rem;
+    color: #4b5563;
+    cursor: pointer;
+    padding: 5px;
+    transition: 0.3s;
+}
+
+.navbar-toggle:hover {
+    color: var(--wmsu-maroon);
+}
+.navbar-nav a.active {
+    background-color: #8B0000; /* maroon/red */
+    color: #fff;
+    border-radius: 8px;
+}
+
+.navbar-nav a.active i {
+    color: #fff;
+}
