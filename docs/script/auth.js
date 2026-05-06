@@ -10,7 +10,7 @@ window.AuthSystem = {
     /* ── Hardcoded credential store ─────────────────────────── */
     _accounts: [
         { email: 'student@wmsu.edu.ph', password: 'student', role: 'student', name: 'Nash Arciaga', profilePic: 'nash_profile.png' },
-        { email: 'maria@wmsu.edu.ph',   password: 'student', role: 'student', name: 'Maria Santos', profilePic: 'maria_profile.png' },
+        { email: 'maria@wmsu.edu.ph',   password: 'maria',   role: 'student', name: 'Maria Santos', profilePic: 'maria_profile.png' },
         { email: 'juan@wmsu.edu.ph',    password: 'student', role: 'student', name: 'Juan Dela Cruz', profilePic: 'juan_profile.png' },
         { email: 'elena@wmsu.edu.ph',   password: 'student', role: 'student', name: 'Elena Rodriguez', profilePic: 'elena_profile.png' },
         { email: 'admin@wmsu.edu.ph',   password: 'admin',   role: 'admin',   name: 'Admin Officer',  profilePic: null },
@@ -181,9 +181,11 @@ window.AuthSystem = {
             authBtns.innerHTML = `
                 <!-- Messages Icon with Red Badge -->
                 <div class="nav-msg-container">
-                    <button class="nav-msg-btn" onclick="window.location.href='${messagesHref}'">
-                        <i class="far fa-comments"></i>
-                        <div class="msg-badge ${hasNotifications ? 'active' : ''}" id="navMsgBadge"></div>
+                    <button class="nav-msg-btn" onclick="window.location.href='${messagesHref}'" title="Secure Chat (Auto-masks Contact Info)">
+                        <span class="msg-icon-stack">
+                            <i class="far fa-comments"></i>
+                            <div class="msg-badge ${hasNotifications ? 'active' : ''}" id="navMsgBadge"></div>
+                        </span>
                     </button>
                 </div>
 
@@ -217,8 +219,8 @@ window.AuthSystem = {
                         </span>
                     </a>
                     <div class="user-meta">
-                        <span class="user-display-name">${userName}${verifiedBadge}</span>
-                        <span class="user-role-badge">${userRole}</span>
+                        <span class="user-display-name">Nash Arciaga${verifiedBadge}</span>
+                        <span class="user-role-badge">Student</span>
                     </div>
                     <button id="logoutBtn" class="btn-logout-nav" title="Logout">
                         <i class="fas fa-sign-out-alt"></i>
@@ -231,6 +233,19 @@ window.AuthSystem = {
                     e.preventDefault();
                     AuthSystem.confirmLogout();
                 });
+
+             function updateSidebarNotif() {
+            const badge = document.getElementById('sidebarNotifCount');
+            const navBadge = document.getElementById('navNotifBadge');
+            const unreadCount = parseInt(localStorage.getItem('kitcycle_unread_count') || '1');
+            if(badge) {
+                badge.innerText = unreadCount;
+                badge.style.display = unreadCount > 0 ? 'inline-block' : 'none';
+            }
+            if(navBadge) {
+                navBadge.style.display = unreadCount > 0 ? 'block' : 'none';
+            }
+        }
 
             // --- Sidebar Profile Update ---
             const sidebarName = document.getElementById('sidebarUserName');
@@ -398,19 +413,28 @@ document.addEventListener('DOMContentLoaded', () => {
         transform: translateY(-2px);
     }
 
-    /* Message Badge (Crimson Circle) */
+    /* Message Badge (Crimson Circle) - Refactored Stack */
+    .msg-icon-stack {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .msg-icon-stack i {
+        font-size: 1.2rem;
+    }
     .msg-badge {
         position: absolute;
-        top: -4px;
-        right: -4px;
-        width: 12px;
-        height: 12px;
+        top: -5px;
+        right: -5px;
+        width: 10px;
+        height: 10px;
         background: #800000; /* WMSU Crimson */
-        border: 2px solid #fff;
+        border: 1.5px solid #fff;
         border-radius: 50%;
         display: none;
         z-index: 10;
-        box-shadow: 0 2px 4px rgba(128,0,0,0.3);
+        box-shadow: 0 1px 3px rgba(128,0,0,0.3);
     }
     .msg-badge.active {
         display: block;

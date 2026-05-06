@@ -41,7 +41,15 @@
             </a>
 
             <div class="item-gallery">
-                <img src="" alt="" class="main-img" id="itemMainImg">
+                <div class="main-img-container" id="mainImgContainer">
+                    <img src="" alt="" class="main-img" id="itemMainImg">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-search-plus"></i> Click to Enlarge
+                    </div>
+                </div>
+                <div class="thumbnail-strip" id="thumbnailStrip">
+                    <!-- Dynamic -->
+                </div>
             </div>
 
             <div class="item-main-info">
@@ -77,6 +85,8 @@
                         <span class="spec-value available" id="itemAvailability">Available</span>
                     </div>
                 </div>
+
+
             </div>
 
             <!-- Lender Info -->
@@ -101,55 +111,70 @@
         <aside>
             <div class="rental-sidebar">
                 <div class="rate-grid">
-                    <div class="rate-card" data-rate="hourly">
-                        <span class="rate-label">Per Hour</span>
+                    <div class="rate-display" id="pill-hourly">
+                        <span class="rate-label">Hour</span>
                         <span class="rate-price" id="rateHourly">₱0</span>
                     </div>
-                    <div class="rate-card active" data-rate="daily">
-                        <span class="rate-label">Per Day</span>
+                    <div class="rate-display" id="pill-daily">
+                        <span class="rate-label">Day</span>
                         <span class="rate-price" id="rateDaily">₱0</span>
                     </div>
-                    <div class="rate-card" data-rate="weekly">
-                        <span class="rate-label">Per Week</span>
+                    <div class="rate-display" id="pill-weekly">
+                        <span class="rate-label">Week</span>
                         <span class="rate-price" id="rateWeekly">₱0</span>
                     </div>
-                    <div class="rate-card" data-rate="monthly">
-                        <span class="rate-label">Per Month</span>
+                    <div class="rate-display" id="pill-monthly">
+                        <span class="rate-label">Month</span>
                         <span class="rate-price" id="rateMonthly">₱0</span>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label">Select Rental Period</label>
-                    <select class="form-control" id="rentalPeriod">
-                        <!-- Dynamic -->
-                    </select>
+                <!-- Hierarchical Duration Builder (Persistent Rows) -->
+                <div class="duration-builder" id="durationBuilder">
+                    <div class="duration-row" id="row-months">
+                        <label class="form-label">Months</label>
+                        <input type="number" class="form-control duration-input" value="0" min="0" data-unit="monthly" id="in-months">
+                    </div>
+                    <div class="duration-row" id="row-weeks">
+                        <label class="form-label">Weeks</label>
+                        <input type="number" class="form-control duration-input" value="0" min="0" data-unit="weekly" id="in-weeks">
+                    </div>
+                    <div class="duration-row" id="row-days">
+                        <label class="form-label">Days</label>
+                        <input type="number" class="form-control duration-input" value="0" min="0" data-unit="daily" id="in-days">
+                    </div>
+                    <div class="duration-row" id="row-hours">
+                        <label class="form-label">Hours</label>
+                        <input type="number" class="form-control duration-input" value="0" min="0" data-unit="hourly" id="in-hours">
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label" id="durationLabel">How many Day?</label>
-                    <input type="number" class="form-control" value="1" min="1" id="rentalDuration">
+                <div class="form-group-compact">
+                    <label class="form-label">Quantity (Qty)</label>
+                    <input type="number" class="form-control" value="1" min="1" id="itemQuantity">
                 </div>
 
                 <div class="total-display">
-                    <div class="total-calc" id="totalCalcText">₱250 × 1 Day</div>
-                    <div class="total-amount">₱<span id="totalValue">250</span></div>
+                    <div class="total-calc" id="totalCalcText">Calculating...</div>
+                    <div class="total-amount">₱<span id="totalValue">0</span></div>
                 </div>
 
+                <!-- Scheduling Section -->
                 <div class="form-group">
                     <label class="form-label">Select Pick-up Date</label>
                     <input type="date" class="form-control" id="rentalDate">
-                    <p style="font-size: 0.7rem; color: var(--text-muted); margin-top: 5px;"><i class="fas fa-info-circle"></i> Occupied dates are automatically greyed out.</p>
+                    <p style="font-size: 0.65rem; color: var(--text-muted); margin-top: 4px;" id="lenderDaysHint">
+                        <i class="fas fa-calendar-alt"></i> Available: Loading...
+                    </p>
                 </div>
 
-                <!-- Pickup Time & Location (Request 3: Lender Controlled) -->
                 <div class="form-group">
                     <label class="form-label">Available Meetup Slots</label>
                     <select class="form-control" id="meetupSlots">
-                        <!-- Dynamic -->
+                        <option value="">Select a date first...</option>
                     </select>
-                    <p style="font-size: 0.7rem; color: #10b981; margin-top: 5px; font-weight: 600;">
-                        <i class="fas fa-qrcode"></i> Digital Handshake: A unique QR code will be generated for verification.
+                    <p class="verification-note">
+                        <i class="fas fa-qrcode"></i> <strong>Digital Handshake:</strong> A unique QR code will be generated upon approval for secure physical handover verification.
                     </p>
                 </div>
 
@@ -159,7 +184,7 @@
                 </div>
 
                 <button class="btn-rent-main" id="btnRentRequest">Request to Rent</button>
-                <button class="btn-message-outline"><i class="far fa-comments"></i> Message Owner</button>
+                <button class="btn-message-outline" id="btnMessageOwner"><i class="far fa-comments"></i> Message Owner</button>
 
                 <div class="trust-badge-mini">
                     <i class="fas fa-shield-alt"></i>
@@ -218,13 +243,27 @@
             <p>&copy; 2026 WMSU KitCycle. All rights reserved.</p>
         </div>
     </footer>
+    
+    <!-- Lightbox Modal -->
+    <div id="lightboxModal" class="lightbox-modal">
+        <span class="lightbox-close">&times;</span>
+        <button class="lightbox-nav prev" id="lightboxPrev"><i class="fas fa-chevron-left"></i></button>
+        <div class="lightbox-content">
+            <img id="lightboxImg" src="">
+            <div id="lightboxCaption" class="lightbox-caption">Image 1 of 5</div>
+        </div>
+        <button class="lightbox-nav next" id="lightboxNext"><i class="fas fa-chevron-right"></i></button>
+    </div>
 
     <script>
         // --- 1. Template Injection Logic ---
+        let currentItem = null;
+
         document.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
             const itemId = urlParams.get('id') || 'camera'; // Fallback to camera
             const item = KitCycleData.getItemById(itemId);
+            currentItem = item;
 
             if (!item) {
                 alert("Item not found!");
@@ -233,8 +272,6 @@
             }
 
             // Inject basic info
-            document.getElementById('itemMainImg').src = item.image;
-            document.getElementById('itemMainImg').alt = item.name;
             document.getElementById('itemTitle').textContent = item.name;
             document.getElementById('itemCategory').textContent = item.category;
             document.getElementById('itemCategorySpec').textContent = item.category;
@@ -247,11 +284,87 @@
 
             // Inject included items
             const includedList = document.getElementById('itemIncluded');
+            includedList.innerHTML = ''; // Clear fallback
             item.included.forEach(inc => {
                 const div = document.createElement('div');
                 div.className = 'included-item';
                 div.innerHTML = `<i class="fas fa-check-circle"></i> ${inc}`;
                 includedList.appendChild(div);
+            });
+
+            // Inject gallery
+            const thumbnailStrip = document.getElementById('thumbnailStrip');
+            const mainImg = document.getElementById('itemMainImg');
+            
+            if (item.galleryImages && item.galleryImages.length > 0) {
+                mainImg.src = item.galleryImages[0];
+                mainImg.alt = item.name;
+
+                item.galleryImages.forEach((imgUrl, index) => {
+                    const thumb = document.createElement('img');
+                    thumb.src = imgUrl;
+                    thumb.className = `thumb-img ${index === 0 ? 'active' : ''}`;
+                    thumb.onclick = () => {
+                        mainImg.src = imgUrl;
+                        document.querySelectorAll('.thumb-img').forEach(t => t.classList.remove('active'));
+                        thumb.classList.add('active');
+                    };
+                    thumbnailStrip.appendChild(thumb);
+                });
+            } else {
+                mainImg.src = item.image || '../../images/canon_dslr_90d.png';
+            }
+
+            // Lightbox Logic
+            const lightbox = document.getElementById('lightboxModal');
+            const lightboxImg = document.getElementById('lightboxImg');
+            const lightboxCaption = document.getElementById('lightboxCaption');
+            const closeLightbox = document.querySelector('.lightbox-close');
+            let currentImgIndex = 0;
+
+            const openLightbox = (index) => {
+                currentImgIndex = index;
+                lightboxImg.src = item.galleryImages[currentImgIndex];
+                lightboxCaption.textContent = `Image ${currentImgIndex + 1} of ${item.galleryImages.length}`;
+                lightbox.style.display = 'flex';
+                document.body.style.overflow = 'hidden'; // Prevent scroll
+            };
+
+            document.getElementById('mainImgContainer').onclick = () => {
+                const activeThumb = document.querySelector('.thumb-img.active');
+                const index = Array.from(thumbnailStrip.children).indexOf(activeThumb);
+                openLightbox(index >= 0 ? index : 0);
+            };
+
+            closeLightbox.onclick = () => {
+                lightbox.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            };
+
+            document.getElementById('lightboxPrev').onclick = (e) => {
+                e.stopPropagation();
+                currentImgIndex = (currentImgIndex - 1 + item.galleryImages.length) % item.galleryImages.length;
+                openLightbox(currentImgIndex);
+            };
+
+            document.getElementById('lightboxNext').onclick = (e) => {
+                e.stopPropagation();
+                currentImgIndex = (currentImgIndex + 1) % item.galleryImages.length;
+                openLightbox(currentImgIndex);
+            };
+
+            // Close on background click
+            lightbox.onclick = (e) => {
+                if (e.target === lightbox) closeLightbox.onclick();
+            };
+
+            // Keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                if (lightbox.style.display === 'flex') {
+                    if (e.key === 'ArrowLeft') document.getElementById('lightboxPrev').click();
+                    if (e.key === 'ArrowRight') document.getElementById('lightboxNext').click();
+                    if (e.key === 'Escape') closeLightbox.onclick();
+                }
             });
 
             // Inject Lender
@@ -265,29 +378,14 @@
             document.getElementById('rateWeekly').textContent = `₱${(item.weeklyPrice || 0).toLocaleString()}`;
             document.getElementById('rateMonthly').textContent = `₱${(item.monthlyPrice || 0).toLocaleString()}`;
 
-            // Populate Select Dropdown
-            const periodSelect = document.getElementById('rentalPeriod');
-            const options = [
-                { val: item.hourlyPrice || 0, text: `Per Hour - ₱${item.hourlyPrice || 0}` },
-                { val: item.price || 0, text: `Per Day - ₱${item.price || 0}` },
-                { val: item.weeklyPrice || 0, text: `Per Week - ₱${(item.weeklyPrice || 0).toLocaleString()}` },
-                { val: item.monthlyPrice || 0, text: `Per Month - ₱${(item.monthlyPrice || 0).toLocaleString()}` }
-            ];
-            options.forEach((opt, idx) => {
-                const el = document.createElement('option');
-                el.value = opt.val;
-                el.textContent = opt.text;
-                if (idx === 1) el.selected = true; // Default to Daily
-                periodSelect.appendChild(el);
-            });
-
-            // Inject Meetup Slots
-            const slotsSelect = document.getElementById('meetupSlots');
-            item.meetupSlots.forEach(slot => {
-                const el = document.createElement('option');
-                el.textContent = slot;
-                slotsSelect.appendChild(el);
-            });
+            // Inject Lender Availability Hint
+            const hint = document.getElementById('lenderDaysHint');
+            if (item.meetupSlots && item.meetupSlots.length > 0) {
+                const days = item.meetupSlots.map(s => s.split(' ')[0]).join(', ');
+                hint.innerHTML = `<i class="fas fa-calendar-alt"></i> Available: ${days}`;
+            } else {
+                hint.textContent = "Lender availability not set.";
+            }
 
             // Inject Q&A
             const qaContainer = document.getElementById('qaContainer');
@@ -307,82 +405,322 @@
                 qaContainer.innerHTML = '<p style="color: #64748b; font-size: 0.9rem;">No questions asked yet.</p>';
             }
 
-            // Initial Price Update
+            // Institutional Logic Check
+            const isInstitutional = item.propertyTag === 'Institutional';
+            if (isInstitutional) {
+                // Update Badge
+                const itemTitleEl = document.getElementById('itemTitle');
+                const badge = document.createElement('span');
+                badge.className = 'prop-tag institutional';
+                badge.textContent = 'Institutional Asset';
+                badge.style.marginLeft = '10px';
+                badge.style.fontSize = '0.7rem';
+                itemTitleEl.appendChild(badge);
+
+                // Update Price Logic for Institutional
+                // (₱0 locked + ₱20 max consumables)
+                // We'll override the rates for calculation purposes
+                item.monthlyPrice = 0;
+                item.weeklyPrice = 0;
+                item.price = 20; // 20 flat for maintenance
+                item.hourlyPrice = 0;
+
+                // Update Lender to Faculty (Blue)
+                const lenderEl = document.querySelector('.lender-name');
+                if (lenderEl) {
+                    lenderEl.innerHTML = `<span style="color: #2563eb; font-weight: 700;"><i class="fas fa-chalkboard-teacher"></i> Verified Faculty</span>`;
+                    const badgeEl = lenderEl.nextElementSibling;
+                    if (badgeEl) badgeEl.style.display = 'none'; // hide student badge
+                }
+
+                // Update UI text
+                const rateCardsElements = document.querySelectorAll('.rate-card');
+                rateCardsElements.forEach(card => {
+                    if (card.dataset.rate === 'daily') {
+                        card.querySelector('.rate-price').textContent = '₱20';
+                        card.querySelector('.rate-label').textContent = 'Flat Maintenance Fee';
+                    } else {
+                        card.style.opacity = '0.5';
+                        card.style.pointerEvents = 'none';
+                        card.querySelector('.rate-price').textContent = '₱0';
+                    }
+                });
+
+                UIUtils.showToast("Institutional Item: ₱0 rental + ₱20 maintenance fee.", "info");
+            }
+
+            // Enforce Qty Limit
+            const qtyInput = document.getElementById('itemQuantity');
+            if (qtyInput) {
+                qtyInput.max = item.quantity;
+                qtyInput.addEventListener('input', () => {
+                    if (parseInt(qtyInput.value) > item.quantity) {
+                        UIUtils.showToast(`Max quantity available: ${item.quantity}`, "warning");
+                        qtyInput.value = item.quantity;
+                    }
+                    updatePrice();
+                });
+            }
+
+            // Initial UI Setup
+            updatePillLogic('daily');
             updatePrice();
         });
 
-        // --- 2. Price Calculation Logic ---
-        const periodSelect = document.getElementById('rentalPeriod');
-        const durationInput = document.getElementById('rentalDuration');
-        const durationLabel = document.getElementById('durationLabel');
+        // --- 2. Price & Logic Controls ---
+        const quantityInput = document.getElementById('itemQuantity');
         const totalCalcText = document.getElementById('totalCalcText');
         const totalValue = document.getElementById('totalValue');
         const btnRent = document.getElementById('btnRentRequest');
         const termsCheck = document.getElementById('termsCheck');
+        const durationInputs = document.querySelectorAll('.duration-input');
+        const rateCards = document.querySelectorAll('.rate-card');
+        const rentalDateInput = document.getElementById('rentalDate');
+        const meetupSlotsSelect = document.getElementById('meetupSlots');
+        const lenderDaysHint = document.getElementById('lenderDaysHint');
 
         function updatePrice() {
-            const price = parseInt(periodSelect.value);
-            const duration = parseInt(durationInput.value) || 1;
-            const total = price * duration;
+            if (!currentItem) return;
+
+            const qty = parseInt(quantityInput.value) || 1;
+            let mVal = 0, wVal = 0, dVal = 0, hVal = 0;
             
-            const selectedText = periodSelect.options[periodSelect.selectedIndex].text.split(' - ')[0];
-            const unitName = selectedText.replace('Per ', '');
-            
-            durationLabel.textContent = `How many ${unitName}?`;
-            totalCalcText.textContent = `₱${price} × ${duration} ${unitName}${duration > 1 ? 's' : ''}`;
-            totalValue.textContent = total.toLocaleString();
+            durationInputs.forEach(input => {
+                const val = parseInt(input.value) || 0;
+                if (input.dataset.unit === 'monthly') mVal = val;
+                if (input.dataset.unit === 'weekly') wVal = val;
+                if (input.dataset.unit === 'daily') dVal = val;
+                if (input.dataset.unit === 'hourly') hVal = val;
+            });
+
+            const mR = currentItem.monthlyPrice || 0;
+            const wR = currentItem.weeklyPrice || 0;
+            const dR = currentItem.price || 0;
+            const hR = currentItem.hourlyPrice || 0;
+
+            let parts = [];
+            const isInstitutional = currentItem.propertyTag === 'Institutional';
+            let grandTotal = 0;
+
+            if (isInstitutional) {
+                // Institutional: Flat ₱20 maintenance fee regardless of duration
+                grandTotal = 20;
+                parts.push("₱20 Maintenance Fee");
+            } else {
+                grandTotal = ((mVal * mR) + (wVal * wR) + (dVal * dR) + (hVal * hR)) * qty;
+                if (mVal > 0) parts.push(`₱${mR * mVal} (Mo)`);
+                if (wVal > 0) parts.push(`₱${wR * wVal} (Wk)`);
+                if (dVal > 0) parts.push(`₱${dR * dVal} (D)`);
+                if (hVal > 0) parts.push(`₱${hR * hVal} (H)`);
+            }
+
+            if (parts.length === 0 && !isInstitutional) {
+                totalCalcText.textContent = "Select duration above";
+                totalValue.textContent = "0";
+                return;
+            }
+
+            // Check Reservation Intent
+            let depositText = '';
+            if (rentalDateInput && rentalDateInput.value) {
+                const selectedDate = new Date(rentalDateInput.value);
+                const today = new Date();
+                today.setHours(0,0,0,0);
+                
+                if (selectedDate > today) {
+                    const deposit = grandTotal * 0.10;
+                    depositText = ` (Reservation Deposit: ₱${deposit.toFixed(2)})`;
+                }
+            }
+
+            totalCalcText.textContent = `(${parts.join(' + ')}) × ${qty} qty`;
+            totalValue.textContent = grandTotal.toLocaleString() + depositText;
         }
 
-        periodSelect.addEventListener('change', updatePrice);
-        durationInput.addEventListener('input', updatePrice);
+        // --- 3. Hierarchical Pill & Date Logic ---
+        function updatePillLogic(rateType) {
+            // Inputs are always enabled and values are no longer auto-filled.
+            // The rate cards now simply act as a visual hint for the user.
+        }
+
+        // Rate cards are now static displays, no click logic needed.
+
+        // Restricted Date Picker Logic
+        rentalDateInput.addEventListener('change', () => {
+            const selectedDate = new Date(rentalDateInput.value);
+            if (isNaN(selectedDate.getTime())) return;
+
+            // Calendar Lock Logic: Check if reserved
+            const reservedDates = JSON.parse(localStorage.getItem('kitcycle_reserved_dates') || '{}');
+            const itemReserved = reservedDates[currentItem.id] || [];
+            
+            // Note: in a real app we'd compare strict formatting, here we just do a string includes check
+            if (itemReserved.includes(rentalDateInput.value)) {
+                UIUtils.showToast("This date is already reserved by another student.", "error");
+                rentalDateInput.value = '';
+                meetupSlotsSelect.innerHTML = '<option value="">Select a date first...</option>';
+                updatePrice(); // clear deposit text
+                return;
+            }
+
+            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const dayName = days[selectedDate.getDay()];
+            const shortDayName = dayName.substring(0, 3);
+
+            // Check if lender is available on this day
+            const isAvailable = currentItem.meetupSlots.some(slot => {
+                const s = slot.toLowerCase();
+                return s.includes('daily') || 
+                       s.includes(dayName.toLowerCase()) || 
+                       s.includes(shortDayName.toLowerCase()) ||
+                       (s.includes('mon-fri') && selectedDate.getDay() >= 1 && selectedDate.getDay() <= 5);
+            });
+
+            if (!isAvailable) {
+                UIUtils.showToast(`${currentItem.lender} is not available on ${dayName}s`, "info");
+                rentalDateInput.value = '';
+                meetupSlotsSelect.innerHTML = '<option value="">Select a date first...</option>';
+                updatePrice(); // clear deposit text
+                return;
+            }
+
+            // Filter Slots
+            meetupSlotsSelect.innerHTML = '';
+            const filtered = currentItem.meetupSlots.filter(slot => {
+                const s = slot.toLowerCase();
+                return s.includes('daily') || 
+                       s.includes(dayName.toLowerCase()) || 
+                       s.includes(shortDayName.toLowerCase()) ||
+                       (s.includes('mon-fri') && selectedDate.getDay() >= 1 && selectedDate.getDay() <= 5);
+            });
+
+            filtered.forEach(slot => {
+                const el = document.createElement('option');
+                el.textContent = slot;
+                meetupSlotsSelect.appendChild(el);
+            });
+
+            updatePrice(); // Update price to recalculate deposit if needed
+        });
+
+        durationInputs.forEach(input => input.addEventListener('input', updatePrice));
+        quantityInput.addEventListener('input', updatePrice);
+
+        // --- 4. Messaging & Request Logic ---
+        const btnMessage = document.getElementById('btnMessageOwner');
+
+        btnMessage.addEventListener('click', () => {
+            if (!currentItem) return;
+            const messagesUrl = `../student-interface html/student-messages.html?user=${encodeURIComponent(currentItem.lender)}`;
+            window.location.href = messagesUrl;
+        });
 
         btnRent.addEventListener('click', () => {
             if (btnRent.classList.contains('sent')) return;
+
+            const totalNum = parseInt(totalValue.textContent.replace(/,/g, '')) || 0;
+            if (totalNum <= 0) {
+                UIUtils.showToast("Please enter a valid rental duration", "info");
+                return;
+            }
+
+            if (!rentalDateInput.value) {
+                UIUtils.showToast("Please select a pick-up date", "info");
+                return;
+            }
 
             if (!termsCheck.checked) {
                 UIUtils.showToast("Please agree to the Rental Agreement", "info");
                 return;
             }
             
-            // Status Transition Logic
+            const finalPrice = totalValue.textContent;
             btnRent.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
             btnRent.style.pointerEvents = 'none';
 
+            // Capture Breakdown for the message
+            const breakdown = {
+                months: document.getElementById('in-months').value,
+                weeks: document.getElementById('in-weeks').value,
+                days: document.getElementById('in-days').value,
+                hours: document.getElementById('in-hours').value,
+                qty: quantityInput.value,
+                pickup: rentalDateInput.value,
+                slot: meetupSlotsSelect.value
+            };
+
             setTimeout(() => {
-                btnRent.innerHTML = '<i class="fas fa-check"></i> Request Sent';
+                btnRent.innerHTML = `<i class="fas fa-check"></i> Request Sent`;
                 btnRent.classList.add('sent');
-                UIUtils.showToast("Rental request sent! Lender will be notified.");
                 
-                // Trigger "Real" Notification for Lender (Simulated)
-                const itemName = document.getElementById('itemTitle').textContent;
-                AuthSystem.addNotification("New Rental Request", `Someone wants to rent your '${itemName}'.`);
+                // Generate a mock Transaction ID
+                const txId = 'TXN-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+
+                // Store request details for the messages hub
+                const requestDetails = {
+                    txId: txId,
+                    itemId: currentItem.id,
+                    itemName: currentItem.name,
+                    lender: currentItem.lender,
+                    totalPrice: finalPrice,
+                    duration: `${breakdown.months}m ${breakdown.weeks}w ${breakdown.days}d ${breakdown.hours}h`,
+                    pickup: breakdown.pickup,
+                    slot: breakdown.slot,
+                    qty: breakdown.qty,
+                    image: currentItem.image,
+                    status: 'PENDING'
+                };
                 
-                // Optional: Store in local storage to persist the "Sent" state for this item
-                const itemId = new URLSearchParams(window.location.search).get('id') || 'camera';
-                localStorage.setItem(`request_sent_${itemId}`, 'true');
+                localStorage.setItem('kitcycle_last_request', JSON.stringify(requestDetails));
+                localStorage.setItem('kitcycle_unread_count', '1');
+
+                // PERSISTENT CONVERSATION SYNC:
+                // Push this request into the kitcycle_messages store as a structured card
+                const currentMessages = JSON.parse(localStorage.getItem('kitcycle_messages') || '{}');
+                const lenderKey = currentItem.lender.toLowerCase().split(' ')[0]; // Simple keying: 'maria', 'juan', etc.
+                
+                if (currentMessages[lenderKey]) {
+                    const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    
+                    // Update the thread context to match this request
+                    currentMessages[lenderKey].item = currentItem.name;
+                    currentMessages[lenderKey].img = currentItem.image;
+                    currentMessages[lenderKey].status = "Awaiting Pickup";
+                    currentMessages[lenderKey].statusClass = "status-pending";
+
+                    currentMessages[lenderKey].messages.push({
+                        t: 'out',
+                        type: 'request',
+                        details: requestDetails,
+                        time: now
+                    });
+                    localStorage.setItem('kitcycle_messages', JSON.stringify(currentMessages));
+                }
+                
+                // Detailed Summary Modal with OK and Close options
+                UIUtils.showModal({
+                    title: "Check Message?",
+                    message: `Successfully requested ${currentItem.name} from ${currentItem.lender}. Would you like to view the negotiation thread in your messages?`,
+                    type: "info",
+                    confirmText: "OK",
+                    cancelText: "Close",
+                    onConfirm: (val) => {
+                        if (val) {
+                            window.location.href = `../student-interface html/student-messages.html?user=${encodeURIComponent(currentItem.lender)}`;
+                        }
+                    }
+                });
             }, 1200);
         });
 
-        // Restore "Sent" state on load
+        // Restore "Sent" state
         document.addEventListener('DOMContentLoaded', () => {
             const itemId = new URLSearchParams(window.location.search).get('id') || 'camera';
-            if (localStorage.getItem(`request_sent_${itemId}`) === 'true') {
-                btnRent.innerHTML = '<i class="fas fa-check"></i> Request Sent';
+            const sentState = localStorage.getItem(`request_sent_${itemId}`);
+            if (sentState) {
+                btnRent.innerHTML = `<i class="fas fa-check"></i> Request Sent (${sentState})`;
                 btnRent.classList.add('sent');
             }
-        });
-
-        // Map selection from cards to dropdown
-        document.querySelectorAll('.rate-card').forEach(card => {
-            card.addEventListener('click', () => {
-                document.querySelectorAll('.rate-card').forEach(c => c.classList.remove('active'));
-                card.classList.add('active');
-                
-                const rateType = card.dataset.rate;
-                const mapping = { hourly: 0, daily: 1, weekly: 2, monthly: 3 };
-                periodSelect.selectedIndex = mapping[rateType];
-                updatePrice();
-            });
         });
     </script>
 </body>

@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Settings | WMSU KitCycle</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/student-interface/student-dashboard.css">
+    <script src="../../script/ui-utils.js"></script>
+    <script src="../../script/auth.js" defer></script>
+    
+    <!-- Instant Sidebar State Check -->
+    <script>
+        (function() {
+            const isMinimized = localStorage.getItem('sidebarMinimized') === 'true';
+            if (isMinimized) {
+                document.documentElement.classList.add('sidebar-is-minimized');
+            }
+        })();
+    </script>
+    <style>
+        .settings-card {
+            background: #fff;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+        }
+
+        .settings-section-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid #f1f5f9;
+            padding-bottom: 10px;
+        }
+
+        .profile-edit-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+        }
+
+        .avatar-upload-box {
+            text-align: center;
+        }
+
+        .avatar-preview {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #800000;
+            margin-bottom: 15px;
+        }
+
+        .btn-upload {
+            background: #f1f5f9;
+            color: #475569;
+            border: 1.5px solid #cbd5e1;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #475569;
+            margin-bottom: 8px;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        .form-group input:focus {
+            border-color: #800000;
+            box-shadow: 0 0 0 3px rgba(128, 0, 0, 0.1);
+        }
+
+        .btn-save-profile {
+            background: #800000;
+            color: #fff;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: 0.3s;
+        }
+
+        .btn-save-profile:hover {
+            background: #600000;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .profile-edit-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="navbar">
+        <div class="nav-left-group">
+            <div class="sidebar-toggle" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </div>
+            <div class="logo">
+                <img src="../../images/wmsulogo.png" alt="WMSU Logo" class="nav-logo-img">
+                <div class="logo-text">WMSU<span>KitCycle</span></div>
+            </div>
+        </div>
+        <div class="nav-right" style="display: flex; align-items: center; gap: 30px;">
+            <ul class="nav-links" style="display: flex; list-style: none; gap: 25px; align-items: center; margin: 0;">
+                <li><a href="student-dashboard.html">Home</a></li>
+                <li><a href="../marketplace.html">Marketplace</a></li>
+                <li><a href="../howitworks.html">How It Works</a></li>
+                <li><a href="../safety.html">Safety</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <!-- Injected by auth.js -->
+            </div>
+        </div>
+    </header>
+
+    <div class="dashboard-layout">
+
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-profile">
+                <div class="profile-avatar"><img id="sidebarProfileImg" src="../../images/nash_profile.png" alt="Profile"></div>
+                <div class="profile-info">
+                    <h4 id="sidebarUserName">Nash Arciaga</h4>
+                    <span id="sidebarUserRole">Student</span>
+                </div>
+            </div>
+
+            <ul class="sidebar-nav">
+                <li><a href="student-dashboard.html"><i class="fas fa-th-large"></i> <span>Dashboard</span></a></li>
+                <li><a href="student-rentals.html"><i class="fas fa-box-open"></i> <span>Active Exchanges</span></a></li>
+                <li><a href="student-history.html"><i class="fas fa-history"></i> <span>Transaction History</span></a></li>
+                <li>
+                    <a href="student-messages.html" style="position: relative;">
+                        <i class="fas fa-comments"></i> <span>Messages</span>
+                        <span class="sidebar-badge">1</span>
+                    </a>
+                </li>
+                <li><a href="student-saved.html"><i class="fas fa-heart"></i> <span>Saved Items</span></a></li>
+                <li><a href="student-rating.html"><i class="fas fa-star"></i> <span>My Rating</span></a></li>
+                <li><a href="student-listings.html"><i class="fas fa-list"></i> <span>My Listings</span></a></li>
+                <li class="active"><a href="student-settings.html"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
+            </ul>
+
+            <a href="javascript:void(0)" onclick="AuthSystem.confirmLogout(); return false;" class="sidebar-logout"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
+        </aside>
+
+        <main class="dashboard-content" id="mainContent">
+
+            <div class="dashboard-banner">
+                <div>
+                    <h2><i class="fas fa-cog"></i> Account Settings</h2>
+                    <p>Manage your profile, account preferences, and security</p>
+                </div>
+            </div>
+
+            <div class="settings-card">
+                <div class="settings-section-title">
+                    <i class="fas fa-user-circle"></i> Edit Profile
+                </div>
+
+                <form id="profileForm">
+                    <div class="profile-edit-grid">
+                        <div class="avatar-upload-box">
+                            <img id="avatarPreview" src="../../images/nash_profile.png" class="avatar-preview" alt="Avatar">
+                            <br>
+                            <label class="btn-upload">
+                                <i class="fas fa-camera"></i> Change Photo
+                                <input type="file" style="display:none;" onchange="previewImage(this)">
+                            </label>
+                            <p style="font-size: 0.75rem; color: #64748b; margin-top: 10px;">JPG, PNG or GIF. Max 2MB.</p>
+                        </div>
+
+                        <div class="profile-fields">
+                            <div class="form-group">
+                                <label>Full Name</label>
+                                <input type="text" id="editFullName" value="Nash Arciaga" placeholder="Enter your full name">
+                            </div>
+
+                            <div class="form-group">
+                                <label>WMSU Email Address</label>
+                                <input type="email" id="editEmail" value="student@wmsu.edu.ph" disabled style="background:#f8fafc; cursor:not-allowed;">
+                                <span style="font-size: 0.75rem; color: #64748b;"><i class="fas fa-lock"></i> Managed by WMSU Registrar</span>
+                            </div>
+
+                            <div class="form-group">
+                                <label>College / Department</label>
+                                <select id="editCollege" disabled style="background:#f8fafc; cursor:not-allowed;">
+                                    <option>College of Engineering (CET)</option>
+                                    <option>College of Science & Math (CSM)</option>
+                                    <option>College of Liberal Arts (CLA)</option>
+                                    <option>College of Computing Studies (CCS)</option>
+                                    <option>College of Teacher Education (CTE)</option>
+                                </select>
+                                <span style="font-size: 0.75rem; color: #64748b;"><i class="fas fa-lock"></i> Managed by WMSU Registrar</span>
+                            </div>
+
+                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                                <div class="form-group">
+                                    <label>Course / Program</label>
+                                    <input type="text" id="editCourse" value="BS Civil Engineering" placeholder="e.g. BSCE" disabled style="background:#f8fafc; cursor:not-allowed;">
+                                    <span style="font-size: 0.75rem; color: #64748b;"><i class="fas fa-lock"></i> Managed by WMSU Registrar</span>
+                                </div>
+                                <div class="form-group">
+                                    <label>Year Level</label>
+                                    <select id="editYear" disabled style="background:#f8fafc; cursor:not-allowed;">
+                                        <option>1st Year</option>
+                                        <option>2nd Year</option>
+                                        <option>3rd Year</option>
+                                        <option>4th Year</option>
+                                        <option>5th Year</option>
+                                    </select>
+                                    <span style="font-size: 0.75rem; color: #64748b;"><i class="fas fa-lock"></i> Managed by WMSU Registrar</span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Bio / Description</label>
+                                <textarea id="editBio" rows="3" placeholder="Tell other students a bit about yourself...">BS Civil Engineering student. Responsible borrower and lender. Let's help each other out with gear!</textarea>
+                            </div>
+
+                            <div style="margin-top: 2rem;">
+                                <button type="button" class="btn-save-profile" onclick="saveProfile()">Save Changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="settings-card">
+                <div class="settings-section-title">
+                    <i class="fas fa-shield-alt"></i> Security & Privacy
+                </div>
+                
+                <div style="display: flex; flex-direction: column; gap: 15px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <h4 style="margin:0; font-size: 1rem;">Two-Factor Authentication</h4>
+                            <p style="margin:5px 0 0 0; font-size: 0.85rem; color: #64748b;">Protect your account with an extra layer of security.</p>
+                        </div>
+                        <button style="padding: 8px 15px; border-radius: 8px; border: 1px solid #cbd5e1; background: #fff; font-weight: 600; cursor: pointer;">Enable</button>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f1f5f9; padding-top: 15px;">
+                        <div>
+                            <h4 style="margin:0; font-size: 1rem;">Change Password</h4>
+                            <p style="margin:5px 0 0 0; font-size: 0.85rem; color: #64748b;">It's a good idea to use a strong password that you don't use elsewhere.</p>
+                        </div>
+                        <button style="padding: 8px 15px; border-radius: 8px; border: 1px solid #cbd5e1; background: #fff; font-weight: 600; cursor: pointer;">Update</button>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            document.documentElement.classList.remove('sidebar-is-minimized');
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            const isMinimized = sidebar.classList.toggle('minimized');
+            mainContent.classList.toggle('expanded');
+            localStorage.setItem('sidebarMinimized', isMinimized);
+        }
+
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('avatarPreview').src = e.target.result;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function saveProfile() {
+            const name = document.getElementById('editFullName').value;
+            const bio = document.getElementById('editBio').value;
+            const img = document.getElementById('avatarPreview').src;
+            const college = document.getElementById('editCollege').value;
+            const course = document.getElementById('editCourse').value;
+            const year = document.getElementById('editYear').value;
+
+            localStorage.setItem('userName', name);
+            localStorage.setItem('userCollege', college);
+            localStorage.setItem('userCourse', course);
+            localStorage.setItem('userYear', year);
+            localStorage.setItem('userBio', bio);
+            
+            if(img.startsWith('data:')) {
+                localStorage.setItem('userPic', img);
+            }
+
+            UIUtils.showToast("Profile updated successfully!");
+            
+            // Sync with sidebar immediately
+            const sidebarName = document.getElementById('sidebarUserName');
+            if(sidebarName) sidebarName.textContent = name;
+            
+            const sidebarImg = document.getElementById('sidebarProfileImg');
+            if(sidebarImg) sidebarImg.src = img;
+            
+            if(window.AuthSystem) AuthSystem.updateNavbar();
+        }
+
+        window.onload = function() {
+            const isMinimized = localStorage.getItem('sidebarMinimized') === 'true';
+            if (isMinimized) {
+                document.getElementById('sidebar').classList.add('minimized');
+                document.getElementById('mainContent').classList.add('expanded');
+            }
+
+            // Load existing data
+            const currentName = localStorage.getItem('userName');
+            if(currentName) document.getElementById('editFullName').value = currentName;
+            
+            const currentCollege = localStorage.getItem('userCollege');
+            if(currentCollege) document.getElementById('editCollege').value = currentCollege;
+
+            const currentCourse = localStorage.getItem('userCourse');
+            if(currentCourse) document.getElementById('editCourse').value = currentCourse;
+
+            const currentYear = localStorage.getItem('userYear');
+            if(currentYear) document.getElementById('editYear').value = currentYear;
+
+            const currentBio = localStorage.getItem('userBio');
+            if(currentBio) document.getElementById('editBio').value = currentBio;
+            
+            const currentPic = localStorage.getItem('userPic');
+            if(currentPic) {
+                const imgPath = currentPic.startsWith('data:') ? currentPic : '../../images/' + currentPic;
+                document.getElementById('avatarPreview').src = imgPath;
+            }
+        };
+    </script>
+</body>
+
+</html>

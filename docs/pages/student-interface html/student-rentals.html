@@ -108,9 +108,51 @@
             align-items: center;
             gap: 6px;
         }
-        .urgent { color: #ef4444; }
-        .safe { color: #10b981; }
-        .neutral { color: #64748b; }
+        .timer-text { font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 5px; }
+        .timer-urgent { color: #ef4444; }
+        .timer-warning { color: #f59e0b; }
+        .timer-normal { color: #10b981; }
+        .timer-flashing { 
+            color: #ef4444; 
+            animation: flashRed 1s infinite; 
+        }
+        @keyframes flashRed {
+            0% { opacity: 1; }
+            50% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+
+        /* Scanner Animation */
+        .scanner-line {
+            width: 100%;
+            height: 3px;
+            background: #800000;
+            position: relative;
+            box-shadow: 0 0 15px #800000;
+            animation: scan 2s linear infinite;
+            z-index: 10;
+        }
+        @keyframes scan {
+            0% { top: 0; }
+            50% { top: 150px; }
+            100% { top: 0; }
+        }
+
+        /* Role Badges */
+        .role-badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .role-borrowing { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+        .role-lending { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
+
+        /* Rating State */
+        .rating-pending-card { background: #FFF9E6 !important; border: 1px solid #FFD700 !important; }
 
         .progress-track {
             width: 100%;
@@ -156,6 +198,55 @@
 
         /* Filter Logic */
         .hidden { display: none !important; }
+
+        /* Rating Modal Specifics */
+        .rating-stars {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin: 15px 0;
+            font-size: 1.8rem;
+            color: #cbd5e1;
+        }
+        .rating-stars i { cursor: pointer; transition: color 0.2s; }
+        .rating-stars i.active { color: #ffd700; }
+
+        .rating-metric {
+            text-align: left;
+            margin-bottom: 15px;
+        }
+        .rating-metric label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #475569;
+            margin-bottom: 8px;
+        }
+        .metric-stars {
+            display: flex;
+            gap: 8px;
+            color: #cbd5e1;
+            font-size: 1.2rem;
+        }
+        .metric-stars i { cursor: pointer; }
+        .metric-stars i.active { color: #fbbf24; }
+
+        .anonymous-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f8fafc;
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+        .anonymous-toggle input { width: 18px; height: 18px; cursor: pointer; }
+        .anonymous-toggle label { font-size: 0.85rem; font-weight: 600; color: #64748b; cursor: pointer; }
+
+        /* Upload Area Focus */
+        #uploadArea:hover { border-color: #800000 !important; background: #fff1f2 !important; }
+        #uploadArea.dragover { border-color: #800000; background: #fff1f2; }
     </style>
 </head>
 
@@ -190,18 +281,25 @@
             <div class="sidebar-profile">
                 <div class="profile-avatar"><img id="sidebarProfileImg" src="../../images/nash_profile.png" alt="Profile"></div>
                 <div class="profile-info">
-                    <h4 id="sidebarUserName">Nash Arciaga</h4>
+                    <h4 id="sidebarUserName">Nash Arciaga <i class="fas fa-shield-alt" style="color: #800000; font-size: 0.85rem; margin-left: 5px;" title="Verified Student"></i></h4>
                     <span id="sidebarUserRole">Student</span>
                 </div>
             </div>
 
             <ul class="sidebar-nav">
                 <li><a href="student-dashboard.html"><i class="fas fa-th-large"></i> <span>Dashboard</span></a></li>
-                <li class="active"><a href="student-rentals.html"><i class="fas fa-box-open"></i> <span>My Rentals</span></a></li>
-                <li><a href="student-messages.html"><i class="fas fa-comments"></i> <span>Messages</span> <span class="nav-badge-v2" style="display: inline-block;">1</span></a></li>
+                <li class="active"><a href="student-rentals.html"><i class="fas fa-box-open"></i> <span>Active Rentals</span></a></li>
+                <li><a href="student-history.html"><i class="fas fa-history"></i> <span>Transaction History</span></a></li>
+                <li>
+                    <a href="student-messages.html" style="position: relative;">
+                        <i class="fas fa-comments"></i> <span>Messages</span>
+                        <span class="sidebar-badge">1</span>
+                    </a>
+                </li>
                 <li><a href="student-saved.html"><i class="fas fa-heart"></i> <span>Saved Items</span></a></li>
                 <li><a href="student-rating.html"><i class="fas fa-star"></i> <span>My Rating</span></a></li>
                 <li><a href="student-listings.html"><i class="fas fa-list"></i> <span>My Listings</span></a></li>
+                <li><a href="student-settings.html"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
             </ul>
 
             <a href="javascript:void(0)" onclick="AuthSystem.confirmLogout(); return false;" class="sidebar-logout"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
@@ -212,16 +310,14 @@
             <div class="dashboard-banner">
                 <div>
                     <h2><i class="fas fa-box-open"></i> Full Rental Inventory</h2>
-                    <p>Detailed view of all your borrowing and lending history</p>
+                    <p>Track your borrowing commitments and lending requests in real-time.</p>
                 </div>
             </div>
 
             <div class="rental-filter-bar">
-                <button class="filter-btn active" onclick="filterRentals('all', this)">All Rentals</button>
+                <button class="filter-btn active" onclick="filterRentals('all', this)">All Active</button>
                 <button class="filter-btn" onclick="filterRentals('ongoing', this)">Ongoing</button>
                 <button class="filter-btn" onclick="filterRentals('pending', this)">Pending Pickup</button>
-                <button class="filter-btn" onclick="filterRentals('completed', this)">Completed</button>
-                <button class="filter-btn" onclick="filterRentals('cancelled', this)">Cancelled</button>
             </div>
 
             <!-- Clearance Widget -->
@@ -241,13 +337,139 @@
         </main>
     </div>
 
-    <!-- QR Modal -->
+    <!-- Extension Conflict Modal -->
+    <div class="modal-overlay" id="extendConflictModal">
+        <div class="modal-card" style="border-top: 5px solid #800000;">
+            <div style="text-align: center; margin-bottom: 15px;">
+                <i class="fas fa-calendar-times" style="font-size: 3rem; color: #800000;"></i>
+            </div>
+            <h3 style="margin-bottom: 10px; color: #800000;">Extension Unavailable</h3>
+            <p style="font-size: 0.9rem; color: #4b5563; line-height: 1.5;">Item is reserved by another student within 24 hours of your current due date. Please proceed with the scheduled return.</p>
+            <button onclick="document.getElementById('extendConflictModal').style.display='none'" style="width: 100%; margin-top: 20px; background: #800000; color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer;">I Understand</button>
+        </div>
+    </div>
+
+    <!-- Return Verification (Pre-Handover) -->
+    <div id="preHandoverModal" class="modal-overlay" style="display:none;">
+        <div class="modal-content" style="max-width: 380px; padding: 20px; border-radius: 30px; background: #fff; position: relative; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);">
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                <div style="background: #fff1f2; color: #800000; width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0;">
+                    <i class="fas fa-clipboard-check"></i>
+                </div>
+                <div>
+                    <h2 style="margin: 0; font-size: 1.1rem; color: #1e293b; font-weight: 800;">Return Verification</h2>
+                    <p style="margin: 0; font-size: 0.75rem; color: #64748b; font-weight: 600;" id="returnHeaderTitle">Final condition audit before handover</p>
+                </div>
+            </div>
+
+            <div id="returnHeaderInfo" style="margin-bottom: 12px; padding: 8px 12px; background: #f8fafc; border-radius: 10px; border: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
+                <p style="margin: 0; font-size: 0.85rem; font-weight: 800; color: #800000;" id="returnItemName">Item Name</p>
+                <p style="margin: 0; font-size: 0.7rem; color: #64748b; font-weight: 600;"><span id="returnLenderName" style="color: #1e293b;">Lender Name</span></p>
+            </div>
+
+            <div id="verificationActions">
+                <div style="margin-bottom: 10px;">
+                    <div id="uploadArea" onclick="document.getElementById('proofOfCondition').click()" style="border: 1.5px dashed #cbd5e1; border-radius: 12px; padding: 15px; text-align: center; cursor: pointer; transition: 0.3s; background: #fdfdfd; position: relative; overflow: hidden;">
+                        <input type="file" id="proofOfCondition" hidden accept="image/*" onchange="handleReturnPhoto(this)">
+                        <div id="uploadPlaceholder">
+                            <i class="fas fa-camera" style="font-size: 1.5rem; color: #94a3b8; margin-bottom: 5px; display: block;"></i>
+                            <p style="margin: 0; font-size: 0.75rem; color: #64748b; font-weight: 600;">Snapshot of current condition</p>
+                            <p style="margin: 5px 0 0; font-size: 0.75rem; color: #94a3b8;">Max 5MB • JPG, PNG</p>
+                        </div>
+                        <div id="uploadPreview" style="display: none;">
+                            <img id="previewImg" src="" style="width: 100%; height: 120px; object-fit: cover; border-radius: 10px; border: 1.5px solid #e2e8f0;">
+                            <div style="position: absolute; top: 10px; right: 10px; background: #10b981; color: #fff; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; box-shadow: 0 4px 10px rgba(16,185,129,0.3);">
+                                <i class="fas fa-check"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <textarea id="returnNotes" placeholder="Condition notes (optional)..." style="width: 100%; height: 50px; padding: 10px; border-radius: 10px; border: 2px solid #f1f5f9; font-family: inherit; font-size: 0.8rem; resize: none; transition: 0.2s; outline: none; background: #f8fafc;" onfocus="this.style.borderColor='#800000'; this.style.background='#fff'"></textarea>
+                </div>
+
+                <button id="btnGenerateReturnQR" disabled onclick="submitProofOfCondition()" style="width: 100%; padding: 12px; border-radius: 12px; background: #cbd5e1; color: #fff; border: none; font-weight: 800; cursor: not-allowed; transition: 0.3s; font-size: 0.9rem; box-shadow: 0 10px 20px rgba(0,0,0,0.05);">Verify & Generate QR</button>
+                <button onclick="closePreHandoverModal()" style="width: 100%; margin-top: 8px; background: none; border: none; color: #64748b; font-weight: 700; cursor: pointer; font-size: 0.8rem; transition: 0.2s;" onmouseover="this.style.color='#1e293b'">Cancel</button>
+            </div>
+
+            <div id="scanningState" style="display: none; text-align: center; padding: 30px;">
+                <div style="width: 50px; height: 50px; border: 4px solid #f1f5f9; border-top: 4px solid #800000; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px;"></div>
+                <p style="font-weight: 800; color: #1e293b; font-size: 1.1rem; margin-bottom: 5px;">Verifying Snapshot...</p>
+                <p style="color: #64748b; font-size: 0.85rem;">Encrypting return data for secure handover</p>
+            </div>
+
+            <div style="margin-top: 25px; padding-top: 20px; border-top: 1.5px solid #f1f5f9; text-align: center;">
+                <p style="margin: 0; font-size: 0.72rem; color: #ef4444; font-weight: 800; line-height: 1.5; padding: 0 10px;">
+                    <i class="fas fa-exclamation-triangle"></i> INSTITUTIONAL NOTICE: False reporting or condition staging will result in an immediate flag on the WMSU Registrar Negative List and potential suspension of rental privileges.
+                </p>
+            </div>
+        </div>
+    </div>
+    <style> @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } } </style>    <!-- Enhanced Rating Modal -->
+    <div class="modal-overlay" id="ratingModal">
+        <div class="modal-card" style="max-width: 400px; padding: 30px; border-radius: 25px;">
+            <div style="text-align: center; margin-bottom: 20px;">
+                <div style="width: 70px; height: 70px; background: #fffbeb; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; border: 2px solid #fbbf24;">
+                    <i class="fas fa-star" style="font-size: 2.2rem; color: #fbbf24;"></i>
+                </div>
+                <h2 style="margin: 0; color: #1e293b; font-weight: 800; font-size: 1.4rem;">Complete Your Rental</h2>
+                <p style="font-size: 0.9rem; color: #64748b; margin-top: 5px;">Your feedback helps keep WMSU KitCycle safe and reliable.</p>
+            </div>
+
+            <div class="rating-stars" id="overallStars">
+                <i class="fas fa-star" data-val="1"></i>
+                <i class="fas fa-star" data-val="2"></i>
+                <i class="fas fa-star" data-val="3"></i>
+                <i class="fas fa-star" data-val="4"></i>
+                <i class="fas fa-star" data-val="5"></i>
+            </div>
+
+            <div class="rating-metric">
+                <label>Item Quality & Condition</label>
+                <div class="metric-stars" id="itemStars">
+                    <i class="fas fa-star" data-val="1"></i>
+                    <i class="fas fa-star" data-val="2"></i>
+                    <i class="fas fa-star" data-val="3"></i>
+                    <i class="fas fa-star" data-val="4"></i>
+                    <i class="fas fa-star" data-val="5"></i>
+                </div>
+            </div>
+
+            <div class="rating-metric">
+                <label>Lender Communication</label>
+                <div class="metric-stars" id="serviceStars">
+                    <i class="fas fa-star" data-val="1"></i>
+                    <i class="fas fa-star" data-val="2"></i>
+                    <i class="fas fa-star" data-val="3"></i>
+                    <i class="fas fa-star" data-val="4"></i>
+                    <i class="fas fa-star" data-val="5"></i>
+                </div>
+            </div>
+
+            <textarea id="ratingFeedback" placeholder="Optional: Share your experience with this rental..." style="width: 100%; height: 90px; padding: 15px; border-radius: 15px; border: 2px solid #f1f5f9; font-family: inherit; font-size: 0.9rem; resize: none; margin-bottom: 20px; outline: none; background: #f8fafc;"></textarea>
+
+            <label class="anonymous-toggle">
+                <input type="checkbox" id="isAnonymous">
+                <span>Post review anonymously</span>
+            </label>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <button onclick="document.getElementById('ratingModal').style.display='none'" style="padding: 14px; border-radius: 15px; background: #f1f5f9; color: #475569; border: none; font-weight: 700; cursor: pointer;">Maybe Later</button>
+                <button onclick="submitRating()" style="padding: 14px; border-radius: 15px; background: #10b981; color: #fff; border: none; font-weight: 800; cursor: pointer; box-shadow: 0 4px 12px rgba(16,185,129,0.2);">Submit Review</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dynamic QR Modal -->
     <div class="modal-overlay" id="qrModal">
         <div class="modal-card">
             <h3 style="margin-bottom: 10px;">Verification QR Code</h3>
-            <p style="font-size: 0.85rem; color: #64748b;">Show this to the lender to officially confirm the handover.</p>
+            <p style="font-size: 0.85rem; color: #64748b;">Show this to the counter-party to officially complete the handover.</p>
             <div style="width: 200px; height: 200px; background: #f1f5f9; margin: 1.5rem auto; border-radius: 15px; display: flex; align-items: center; justify-content: center; border: 2px dashed #cbd5e1;"><i class="fas fa-qrcode" style="font-size: 5rem; color: #cbd5e1;"></i></div>
+            <div style="margin-bottom: 15px; font-size: 0.85rem; font-weight: 700; color: #ef4444;"><i class="fas fa-sync-alt"></i> Refreshes in <span id="qrCountdown">30</span>s</div>
             <button onclick="closeQRModal()" style="width: 100%; background: #800000; color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer;">Close</button>
+            <button onclick="simulateSuccessfulScan()" style="width: 100%; background: #10b981; color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer; margin-top: 10px;">(Dev) Simulate Scan</button>
         </div>
     </div>
 
@@ -271,73 +493,48 @@
         function renderRentals() {
             const container = document.getElementById('rentalsContainer');
             const rentals = getActiveRentals();
-            let html = '';
+            
+            // Filter out completed and cancelled items - they belong in History
+            const activeRentals = rentals.filter(r => r.status !== 'Completed' && r.status !== 'Cancelled');
 
-            const filteredRentals = rentals.filter(r => {
+            const filteredRentals = activeRentals.filter(r => {
                 if (currentFilter === 'all') return true;
-                if (currentFilter === 'ongoing') return r.status === 'Active' || r.status === 'Return Initiated' || r.status === 'Partial Return';
-                if (currentFilter === 'pending') return r.status === 'Pending Pickup';
-                if (currentFilter === 'completed') return r.status === 'Completed';
-                if (currentFilter === 'cancelled') return r.status === 'Cancelled';
+                if (currentFilter === 'ongoing') return (r.status === 'Active' || r.status === 'Return Initiated' || r.status === 'Partial Return' || r.status === 'Pending Rating');
+                if (currentFilter === 'pending') return r.status === 'Pending Pickup' || r.status === 'Reserved';
                 return true;
             });
 
             if (filteredRentals.length === 0) {
-                container.innerHTML = '<div style="text-align:center; padding:3rem; color:#64748b;"><i class="fas fa-box-open" style="font-size:3rem; opacity:0.3; margin-bottom:1rem;"></i><p>No rentals found for this category.</p></div>';
+                container.innerHTML = `
+                    <div style="text-align:center; padding:6rem 2rem; color:#64748b;">
+                        <div style="font-size: 5rem; color: #cbd5e1; margin-bottom: 2rem; animation: float 3s ease-in-out infinite;">
+                            <i class="fas fa-box-open"></i>
+                        </div>
+                        <h3 style="color:#1e293b; margin-bottom:0.5rem; font-size: 1.5rem;">No active rentals</h3>
+                        <p style="margin-bottom:2rem; font-size: 1rem;">Browse the marketplace to find gear for your academic projects!</p>
+                        <button onclick="location.href='../marketplace.html'" style="background:#800000; color:#fff; border:none; padding:14px 30px; border-radius:10px; font-weight:700; cursor:pointer; box-shadow: 0 4px 15px rgba(128,0,0,0.2);">Browse Marketplace</button>
+                    </div>`;
                 return;
             }
 
-            filteredRentals.forEach(r => {
-                const prog = calcRentalProgress(r.startDate, r.dueDate);
-                const isPending = r.status === 'Pending Pickup';
-                const isCompleted = r.status === 'Completed';
-                const isCancelled = r.status === 'Cancelled';
+            const myName = localStorage.getItem('userName') || 'Nash Arciaga';
+            const borrowing = filteredRentals.filter(r => r.lender !== myName);
+            const lending = filteredRentals.filter(r => r.lender === myName);
 
-                let statusBadgeHtml = '';
-                if (isPending) statusBadgeHtml = '<div class="timer-badge safe" style="margin-top:3px;"><i class="fas fa-info-circle"></i> Handover Pending</div>';
-                else if (isCompleted) statusBadgeHtml = '<div style="margin-top:5px; font-size:0.8rem; color:#10b981; font-weight:700;"><i class="fas fa-check-circle"></i> Completed</div>';
-                else if (isCancelled) statusBadgeHtml = '<div style="margin-top:5px; font-size:0.8rem; color:#ef4444; font-weight:700;"><i class="fas fa-times-circle"></i> Cancelled</div>';
-                else statusBadgeHtml = `<div class="timer-badge ${prog.isOverdue ? 'urgent' : (prog.percent > 75 ? 'urgent' : 'safe')}" style="margin-top:3px;"><i class="far fa-clock"></i> ${prog.isOverdue ? 'OVERDUE' : 'Due in: ' + prog.timeLeft}</div>
-                                        <div class="progress-track"><div class="progress-fill" style="width: ${prog.percent}%; background: ${prog.color};"></div></div>`;
+            let html = '';
 
-                let actionHtml = '';
-                if (isPending) {
-                    actionHtml = `<button class="btn-handover" onclick="openQRModal()" style="background:#111827;"><i class="fas fa-qrcode"></i> Pickup QR</button>
-                                  <button onclick="DashboardActions.contactStudent('${r.lender}')" style="border:none; background:none; color:#64748b; font-size:0.75rem; text-decoration:underline; cursor:pointer;">Message ${r.lender.split(' ')[0]}</button>`;
-                } else if (isCompleted) {
-                    actionHtml = `<button onclick="DashboardActions.rentAgain('${r.id}')" style="border:1.5px solid #800000; color:#800000; padding:8px; border-radius:6px; font-weight:700; cursor:pointer; background:#fff; font-size:0.8rem;">Rent Again</button>`;
-                } else if (isCancelled) {
-                    actionHtml = `<span style="font-size:0.75rem; color:#64748b; text-align:center;">Refund Processed</span>`;
-                } else {
-                    actionHtml = `<button class="btn-handover" onclick="DashboardActions.initiateReturn(this, '${r.id}')"><i class="fas fa-history"></i> Return Item</button>
-                                  <button onclick="DashboardActions.extendRental(this)" style="border:1.5px solid #800000; color:#800000; padding:8px; border-radius:6px; font-weight:700; cursor:pointer; background:#fff; font-size:0.8rem;">Extend</button>`;
-                }
+            // Section 1: Borrowing Items
+            if (borrowing.length > 0) {
+                html += `<h3 style="margin: 20px 0 15px; color: #1e293b; font-size: 1.2rem;"><i class="fas fa-arrow-down" style="color: #3b82f6;"></i> Items You're Borrowing</h3>`;
+                borrowing.forEach(r => html += generateRentalCard(r, false, myName));
+            }
 
-                const opacity = (isCompleted || isCancelled) ? '0.7' : '1';
-                const filter = isCancelled ? 'grayscale(1)' : 'none';
+            // Section 2: Lending Items
+            if (lending.length > 0) {
+                html += `<h3 style="margin: 30px 0 15px; color: #1e293b; font-size: 1.2rem;"><i class="fas fa-arrow-up" style="color: #10b981;"></i> Items You're Lending</h3>`;
+                lending.forEach(r => html += generateRentalCard(r, true, myName));
+            }
 
-                html += `
-                <div class="rental-horizontal-card" style="opacity:${opacity}; filter:${filter};" data-id="${r.id}">
-                    <img src="${r.image}" class="rental-img-fixed" alt="${r.item}">
-                    <div class="rental-info-core">
-                        <div style="display:flex; align-items:center; gap:10px;">
-                            <h3 style="font-size:1.1rem; margin:0;">${r.item}</h3>
-                            <span class="verified-badge-inline"><i class="fas fa-shield-alt"></i> Lender Verified</span>
-                            ${r.quantityBorrowed > 1 ? `<span style="background:#111827; color:#fff; padding:2px 6px; border-radius:4px; font-size:0.7rem; font-weight:700;">Qty: ${r.quantityBorrowed}</span>` : ''}
-                        </div>
-                        <p style="font-size:0.85rem; color:#64748b; margin:4px 0;">Rented from <strong>${r.lender}</strong> • ${r.location}</p>
-                        ${statusBadgeHtml}
-                        <div style="display:flex; gap:15px; margin-top:8px; font-size:0.8rem; color:#4b5563;">
-                            <span><i class="fas fa-map-marker-alt"></i> ${r.location}</span>
-                            <span><i class="fas fa-coins"></i> ₱${r.totalCost.toLocaleString()}</span>
-                            ${r.status === 'Partial Return' ? `<span style="color:#f59e0b; font-weight:700;"><i class="fas fa-exclamation-circle"></i> Partially Returned (${r.quantityReturned}/${r.quantityBorrowed})</span>` : ''}
-                        </div>
-                    </div>
-                    <div class="action-column">
-                        ${actionHtml}
-                    </div>
-                </div>`;
-            });
             container.innerHTML = html;
 
             // Check Clearance
@@ -350,6 +547,107 @@
             }
         }
 
+        function generateRentalCard(r, isLender, myName) {
+            const prog = calcRentalProgress(r.startDate, r.dueDate);
+            const isPending = r.status === 'Pending Pickup' || r.status === 'Reserved';
+            const isPendingRating = r.status === 'Pending Rating';
+
+            let roleBadge = isLender ? 
+                '<span class="role-badge role-lending"><i class="fas fa-arrow-up"></i> Lending</span>' : 
+                '<span class="role-badge role-borrowing"><i class="fas fa-arrow-down"></i> Borrowing</span>';
+
+            let statusBadgeHtml = '';
+            let timerClass = 'timer-normal';
+            let hoursLeft = 24;
+            if (prog.timeLeft && !isPending && !isPendingRating) {
+                if (prog.timeLeft.includes('d')) {
+                    const parts = prog.timeLeft.split('d');
+                    hoursLeft = 24 * parseInt(parts[0]);
+                } else if (prog.timeLeft.includes('h')) {
+                    const parts = prog.timeLeft.split('h');
+                    hoursLeft = parseInt(parts[0]);
+                } else if (prog.timeLeft.includes('m')) {
+                    hoursLeft = 0;
+                }
+            }
+
+            if (prog.isOverdue || (hoursLeft < 1 && !isPending && !isPendingRating)) timerClass = 'timer-flashing';
+            else if (hoursLeft < 4) timerClass = 'timer-urgent';
+            else if (hoursLeft <= 12) timerClass = 'timer-warning';
+
+            if (isPending) statusBadgeHtml = '<div class="timer-text timer-normal" style="margin-top:3px;"><i class="fas fa-calendar-check"></i> Reserved / Ready</div>';
+            else if (isPendingRating) statusBadgeHtml = '<div style="margin-top:5px; font-size:0.8rem; color:#10b981; font-weight:700;"><i class="fas fa-check-circle"></i> Handover Complete</div>';
+            else statusBadgeHtml = `<div class="timer-text ${timerClass}" style="margin-top:3px;"><i class="far fa-clock"></i> ${prog.isOverdue ? 'OVERDUE' : 'Due in: ' + prog.timeLeft}</div>
+                                    <div class="progress-track"><div class="progress-fill" style="width: ${prog.percent}%; background: ${prog.color};"></div></div>`;
+
+            let actionHtml = '';
+            if (isPending) {
+                actionHtml = `<button class="btn-handover" onclick="openDynamicQRModal('${r.id}')" style="background:#111827;"><i class="fas fa-qrcode"></i> ${isLender ? 'Pickup QR' : 'Pickup QR'}</button>
+                              <button onclick="DashboardActions.contactStudent('${isLender ? r.borrower : r.lender}')" style="border:none; background:none; color:#64748b; font-size:0.75rem; text-decoration:underline; cursor:pointer;">Message ${isLender ? r.borrower.split(' ')[0] : r.lender.split(' ')[0]}</button>`;
+            } else if (isPendingRating) {
+                actionHtml = `
+                    <button onclick="openRatingModal('${r.id}', '${r.item}', '${r.lender}')" style="background:#10b981; color:#fff; border:none; padding:10px; border-radius:8px; font-weight:700; cursor:pointer; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;"><i class="fas fa-star"></i> Rate Now</button>
+                    <button onclick="removeFromActive('${r.id}')" style="background:#f1f5f9; color:#475569; border:none; padding:10px; border-radius:8px; font-weight:700; cursor:pointer; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;"><i class="fas fa-times"></i> Remove</button>
+                `;
+            } else {
+                if (isLender) {
+                    if (r.status === 'Return Initiated') {
+                        actionHtml = `
+                            <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 10px; margin-bottom: 8px;">
+                                <p style="font-size: 0.7rem; font-weight: 800; color: #800000; margin: 0 0 5px 0; text-transform: uppercase;">Condition Audit</p>
+                                <div style="display: flex; gap: 10px; align-items: center;">
+                                    <img src="${r.conditionAfter}" style="width: 50px; height: 50px; border-radius: 8px; object-fit: cover; border: 1px solid #cbd5e1;">
+                                    <p style="font-size: 0.75rem; color: #475569; margin: 0; line-height: 1.2;">${r.returnNotes || 'No notes provided.'}</p>
+                                </div>
+                            </div>
+                            <button class="btn-handover" style="background:#111827; width: 100%;" onclick="openDynamicQRModal('${r.id}')"><i class="fas fa-qrcode"></i> Scan to Receive</button>
+                        `;
+                    } else {
+                        actionHtml = `<button class="btn-handover" style="background:#f1f5f9; color:#4b5563; border:1px solid #cbd5e1;" onclick="location.href='student-listings.html'"><i class="fas fa-cog"></i> Manage Listing</button>
+                                      <button onclick="UIUtils.showToast('Return tracking active', 'info')" style="border:1.5px solid #800000; color:#800000; padding:8px; border-radius:6px; font-weight:700; cursor:pointer; background:#fff; font-size:0.8rem;">Track Return</button>`;
+                    }
+                } else {
+                    const isTooLateForExtension = hoursLeft < 4;
+                    const hasReservation = r.hasReservation || false;
+                    let returnStyle = isTooLateForExtension ? 'background:#ffd700; color:#111827; border:none;' : 'background:#800000; color:#fff;';
+                    
+                    let extendBtn = (isTooLateForExtension || hasReservation) ? 
+                        `<button disabled style="border:2px solid #D3D3D3; color:#D3D3D3; padding:8px; border-radius:8px; font-weight:700; cursor:not-allowed; background:#fff; font-size:0.85rem; width: 100%;" title="${hasReservation ? 'Reserved by another student' : 'Too close to deadline'}">Extend</button>` :
+                        `<button onclick="checkExtendConflict('${r.id}')" style="border:2px solid #800000; color:#800000; padding:8px; border-radius:8px; font-weight:700; cursor:pointer; background:#fff; font-size:0.85rem; width: 100%;">Extend</button>`;
+
+                    actionHtml = `
+                        <div style="display: flex; flex-direction: column; gap: 8px; width: 100%;">
+                            ${extendBtn}
+                            <button class="btn-handover" style="${returnStyle} padding:10px; border-radius:8px; font-weight:700; cursor:pointer; width: 100%; border:none; font-size:0.85rem;" onclick="openPreHandoverModal('${r.id}', '${r.item}', '${r.lender}')">Return Item</button>
+                        </div>
+                    `;
+                }
+            }
+
+            const cardClass = isPendingRating ? 'rental-horizontal-card rating-pending-card' : 'rental-horizontal-card';
+
+            return `
+            <div class="${cardClass}" data-id="${r.id}">
+                <img src="${r.image}" class="rental-img-fixed" alt="${r.item}">
+                <div class="rental-info-core">
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <h3 style="font-size:1.1rem; margin:0;">${r.item}</h3>
+                        ${roleBadge}
+                        ${r.quantityBorrowed > 1 ? `<span style="background:#111827; color:#fff; padding:2px 6px; border-radius:4px; font-size:0.7rem; font-weight:700;">Qty: ${r.quantityBorrowed}</span>` : ''}
+                    </div>
+                    <p style="font-size:0.85rem; color:#64748b; margin:4px 0;">${isLender ? 'Lending to' : 'Rented from'} <strong>${isLender ? r.borrower : r.lender}</strong> • ${r.location}</p>
+                    ${statusBadgeHtml}
+                    <div style="display:flex; gap:15px; margin-top:8px; font-size:0.8rem; color:#4b5563;">
+                        <span><i class="fas fa-map-marker-alt"></i> ${r.location}</span>
+                        <span><i class="fas fa-coins"></i> ₱${r.totalCost.toLocaleString()}</span>
+                    </div>
+                </div>
+                <div class="action-column">
+                    ${actionHtml}
+                </div>
+            </div>`;
+        }
+
         window.onload = function() {
             const isMinimized = localStorage.getItem('sidebarMinimized') === 'true';
             if (isMinimized) {
@@ -357,13 +655,195 @@
                 document.getElementById('mainContent').classList.add('expanded');
             }
             renderRentals();
-            setInterval(renderRentals, 60000); // refresh progress bars every minute
+            setupStarRating();
+            setInterval(renderRentals, 60000);
         };
 
-        function openQRModal() { DashboardActions.generateQR(); }
-        function closeQRModal() { DashboardActions.closeQR(); }
+        function setupStarRating() {
+            const starGroups = ['overallStars', 'itemStars', 'serviceStars'];
+            starGroups.forEach(groupId => {
+                const group = document.getElementById(groupId);
+                if (!group) return;
+                const stars = group.querySelectorAll('i');
+                stars.forEach(star => {
+                    star.addEventListener('click', () => {
+                        const val = parseInt(star.getAttribute('data-val'));
+                        stars.forEach(s => {
+                            const sVal = parseInt(s.getAttribute('data-val'));
+                            if (sVal <= val) s.classList.add('active');
+                            else s.classList.remove('active');
+                        });
+                    });
+                });
+            });
+        }
 
-        // Filter Logic
+        function handleReturnPhoto(input) {
+            const area = document.getElementById('uploadArea');
+            const placeholder = document.getElementById('uploadPlaceholder');
+            const preview = document.getElementById('uploadPreview');
+            const img = document.getElementById('previewImg');
+            const btn = document.getElementById('btnGenerateReturnQR');
+
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    img.src = e.target.result;
+                    placeholder.style.display = 'none';
+                    preview.style.display = 'block';
+                    btn.disabled = false;
+                    btn.style.background = '#800000';
+                    btn.style.cursor = 'pointer';
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function openQRModal() { document.getElementById('qrModal').style.display = 'flex'; }
+        function closeQRModal() { 
+            document.getElementById('qrModal').style.display = 'none'; 
+            clearInterval(qrInterval);
+        }
+
+        let activeReturnId = null;
+        let qrInterval = null;
+        
+        function checkExtendConflict(id) {
+            UIUtils.showToast("Extension Unavailable: Item is reserved by another student.", "error");
+            document.getElementById('extendConflictModal').style.display = 'flex';
+        }
+
+        function openPreHandoverModal(id, itemName, lenderName) { 
+            activeReturnId = id;
+            document.getElementById('returnItemName').innerText = itemName;
+            document.getElementById('returnLenderName').innerText = lenderName;
+            document.getElementById('proofOfCondition').value = '';
+            document.getElementById('uploadPlaceholder').style.display = 'block';
+            document.getElementById('uploadPreview').style.display = 'none';
+            document.getElementById('btnGenerateReturnQR').disabled = true;
+            document.getElementById('btnGenerateReturnQR').style.background = '#cbd5e1';
+            document.getElementById('preHandoverModal').style.display = 'flex';
+            document.getElementById('scanningState').style.display = 'none';
+            document.getElementById('verificationActions').style.display = 'block';
+        }
+        
+        function closePreHandoverModal() { 
+            document.getElementById('preHandoverModal').style.display = 'none'; 
+        }
+
+        function submitProofOfCondition() {
+            const actions = document.getElementById('verificationActions');
+            const scanner = document.getElementById('scanningState');
+            const previewImg = document.getElementById('previewImg').src;
+            const notes = document.getElementById('returnNotes').value;
+
+            // Save to LocalStorage under the transaction ID
+            let rentalsDb = getActiveRentals();
+            let idx = rentalsDb.findIndex(r => r.id === activeReturnId);
+            if (idx > -1) {
+                rentalsDb[idx].conditionAfter = previewImg;
+                rentalsDb[idx].returnNotes = notes;
+                rentalsDb[idx].status = 'Return Initiated';
+                saveActiveRentals(rentalsDb);
+                
+                // Push notification to Lender (using kitcycle_notifications)
+                let notifs = JSON.parse(localStorage.getItem('kitcycle_notifications') || '[]');
+                notifs.unshift({
+                    id: 'notif-' + Date.now(),
+                    title: 'Return Initiated',
+                    message: `${rentalsDb[idx].borrower} has initiated the return for ${rentalsDb[idx].item}. Check condition snapshots before scanning.`,
+                    time: 'Just now',
+                    type: 'return',
+                    txnId: activeReturnId,
+                    read: false
+                });
+                localStorage.setItem('kitcycle_notifications', JSON.stringify(notifs));
+            }
+
+            actions.style.display = 'none';
+            scanner.style.display = 'block';
+
+            setTimeout(() => {
+                closePreHandoverModal();
+                scanner.style.display = 'none';
+                openDynamicQRModal(activeReturnId);
+            }, 3000);
+        }
+
+        function openRatingModal(id, itemName, lenderName) {
+            activeReturnId = id;
+            const modal = document.getElementById('ratingModal');
+            modal.querySelector('h2').innerText = `Rate ${itemName}`;
+            modal.querySelector('p').innerText = `How was the experience with ${lenderName}?`;
+            modal.style.display = 'flex';
+            
+            // Reset stars
+            document.querySelectorAll('.rating-stars i, .metric-stars i').forEach(s => s.classList.remove('active'));
+            document.getElementById('ratingFeedback').value = '';
+        }
+
+        function submitRating() {
+            if (activeReturnId) {
+                moveTransactionToHistory(activeReturnId, 'Review Submitted');
+            }
+            document.getElementById('ratingModal').style.display = 'none';
+            renderRentals();
+            UIUtils.showToast("Rating submitted! Transaction moved to History.", "success");
+        }
+
+        function removeFromActive(id) {
+            if (confirm("Remove this transaction from active list? You can still rate it later in History.")) {
+                moveTransactionToHistory(id, 'Completed');
+                renderRentals();
+                UIUtils.showToast("Moved to Transaction History.", "info");
+            }
+        }
+
+        function moveTransactionToHistory(id, newStatus) {
+            let rentalsDb = getActiveRentals();
+            let idx = rentalsDb.findIndex(r => r.id === id);
+            if (idx > -1) {
+                const item = rentalsDb[idx];
+                item.status = newStatus;
+                
+                // Add to history
+                let history = JSON.parse(localStorage.getItem('student_history') || '[]');
+                history.unshift(item);
+                localStorage.setItem('student_history', JSON.stringify(history));
+                
+                // Remove from active
+                rentalsDb.splice(idx, 1);
+                saveActiveRentals(rentalsDb);
+            }
+        }
+
+        function openDynamicQRModal(id) {
+            if (id) activeReturnId = id;
+            document.getElementById('qrModal').style.display = 'flex';
+            let timeLeft = 30;
+            document.getElementById('qrCountdown').innerText = timeLeft;
+            clearInterval(qrInterval);
+            qrInterval = setInterval(() => {
+                timeLeft--;
+                if(timeLeft <= 0) timeLeft = 30;
+                document.getElementById('qrCountdown').innerText = timeLeft;
+            }, 1000);
+        }
+
+        function simulateSuccessfulScan() {
+            if (activeReturnId) {
+                let rentalsDb = getActiveRentals();
+                let idx = rentalsDb.findIndex(r => r.id === activeReturnId);
+                if (idx > -1) {
+                    rentalsDb[idx].status = 'Pending Rating';
+                    saveActiveRentals(rentalsDb);
+                }
+            }
+            closeQRModal();
+            renderRentals();
+            UIUtils.showToast("Scan successful! Handover complete.", "success");
+        }
+
         function filterRentals(category, btn) {
             currentFilter = category;
             const btns = document.querySelectorAll('.filter-btn');
