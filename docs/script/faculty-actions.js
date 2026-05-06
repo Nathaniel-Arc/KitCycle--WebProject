@@ -801,7 +801,7 @@ window.FacultyActions = {
         if (typeof UIUtils !== 'undefined' && UIUtils.showModal) {
             UIUtils.showModal({
                 title: 'Verify Student Listing',
-                message: `Mark "${listing.name}" owned by ${listing.student} as verified? This will make it visible in the Marketplace.`,
+                message: `Mark "${listing.name}" owned by ${listing.student} as verified? This will make it visible in the WMSU Market.`,
                 type: 'confirm',
                 onConfirm: (val) => {
                     if (val) {
