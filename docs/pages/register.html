@@ -108,8 +108,10 @@
                                 <option value="" disabled selected>Select your course</option>
                                 <option>BS Computer Science</option>
                                 <option>BS Information Technology</option>
-                                <option>BS Civil Engineering</option>
-                                <option>BS Electrical Engineering</option>
+                                <option>BS in Civil Engineering</option>
+                                <option>BS in Electrical Engineering</option>
+                                <option>BS in Electronics and Communications Engineering</option>
+                                <option>BS in Architecture</option>
                                 <option>BS Mechanical Engineering</option>
                                 <option>BS Nursing</option>
                                 <option>BS Medical Technology</option>
@@ -127,6 +129,13 @@
                     </div>
 
                     <div style="display:flex; gap:15px;">
+                        <div class="input-group" style="flex:1;">
+                            <label>Age <span style="color:#ef4444;">*</span></label>
+                            <div class="input-wrapper">
+                                <input type="number" id="regAge" min="15" max="100" placeholder="Age" required
+                                    style="width:100%; padding:12px 15px; border:1.5px solid #e2e8f0; border-radius:10px; font-size:0.95rem; outline:none;">
+                            </div>
+                        </div>
                         <div class="input-group" style="flex:1;">
                             <label>Year Level <span style="color:#ef4444;">*</span></label>
                             <div class="input-wrapper">
@@ -359,6 +368,44 @@
             // Simulation of code sending
             alert("A new verification code has been sent to your university email.");
             startResendCooldown();
+        });
+
+        // Year Level Conditional Logic
+        const courseSelect = document.getElementById('regCourse');
+        const yearSelect = document.getElementById('regYear');
+
+        courseSelect.addEventListener('change', () => {
+            const selectedCourse = courseSelect.value;
+            const fiveYearCourses = [
+                'BS in Civil Engineering',
+                'BS in Electrical Engineering',
+                'BS in Electronics and Communications Engineering',
+                'BS in Architecture'
+            ];
+
+            const currentValue = yearSelect.value;
+            yearSelect.innerHTML = '<option value="" disabled selected>Year</option>';
+            
+            const maxYear = fiveYearCourses.includes(selectedCourse) ? 5 : 4;
+            
+            for (let i = 1; i <= maxYear; i++) {
+                const suffix = i === 1 ? 'st' : i === 2 ? 'nd' : i === 3 ? 'rd' : 'th';
+                const option = document.createElement('option');
+                option.textContent = `${i}${suffix} Year`;
+                yearSelect.appendChild(option);
+            }
+            
+            const irregularOption = document.createElement('option');
+            irregularOption.textContent = 'Irregular';
+            yearSelect.appendChild(irregularOption);
+
+            // Try to restore previous value if it still exists
+            if (currentValue) {
+                const options = Array.from(yearSelect.options).map(opt => opt.textContent);
+                if (options.includes(currentValue)) {
+                    yearSelect.value = currentValue;
+                }
+            }
         });
     </script>
 

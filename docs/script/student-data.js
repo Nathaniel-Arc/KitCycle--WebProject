@@ -1,47 +1,6 @@
 // Student Data Management Layer — KitCycle v2 (Full Refactor)
 
-const DEFAULT_SAVED_ITEMS = [
-    {
-        id: 's1',
-        name: 'Laboratory Microscope',
-        price: 150,
-        owner: 'Dr. Pedro Cruz',
-        rating: 4.7,
-        image: '../../images/microscope.jpeg',
-        availability: { status: 'available', text: 'Available Now' },
-        comparisonTag: 'Best Value for Science'
-    },
-    {
-        id: 's2',
-        name: 'Studio Lighting Kit',
-        price: 200,
-        owner: 'Creative Arts Dept',
-        rating: 4.8,
-        image: '../../images/lighting.jpeg',
-        availability: { status: 'due', text: 'Due back: May 2' },
-        comparisonTag: 'Lowest Price'
-    },
-    {
-        id: 's3',
-        name: 'Nikon D3500 Kit',
-        price: 180,
-        owner: 'John Smith',
-        rating: 4.9,
-        image: '../../images/camera.jpg',
-        availability: { status: 'available', text: 'Available Now' },
-        comparisonTag: null
-    },
-    {
-        id: 's4',
-        name: 'Graphing Calculator',
-        price: 60,
-        owner: 'Math Society',
-        rating: 4.6,
-        image: '../../images/calculator.jpg',
-        availability: { status: 'due', text: 'Due back: Today' },
-        comparisonTag: 'Best Value for Math'
-    }
-];
+const DEFAULT_SAVED_ITEMS = ['camera', 'calculator', 'stethoscope', 'tablet'];
 
 const DEFAULT_LISTINGS = [
     {
@@ -229,14 +188,15 @@ const DEFAULT_ACTIVE_RENTALS = [
         id: 'ar1',
         item: 'Canon EOS 90D DSLR',
         image: '../../images/camera.jpg',
+        borrower: 'Nash Arciaga',
         lender: 'Juan Dela Cruz',
         lenderAvatar: '../../images/juan_profile.png',
         location: 'Engineering Building',
         rate: 250,
         rateUnit: 'day',
-        status: 'Active', // Active, Pending Pickup, Return Initiated, Partial Return, Completed, Disputed
-        startDate: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000).toISOString(),
-        dueDate: new Date(Date.now() + 5 * 60 * 60 * 1000).toISOString(),
+        status: 'Active',
+        startDate: '2026-05-01T08:00:00Z',
+        dueDate: '2026-05-06T17:00:00Z',
         totalCost: 1750,
         quantityBorrowed: 1,
         quantityReturned: 0,
@@ -248,18 +208,99 @@ const DEFAULT_ACTIVE_RENTALS = [
         id: 'ar2',
         item: 'Scientific Calculator TI-84',
         image: '../../images/calculator.jpg',
+        borrower: 'Nash Arciaga',
         lender: 'Maria Santos',
         lenderAvatar: '../../images/maria_profile.png',
         location: 'Library Lobby',
         rate: 60,
         rateUnit: 'day',
-        status: 'Pending Pickup',
-        startDate: null,
-        dueDate: null,
-        totalCost: 0,
+        status: 'Pending Rating',
+        startDate: '2026-05-01T10:00:00Z',
+        dueDate: '2026-05-03T10:00:00Z',
+        totalCost: 180,
         quantityBorrowed: 2,
+        quantityReturned: 2,
+        conditionBefore: '../../images/calculator.jpg',
+        conditionAfter: '../../images/calculator.jpg',
+        damageReport: null
+    },
+    {
+        id: 'ar3',
+        item: 'Engineering Textbook Bundle',
+        image: '../../images/books.jpeg',
+        borrower: 'Elena Gomez',
+        lender: 'Nash Arciaga',
+        lenderAvatar: '../../images/nash_profile.png',
+        location: 'CET Lobby',
+        rate: 50,
+        rateUnit: 'day',
+        status: 'Active',
+        startDate: '2026-05-04T09:00:00Z',
+        dueDate: '2026-05-10T17:00:00Z',
+        totalCost: 250,
+        quantityBorrowed: 1,
         quantityReturned: 0,
-        conditionBefore: null,
+        conditionBefore: '../../images/books.jpeg',
+        conditionAfter: null,
+        damageReport: null
+    },
+    {
+        id: 'ar4',
+        item: 'Studio Lighting Kit',
+        image: '../../images/lighting.jpeg',
+        borrower: 'Nash Arciaga',
+        lender: 'Creative Arts Dept',
+        lenderAvatar: '../../images/maria_profile.png',
+        location: 'Art Center',
+        rate: 200,
+        rateUnit: 'day',
+        status: 'Completed',
+        startDate: '2026-04-20T08:00:00Z',
+        dueDate: '2026-04-25T17:00:00Z',
+        totalCost: 1000,
+        quantityBorrowed: 1,
+        quantityReturned: 1,
+        conditionBefore: '../../images/lighting.jpeg',
+        conditionAfter: '../../images/lighting.jpeg',
+        damageReport: null
+    },
+    {
+        id: 'ar5',
+        item: 'Laboratory Microscope',
+        image: '../../images/microscope.jpeg',
+        borrower: 'Nash Arciaga',
+        lender: 'Dr. Pedro Cruz',
+        lenderAvatar: '../../images/elena_profile.png',
+        location: 'Science Lab A',
+        rate: 150,
+        rateUnit: 'day',
+        status: 'Active',
+        startDate: '2026-05-04T10:00:00Z',
+        dueDate: '2026-05-08T17:00:00Z',
+        totalCost: 600,
+        quantityBorrowed: 1,
+        quantityReturned: 0,
+        conditionBefore: '../../images/microscope.jpeg',
+        conditionAfter: null,
+        damageReport: null
+    },
+    {
+        id: 'ar6',
+        item: 'Digital Drawing Tablet',
+        image: '../../images/tablet.jpeg',
+        borrower: 'Nash Arciaga',
+        lender: 'Gabriel Lopez',
+        lenderAvatar: '../../images/juan_profile.png',
+        location: 'ICT Computer Lab',
+        rate: 120,
+        rateUnit: 'day',
+        status: 'Active',
+        startDate: '2026-05-05T09:00:00Z',
+        dueDate: '2026-05-07T17:00:00Z',
+        totalCost: 240,
+        quantityBorrowed: 1,
+        quantityReturned: 0,
+        conditionBefore: '../../images/tablet.jpeg',
         conditionAfter: null,
         damageReport: null
     }
@@ -267,11 +308,15 @@ const DEFAULT_ACTIVE_RENTALS = [
 
 // Initialize Data
 function initStudentData() {
+    // Only set defaults if not already present to allow persistence
     if (!localStorage.getItem('student_saved_items')) {
         localStorage.setItem('student_saved_items', JSON.stringify(DEFAULT_SAVED_ITEMS));
     }
     if (!localStorage.getItem('student_listings')) {
         localStorage.setItem('student_listings', JSON.stringify(DEFAULT_LISTINGS));
+    }
+    if (!localStorage.getItem('active_rentals_v2')) {
+        localStorage.setItem('active_rentals_v2', JSON.stringify(DEFAULT_ACTIVE_RENTALS));
     }
     if (!localStorage.getItem('student_ratings')) {
         localStorage.setItem('student_ratings', JSON.stringify(DEFAULT_RATINGS));
@@ -281,9 +326,6 @@ function initStudentData() {
     }
     if (!localStorage.getItem('student_clearance')) {
         localStorage.setItem('student_clearance', JSON.stringify(DEFAULT_CLEARANCE));
-    }
-    if (!localStorage.getItem('active_rentals_v2')) {
-        localStorage.setItem('active_rentals_v2', JSON.stringify(DEFAULT_ACTIVE_RENTALS));
     }
 }
 

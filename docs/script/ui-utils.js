@@ -89,7 +89,7 @@ window.UIUtils = {
                         : '<i class="fas fa-bell" style="color: #800000;"></i>';
 
         const isPrompt = type === 'prompt';
-        const isConfirm = type === 'confirm';
+        const isConfirm = type === 'confirm' || arguments[0].cancelText;
 
         overlay.innerHTML = `
             <div class="ui-modal-card" style="
@@ -106,16 +106,16 @@ window.UIUtils = {
                     width: 100%; padding: 12px 15px; border: 2px solid #e2e8f0; border-radius: 10px;
                     margin-bottom: 20px; font-size: 0.95rem; outline: none; transition: 0.2s;
                 " onfocus="this.style.borderColor='#800000'">` : ''}
-
+ 
                 <div style="display: flex; gap: 10px; justify-content: center;">
                     ${(isConfirm || isPrompt) ? `<button id="ui-modal-cancel" style="
                         flex: 1; padding: 12px; background: #f1f5f9; color: #4b5563; border: none;
                         border-radius: 10px; font-weight: 700; cursor: pointer; transition: 0.2s;
-                    ">Cancel</button>` : ''}
+                    ">${arguments[0].cancelText || 'Cancel'}</button>` : ''}
                     <button id="ui-modal-ok" style="
                         flex: 1; padding: 12px; background: #800000; color: #fff; border: none;
                         border-radius: 10px; font-weight: 700; cursor: pointer; transition: 0.2s;
-                    ">${isConfirm ? 'Confirm' : 'OK'}</button>
+                    ">${arguments[0].confirmText || (isConfirm ? 'Confirm' : 'OK')}</button>
                 </div>
             </div>
         `;
@@ -171,24 +171,26 @@ document.addEventListener('click', (e) => {
 
         const icon = saveBtn.querySelector('i');
         const itemCard = saveBtn.closest('.item-card') || saveBtn.closest('.market-card');
-        const itemName = itemCard ? (itemCard.querySelector('h3') || itemCard.querySelector('h4')).textContent : 'Item';
+        const itemId = itemCard ? itemCard.getAttribute('data-id') : null;
+        const itemName = itemCard ? (itemCard.querySelector('h3') || itemCard.querySelector('h4')).textContent.trim() : 'Item';
+        const identifier = itemId || itemName; // Prefer ID, fallback to Name
         
         const isSaved = icon.classList.contains('fas');
-        let savedItems = JSON.parse(localStorage.getItem('savedItems') || '[]');
+        let savedItems = JSON.parse(localStorage.getItem('student_saved_items') || '[]');
 
         if (isSaved) {
             icon.classList.replace('fas', 'far');
             saveBtn.style.color = 'inherit';
-            savedItems = savedItems.filter(name => name !== itemName);
+            savedItems = savedItems.filter(id => id !== identifier);
             UIUtils.showToast("Removed from Saved List", "info");
         } else {
             icon.classList.replace('far', 'fas');
             saveBtn.style.color = '#ef4444';
-            if (!savedItems.includes(itemName)) savedItems.push(itemName);
+            if (!savedItems.includes(identifier)) savedItems.push(identifier);
             UIUtils.showToast("Item added to your Saved List");
         }
 
-        localStorage.setItem('savedItems', JSON.stringify(savedItems));
+        localStorage.setItem('student_saved_items', JSON.stringify(savedItems));
         window.dispatchEvent(new CustomEvent('savedItemsChanged'));
     }
 });

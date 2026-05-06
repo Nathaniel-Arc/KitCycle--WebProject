@@ -32,6 +32,57 @@
         .sidebar-is-minimized .sidebar-nav i { font-size: 1.2rem !important; margin: 0 !important; }
         .sidebar-is-minimized .sidebar-profile { justify-content: center !important; padding-bottom: 1.5rem !important; }
 
+        /* Rating Modal Specifics */
+        .rating-stars {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin: 15px 0;
+            font-size: 1.8rem;
+            color: #cbd5e1;
+        }
+        .rating-stars i { cursor: pointer; transition: color 0.2s; }
+        .rating-stars i.active { color: #ffd700; }
+
+        .rating-metric {
+            text-align: left;
+            margin-bottom: 15px;
+        }
+        .rating-metric label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #475569;
+            margin-bottom: 8px;
+        }
+        .metric-stars {
+            display: flex;
+            gap: 8px;
+            color: #cbd5e1;
+            font-size: 1.2rem;
+        }
+        .metric-stars i { cursor: pointer; }
+        .metric-stars i.active { color: #fbbf24; }
+
+        .anonymous-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f8fafc;
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+        .anonymous-toggle input { width: 18px; height: 18px; cursor: pointer; }
+        .anonymous-toggle label { font-size: 0.85rem; font-weight: 600; color: #64748b; cursor: pointer; }
+
+        /* Upload Area Focus */
+        #uploadArea:hover { border-color: #800000 !important; background: #fff1f2 !important; }
+        #uploadArea.dragover { border-color: #800000; background: #fff1f2; }
+        
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
         /* --- DASHBOARD REFINEMENTS --- */
         
         /* Compact Rental Items */
@@ -63,7 +114,33 @@
 
         .timer-text { font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 5px; }
         .timer-urgent { color: #ef4444; }
+        .timer-warning { color: #f59e0b; }
         .timer-normal { color: #10b981; }
+        .timer-flashing { 
+            color: #ef4444; 
+            animation: flashRed 1s infinite; 
+        }
+        @keyframes flashRed {
+            0% { opacity: 1; }
+            50% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+
+        /* Scanner Animation */
+        .scanner-line {
+            width: 100%;
+            height: 3px;
+            background: #800000;
+            position: relative;
+            box-shadow: 0 0 15px #800000;
+            animation: scan 2s linear infinite;
+            z-index: 10;
+        }
+        @keyframes scan {
+            0% { top: 0; }
+            50% { top: 150px; }
+            100% { top: 0; }
+        }
 
         .btn-qr {
             background: #111827; color: #fff; border: none; padding: 10px 15px; border-radius: 8px;
@@ -154,19 +231,18 @@
 
             <ul class="sidebar-nav">
                 <li class="active"><a href="student-dashboard.html"><i class="fas fa-th-large"></i> <span>Dashboard</span></a></li>
-                <li><a href="student-rentals.html"><i class="fas fa-box-open"></i> <span>My Rentals</span></a></li>
-                <li style="position: relative;">
-                    <a href="student-messages.html">
-                        <div style="position: relative; display: inline-block;">
-                            <i class="fas fa-comments"></i>
-                            <span class="nav-badge-v2" style="display: flex; position: absolute; top: -5px; right: -8px; width: 16px; height: 16px; align-items: center; justify-content: center; border-radius: 50%; font-size: 0.65rem; border: 1.5px solid #fff;">1</span>
-                        </div>
-                        <span style="margin-left: 12px;">Messages</span>
+                <li><a href="student-rentals.html"><i class="fas fa-box-open"></i> <span>Active Rentals</span></a></li>
+                <li><a href="student-history.html"><i class="fas fa-history"></i> <span>Transaction History</span></a></li>
+                <li>
+                    <a href="student-messages.html" style="position: relative;">
+                        <i class="fas fa-comments"></i> <span>Messages</span>
+                        <span class="sidebar-badge">1</span>
                     </a>
                 </li>
                 <li><a href="student-saved.html"><i class="fas fa-heart"></i> <span>Saved Items</span></a></li>
                 <li><a href="student-rating.html"><i class="fas fa-star"></i> <span>My Rating</span></a></li>
                 <li><a href="student-listings.html"><i class="fas fa-list"></i> <span>My Listings</span></a></li>
+                <li><a href="student-settings.html"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
             </ul>
 
             <a href="javascript:void(0)" onclick="AuthSystem.confirmLogout(); return false;" class="sidebar-logout"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
@@ -201,25 +277,61 @@
             </div>
 
             <!-- Dashboard Body -->
-            <div class="split-row">
+            <div class="split-row" style="align-items: stretch; justify-content: start;">
 
                 <!-- Left Column: Primary Activities -->
-                <div class="main-column">
+                <div class="main-column" style="display: flex; flex-direction: column; gap: 15px;">
+                    
+                    <!-- Performance Section (New) -->
                     <div class="content-card">
                         <div class="card-header">
-                            <h3>My Active Rentals (Borrowing)</h3>
+                            <h3><i class="fas fa-chart-line"></i> Performance Overview</h3>
+                            <span style="font-size: 0.8rem; color: #64748b;">Updated Today</span>
+                        </div>
+                        <div class="performance-grid">
+                            <div class="perf-item">
+                                <div class="perf-label">Punctuality</div>
+                                <div class="perf-value">98%</div>
+                                <div class="perf-bar"><div class="perf-fill" style="width: 98%; background: #10b981;"></div></div>
+                            </div>
+                            <div class="perf-item">
+                                <div class="perf-label">Item Care</div>
+                                <div class="perf-value">100%</div>
+                                <div class="perf-bar"><div class="perf-fill" style="width: 100%; background: #10b981;"></div></div>
+                            </div>
+                            <div class="perf-item">
+                                <div class="perf-label">Lender Rating</div>
+                                <div class="perf-value">4.9/5</div>
+                                <div class="perf-bar"><div class="perf-fill" style="width: 98%; background: #ffd700;"></div></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-card">
+                        <div class="card-header">
+                            <h3>Active Rentals (Borrowing)</h3>
                         </div>
 
                         <div class="active-rental-list" id="dashboardBorrowingList">
                             <!-- Populated by JS -->
                         </div>
-                        <div style="text-align: center; margin-top: 15px;">
+                        <div style="text-align: center; margin-top: 8px;">
                             <a href="student-rentals.html" style="font-weight: 700; color: #800000; text-decoration: none; font-size: 0.9rem;">View All My Rentals <i class="fas fa-arrow-right"></i></a>
                         </div>
                     </div>
 
+                    <!-- Pending Requests Widget -->
+                    <div class="content-card" id="pendingRequestsCard" style="display: none; border: 1px solid #ffd700; background: #fffcf0; margin-bottom: 15px;">
+                        <div class="card-header" style="border: none; margin-bottom: 0.5rem; padding: 0;">
+                            <h3><i class="fas fa-clock" style="color:#d97706;"></i> Pending Requests (<span id="pendingRequestsCount">0</span>)</h3>
+                        </div>
+                        <div class="lending-list" id="dashboardPendingList" style="display: flex; flex-direction: column; gap: 10px;">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
                     <!-- Items You're Lending Widget -->
-                    <div class="lending-widget">
+                    <div class="lending-widget" style="background: #fff; border-radius: 12px; padding: 1.2rem; border: 1px solid #e2e8f0; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);">
                         <div class="card-header" style="border: none; margin-bottom: 1.2rem; padding: 0;">
                             <h3>Items You're Lending (<span id="lendingCount">0</span>)</h3>
                             <span style="background: #eff6ff; color: #1d4ed8; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 700;">Active</span>
@@ -227,103 +339,246 @@
                         <div class="lending-list" id="dashboardLendingList">
                             <!-- Populated by JS -->
                         </div>
+                        <div style="text-align: center; margin-top: 8px;">
+                            <a href="student-listings.html" style="font-weight: 700; color: #800000; text-decoration: none; font-size: 0.9rem;">View All My Listings <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+
+                    <!-- Recent Transaction History (New) -->
+                    <div class="content-card">
+                        <div class="card-header">
+                            <h3>Recent History</h3>
+                            <a href="student-history.html" style="font-size: 0.85rem; color: #800000; font-weight: 700; text-decoration: none;">Full History</a>
+                        </div>
+                        <div class="compact-table-wrapper">
+                            <table class="compact-history-table">
+                                <thead>
+                                    <tr>
+                                        <th>Item</th>
+                                        <th>Status</th>
+                                        <th>Date</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recentHistoryTable">
+                                    <!-- Populated by JS -->
+                                    <tr>
+                                        <td colspan="4" style="text-align:center; padding: 20px; color:#64748b;">Loading history...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Saved Gear Section (Moved here) -->
+                    <div class="content-card">
+                        <div class="card-header">
+                            <h3>Saved Gear (<span id="savedGearCountSide">0</span>)</h3>
+                            <a href="student-saved.html" style="font-size: 0.85rem; color: #800000; font-weight: 700; text-decoration: none;">View All</a>
+                        </div>
+                        <div class="saved-grid-compact" id="dashboardSavedGrid">
+                            <!-- Populated by JS -->
+                        </div>
                     </div>
                 </div>
 
                 <!-- Right Column: Profile & Actions -->
-                <div class="side-column">
+                <div class="side-column" style="display: flex; flex-direction: column; gap: 15px;">
                     <div class="content-card">
                         <h3>Trust Profile</h3>
                         <div style="text-align: center; margin-top: 1rem;">
                             <div class="trust-badge"><i class="fas fa-id-card"></i> Student ID Verified</div>
-                            <div class="rating-circle" style="width: 90px; height: 90px; background: conic-gradient(#ffd700 96%, #f1f5f9 0); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto;">
+                            <div class="trust-badge" id="clearanceBadge" style="margin-left: 5px; background: #f0fdf4; color: #15803d;"><i class="fas fa-university"></i> WMSU Clearance: [CLEARED]</div>
+                            <div class="rating-circle" style="width: 90px; height: 90px; background: conic-gradient(#ffd700 96%, #f1f5f9 0); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 10px auto;">
                                 <div style="width: 70px; height: 70px; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: 800;">4.8</div>
                             </div>
-                            <p style="font-size: 0.8rem; color: #64748b; margin-top: 10px;"><span id="trustProfileName">Nash Arciaga</span> • <strong>98% Reliability</strong></p>
+                            <p style="font-size: 0.8rem; color: #64748b; margin-top: 10px;">
+                                <span id="trustProfileName">Nash Arciaga</span> • <strong>Gold Scholar</strong>
+                            </p>
                         </div>
                         <div style="margin-top: 1.5rem; border-top: 1px solid #f1f5f9; padding-top: 1rem; font-size: 0.85rem; display: flex; flex-direction: column; gap: 8px;">
                             <div style="display: flex; justify-content: space-between;"><span>Member Since</span> <span style="font-weight: 600;">Aug 2024</span></div>
-                            <div style="display: flex; justify-content: space-between;"><span>Account Level</span> <span style="font-weight: 600; color: #800000;">Gold Scholar</span></div>
+                            <div style="display: flex; justify-content: space-between;"><span>Total Rentals</span> <span style="font-weight: 600;">14 Items</span></div>
                             <div style="display: flex; justify-content: space-between;"><span>Security Check</span> <span style="font-weight: 600; color: #10b981;">Passed</span></div>
                         </div>
                         <button style="width: 100%; margin-top: 1.2rem; padding: 12px; border-radius: 8px; border: none; font-weight: 700; cursor: pointer; background: #f1f5f9; font-size: 0.85rem;">Manage Trust Profile</button>
                     </div>
 
-                    <div class="content-card margin-top">
+                    <div class="content-card">
                         <h3>Quick Actions</h3>
                         <div class="action-stack" style="display: flex; flex-direction: column; gap: 10px; margin-top: 1rem;">
-                            <button class="btn-act-y" onclick="location.href='../marketplace.html'" style="background: #ffd700; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem;">Browse Marketplace</button>
+                            <button class="btn-act-y" id="btnBrowseMarketplace" onclick="location.href='../marketplace.html'" style="background: #ffd700; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem;">Browse Marketplace</button>
                             <button class="btn-act-o" onclick="location.href='student-listings.html'" style="background: #fff; border: 2px solid #800000; color: #800000; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem;">List a New Item</button>
                             <button onclick="DashboardActions.verifyId()" style="background: #111827; color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem;"><i class="fas fa-shield-alt"></i> Verify Student ID</button>
                             <button onclick="DashboardActions.referStudent()" style="background: #f1f5f9; color: #4b5563; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem;"><i class="fas fa-users"></i> Refer a Fellow Student</button>
-                            <button onclick="DashboardActions.contactSafety()" style="background: #fff; border: 1.5px solid #cbd5e1; color: #64748b; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem;"><i class="fas fa-life-ring"></i> Contact Campus Safety</button>
                         </div>
                     </div>
-                </div>
+                    
+                    <div class="content-card">
+                        <h3 id="pendingRatingsTitle">Pending Ratings (0)</h3>
+                        <div id="pendingRatingsContainer" style="margin-top: 10px; display: flex; flex-direction: column; gap: 8px;">
+                            <p style="font-size: 0.85rem; color: #64748b;">No pending ratings.</p>
+                        </div>
+                    </div>
 
-            </div>
-
-            <!-- Saved Gear Section (Full Width) -->
-            <div class="content-card full-width-card margin-top">
-                <div class="card-header">
-                    <h3>Saved Gear (4)</h3>
-                    <a href="student-saved.html" style="font-size: 0.85rem; color: #800000; font-weight: 700; text-decoration: none;">View All</a>
-                </div>
-                <div class="saved-grid">
-                    <div class="item-card">
-                        <img src="../../images/microscope.jpeg" alt="Micro" style="width: 100%; height: 140px; object-fit: cover;">
-                        <div style="padding: 12px;">
-                            <h4 style="font-size: 0.9rem; margin-bottom: 5px;">Laboratory Microscope</h4>
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <span style="font-weight: 800; color: #800000;">₱150/d</span>
-                                <span style="font-size: 0.8rem; color: #64748b;"><i class="fas fa-star" style="color: #ffd700;"></i> 4.7</span>
-                            </div>
+                    <!-- Accountability Rules (Fixed) -->
+                    <div class="content-card" style="border: 1px solid #fca5a5; background: #fef2f2;">
+                        <h3 style="color: #800000; font-size: 1rem; margin-bottom: 10px;"><i class="fas fa-exclamation-triangle"></i> Accountability Rules</h3>
+                        <div class="rules-content" style="font-size: 0.85rem; line-height: 1.4;">
+                            <p style="margin-bottom: 8px;"><strong>Cancellation Penalty:</strong> Canceling a reservation within 48h of meetup forfeits your Reservation Deposit as a 'Lost Opportunity Fee'.</p>
+                            <p><strong>Registrar Lock:</strong> Failure to show up for a handover or return an item will flag your account on the <strong>WMSU Registrar Negative List</strong>, blocking semester clearance.</p>
                         </div>
-                    </div>
-                    <div class="item-card">
-                        <img src="../../images/lighting.jpeg" alt="Light" style="width: 100%; height: 140px; object-fit: cover;">
-                        <div style="padding: 12px;">
-                            <h4 style="font-size: 0.9rem; margin-bottom: 5px;">Studio Lighting Kit</h4>
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <span style="font-weight: 800; color: #800000;">₱200/d</span>
-                                <span style="font-size: 0.8rem; color: #64748b;"><i class="fas fa-star" style="color: #ffd700;"></i> 4.8</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item-card">
-                        <img src="../../images/camera.jpg" alt="Cam" style="width: 100%; height: 140px; object-fit: cover;">
-                        <div style="padding: 12px;">
-                            <h4 style="font-size: 0.9rem; margin-bottom: 5px;">Nikon D3500 Kit</h4>
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <span style="font-weight: 800; color: #800000;">₱180/d</span>
-                                <span style="font-size: 0.8rem; color: #64748b;"><i class="fas fa-star" style="color: #ffd700;"></i> 4.9</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item-card">
-                        <img src="../../images/calculator.jpg" alt="Calc" style="width: 100%; height: 140px; object-fit: cover;">
-                        <div style="padding: 12px;">
-                            <h4 style="font-size: 0.9rem; margin-bottom: 5px;">Graphing Calculator</h4>
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <span style="font-weight: 800; color: #800000;">₱60/d</span>
-                                <span style="font-size: 0.8rem; color: #64748b;"><i class="fas fa-star" style="color: #ffd700;"></i> 4.6</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                    </d        </div>
 
     </div>
 
+    <!-- Modals Synchronization -->
 
+    <!-- Extension Conflict Modal -->
+    <div class="modal-overlay" id="extendConflictModal">
+        <div class="modal-card" style="border-top: 5px solid #800000; max-width: 400px; padding: 30px; border-radius: 25px;">
+            <div style="text-align: center; margin-bottom: 15px;">
+                <i class="fas fa-calendar-times" style="font-size: 3rem; color: #800000;"></i>
+            </div>
+            <h3 style="margin-bottom: 10px; color: #800000; font-weight: 800;">Extension Unavailable</h3>
+            <p style="font-size: 0.9rem; color: #4b5563; line-height: 1.5;">Item is reserved by another student within 24 hours of your current due date. Please proceed with the scheduled return.</p>
+            <button onclick="document.getElementById('extendConflictModal').style.display='none'" style="width: 100%; margin-top: 20px; background: #800000; color: #fff; border: none; padding: 14px; border-radius: 12px; font-weight: 700; cursor: pointer;">I Understand</button>
+        </div>
+    </div>
 
-    <!-- QR Modal -->
+    <!-- Return Verification (Pre-Handover) -->
+    <div id="preHandoverModal" class="modal-overlay" style="display:none;">
+        <div class="modal-content" style="max-width: 380px; padding: 20px; border-radius: 30px; background: #fff; position: relative; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);">
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                <div style="background: #fff1f2; color: #800000; width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0;">
+                    <i class="fas fa-clipboard-check"></i>
+                </div>
+                <div>
+                    <h2 style="margin: 0; font-size: 1.1rem; color: #1e293b; font-weight: 800;">Return Verification</h2>
+                    <p style="margin: 0; font-size: 0.75rem; color: #64748b; font-weight: 600;">Final condition audit before handover</p>
+                </div>
+            </div>
+
+            <div id="returnHeaderInfo" style="margin-bottom: 12px; padding: 8px 12px; background: #f8fafc; border-radius: 10px; border: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
+                <p style="margin: 0; font-size: 0.85rem; font-weight: 800; color: #800000;" id="returnItemName">Item Name</p>
+                <p style="margin: 0; font-size: 0.7rem; color: #64748b; font-weight: 600;"><span id="returnLenderName" style="color: #1e293b;">Lender Name</span></p>
+            </div>
+
+            <div id="verificationActions">
+                <div style="margin-bottom: 10px;">
+                    <div id="uploadArea" onclick="document.getElementById('proofOfCondition').click()" style="border: 1.5px dashed #cbd5e1; border-radius: 12px; padding: 15px; text-align: center; cursor: pointer; transition: 0.3s; background: #fdfdfd; position: relative; overflow: hidden;">
+                        <input type="file" id="proofOfCondition" hidden accept="image/*" onchange="handleReturnPhoto(this)">
+                        <div id="uploadPlaceholder">
+                            <i class="fas fa-camera" style="font-size: 1.5rem; color: #94a3b8; margin-bottom: 5px; display: block;"></i>
+                            <p style="margin: 0; font-size: 0.75rem; color: #64748b; font-weight: 600;">Snapshot of current condition</p>
+                        </div>
+                        <div id="uploadPreview" style="display: none;">
+                            <img id="previewImg" src="" style="width: 100%; height: 120px; object-fit: cover; border-radius: 10px; border: 1.5px solid #e2e8f0;">
+                            <div style="position: absolute; top: 10px; right: 10px; background: #10b981; color: #fff; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; box-shadow: 0 4px 10px rgba(16,185,129,0.3);">
+                                <i class="fas fa-check"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <textarea id="returnNotes" placeholder="Condition notes (optional)..." style="width: 100%; height: 50px; padding: 10px; border-radius: 10px; border: 2px solid #f1f5f9; font-family: inherit; font-size: 0.8rem; resize: none; transition: 0.2s; outline: none; background: #f8fafc;" onfocus="this.style.borderColor='#800000'; this.style.background='#fff'"></textarea>
+                </div>
+
+                <button id="btnGenerateReturnQR" disabled onclick="submitProofOfCondition()" style="width: 100%; padding: 12px; border-radius: 12px; background: #cbd5e1; color: #fff; border: none; font-weight: 800; cursor: not-allowed; transition: 0.3s; font-size: 0.9rem; box-shadow: 0 10px 20px rgba(0,0,0,0.05);">Verify & Generate QR</button>
+                <button onclick="closePreHandoverModal()" style="width: 100%; margin-top: 8px; background: none; border: none; color: #64748b; font-weight: 700; cursor: pointer; font-size: 0.8rem; transition: 0.2s;" onmouseover="this.style.color='#1e293b'">Cancel</button>
+            </div>
+
+            <div id="scanningState" style="display: none; text-align: center; padding: 30px;">
+                <div style="width: 50px; height: 50px; border: 4px solid #f1f5f9; border-top: 4px solid #800000; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px;"></div>
+                <p style="font-weight: 800; color: #1e293b; font-size: 1.1rem; margin-bottom: 5px;">Verifying Snapshot...</p>
+                <p style="color: #64748b; font-size: 0.85rem;">Encrypting return data for secure handover</p>
+            </div>
+
+            <div style="margin-top: 25px; padding-top: 20px; border-top: 1.5px solid #f1f5f9; text-align: center;">
+                <p style="margin: 0; font-size: 0.72rem; color: #ef4444; font-weight: 800; line-height: 1.5;">
+                    <i class="fas fa-exclamation-triangle"></i> INSTITUTIONAL NOTICE: False reporting results in an immediate flag on the WMSU Registrar Negative List and potential suspension.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced Rating Modal -->
+    <div class="modal-overlay" id="ratingModal">
+        <div class="modal-card" style="max-width: 400px; padding: 30px; border-radius: 25px;">
+            <div style="text-align: center; margin-bottom: 20px;">
+                <div style="width: 70px; height: 70px; background: #fffbeb; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; border: 2px solid #fbbf24;">
+                    <i class="fas fa-star" style="font-size: 2.2rem; color: #fbbf24;"></i>
+                </div>
+                <h2 style="margin: 0; color: #1e293b; font-weight: 800; font-size: 1.4rem;">Complete Your Rental</h2>
+                <p style="font-size: 0.9rem; color: #64748b; margin-top: 5px;">Your feedback helps keep WMSU KitCycle safe and reliable.</p>
+            </div>
+
+            <div class="rating-stars" id="overallStars">
+                <i class="fas fa-star" data-val="1"></i>
+                <i class="fas fa-star" data-val="2"></i>
+                <i class="fas fa-star" data-val="3"></i>
+                <i class="fas fa-star" data-val="4"></i>
+                <i class="fas fa-star" data-val="5"></i>
+            </div>
+
+            <div class="rating-metric">
+                <label>Item Quality & Condition</label>
+                <div class="metric-stars" id="itemStars">
+                    <i class="fas fa-star" data-val="1"></i>
+                    <i class="fas fa-star" data-val="2"></i>
+                    <i class="fas fa-star" data-val="3"></i>
+                    <i class="fas fa-star" data-val="4"></i>
+                    <i class="fas fa-star" data-val="5"></i>
+                </div>
+            </div>
+
+            <div class="rating-metric">
+                <label>Lender Communication</label>
+                <div class="metric-stars" id="serviceStars">
+                    <i class="fas fa-star" data-val="1"></i>
+                    <i class="fas fa-star" data-val="2"></i>
+                    <i class="fas fa-star" data-val="3"></i>
+                    <i class="fas fa-star" data-val="4"></i>
+                    <i class="fas fa-star" data-val="5"></i>
+                </div>
+            </div>
+
+            <textarea id="ratingFeedback" placeholder="Optional: Share your experience with this rental..." style="width: 100%; height: 90px; padding: 15px; border-radius: 15px; border: 2px solid #f1f5f9; font-family: inherit; font-size: 0.9rem; resize: none; margin-bottom: 20px; outline: none; background: #f8fafc;"></textarea>
+
+            <label class="anonymous-toggle">
+                <input type="checkbox" id="isAnonymous">
+                <span>Post review anonymously</span>
+            </label>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <button onclick="document.getElementById('ratingModal').style.display='none'" style="padding: 14px; border-radius: 15px; background: #f1f5f9; color: #475569; border: none; font-weight: 700; cursor: pointer;">Maybe Later</button>
+                <button onclick="submitRating()" style="padding: 14px; border-radius: 15px; background: #10b981; color: #fff; border: none; font-weight: 800; cursor: pointer; box-shadow: 0 4px 12px rgba(16,185,129,0.2);">Submit Review</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dynamic QR Modal -->
     <div class="modal-overlay" id="qrModal">
         <div class="modal-card">
             <h3 style="margin-bottom: 10px;">Verification QR Code</h3>
-            <p style="font-size: 0.85rem; color: #64748b;">Show this to Maria Santos to officially start your rental timer.</p>
+            <p style="font-size: 0.85rem; color: #64748b;">Show this to the counter-party to officially complete the handover.</p>
             <div style="width: 200px; height: 200px; background: #f1f5f9; margin: 1.5rem auto; border-radius: 15px; display: flex; align-items: center; justify-content: center; border: 2px dashed #cbd5e1;"><i class="fas fa-qrcode" style="font-size: 5rem; color: #cbd5e1;"></i></div>
+            <div style="margin-bottom: 15px; font-size: 0.85rem; font-weight: 700; color: #ef4444;"><i class="fas fa-sync-alt"></i> Refreshes in <span id="qrCountdown">30</span>s</div>
             <button onclick="closeQRModal()" style="width: 100%; background: #800000; color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer;">Close</button>
+            <button onclick="simulateSuccessfulScan()" style="width: 100%; background: #10b981; color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer; margin-top: 10px;">(Dev) Simulate Scan</button>
+        </div>
+    </div>
+
+    <!-- Extension Conflict Modal -->
+    <div class="modal-overlay" id="extendConflictModal">
+        <div class="modal-card" style="border-top: 5px solid #800000; max-width: 350px;">
+            <div style="text-align: center; margin-bottom: 15px;">
+                <i class="fas fa-calendar-times" style="font-size: 3rem; color: #800000;"></i>
+            </div>
+            <h3 style="margin-bottom: 10px; color: #800000;">Extension Unavailable</h3>
+            <p style="font-size: 0.9rem; color: #4b5563; line-height: 1.5;">Item is reserved by another student within 24 hours of your current due date. Please proceed with the scheduled return.</p>
+            <button onclick="document.getElementById('extendConflictModal').style.display='none'" style="width: 100%; margin-top: 20px; background: #800000; color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer;">I Understand</button>
         </div>
     </div>
 
@@ -332,192 +587,367 @@
         <div class="fab-messenger" onclick="toggleChat()" style="width: 60px; height: 60px; border: 3px solid #fff; box-shadow: 0 8px 25px rgba(0,0,0,0.2);"><i class="fas fa-comments"></i></div>
     </div>
 
-    <div class="quick-chat-window" id="quickChat">
-        <div class="quick-chat-header"><span>Messages</span><i class="fas fa-times" onclick="toggleChat()" style="cursor: pointer;"></i></div>
-        <div class="quick-chat-body">
-            <div style="display: flex; gap: 10px; align-items: center; padding: 10px; border-bottom: 1px solid #f1f5f9;">
-                <div style="width: 35px; height: 35px; background: #800000; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 800; font-size: 0.8rem;">J</div>
-                <div><h5 style="margin: 0; font-size: 0.85rem;">Juan Dela Cruz</h5><p style="margin: 0; font-size: 0.7rem; color: #64748b;">I'm at the Grandstand now.</p></div>
-            </div>
-        </div>
-    </div>
-
     <script src="../../script/student-data.js"></script>
     <script>
+        // --- DATA SYNCHRONIZATION ENGINE ---
+        
         function updateDashboardStats() {
-            // Get data from localStorage
-            const savedNames = JSON.parse(localStorage.getItem('savedItems') || '[]');
+            const savedNames = JSON.parse(localStorage.getItem('student_saved_items') || '[]');
             const listings = getMyListings();
+            const rentals = getActiveRentals();
+            const myName = localStorage.getItem('userName') || 'Nash Arciaga';
             
-            // Update Saved Gear count
-            const countEl = document.getElementById('savedGearCount');
-            if (countEl) countEl.innerText = savedNames.length;
-            
-            const headerCount = document.querySelector('.full-width-card .card-header h3');
-            if (headerCount) headerCount.innerText = `Saved Gear (${savedNames.length})`;
+            if (document.getElementById('savedGearCount')) document.getElementById('savedGearCount').innerText = savedNames.length;
+            if (document.getElementById('savedGearCountSide')) document.getElementById('savedGearCountSide').innerText = savedNames.length;
 
-            // Update Earnings (simulated sum of listing prices)
             const earnings = listings.reduce((sum, item) => sum + (item.status === 'Rented' ? parseInt(item.price) : 0), 0);
             const earningsEl = document.querySelector('.stat-card:nth-child(4) h3');
             if (earningsEl) earningsEl.innerText = `₱${earnings.toLocaleString()}`;
 
-            // Update Saved Gear Grid
-            const savedGrid = document.querySelector('.saved-grid');
+            const savedGrid = document.getElementById('dashboardSavedGrid');
             if (savedGrid) {
                 if (savedNames.length === 0) {
-                    savedGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #64748b; padding: 40px;">No saved items. Explore the marketplace to add some!</p>';
+                    savedGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #64748b; padding: 40px;">No saved items.</p>';
                 } else {
-                    savedGrid.innerHTML = savedNames.slice(0, 4).reverse().map(name => {
-                        const item = KitCycleData.items.find(i => i.name === name);
+                    savedGrid.innerHTML = savedNames.slice(0, 3).reverse().map(identifier => {
+                        const item = KitCycleData.items.find(i => i.id === identifier || i.name === identifier);
                         if (!item) return '';
-                        
                         return `
-                            <div class="item-card" style="cursor:pointer;" onclick="window.location.href='../item-details html/item-details.html?id=${item.id}'">
-                                <img src="${item.image}" alt="${item.name}" style="width: 100%; height: 140px; object-fit: cover;">
-                                <div style="padding: 12px;">
-                                    <h4 style="font-size: 0.9rem; margin-bottom: 5px;">${item.name}</h4>
+                            <div class="item-card" data-id="${item.id}" style="cursor:pointer;" onclick="window.location.href='../item-details html/item-details.html?id=${item.id}'">
+                                <img src="${item.image}" alt="${item.name}" style="width: 100%; height: 110px; object-fit: cover;">
+                                <div style="padding: 10px;">
+                                    <h4 style="font-size: 0.85rem; margin-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${item.name}</h4>
                                     <div style="display: flex; justify-content: space-between; align-items: center;">
-                                        <span style="font-weight: 800; color: #800000;">₱${item.price}/d</span>
-                                        <span style="font-size: 0.8rem; color: #64748b;"><i class="fas fa-star" style="color: #ffd700;"></i> ${item.rating}</span>
+                                        <span style="font-weight: 800; color: #800000; font-size: 0.85rem;">₱${item.price}/d</span>
+                                        <span style="font-size: 0.75rem; color: #64748b;"><i class="fas fa-star" style="color: #ffd700;"></i> ${item.rating || '4.8'}</span>
                                     </div>
                                 </div>
-                            </div>
-                        `;
+                            </div>`;
                     }).join('');
                 }
             }
-        function toggleSidebar() {
-            document.documentElement.classList.remove('sidebar-is-minimized');
-            const sidebar = document.getElementById('sidebar');
-            const mainContent = document.getElementById('mainContent');
-            const isMinimized = sidebar.classList.toggle('minimized');
-            mainContent.classList.toggle('expanded');
-            localStorage.setItem('sidebarMinimized', isMinimized);
+            renderRecentHistory();
+            renderDashboardRentals();
         }
 
-        function toggleNotifs() {
-            // Handled by auth.js
-        }
-
-        function updateDashboardStats() {
-            const savedNames = JSON.parse(localStorage.getItem('savedItems') || '[]');
-            const countEl = document.getElementById('savedGearCount');
-            if (countEl) countEl.textContent = savedNames.length;
+        function renderRecentHistory() {
+            const historyTable = document.getElementById('recentHistoryTable');
+            if (!historyTable) return;
+            const history = JSON.parse(localStorage.getItem('student_history') || '[]');
+            if (history.length === 0) {
+                historyTable.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 20px; color:#64748b;">No recent transactions.</td></tr>`;
+                return;
+            }
+            historyTable.innerHTML = history.slice(0, 4).map(r => `
+                <tr>
+                    <td style="font-weight: 600;">${r.item}</td>
+                    <td><span class="status-tag status-completed">${r.status || 'Completed'}</span></td>
+                    <td>${new Date(r.startDate).toLocaleDateString(undefined, {month: 'short', day: 'numeric'})}</td>
+                    <td style="font-weight: 700;">₱${r.totalCost || 0}</td>
+                </tr>`).join('');
         }
 
         function renderDashboardRentals() {
             const borrowingList = document.getElementById('dashboardBorrowingList');
             const lendingList = document.getElementById('dashboardLendingList');
             const rentals = getActiveRentals();
-            
             const myName = localStorage.getItem('userName') || 'Nash Arciaga';
-            const borrowing = rentals.filter(r => r.borrower === myName && (r.status === 'Active' || r.status === 'Return Initiated' || r.status === 'Pending Pickup' || r.status === 'Partial Return'));
-            const lending = rentals.filter(r => r.lender === myName && (r.status === 'Active' || r.status === 'Return Initiated' || r.status === 'Pending Pickup' || r.status === 'Partial Return'));
+            
+            const borrowing = rentals.filter(r => r.borrower === myName && r.status !== 'Completed' && r.status !== 'Cancelled');
+            const lending = rentals.filter(r => r.lender === myName && r.status !== 'Completed' && r.status !== 'Cancelled');
 
-            // Render Borrowing
-            if (borrowing.length === 0) {
-                borrowingList.innerHTML = '<p style="text-align:center; color:#64748b; padding:1rem;">No active rentals.</p>';
-            } else {
-                borrowingList.innerHTML = borrowing.slice(0, 3).map(r => {
-                    const prog = calcRentalProgress(r.startDate, r.dueDate);
-                    const isPending = r.status === 'Pending Pickup';
-                    let timerHtml = isPending ? `<span class="timer-text timer-normal"><i class="far fa-clock"></i> Ready for Pickup</span>` 
-                                              : `<span class="timer-text ${prog.isOverdue ? 'timer-urgent' : 'timer-normal'}"><i class="far fa-clock"></i> ${prog.isOverdue ? 'OVERDUE' : 'Returns in: ' + prog.timeLeft}</span>`;
-                    let progHtml = isPending ? `<div class="progress-bar-container"><div class="progress-bar progress-green" style="width:0;"></div></div>`
-                                             : `<div class="progress-bar-container"><div class="progress-bar" style="width:${prog.percent}%; background:${prog.color};"></div></div>`;
-                    let actionHtml = isPending ? `<button class="btn-qr" onclick="openQRModal()"><i class="fas fa-qrcode"></i> Generate Pickup QR</button>`
-                                               : `<button onclick="DashboardActions.extendRental(this)" style="background:#800000; color:#fff; border:none; padding:10px; border-radius:8px; font-weight:700; cursor:pointer;">Extend</button>
-                                                  <button onclick="DashboardActions.initiateReturn(this, '${r.id}')" style="border:2px solid #800000; color:#800000; padding:8px; border-radius:8px; font-weight:700; cursor:pointer; background:#fff;">Return</button>`;
-
-                    return `
-                    <div class="compact-rental-item">
-                        <div class="rental-thumb"><img src="${r.image}" alt="${r.item}" style="width:100%; height:100%; object-fit:cover;"></div>
-                        <div class="rental-brief">
-                            <div style="display:flex; justify-content:space-between;">
-                                <h4>${r.item} ${r.quantityBorrowed > 1 ? '(x'+r.quantityBorrowed+')' : ''}</h4>
-                                ${timerHtml}
-                            </div>
-                            <p style="font-size:0.85rem; color:#64748b;">Lender: ${r.lender} • ${r.location} <i class="fas fa-map-marked-alt map-trigger"></i></p>
-                            ${progHtml}
-                        </div>
-                        <div class="rental-actions">${actionHtml}</div>
-                    </div>`;
-                }).join('');
-            }
-
-            // Render Lending
-            document.getElementById('lendingCount').innerText = lending.length;
-            if (lending.length === 0) {
-                lendingList.innerHTML = '<p style="text-align:center; color:#64748b; padding:1rem;">Not currently lending any items.</p>';
-            } else {
-                lendingList.innerHTML = lending.map(r => {
-                    const isReturn = (r.status === 'Return Initiated');
-                    let actionHtml = isReturn ? `<button onclick="DashboardActions.scanQR(this)" style="background:#111827; color:#fff; border:none; padding:8px 12px; border-radius:6px; font-size:0.8rem; font-weight:600; cursor:pointer;">Scan Return QR</button>`
-                                              : `<button class="btn-extension" onclick="DashboardActions.extendLending(this)">Extend</button>`;
-                    return `
-                    <div class="lending-item-v2">
-                        <img src="${r.image}" class="lending-thumb-v2" alt="${r.item}">
-                        <div style="flex:1;">
-                            <h4 style="margin:0; font-size:1rem;">${r.item}</h4>
-                            <p style="margin:5px 0; font-size:0.85rem; color:#64748b;">Borrower: <strong>${r.borrower}</strong> • ${r.location}</p>
-                            <span style="font-size:0.8rem; font-weight:700; color:${isReturn ? '#f59e0b' : '#10b981'};"><i class="fas fa-user-check"></i> Status: ${isReturn ? 'Returning' : 'With Borrower'}</span>
-                        </div>
-                        <div class="rental-actions" style="min-width:140px;">${actionHtml}</div>
-                    </div>`;
-                }).join('');
-            }
-
-            // Banner greeting
-            const firstName = myName.split(' ')[0];
-            const urgentRentals = borrowing.filter(r => {
-                if(r.status === 'Pending Pickup') return false;
-                const p = calcRentalProgress(r.startDate, r.dueDate);
-                return p.isOverdue || p.percent > 75;
-            });
-            const bannerGreeting = document.getElementById('bannerGreeting');
-            if (bannerGreeting) {
-                bannerGreeting.textContent = 'Welcome back, ' + firstName + '!';
-                const p = bannerGreeting.nextElementSibling;
-                if (urgentRentals.length > 0) {
-                    p.innerHTML = `You have <strong style="color:#ef4444;">${urgentRentals.length} item(s) due soon</strong>. Please prepare for handover.`;
-                } else if (borrowing.length > 0) {
-                    p.textContent = `You have ${borrowing.length} active rental(s). Keep up the good work.`;
+            if (borrowingList) {
+                if (borrowing.length === 0) {
+                    borrowingList.innerHTML = '<p style="text-align:center; color:#64748b; padding:20px;">No active borrowing.</p>';
                 } else {
-                    p.textContent = 'Ready to borrow or lend today? Check out the marketplace.';
+                    borrowingList.innerHTML = borrowing.slice(0, 3).map(r => generateDashboardRentalCard(r, false)).join('');
                 }
+            }
+
+            if (lendingList) {
+                document.getElementById('lendingCount').innerText = lending.length;
+                if (lending.length === 0) {
+                    lendingList.innerHTML = '<p style="text-align:center; color:#64748b; padding:20px;">No active lending.</p>';
+                } else {
+                    lendingList.innerHTML = lending.map(r => generateDashboardRentalCard(r, true)).join('');
+                }
+            }
+            setupStarRating();
+        }
+
+        function generateDashboardRentalCard(r, isLender) {
+            const prog = calcRentalProgress(r.startDate, r.dueDate);
+            const isPending = r.status === 'Pending Pickup' || r.status === 'Reserved';
+            const isPendingRating = r.status === 'Pending Rating';
+            
+            let timerHtml = isPending ? `<span class="timer-text timer-normal"><i class="far fa-clock"></i> Ready for Pickup</span>` 
+                                      : (isPendingRating ? `<span class="timer-text timer-normal" style="color: #10b981;"><i class="fas fa-check-circle"></i> Handover Complete</span>`
+                                      : `<span class="timer-text ${prog.isOverdue?'timer-flashing':'timer-normal'}"><i class="far fa-clock"></i> ${prog.timeLeft}</span>`);
+
+            let actionHtml = '';
+            if (isPending) {
+                actionHtml = `<button class="btn-qr" onclick="openDynamicQRModal('${r.id}')" style="width: 100%; padding: 8px;"><i class="fas fa-qrcode"></i> QR</button>`;
+            } else if (isPendingRating) {
+                actionHtml = `
+                    <div style="display: flex; gap: 5px; flex-direction: column;">
+                        <button onclick="openRatingModal('${r.id}', '${r.item}', '${r.lender}')" style="background:#10b981; color:#fff; border:none; padding:8px; border-radius:8px; font-weight:700; cursor:pointer; font-size:0.75rem;">Rate Now</button>
+                        <button onclick="removeFromActive('${r.id}')" style="background:#f1f5f9; color:#475569; border:none; padding:8px; border-radius:8px; font-weight:700; cursor:pointer; font-size:0.75rem;">Remove</button>
+                    </div>`;
+            } else {
+                if (isLender) {
+                    if (r.status === 'Return Initiated') {
+                        actionHtml = `
+                            <div style="display: flex; flex-direction: column; gap: 4px;">
+                                <div style="font-size: 0.6rem; color: #800000; font-weight: 800; text-transform: uppercase;">Audit Alert</div>
+                                <div style="display: flex; gap: 5px; align-items: center; background: #f8fafc; border: 1px solid #e2e8f0; padding: 4px; border-radius: 8px;">
+                                    <img src="${r.conditionAfter}" style="width: 30px; height: 30px; border-radius: 4px; object-fit: cover;">
+                                    <span style="font-size: 0.65rem; color: #64748b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 50px;">Audit Ready</span>
+                                </div>
+                                <button class="btn-qr" onclick="openDynamicQRModal('${r.id}')" style="width: 100%; padding: 6px; font-size: 0.75rem;"><i class="fas fa-qrcode"></i> Scan</button>
+                            </div>
+                        `;
+                    } else {
+                        actionHtml = `<button onclick="location.href='student-listings.html'" style="background:#f1f5f9; color:#475569; border:1px solid #e2e8f0; padding:8px; border-radius:8px; font-weight:700; cursor:pointer; font-size:0.8rem; width: 100%;">Manage</button>`;
+                    }
+                } else {
+                    const hoursLeft = prog.timeLeft && prog.timeLeft.includes('h') ? parseInt(prog.timeLeft) : 24;
+                    const isTooLateForExtension = hoursLeft < 4;
+                    const hasReservation = r.hasReservation || false; // Simulated reservation check
+                    
+                    let extendBtn = (isTooLateForExtension || hasReservation) ? 
+                        `<button disabled style="border:2px solid #D3D3D3; color:#D3D3D3; padding:8px; border-radius:8px; font-weight:700; cursor:not-allowed; background:#fff; font-size:0.75rem; width: 100%;" title="${hasReservation ? 'Reserved by another student' : 'Too close to deadline'}">Extend</button>` :
+                        `<button onclick="checkExtendConflict('${r.id}')" style="border:2px solid #800000; color:#800000; padding:8px; border-radius:8px; font-weight:700; cursor:pointer; background:#fff; font-size:0.75rem; width: 100%;">Extend</button>`;
+
+                    actionHtml = `
+                        <div style="display: flex; flex-direction: column; gap: 5px;">
+                            ${extendBtn}
+                            <button onclick="openPreHandoverModal('${r.id}', '${r.item}', '${r.lender}')" style="background:#800000; color:#fff; border:none; padding:8px 12px; border-radius:8px; font-weight:700; cursor:pointer; font-size:0.75rem; width: 100%;">Return</button>
+                        </div>`;
+                }
+            }
+
+            return `
+                <div class="compact-rental-item" style="display: flex; align-items: center; gap: 15px; padding: 12px; background: #fff; border: 1px solid #e2e8f0; border-radius: 15px; margin-bottom: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.03);">
+                    <img src="${r.image}" style="width: 60px; height: 60px; border-radius: 10px; object-fit: cover;">
+                    <div style="flex: 1; overflow: hidden;">
+                        <h4 style="margin: 0; font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${r.item}</h4>
+                        <p style="margin: 4px 0; font-size: 0.8rem; color: #64748b;">${isLender?'Lending to':'Borrowing from'} ${isLender?r.borrower:r.lender}</p>
+                        ${timerHtml}
+                    </div>
+                    <div style="min-width: 100px;">
+                        ${actionHtml}
+                    </div>
+                </div>`;
+        }
+
+        // --- INTERACTION LOGIC ---
+
+        function setupStarRating() {
+            const starGroups = ['overallStars', 'itemStars', 'serviceStars'];
+            starGroups.forEach(groupId => {
+                const group = document.getElementById(groupId);
+                if (!group) return;
+                const stars = group.querySelectorAll('i');
+                stars.forEach(star => {
+                    star.addEventListener('click', () => {
+                        const val = parseInt(star.getAttribute('data-val'));
+                        stars.forEach(s => {
+                            const sVal = parseInt(s.getAttribute('data-val'));
+                            if (sVal <= val) s.classList.add('active');
+                            else s.classList.remove('active');
+                        });
+                    });
+                });
+            });
+        }
+
+        function handleReturnPhoto(input) {
+            const placeholder = document.getElementById('uploadPlaceholder');
+            const preview = document.getElementById('uploadPreview');
+            const img = document.getElementById('previewImg');
+            const btn = document.getElementById('btnGenerateReturnQR');
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    img.src = e.target.result;
+                    placeholder.style.display = 'none';
+                    preview.style.display = 'block';
+                    btn.disabled = false;
+                    btn.style.background = '#800000';
+                    btn.style.cursor = 'pointer';
+                }
+                reader.readAsDataURL(input.files[0]);
             }
         }
 
-        window.onload = function() {
-            const isMinimized = localStorage.getItem('sidebarMinimized') === 'true';
-            if (isMinimized) {
-                const sidebar = document.getElementById('sidebar');
-                const mainContent = document.getElementById('mainContent');
-                if (sidebar) sidebar.classList.add('minimized');
-                if (mainContent) mainContent.classList.add('expanded');
+        let activeReturnId = null;
+        let qrInterval = null;
+
+        function checkExtendConflict(id) {
+            UIUtils.showToast("Extension Unavailable: Item is reserved by another student.", "error");
+            document.getElementById('extendConflictModal').style.display = 'flex';
+        }
+
+        function openPreHandoverModal(id, itemName, lenderName) { 
+            activeReturnId = id;
+            document.getElementById('returnItemName').innerText = itemName;
+            document.getElementById('returnLenderName').innerText = lenderName;
+            document.getElementById('proofOfCondition').value = '';
+            document.getElementById('uploadPlaceholder').style.display = 'block';
+            document.getElementById('uploadPreview').style.display = 'none';
+            document.getElementById('btnGenerateReturnQR').disabled = true;
+            document.getElementById('btnGenerateReturnQR').style.background = '#cbd5e1';
+            document.getElementById('preHandoverModal').style.display = 'flex';
+            document.getElementById('scanningState').style.display = 'none';
+            document.getElementById('verificationActions').style.display = 'block';
+        }
+        
+        function closePreHandoverModal() { document.getElementById('preHandoverModal').style.display = 'none'; }
+
+        function submitProofOfCondition() {
+            const actions = document.getElementById('verificationActions');
+            const scanner = document.getElementById('scanningState');
+            const previewImg = document.getElementById('previewImg').src;
+            const notes = document.getElementById('returnNotes').value;
+
+            // Save to LocalStorage
+            let rentalsDb = getActiveRentals();
+            let idx = rentalsDb.findIndex(r => r.id === activeReturnId);
+            if (idx > -1) {
+                rentalsDb[idx].conditionAfter = previewImg;
+                rentalsDb[idx].returnNotes = notes;
+                rentalsDb[idx].status = 'Return Initiated';
+                saveActiveRentals(rentalsDb);
+                
+                // Push notification to Lender
+                let notifs = JSON.parse(localStorage.getItem('kitcycle_notifications') || '[]');
+                notifs.unshift({
+                    id: 'notif-' + Date.now(),
+                    title: 'Return Initiated',
+                    message: `${rentalsDb[idx].borrower} has initiated the return for ${rentalsDb[idx].item}. Check condition snapshots before scanning.`,
+                    time: 'Just now',
+                    type: 'return',
+                    txnId: activeReturnId,
+                    read: false
+                });
+                localStorage.setItem('kitcycle_notifications', JSON.stringify(notifs));
             }
-            const storedName = localStorage.getItem('userName');
-            if (storedName) {
-                const trustProfileName = document.getElementById('trustProfileName');
-                if (trustProfileName) trustProfileName.textContent = storedName;
-            }
-            updateDashboardStats();
+
+            actions.style.display = 'none';
+            scanner.style.display = 'block';
+
+            setTimeout(() => {
+                closePreHandoverModal();
+                scanner.style.display = 'none';
+                openDynamicQRModal(activeReturnId);
+            }, 3000);
+        }
+
+        function openRatingModal(id, itemName, lenderName) {
+            activeReturnId = id;
+            const modal = document.getElementById('ratingModal');
+            modal.querySelector('h2').innerText = `Rate ${itemName}`;
+            modal.querySelector('p').innerText = `How was the experience with ${lenderName}?`;
+            modal.style.display = 'flex';
+            document.querySelectorAll('.rating-stars i, .metric-stars i').forEach(s => s.classList.remove('active'));
+            document.getElementById('ratingFeedback').value = '';
+        }
+
+        function submitRating() {
+            if (activeReturnId) moveTransactionToHistory(activeReturnId, 'Review Submitted');
+            document.getElementById('ratingModal').style.display = 'none';
             renderDashboardRentals();
-            setInterval(renderDashboardRentals, 60000);
-        };
+            updateDashboardStats();
+            UIUtils.showToast("Rating submitted! Moved to History.", "success");
+        }
+
+        function removeFromActive(id) {
+            if (confirm("Remove this transaction from active list? It will be archived in History.")) {
+                moveTransactionToHistory(id, 'Completed');
+                renderDashboardRentals();
+                updateDashboardStats();
+                UIUtils.showToast("Moved to Transaction History.", "info");
+            }
+        }
+
+        function moveTransactionToHistory(id, newStatus) {
+            let rentalsDb = getActiveRentals();
+            let idx = rentalsDb.findIndex(r => r.id === id);
+            if (idx > -1) {
+                const item = rentalsDb[idx];
+                item.status = newStatus;
+                let history = JSON.parse(localStorage.getItem('student_history') || '[]');
+                history.unshift(item);
+                localStorage.setItem('student_history', JSON.stringify(history));
+                rentalsDb.splice(idx, 1);
+                saveActiveRentals(rentalsDb);
+            }
+        }
+
+        function openDynamicQRModal(id) {
+            if (id) activeReturnId = id;
+            document.getElementById('qrModal').style.display = 'flex';
+            let timeLeft = 30;
+            document.getElementById('qrCountdown').innerText = timeLeft;
+            clearInterval(qrInterval);
+            qrInterval = setInterval(() => {
+                timeLeft--;
+                if(timeLeft <= 0) timeLeft = 30;
+                document.getElementById('qrCountdown').innerText = timeLeft;
+            }, 1000);
+        }
+
+        function closeQRModal() { 
+            document.getElementById('qrModal').style.display = 'none'; 
+            clearInterval(qrInterval);
+        }
+
+        function simulateSuccessfulScan() {
+            if (activeReturnId) {
+                let rentalsDb = getActiveRentals();
+                let idx = rentalsDb.findIndex(r => r.id === activeReturnId);
+                if (idx > -1) {
+                    rentalsDb[idx].status = 'Pending Rating';
+                    saveActiveRentals(rentalsDb);
+                }
+            }
+            closeQRModal();
+            renderDashboardRentals();
+            updateDashboardStats();
+            UIUtils.showToast("Scan successful! Handover complete.", "success");
+        }
+
+        function toggleSidebar() {
+            document.documentElement.classList.toggle('sidebar-is-minimized');
+            const isMinimized = document.documentElement.classList.contains('sidebar-is-minimized');
+            localStorage.setItem('sidebarMinimized', isMinimized);
+        }
 
         function toggleChat() {
             const chat = document.getElementById('quickChat');
             chat.style.display = chat.style.display === 'block' ? 'none' : 'block';
         }
 
-        function openQRModal() { document.getElementById('qrModal').style.display = 'flex'; }
-        function closeQRModal() { document.getElementById('qrModal').style.display = 'none'; }
-        
-        window.addEventListener('storage', (e) => {
-            if (e.key === 'savedItems') updateDashboardStats();
-        });
+        window.onload = function() {
+            const isMinimized = localStorage.getItem('sidebarMinimized') === 'true';
+            if (isMinimized) document.documentElement.classList.add('sidebar-is-minimized');
+            
+            const storedName = localStorage.getItem('userName');
+            if (storedName) {
+                if (document.getElementById('trustProfileName')) document.getElementById('trustProfileName').textContent = storedName;
+                if (document.getElementById('bannerGreeting')) document.getElementById('bannerGreeting').textContent = `Welcome back, ${storedName.split(' ')[0]}!`;
+            }
+            
+            updateDashboardStats();
+            renderDashboardRentals();
+            
+            window.addEventListener('storage', (e) => {
+                if (e.key === 'savedItems' || e.key === 'active_rentals_v2' || e.key === 'kitcycle_rentals') {
+                    updateDashboardStats();
+                    renderDashboardRentals();
+                }
+            });
+        };
     </script>
 </body>
-
 </html>

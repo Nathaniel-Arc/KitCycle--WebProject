@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="../../css/student-interface/student-dashboard.css">
-    <link rel="stylesheet" href="../../css/student-interface/student-saved.css">
+    <link rel="stylesheet" href="../../css/marketplace.css">
     <script src="../../script/items-data.js"></script>
     <script src="../../script/ui-utils.js"></script>
     <script src="../../script/auth.js" defer></script>
@@ -30,6 +30,23 @@
         .sidebar-is-minimized .sidebar-nav a { justify-content: center !important; padding: 12px 0 !important; }
         .sidebar-is-minimized .sidebar-nav i { font-size: 1.2rem !important; margin: 0 !important; }
         .sidebar-is-minimized .sidebar-profile { justify-content: center !important; padding-bottom: 1.5rem !important; }
+        
+        /* Fix for marketplace grid in dashboard context */
+        .marketplace-grid {
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            width: 100%;
+            display: grid;
+            gap: 24px;
+        }
+        
+        .market-card {
+            height: 100%;
+        }
+
+        .btn-save-mini.active i {
+            color: #f43f5e;
+            font-weight: 900;
+        }
     </style>
 </head>
 
@@ -71,11 +88,18 @@
 
             <ul class="sidebar-nav">
                 <li><a href="student-dashboard.html"><i class="fas fa-th-large"></i> <span>Dashboard</span></a></li>
-                <li><a href="student-rentals.html"><i class="fas fa-box-open"></i> <span>My Rentals</span></a></li>
-                <li><a href="student-messages.html"><i class="fas fa-comments"></i> <span>Messages</span> <span class="nav-badge-v2" style="display: inline-block;">1</span></a></li>
+                <li><a href="student-rentals.html"><i class="fas fa-box-open"></i> <span>Active Rentals</span></a></li>
+                <li><a href="student-history.html"><i class="fas fa-history"></i> <span>Transaction History</span></a></li>
+                <li>
+                    <a href="student-messages.html" style="position: relative;">
+                        <i class="fas fa-comments"></i> <span>Messages</span>
+                        <span class="sidebar-badge">1</span>
+                    </a>
+                </li>
                 <li class="active"><a href="student-saved.html"><i class="fas fa-heart"></i> <span>Saved Items</span></a></li>
                 <li><a href="student-rating.html"><i class="fas fa-star"></i> <span>My Rating</span></a></li>
                 <li><a href="student-listings.html"><i class="fas fa-list"></i> <span>My Listings</span></a></li>
+                <li><a href="student-settings.html"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
             </ul>
 
             <a href="javascript:void(0)" onclick="AuthSystem.confirmLogout(); return false;" class="sidebar-logout"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
@@ -90,82 +114,72 @@
                 </div>
             </div>
 
-            <div class="wishlist-grid" id="savedItemsGrid">
-                <!-- Items will be loaded here dynamically -->
+            <div class="marketplace-grid" id="savedItemsGrid">
+                <!-- Items will be loaded here dynamically using Marketplace card style -->
             </div>
 
         </main>
     </div>
 
     <script src="../../script/student-data.js"></script>
-    <style>
-        .availability-badge {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: #fff;
-            z-index: 10;
-        }
-        .availability-badge.available { background: #10b981; }
-        .availability-badge.due { background: #f59e0b; }
-        
-        .comparison-tag {
-            background: #eff6ff;
-            color: #1d4ed8;
-            font-size: 0.75rem;
-            font-weight: 700;
-            padding: 4px 10px;
-            border-radius: 4px;
-            display: inline-block;
-            margin-bottom: 8px;
-            border: 1px solid #bfdbfe;
-        }
-    </style>
     <script>
         function renderSavedItems() {
             const grid = document.getElementById('savedItemsGrid');
-            const savedNames = JSON.parse(localStorage.getItem('savedItems') || '[]');
+            const savedIds = JSON.parse(localStorage.getItem('student_saved_items') || '[]');
             
-            if (savedNames.length === 0) {
+            if (savedIds.length === 0) {
                 grid.innerHTML = `
-                    <div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: #64748b;">
-                        <i class="fas fa-heart-broken" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.3;"></i>
-                        <h3>No saved items yet</h3>
-                        <p>Browse the marketplace to find gear for your studies!</p>
-                        <a href="../marketplace.html" class="btn-primary-maroon" style="display: inline-block; margin-top: 1rem; text-decoration: none; padding: 12px 25px; border-radius: 8px; background: #800000; color: white;">Browse Marketplace</a>
+                    <div style="grid-column: 1/-1; text-align: center; padding: 6rem 2rem; background: white; border-radius: 12px; border: 1px solid #e2e8f0;">
+                        <i class="fas fa-heart-broken" style="font-size: 4rem; margin-bottom: 1.5rem; color: #cbd5e1;"></i>
+                        <h3 style="color: #1e293b; margin-bottom: 0.5rem; font-size: 1.5rem;">No saved items yet</h3>
+                        <p style="color: #64748b; margin-bottom: 2rem;">Browse the marketplace to find gear for your studies!</p>
+                        <a href="../marketplace.html" style="display: inline-block; text-decoration: none; padding: 14px 30px; border-radius: 10px; background: #800000; color: white; font-weight: 700; box-shadow: 0 4px 15px rgba(128,0,0,0.2);">Browse Marketplace</a>
                     </div>
                 `;
                 return;
             }
 
-            grid.innerHTML = savedNames.map(name => {
-                const item = KitCycleData.items.find(i => i.name === name);
+            grid.innerHTML = savedIds.map(identifier => {
+                // Support both ID and Name for backward compatibility
+                const item = KitCycleData.items.find(i => i.id === identifier || i.name === identifier);
                 if (!item) return '';
                 
+                // Construct consistent card HTML matching marketplace.html
                 return `
-                    <div class="wish-card">
-                        <div class="wish-image">
-                            <div class="availability-badge available">
-                                <i class="fas fa-check-circle"></i> Available Now
-                            </div>
+                    <div class="market-card">
+                        <div class="market-img-container">
+                            <span class="status-pill">${item.availability}</span>
                             <img src="${item.image}" alt="${item.name}">
-                            <button class="heart-icon active" onclick="removeSavedItem('${item.name}')"><i class="fas fa-heart"></i></button>
                         </div>
-                        <div class="wish-info">
-                            <span class="comparison-tag"><i class="fas fa-tag"></i> Best Value</span>
-                            <h4>${item.name}</h4>
-                            <p class="owner-by">Listed by ${item.lender}</p>
-                            <div class="wish-rating">
-                                <i class="fas fa-star" style="color: #ffd700;"></i> ${item.rating} <span class="review-count">(${item.rentals})</span>
+                        <div class="market-info">
+                            <div class="badge-row" style="margin-bottom: 12px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                                <span class="cat-badge ${item.categoryClass}" style="margin-bottom: 0;">${item.category}</span>
+                                <span class="prop-tag personal" style="margin-left: 0;">PEER LISTING</span>
                             </div>
-                            <div class="wish-price">₱${item.price} <small>/day</small></div>
-                            <div class="wish-actions" style="display: flex; gap: 10px; margin-top: 15px;">
-                                <button class="btn-primary-maroon" style="flex: 1; padding: 10px; background: #800000; color: white; border: none; border-radius: 6px; cursor: pointer;" onclick="window.location.href='../item-details html/item-details.html?id=${item.id}'">Check Availability</button>
-                                <button class="btn-trash" style="padding: 10px; background: #f1f5f9; border: none; border-radius: 6px; cursor: pointer; color: #ef4444;" onclick="removeSavedItem('${item.name}')" title="Remove from Saved List"><i class="fas fa-trash-alt"></i></button>
+                            <h4>${item.name}</h4>
+                            <div class="lender-info">
+                                <span class="lender-name">${item.lender}</span>
+                                <span class="verified-badge-small" title="Lender Verified"><i class="fas fa-check-circle"></i> Lender Verified</span>
+                            </div>
+                            <p class="location"><i class="fas fa-map-marker-alt"></i> ${item.location}</p>
+                            <div class="rating-row">
+                                <div class="rating-left">
+                                    <span class="stars">★ ${item.rating}</span>
+                                    <span class="rating-text">| ${item.rentals} Rentals</span>
+                                </div>
+                                <span style="font-size: 0.8rem; font-weight: 700; color: #4b5563;"><i class="fas fa-box"></i> Qty: ${item.quantity}</span>
+                            </div>
+                            <div class="card-footer">
+                                <div class="price">
+                                    ₱${item.price}
+                                    <span class="per-day">per day</span>
+                                </div>
+                                <div class="item-actions">
+                                    <button class="btn-remove-saved" title="Remove from saved" onclick="removeSavedItem('${item.id}', event)" style="width: 38px; height: 38px; border-radius: 50%; border: 1.5px solid #fecaca; background: #fff1f2; color: #ef4444; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s;">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                    <button class="btn-rent-now" onclick="window.location.href='../item-details html/item-details.html?id=${item.id}'">Rent Now</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -173,10 +187,11 @@
             }).join('');
         }
 
-        function removeSavedItem(name) {
-            let savedItems = JSON.parse(localStorage.getItem('savedItems') || '[]');
-            savedItems = savedItems.filter(item => item !== name);
-            localStorage.setItem('savedItems', JSON.stringify(savedItems));
+        function removeSavedItem(id, event) {
+            if(event) event.stopPropagation();
+            let savedItems = JSON.parse(localStorage.getItem('student_saved_items') || '[]');
+            savedItems = savedItems.filter(item => item !== id);
+            localStorage.setItem('student_saved_items', JSON.stringify(savedItems));
             
             UIUtils.showToast("Item removed from Saved List", "info");
             window.dispatchEvent(new CustomEvent('savedItemsChanged'));
@@ -190,16 +205,6 @@
             const isMinimized = sidebar.classList.toggle('minimized');
             mainContent.classList.toggle('expanded');
             localStorage.setItem('sidebarMinimized', isMinimized);
-        }
-
-        function toggleNotifs() {
-            // Handled by auth.js
-        }
-
-        window.onclick = function(event) {
-            if (!event.target.closest('.nav-notification-btn')) {
-                // Handled by auth.js
-            }
         }
 
         window.onload = function() {

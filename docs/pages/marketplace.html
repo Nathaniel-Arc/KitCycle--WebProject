@@ -37,8 +37,8 @@
 
     <section class="marketplace-hero">
         <div style="font-size: 3rem; color: var(--gold); margin-bottom: 15px;"><i class="fas fa-store"></i></div>
-        <h1>Browse Marketplace</h1>
-        <p>Find the perfect academic gear from fellow WMSU students</p>
+        <h1>WMSU Marketplace</h1>
+        <p>Borrow directly from your peers and colleagues across campus.</p>
         
         <div class="search-bar-container">
             <i class="fas fa-search search-icon"></i>
@@ -54,383 +54,70 @@
             <button class="filter-btn" data-filter="lab">Laboratory Equipment</button>
             <button class="filter-btn" data-filter="text">Textbooks</button>
         </div>
-        <span class="results-count" id="item-count">12 items found</span>
+        <span class="results-count" id="item-count">0 items found</span>
     </section>
 
-    <section class="marketplace-grid-container">
-        <div class="marketplace-grid">
-            <!-- Item 1 -->
-            <div class="market-card" data-category="media" data-id="camera">
-                <div class="market-img-container">
-                    <a href="item-details html/item-details.html?id=camera" style="display: block; width: 100%; height: 100%;">
-                        <span class="status-pill">Available</span>
-                        <img src="../images/canon_dslr_90d.png" alt="Canon EOS 90D DSLR">
-                    </a>
-                </div>
-                <div class="market-info">
-                    <span class="cat-badge media">Media Equipment</span>
-                    <a href="item-details html/item-details.html?id=camera" style="text-decoration: none; color: inherit;"><h4>Canon EOS 90D DSLR</h4></a>
-                    <div class="lender-info">
-                        <span class="lender-name">Maria Santos</span>
-                        <span class="verified-badge-small"><i class="fas fa-check"></i> Verified Student</span>
-                    </div>
-                    <p class="location"><i class="fas fa-map-marker-alt"></i> Engineering Lobby</p>
-                    <div class="rating-row">
-                        <span class="stars">★ 4.9</span>
-                        <span class="rating-text">| 12 Rentals</span>
-                    </div>
-                    <div class="card-footer">
-                        <div class="price">
-                            ₱250
-                            <span class="per-day">per day</span>
-                        </div>
-                        <div class="item-actions">
-                            <button class="btn-save-mini" title="Save for later"><i class="far fa-heart"></i></button>
-                            <button class="btn-rent-now">Rent Now</button>
-                        </div>
-                    </div>
+    <section class="marketplace-layout-wrapper">
+        <aside class="advanced-filter-sidebar">
+            <h3><i class="fas fa-sliders-h"></i> Filter & Sort</h3>
+            
+            <div class="filter-group">
+                <label>Sort By</label>
+                <select id="sort-price" class="filter-select">
+                    <option value="default">Default</option>
+                    <option value="asc">Price: Lowest to Highest</option>
+                    <option value="desc">Price: Highest to Lowest</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label>Availability</label>
+                <div class="toggle-group">
+                    <label><input type="radio" name="availability" value="all" checked> All Items</label>
+                    <label><input type="radio" name="availability" value="available"> Available Now</label>
+                    <label><input type="radio" name="availability" value="rented"> Currently Rented</label>
                 </div>
             </div>
 
-            <!-- Item 2 -->
-            <div class="market-card" data-category="tools" data-id="calculator">
-                <div class="market-img-container">
-                    <span class="status-pill">Available</span>
-                    <img src="../images/calculator.jpg" alt="Scientific Calculator TI-84">
+            <div class="filter-group">
+                <label>Property Type</label>
+                <div class="toggle-group">
+                    <label><input type="radio" name="property" value="all" checked> All Types</label>
+                    <label><input type="radio" name="property" value="personal"> Verified Peer Listings</label>
                 </div>
-                <div class="market-info">
-                    <span class="cat-badge tools">Academic Tools</span>
-                    <h4>Scientific Calculator TI-84</h4>
-                    <div class="lender-info">
-                        <span class="lender-name">Juan Dela Cruz</span>
-                        <span class="verified-badge-small"><i class="fas fa-check"></i> Verified Student</span>
+            </div>
+        </aside>
+
+        <div class="marketplace-main-content">
+            <section class="marketplace-grid-container">
+            <div id="marketplace-grid" class="marketplace-grid">
+                <!-- Items will be rendered here dynamically -->
+            </div>
+
+            <div id="empty-state" class="empty-state" style="display: none; text-align: center; padding: 60px 20px; background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); grid-column: 1 / -1;">
+                <i class="fas fa-search" style="font-size: 3.5rem; color: #cbd5e1; margin-bottom: 20px; display: block;"></i>
+                <h3 style="color: #1f2937; margin-bottom: 10px; font-size: 1.5rem;">No peer listings found.</h3>
+                <p style="color: #6b7280; font-size: 1.1rem;">Check back later or list your own gear!</p>
+            </div>
+
+            <div class="pagination-container">
+                <div class="pagination-wrapper">
+                    <button class="next-page-link" id="prev-page-text">Previous Page</button>
+                    <button class="pag-btn prev" id="prev-page">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <div class="page-numbers" id="page-numbers">
+                        <!-- Page numbers will be generated here -->
                     </div>
-                    <p class="location"><i class="fas fa-map-marker-alt"></i> Science Building 2F</p>
-                    <div class="rating-row">
-                        <span class="stars">★ 5.0</span>
-                        <span class="rating-text">| 45 Rentals</span>
-                    </div>
-                    <div class="card-footer">
-                        <div class="price">
-                            ₱50
-                            <span class="per-day">per day</span>
-                        </div>
-                        <div class="item-actions">
-                            <button class="btn-save-mini" title="Save for later"><i class="far fa-heart"></i></button>
-                            <button class="btn-rent-now">Rent Now</button>
-                        </div>
-                    </div>
+                    <button class="pag-btn next" id="next-page">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                    <button class="next-page-link" id="next-page-text">Next Page</button>
                 </div>
             </div>
 
-            <!-- Item 3 -->
-            <div class="market-card" data-category="text" data-id="textbook">
-                <div class="market-img-container">
-                    <span class="status-pill">Available</span>
-                    <img src="../images/books.jpeg" alt="Engineering Textbook Bundle">
-                </div>
-                <div class="market-info">
-                    <span class="cat-badge text">Textbooks</span>
-                    <h4>Engineering Textbook Bundle</h4>
-                    <div class="lender-info">
-                        <span class="lender-name">Elena Rodriguez</span>
-                        <span class="verified-badge-small"><i class="fas fa-check"></i> Verified Student</span>
-                    </div>
-                    <p class="location"><i class="fas fa-map-marker-alt"></i> Main Library Cafe</p>
-                    <div class="rating-row">
-                        <span class="stars">★ 4.8</span>
-                        <span class="rating-text">| 18 Rentals</span>
-                    </div>
-                    <div class="card-footer">
-                        <div class="price">
-                            ₱100
-                            <span class="per-day">per week</span>
-                        </div>
-                        <div class="item-actions">
-                            <button class="btn-save-mini" title="Save for later"><i class="far fa-heart"></i></button>
-                            <button class="btn-rent-now">Rent Now</button>
-                        </div>
-                    </div>
-                </div>
             </div>
-
-            <div class="market-card" data-category="lab" data-id="microscope">
-                <div class="market-img-container">
-                    <span class="status-pill">Available</span>
-                    <img src="../images/microscope.jpeg" alt="Laboratory Microscope">
-                </div>
-                <div class="market-info">
-                    <span class="cat-badge lab">Laboratory Equipment</span>
-                    <h4>Laboratory Microscope</h4>
-                    <div class="lender-info">
-                        <span class="lender-name">Professor Gomez</span>
-                        <span class="verified-badge-small"><i class="fas fa-check"></i> Verified Faculty</span>
-                    </div>
-                    <p class="location"><i class="fas fa-map-marker-alt"></i> Science Lab A</p>
-                    <div class="rating-row">
-                        <span class="stars">★ 4.7</span>
-                        <span class="rating-text">| 12 Rentals</span>
-                    </div>
-                    <div class="card-footer">
-                        <div class="price">
-                            ₱150
-                            <span class="per-day">per day</span>
-                        </div>
-                        <div class="item-actions">
-                            <button class="btn-save-mini" title="Save for later"><i class="far fa-heart"></i></button>
-                            <button class="btn-rent-now">Rent Now</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="market-card" data-category="media" data-id="videocamera">
-                <div class="market-img-container">
-                    <span class="status-pill">Available</span>
-                    <img src="../images/video-camera.png" alt="Professional Video Camera">
-                </div>
-                <div class="market-info">
-                    <span class="cat-badge media">Media Equipment</span>
-                    <h4>Professional Video Camera</h4>
-                    <div class="lender-info">
-                        <span class="lender-name">Mark Tuan</span>
-                        <span class="verified-badge-small"><i class="fas fa-check"></i> Verified Student</span>
-                    </div>
-                    <p class="location"><i class="fas fa-map-marker-alt"></i> ICT Center Lobby</p>
-                    <div class="rating-row">
-                        <span class="stars">★ 4.9</span>
-                        <span class="rating-text">| 31 Rentals</span>
-                    </div>
-                    <div class="card-footer">
-                        <div class="price">
-                            ₱300
-                            <span class="per-day">per day</span>
-                        </div>
-                        <div class="item-actions">
-                            <button class="btn-save-mini" title="Save for later"><i class="far fa-heart"></i></button>
-                            <button class="btn-rent-now">Rent Now</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Item 6 -->
-            <div class="market-card" data-category="tools" data-id="calcset">
-                <div class="market-img-container">
-                    <span class="status-pill">Available</span>
-                    <img src="../images/calc-set.png" alt="Engineering Calculator Set">
-                </div>
-                <div class="market-info">
-                    <span class="cat-badge tools">Academic Tools</span>
-                    <h4>Engineering Calculator Set</h4>
-                    <div class="lender-info">
-                        <span class="lender-name">Sarah Jane</span>
-                        <span class="verified-badge-small"><i class="fas fa-check"></i> Verified Student</span>
-                    </div>
-                    <p class="location"><i class="fas fa-map-marker-alt"></i> CET Study Area</p>
-                    <div class="rating-row">
-                        <span class="stars">★ 4.6</span>
-                        <span class="rating-text">| 28 Rentals</span>
-                    </div>
-                    <div class="card-footer">
-                        <div class="price">
-                            ₱75
-                            <span class="per-day">per day</span>
-                        </div>
-                        <div class="item-actions">
-                            <button class="btn-save-mini" title="Save for later"><i class="far fa-heart"></i></button>
-                            <button class="btn-rent-now">Rent Now</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Item 7 -->
-            <div class="market-card" data-category="lab" data-id="stethoscope">
-                <div class="market-img-container">
-                    <span class="status-pill">Available</span>
-                    <img src="../images/stethoscope.png" alt="Medical Stethoscope">
-                </div>
-                <div class="market-info">
-                    <span class="cat-badge lab">Laboratory Equipment</span>
-                    <h4>Medical Stethoscope</h4>
-                    <div class="lender-info">
-                        <span class="lender-name">Dr. Lisa Manoban</span>
-                        <span class="verified-badge-small"><i class="fas fa-check"></i> Verified Student</span>
-                    </div>
-                    <p class="location"><i class="fas fa-map-marker-alt"></i> College of Nursing</p>
-                    <div class="rating-row">
-                        <span class="stars">★ 5.0</span>
-                        <span class="rating-text">| 15 Rentals</span>
-                    </div>
-                    <div class="card-footer">
-                        <div class="price">
-                            ₱80
-                            <span class="per-day">per day</span>
-                        </div>
-                        <div class="item-actions">
-                            <button class="btn-save-mini" title="Save for later"><i class="far fa-heart"></i></button>
-                            <button class="btn-rent-now">Rent Now</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Item 8 -->
-            <div class="market-card" data-category="media" data-id="lighting">
-                <div class="market-img-container">
-                    <span class="status-pill">Available</span>
-                    <img src="../images/lighting.jpeg" alt="Studio Lighting Kit">
-                </div>
-                <div class="market-info">
-                    <span class="cat-badge media">Media Equipment</span>
-                    <h4>Studio Lighting Kit</h4>
-                    <div class="lender-info">
-                        <span class="lender-name">Jackson Wang</span>
-                        <span class="verified-badge-small"><i class="fas fa-check"></i> Verified Student</span>
-                    </div>
-                    <p class="location"><i class="fas fa-map-marker-alt"></i> MassComm Studio</p>
-                    <div class="rating-row">
-                        <span class="stars">★ 4.8</span>
-                        <span class="rating-text">| 22 Rentals</span>
-                    </div>
-                    <div class="card-footer">
-                        <div class="price">
-                            ₱200
-                            <span class="per-day">per day</span>
-                        </div>
-                        <div class="item-actions">
-                            <button class="btn-save-mini" title="Save for later"><i class="far fa-heart"></i></button>
-                            <button class="btn-rent-now">Rent Now</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Item 9 -->
-            <div class="market-card" data-category="tools" data-id="drafting">
-                <div class="market-img-container">
-                    <span class="status-pill">Available</span>
-                    <img src="../images/calc-set.png" alt="Drafting Tools Set">
-                </div>
-                <div class="market-info">
-                    <span class="cat-badge tools">Academic Tools</span>
-                    <h4>Drafting Tools Set</h4>
-                    <div class="lender-info">
-                        <span class="lender-name">Rafael Santiago</span>
-                        <span class="verified-badge-small"><i class="fas fa-check"></i> Verified Student</span>
-                    </div>
-                    <p class="location"><i class="fas fa-map-marker-alt"></i> Architecture Building</p>
-                    <div class="rating-row">
-                        <span class="stars">★ 4.5</span>
-                        <span class="rating-text">| 19 Rentals</span>
-                    </div>
-                    <div class="card-footer">
-                        <div class="price">
-                            ₱40
-                            <span class="per-day">per day</span>
-                        </div>
-                        <div class="item-actions">
-                            <button class="btn-save-mini" title="Save for later"><i class="far fa-heart"></i></button>
-                            <button class="btn-rent-now">Rent Now</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Item 10 -->
-            <div class="market-card" data-category="tools" data-id="modeling">
-                <div class="market-img-container">
-                    <span class="status-pill">Available</span>
-                    <img src="../images/calc-set.png" alt="Architecture Modeling Kit">
-                </div>
-                <div class="market-info">
-                    <span class="cat-badge tools">Academic Tools</span>
-                    <h4>Architecture Modeling Kit</h4>
-                    <div class="lender-info">
-                        <span class="lender-name">Isabella Chua</span>
-                        <span class="verified-badge-small"><i class="fas fa-check"></i> Verified Student</span>
-                    </div>
-                    <p class="location"><i class="fas fa-map-marker-alt"></i> CET Drafting Lab</p>
-                    <div class="rating-row">
-                        <span class="stars">★ 4.4</span>
-                        <span class="rating-text">| 15 Rentals</span>
-                    </div>
-                    <div class="card-footer">
-                        <div class="price">
-                            ₱60
-                            <span class="per-day">per day</span>
-                        </div>
-                        <div class="item-actions">
-                            <button class="btn-save-mini" title="Save for later"><i class="far fa-heart"></i></button>
-                            <button class="btn-rent-now">Rent Now</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Item 11 -->
-            <div class="market-card" data-category="media" data-id="tablet">
-                <div class="market-img-container">
-                    <span class="status-pill">Available</span>
-                    <img src="../images/tablet.jpeg" alt="Digital Drawing Tablet">
-                </div>
-                <div class="market-info">
-                    <span class="cat-badge media">Media Equipment</span>
-                    <h4>Digital Drawing Tablet</h4>
-                    <div class="lender-info">
-                        <span class="lender-name">Gabriel Lopez</span>
-                        <span class="verified-badge-small"><i class="fas fa-check"></i> Verified Student</span>
-                    </div>
-                    <p class="location"><i class="fas fa-map-marker-alt"></i> ICT Computer Lab 3</p>
-                    <div class="rating-row">
-                        <span class="stars">★ 4.9</span>
-                        <span class="rating-text">| 38 Rentals</span>
-                    </div>
-                    <div class="card-footer">
-                        <div class="price">
-                            ₱120
-                            <span class="per-day">per day</span>
-                        </div>
-                        <div class="item-actions">
-                            <button class="btn-save-mini" title="Save for later"><i class="far fa-heart"></i></button>
-                            <button class="btn-rent-now">Rent Now</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Item 12 -->
-            <div class="market-card" data-category="lab" data-id="labgown">
-                <div class="market-img-container">
-                    <span class="status-pill">Available</span>
-                    <img src="../images/microscope.jpeg" alt="Safety Lab Goggles & Coat">
-                </div>
-                <div class="market-info">
-                    <span class="cat-badge lab">Laboratory Equipment</span>
-                    <h4>Safety Lab Goggles & Coat</h4>
-                    <div class="lender-info">
-                        <span class="lender-name">Dr. Antonio Luna</span>
-                        <span class="verified-badge-small"><i class="fas fa-check"></i> Verified Faculty</span>
-                    </div>
-                    <p class="location"><i class="fas fa-map-marker-alt"></i> Science Building Lab B</p>
-                    <div class="rating-row">
-                        <span class="stars">★ 5.0</span>
-                        <span class="rating-text">| 10 Rentals</span>
-                    </div>
-                    <div class="card-footer">
-                        <div class="price">
-                            ₱30
-                            <span class="per-day">per day</span>
-                        </div>
-                        <div class="item-actions">
-                            <button class="btn-save-mini" title="Save for later"><i class="far fa-heart"></i></button>
-                            <button class="btn-rent-now">Rent Now</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+        </section>
         </div>
     </section>
 
@@ -531,95 +218,235 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Filter logic (existing)
-            const filterBtns = document.querySelectorAll('.filter-btn');
-            const cards = document.querySelectorAll('.market-card');
+            const grid = document.getElementById('marketplace-grid');
             const itemCount = document.getElementById('item-count');
+            const emptyState = document.getElementById('empty-state');
+            
+            // Filters
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            const sortPriceSelect = document.getElementById('sort-price');
+            const propertyRadios = document.querySelectorAll('input[name="property"]');
+            const searchInput = document.querySelector('.search-input');
 
+            // Pagination Elements
+            const prevBtn = document.getElementById('prev-page');
+            const nextBtn = document.getElementById('next-page');
+            const pageNumbersContainer = document.getElementById('page-numbers');
+
+            let currentPage = 1;
+            const itemsPerPage = 6;
+            let filteredItems = [...window.KitCycleData.items];
+
+            function renderItems() {
+                grid.innerHTML = '';
+                
+                const startIndex = (currentPage - 1) * itemsPerPage;
+                const endIndex = startIndex + itemsPerPage;
+                const paginatedItems = filteredItems.slice(startIndex, endIndex);
+
+                if (paginatedItems.length === 0) {
+                    emptyState.style.display = 'block';
+                    itemCount.textContent = '0 items found';
+                } else {
+                    emptyState.style.display = 'none';
+                    itemCount.textContent = `${filteredItems.length} items found`;
+                    
+                    const savedItems = JSON.parse(localStorage.getItem('student_saved_items') || '[]');
+
+                    paginatedItems.forEach(item => {
+                        const isSaved = savedItems.includes(item.id);
+                        const heartIconClass = isSaved ? 'fas fa-heart' : 'far fa-heart';
+                        const heartActiveClass = isSaved ? 'active' : '';
+
+                        const card = document.createElement('div');
+                        card.className = 'market-card';
+                        card.setAttribute('data-category', item.categoryClass);
+                        card.setAttribute('data-id', item.id);
+                        
+                        card.innerHTML = `
+                            <div class="market-img-container">
+                                <span class="status-pill">${item.availability}</span>
+                                <img src="${item.image.replace('../../', '../')}" alt="${item.name}">
+                            </div>
+                            <div class="market-info">
+                                <div class="badge-row" style="margin-bottom: 12px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                                    <span class="cat-badge ${item.categoryClass}" style="margin-bottom: 0;">${item.category}</span>
+                                    <span class="prop-tag personal" style="margin-left: 0;">PEER LISTING</span>
+                                </div>
+                                <h4>${item.name}</h4>
+                                <div class="lender-info">
+                                    <span class="lender-name">${item.lender}</span>
+                                    <span class="verified-badge-small" title="Lender Verified"><i class="fas fa-check-circle"></i> Lender Verified</span>
+                                </div>
+                                <p class="location"><i class="fas fa-map-marker-alt"></i> ${item.location}</p>
+                                <div class="rating-row">
+                                    <div class="rating-left">
+                                        <span class="stars">★ ${item.rating}</span>
+                                        <span class="rating-text">| ${item.rentals} Rentals</span>
+                                    </div>
+                                    <span style="font-size: 0.8rem; font-weight: 700; color: #4b5563;"><i class="fas fa-box"></i> Qty: ${item.quantity}</span>
+                                </div>
+                                <div class="card-footer">
+                                    <div class="price">
+                                        ₱${item.price}
+                                        <span class="per-day">per day</span>
+                                    </div>
+                                    <div class="item-actions">
+                                        <button class="btn-save-mini ${heartActiveClass}" title="Save for later" onclick="event.stopPropagation(); toggleSaveItem('${item.id}', this)">
+                                            <i class="${heartIconClass}"></i>
+                                        </button>
+                                        <button class="btn-rent-now">Rent Now</button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        
+                        card.addEventListener('click', (e) => {
+                            if (e.target.closest('button')) return;
+                            window.location.href = `item-details html/item-details.html?id=${item.id}`;
+                        });
+
+                        const rentBtn = card.querySelector('.btn-rent-now');
+                        rentBtn.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+                            if (isLoggedIn) {
+                                window.location.href = `item-details html/item-details.html?id=${item.id}`;
+                            } else {
+                                document.getElementById('guestModal').style.display = 'flex';
+                            }
+                        });
+
+                        grid.appendChild(card);
+                    });
+                }
+                
+                renderPagination();
+            }
+
+            window.toggleSaveItem = function(id, btn) {
+                let savedItems = JSON.parse(localStorage.getItem('student_saved_items') || '[]');
+                const index = savedItems.indexOf(id);
+                const icon = btn.querySelector('i');
+                
+                if (index > -1) {
+                    savedItems.splice(index, 1);
+                    btn.classList.remove('active');
+                    icon.className = 'far fa-heart';
+                    UIUtils.showToast("Removed from Saved List", "info");
+                } else {
+                    savedItems.push(id);
+                    btn.classList.add('active');
+                    icon.className = 'fas fa-heart';
+                    UIUtils.showToast("Item saved for later!", "success");
+                }
+                
+                localStorage.setItem('student_saved_items', JSON.stringify(savedItems));
+                window.dispatchEvent(new CustomEvent('savedItemsChanged'));
+            };
+
+            function renderPagination() {
+                const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
+                pageNumbersContainer.innerHTML = '';
+
+                for (let i = 1; i <= totalPages; i++) {
+                    const pageBtn = document.createElement('button');
+                    pageBtn.className = `page-num ${i === currentPage ? 'active' : ''}`;
+                    pageBtn.textContent = i;
+                    pageBtn.addEventListener('click', () => {
+                        currentPage = i;
+                        renderItems();
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    });
+                    pageNumbersContainer.appendChild(pageBtn);
+                }
+
+                prevBtn.disabled = currentPage === 1;
+                const isFirstPage = currentPage === 1;
+                const isLastPage = currentPage === totalPages || totalPages === 0;
+                
+                nextBtn.disabled = isLastPage;
+                
+                const nextTextBtn = document.getElementById('next-page-text');
+                if (nextTextBtn) nextTextBtn.disabled = isLastPage;
+
+                const prevTextBtn = document.getElementById('prev-page-text');
+                if (prevTextBtn) prevTextBtn.disabled = isFirstPage;
+            }
+
+            function applyFilters() {
+                const activeCategory = document.querySelector('.filter-btn.active').getAttribute('data-filter');
+                const sortOrder = sortPriceSelect.value;
+                const searchQuery = searchInput.value.toLowerCase();
+
+                filteredItems = window.KitCycleData.items.filter(item => {
+                    const matchesCategory = activeCategory === 'all' || item.categoryClass === activeCategory;
+                    const matchesSearch = item.name.toLowerCase().includes(searchQuery) || 
+                                         item.lender.toLowerCase().includes(searchQuery);
+                    return matchesCategory && matchesSearch;
+                });
+
+                if (sortOrder === 'asc') {
+                    filteredItems.sort((a, b) => a.price - b.price);
+                } else if (sortOrder === 'desc') {
+                    filteredItems.sort((a, b) => b.price - a.price);
+                }
+
+                currentPage = 1;
+                renderItems();
+            }
+
+            // Event Listeners
             filterBtns.forEach(btn => {
                 btn.addEventListener('click', () => {
                     filterBtns.forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
-
-                    const filterValue = btn.getAttribute('data-filter');
-                    let visibleItems = 0;
-
-                    cards.forEach(card => {
-                        const category = card.getAttribute('data-category');
-                        if (filterValue === 'all' || category === filterValue) {
-                            card.style.display = 'block';
-                            visibleItems++;
-                        } else {
-                            card.style.display = 'none';
-                        }
-                    });
-
-                    if (itemCount) {
-                        itemCount.textContent = `${visibleItems} items found`;
-                    }
+                    applyFilters();
                 });
             });
 
-            // Auto-filter from URL param (e.g. ?cat=tools)
-            const urlCat = new URLSearchParams(window.location.search).get('cat');
-            if (urlCat) {
-                const target = document.querySelector(`.filter-btn[data-filter="${urlCat}"]`);
-                if (target) target.click();
+            sortPriceSelect.addEventListener('change', applyFilters);
+            searchInput.addEventListener('input', applyFilters);
+            propertyRadios.forEach(r => r.addEventListener('change', applyFilters));
+
+            const handlePrev = () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderItems();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            };
+
+            prevBtn.addEventListener('click', handlePrev);
+            
+            const prevTextBtn = document.getElementById('prev-page-text');
+            if (prevTextBtn) {
+                prevTextBtn.addEventListener('click', handlePrev);
             }
 
-            // Guest Modal Logic
-            const guestModal = document.getElementById('guestModal');
-            const closeGuestModal = document.getElementById('closeGuestModal');
-            const rentButtons = document.querySelectorAll('.btn-rent-now');
-
-            // Card Click Redirection Fix
-            cards.forEach(card => {
-                card.style.cursor = 'pointer';
-                card.addEventListener('click', (e) => {
-                    // Don't redirect if clicking buttons or links (which might already have href)
-                    if (e.target.closest('button') || e.target.closest('a')) return;
-                    
-                    const itemId = card.dataset.id;
-                    if (itemId) {
-                        window.location.href = `item-details html/item-details.html?id=${itemId}`;
-                    }
-                });
-            });
-
-            // Open modal on rent click
-            rentButtons.forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-
-                    // Check if user is already logged in
-                    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-                    if (isLoggedIn) {
-                        // Redirect to item details with ID
-                        const itemId = btn.closest('.market-card').dataset.id;
-                        if (itemId) {
-                            window.location.href = `item-details html/item-details.html?id=${itemId}`;
-                        }
-                        return;
-                    }
-
-                    guestModal.style.display = 'flex';
-                });
-            });
-
-            // --- Saved Functionality is now handled globally in ui-utils.js ---
-            
-            // Close modal logic
-            closeGuestModal.addEventListener('click', () => {
-                guestModal.style.display = 'none';
-            });
-
-            // Close on outside click
-            window.addEventListener('click', (e) => {
-                if (e.target === guestModal) {
-                    guestModal.style.display = 'none';
+            const handleNext = () => {
+                const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderItems();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
+            };
+
+            nextBtn.addEventListener('click', handleNext);
+            
+            const nextTextBtn = document.getElementById('next-page-text');
+            if (nextTextBtn) {
+                nextTextBtn.addEventListener('click', handleNext);
+            }
+
+            document.getElementById('closeGuestModal').addEventListener('click', () => {
+                document.getElementById('guestModal').style.display = 'none';
             });
+
+            // Initial Render
+            applyFilters();
         });
     </script>
 </body>

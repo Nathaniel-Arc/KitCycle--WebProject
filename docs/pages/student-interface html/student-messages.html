@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="../../css/student-interface/student-dashboard.css">
+    <script src="../../script/ui-utils.js"></script>
     <script src="../../script/auth.js" defer></script>
     
     <!-- Instant Sidebar State Check -->
@@ -173,21 +174,20 @@
                     <span id="sidebarUserRole">Student</span>
                 </div>
             </div>
-            <ul class="sidebar-nav" style="list-style: none;">
+            <ul class="sidebar-nav">
                 <li><a href="student-dashboard.html"><i class="fas fa-th-large"></i> <span>Dashboard</span></a></li>
-                <li><a href="student-rentals.html"><i class="fas fa-box-open"></i> <span>My Rentals</span></a></li>
-                <li class="active" style="position: relative;">
-                    <a href="student-messages.html">
-                        <div style="position: relative; display: inline-block;">
-                            <i class="fas fa-comments"></i>
-                            <span class="nav-badge-v2" style="display: flex; position: absolute; top: -5px; right: -8px; width: 16px; height: 16px; align-items: center; justify-content: center; border-radius: 50%; font-size: 0.65rem; border: 1.5px solid #fff; background: #800000; color: #fff;">1</span>
-                        </div>
-                        <span style="margin-left: 12px;">Messages</span>
+                <li><a href="student-rentals.html"><i class="fas fa-box-open"></i> <span>Active Rentals</span></a></li>
+                <li><a href="student-history.html"><i class="fas fa-history"></i> <span>Transaction History</span></a></li>
+                <li class="active">
+                    <a href="student-messages.html" style="position: relative;">
+                        <i class="fas fa-comments"></i> <span>Messages</span>
+                        <span class="sidebar-badge">1</span>
                     </a>
                 </li>
                 <li><a href="student-saved.html"><i class="fas fa-heart"></i> <span>Saved Items</span></a></li>
                 <li><a href="student-rating.html"><i class="fas fa-star"></i> <span>My Rating</span></a></li>
                 <li><a href="student-listings.html"><i class="fas fa-list"></i> <span>My Listings</span></a></li>
+                <li><a href="student-settings.html"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
             </ul>
             <a href="javascript:void(0)" onclick="AuthSystem.confirmLogout(); return false;" class="sidebar-logout"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
         </aside>
@@ -205,72 +205,8 @@
                         </div>
                     </div>
                     
-                    <div class="chat-items-scroll">
-                        <div class="chat-item active unread" onclick="switchConvo('juan', this)">
-                            <div style="width: 48px; height: 48px; position: relative;">
-                                <img src="../../images/juan_profile.png" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
-                                <div style="position: absolute; bottom: 0; right: 0; width: 12px; height: 12px; background: #10b981; border: 2px solid #fff; border-radius: 50%;"></div>
-                            </div>
-                            <div style="flex: 1;">
-                                <div style="display: flex; justify-content: space-between;"><h4 style="font-size: 0.95rem;">Juan Dela Cruz <i class="fas fa-shield-alt verified-check"></i></h4><span style="font-size: 0.7rem; color: #9ca3af;">10:30 AM</span></div>
-                                <div style="font-size: 0.75rem; color: #64748b;">Lender • Canon DSLR</div>
-                            </div>
-                            <div class="unread-indicator"></div>
-                        </div>
-
-                        <div class="chat-item" onclick="switchConvo('maria', this)">
-                            <div style="width: 48px; height: 48px;">
-                                <img src="../../images/maria_profile.png" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
-                            </div>
-                            <div style="flex: 1;">
-                                <div style="display: flex; justify-content: space-between;"><h4 style="font-size: 0.95rem;">Maria Santos <i class="fas fa-shield-alt verified-check"></i></h4><span style="font-size: 0.7rem; color: #9ca3af;">Yesterday</span></div>
-                                <div style="font-size: 0.75rem; color: #64748b;">Lender • Calculator</div>
-                            </div>
-                        </div>
-
-                        <div class="chat-item" onclick="switchConvo('sherwin', this)">
-                            <div style="width: 48px; height: 48px;">
-                                <img src="../../images/juan_profile.png" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; filter: hue-rotate(45deg);">
-                            </div>
-                            <div style="flex: 1;">
-                                <div style="display: flex; justify-content: space-between;"><h4 style="font-size: 0.95rem;">Sherwin Lim <i class="fas fa-shield-alt verified-check"></i></h4><span style="font-size: 0.7rem; color: #9ca3af;">12:05 PM</span></div>
-                                <div style="font-size: 0.75rem; color: #64748b;">Borrower • Microscope</div>
-                            </div>
-                        </div>
-
-                        <div class="chat-item" onclick="switchConvo('shawn', this)">
-                            <div style="width: 48px; height: 48px;">
-                                <img src="../../images/elena_profile.png" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
-                            </div>
-                            <div style="flex: 1;">
-                                <div style="display: flex; justify-content: space-between;"><h4 style="font-size: 0.95rem;">Shawn Benigno <i class="fas fa-shield-alt verified-check"></i></h4><span style="font-size: 0.7rem; color: #9ca3af;">Tue</span></div>
-                                <div style="font-size: 0.75rem; color: #64748b;">Lender • Lab Coat</div>
-                            </div>
-                        </div>
-
-                        <div class="chat-item" onclick="switchConvo('cedric', this)">
-                            <div style="width: 48px; height: 48px; background: #ec4899; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">C</div>
-                            <div style="flex: 1;">
-                                <div style="display: flex; justify-content: space-between;"><h4 style="font-size: 0.95rem;">Cedric Santiago <i class="fas fa-shield-alt verified-check"></i></h4><span style="font-size: 0.7rem; color: #9ca3af;">Mon</span></div>
-                                <div style="font-size: 0.75rem; color: #64748b;">Borrower • Books</div>
-                            </div>
-                        </div>
-
-                        <div class="chat-item" onclick="switchConvo('van', this)">
-                            <div style="width: 48px; height: 48px; background: #8b5cf6; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">V</div>
-                            <div style="flex: 1;">
-                                <div style="display: flex; justify-content: space-between;"><h4 style="font-size: 0.95rem;">Van Valeros <i class="fas fa-shield-alt verified-check"></i></h4><span style="font-size: 0.7rem; color: #9ca3af;">Sun</span></div>
-                                <div style="font-size: 0.75rem; color: #64748b;">Lender • Drawing Kit</div>
-                            </div>
-                        </div>
-
-                        <div class="chat-item" onclick="switchConvo('karl', this)">
-                            <div style="width: 48px; height: 48px; background: #3b82f6; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">K</div>
-                            <div style="flex: 1;">
-                                <div style="display: flex; justify-content: space-between;"><h4 style="font-size: 0.95rem;">Karl Tzy <i class="fas fa-shield-alt verified-check"></i></h4><span style="font-size: 0.7rem; color: #9ca3af;">Sat</span></div>
-                                <div style="font-size: 0.75rem; color: #64748b;">Borrower • Tripod</div>
-                            </div>
-                        </div>
+                    <div class="chat-items-scroll" id="chatList">
+                        <!-- Populated by JS from kitcycle_messages -->
                     </div>
                 </div>
 
@@ -287,21 +223,13 @@
                         <div style="display: flex; gap: 8px;">
                             <button class="action-icon-btn" onclick="triggerCall('Voice')"><i class="fas fa-phone-alt"></i></button>
                             <button class="action-icon-btn" onclick="triggerCall('Video')"><i class="fas fa-video"></i></button>
+                            <button class="action-icon-btn" onclick="openReportModal()" style="color: #dc2626;"><i class="fas fa-flag"></i></button>
                             <button class="action-icon-btn" onclick="triggerProfile()"><i class="fas fa-user-circle"></i></button>
                         </div>
                     </div>
 
                     <div style="background: #f0fdf4; border-bottom: 1.5px solid #dcfce7; padding: 6px 20px; font-size: 0.75rem; color: #15803d; display: flex; align-items: center; gap: 8px;">
                         <i class="fas fa-lock"></i> <span>End-to-end encrypted. For your safety, phone numbers and emails are automatically masked. Keep all transactions on-platform.</span>
-                    </div>
-
-                    <div class="transaction-context-bar" id="txBar">
-                        <img src="../../images/camera.jpg" class="transaction-thumb-msg" alt="Item" id="txImg">
-                        <div style="flex: 1;">
-                            <h5 style="margin: 0; font-size: 0.9rem;" id="txTitle">Canon EOS 90D DSLR</h5>
-                            <p style="margin: 2px 0; font-size: 0.75rem; color: #64748b;">₱250/day • ₱1,750 Total</p>
-                        </div>
-                        <div id="txStatus" class="status-badge-v2 status-pending">Awaiting Pickup</div>
                     </div>
 
                     <div class="chat-messages-area" id="msgArea">
@@ -356,80 +284,236 @@
             // Handled by auth.js
         }
 
-        // Functional Stubs
-        function triggerCall(type) { alert(`Starting ${type} Call with ${chatData[currentConvoId].name}... \n(Feature available for Verified Students)`); }
-        function triggerProfile() { alert(`Viewing ${chatData[currentConvoId].name}'s Trust Profile... \nRating: 4.9 Stars • 12 Successful Rentals`); }
-        function triggerImage() { alert("Opening Camera / Gallery... \nPlease select an image to verify the item condition."); }
-        function openMap() { alert(`WMSU CAMPUS MAP \n------------------\nDesignated Meetup: ${chatData[currentConvoId].location}\n------------------\nPlease stay in public view.`); }
+        // Functional Stubs with Aesthetic Modals
+        function triggerCall(type) { 
+            UIUtils.showModal({
+                title: `Starting ${type} Call`,
+                message: `Connecting you with ${chatData[currentConvoId].name}... \n\nPlease ensure you are in a quiet area. \n\n(Feature currently available for Verified Students only)`,
+                type: 'info',
+                confirmText: "Understood"
+            });
+        }
+        function triggerProfile() { 
+            UIUtils.showModal({
+                title: `${chatData[currentConvoId].name}'s Trust Profile`,
+                message: `Rating: 4.9 Stars • 12 Successful Rentals\nMajor: BS Computer Science\nCollege: College of Engineering\n\nTrust Score: Excellent (98%)`,
+                type: 'info',
+                confirmText: "Close"
+            });
+        }
+        function triggerImage() { 
+            UIUtils.showModal({
+                title: "Share Media",
+                message: "Opening Camera / Gallery... \n\nPlease select a clear photo of the item to verify its current condition before handover.",
+                type: 'info',
+                confirmText: "Select Photo"
+            });
+        }
+        function openMap() { 
+            UIUtils.showModal({
+                title: "WMSU Meetup Map",
+                message: `Designated Meetup: ${chatData[currentConvoId].location}\n\nRecommended: Engineering Grandstand or Library Lobby for better campus security visibility.`,
+                type: 'info',
+                confirmText: "Open Map"
+            });
+        }
 
-        const chatData = {
-            juan: { name: "Juan Dela Cruz", role: "Lender", profileImg: "../../images/juan_profile.png", item: "Canon EOS 90D DSLR", status: "Awaiting Pickup", statusClass: "status-pending", img: "../../images/camera.jpg", location: "Engineering Grandstand", messages: [{t: 'in', m: "Hello! Are you available to meet?", time: "10:30 AM"}, {t: 'out', m: "Hi Juan! Heading to the Grandstand now.", time: "10:32 AM"}] },
-            maria: { name: "Maria Santos", role: "Lender", profileImg: "../../images/maria_profile.png", item: "Scientific Calculator TI-84", status: "Ready Tomorrow", statusClass: "status-pending", img: "../../images/calculator.jpg", location: "Library Lobby", messages: [{t: 'in', m: "Hi Nash! I've prepared the calculator.", time: "Yesterday"}] },
-            sherwin: { name: "Sherwin Lim", role: "Borrower", profileImg: "../../images/juan_profile.png", item: "Laboratory Microscope", status: "Active Rental", statusClass: "status-active", img: "../../images/microscope.jpeg", location: "Science Lab A", messages: [{t: 'in', m: "Is the lens clear?", time: "12:05 PM"}] },
-            shawn: { name: "Shawn Benigno", role: "Lender", profileImg: "../../images/elena_profile.png", item: "White Lab Coat", status: "Completed", statusClass: "status-active", img: "../../images/lighting.jpeg", location: "CET Entrance", messages: [{t: 'in', m: "Already washed it.", time: "Tue"}] },
-            cedric: { name: "Cedric Santiago", role: "Borrower", profileImg: "../../images/maria_profile.png", item: "Textbook Bundle", status: "Extension Requested", statusClass: "status-pending", img: "../../images/books.jpeg", location: "Main Library", messages: [{t: 'in', m: "Can I extend for 2 days?", time: "Mon"}] },
-            van: { name: "Van Valeros", role: "Lender", profileImg: "../../images/elena_profile.png", item: "Drafting Kit", status: "Pending Pickup", statusClass: "status-pending", img: "../../images/books.jpeg", location: "WMSU Main Gate", messages: [{t: 'in', m: "Meet at the main gate?", time: "Sun"}] },
-            karl: { name: "Karl Tzy", role: "Borrower", profileImg: "../../images/juan_profile.png", item: "Camera Tripod", status: "Due Today", statusClass: "status-active", img: "../../images/lighting.jpeg", location: "CS Dept Hallway", messages: [{t: 'in', m: "Available now?", time: "Sat"}] }
-        };
+        function getInitialChatData() {
+            const defaults = {
+                juan: { name: "Juan Dela Cruz", role: "Lender", profileImg: "../../images/juan_profile.png", item: "Canon EOS 90D DSLR", status: "Awaiting Pickup", statusClass: "status-pending", img: "../../images/camera.jpg", location: "Engineering Grandstand", messages: [] },
+                maria: { name: "Maria Santos", role: "Lender", profileImg: "../../images/maria_profile.png", item: "Scientific Calculator TI-84", status: "Ready Tomorrow", statusClass: "status-pending", img: "../../images/calculator.jpg", location: "Library Lobby", messages: [] },
+                sherwin: { name: "Sherwin Lim", role: "Borrower", profileImg: "../../images/juan_profile.png", item: "Laboratory Microscope", status: "Active Rental", statusClass: "status-active", img: "../../images/microscope.jpeg", location: "Science Lab A", messages: [{t: 'in', m: "Is the lens clear?", time: "12:05 PM"}] },
+                shawn: { name: "Shawn Benigno", role: "Lender", profileImg: "../../images/elena_profile.png", item: "White Lab Coat", status: "Completed", statusClass: "status-active", img: "../../images/lighting.jpeg", location: "CET Entrance", messages: [{t: 'in', m: "Already washed it.", time: "Tue"}] },
+                cedric: { name: "Cedric Santiago", role: "Borrower", profileImg: "../../images/maria_profile.png", item: "Textbook Bundle", status: "Extension Requested", statusClass: "status-pending", img: "../../images/books.jpeg", location: "Main Library", messages: [{t: 'in', m: "Can I extend for 2 days?", time: "Mon"}] },
+                van: { name: "Van Valeros", role: "Lender", profileImg: "../../images/elena_profile.png", item: "Drafting Kit", status: "Pending Pickup", statusClass: "status-pending", img: "../../images/books.jpeg", location: "WMSU Main Gate", messages: [{t: 'in', m: "Meet at the main gate?", time: "Sun"}] },
+                karl: { name: "Karl Tzy", role: "Borrower", profileImg: "../../images/juan_profile.png", item: "Camera Tripod", status: "Due Today", statusClass: "status-active", img: "../../images/lighting.jpeg", location: "CS Dept Hallway", messages: [{t: 'in', m: "Available now?", time: "Sat"}] }
+            };
+            
+            let saved = localStorage.getItem('kitcycle_messages');
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                // One-time clear for Maria and Juan as requested
+                parsed.juan.messages = [];
+                parsed.maria.messages = [];
+                localStorage.setItem('kitcycle_messages', JSON.stringify(parsed));
+                return parsed;
+            }
+            
+            localStorage.setItem('kitcycle_messages', JSON.stringify(defaults));
+            return defaults;
+        }
 
-        function switchConvo(id, el) {
+        let chatData = getInitialChatData();
+
+        function renderChatList() {
+            const list = document.getElementById('chatList');
+            list.innerHTML = '';
+            
+            Object.keys(chatData).forEach(key => {
+                const data = chatData[key];
+                const lastMsg = data.messages[data.messages.length - 1];
+                const lastText = lastMsg ? (lastMsg.type === 'request' ? `Requested: ${lastMsg.details.itemName}` : lastMsg.m) : 'No messages yet';
+                const lastTime = lastMsg ? lastMsg.time : '';
+                
+                const item = document.createElement('div');
+                item.className = `chat-item ${currentConvoId === key ? 'active' : ''}`;
+                item.onclick = () => switchConvo(key);
+                
+                item.innerHTML = `
+                    <div style="width: 48px; height: 48px; position: relative;">
+                        <img src="${data.profileImg}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                        ${key === 'juan' ? '<div style="position: absolute; bottom: 0; right: 0; width: 12px; height: 12px; background: #10b981; border: 2px solid #fff; border-radius: 50%;"></div>' : ''}
+                    </div>
+                    <div style="flex: 1; min-width: 0;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <h4 style="font-size: 0.95rem; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${data.name} <i class="fas fa-shield-alt verified-check"></i></h4>
+                            <span style="font-size: 0.7rem; color: #9ca3af; flex-shrink: 0; margin-left: 8px;">${lastTime}</span>
+                        </div>
+                        <div style="font-size: 0.75rem; color: #64748b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${data.role} • ${lastText}</div>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        function switchConvo(id) {
             currentConvoId = id;
             const data = chatData[id];
             
-            // Handle unread clearing
-            if(el.classList.contains('unread')) {
-                el.classList.remove('unread');
-                unreadCount = Math.max(0, unreadCount - 1);
-                updateSidebarNotif();
-            }
-
-            document.querySelectorAll('.chat-item').forEach(item => item.classList.remove('active'));
-            el.classList.add('active');
+            // Re-render list to update active state
+            renderChatList();
 
             document.getElementById('activeName').innerHTML = data.name + ' <i class="fas fa-shield-alt verified-check"></i>';
             document.getElementById('activeRole').innerText = data.role;
             document.getElementById('activeAvatar').src = data.profileImg;
             
-            document.getElementById('txTitle').innerText = data.item;
-            document.getElementById('txImg').src = data.img;
-            document.getElementById('txStatus').innerText = data.status;
-            document.getElementById('txStatus').className = "status-badge-v2 " + data.statusClass;
-
             renderMessages();
         }
 
         function renderMessages() {
             const area = document.getElementById('msgArea');
             area.innerHTML = '';
-            chatData[currentConvoId].messages.forEach(msg => {
-                const row = document.createElement('div');
-                row.className = "message-row" + (msg.t === 'out' ? ' sent' : '');
-                
-                // Privacy Masking (Display level)
-                let safeText = msg.m;
-                const phoneRegex = /(?:\+63|0)\d{10}/g;
-                const emailRegex = /[\w.-]+@[\w.-]+\.\w+/g;
-                
-                if(phoneRegex.test(safeText) || emailRegex.test(safeText)) {
-                    safeText = safeText.replace(phoneRegex, '<span style="background:rgba(255,255,255,0.2);padding:2px 4px;border-radius:4px;font-style:italic;">[Contact Masked]</span>');
-                    safeText = safeText.replace(emailRegex, '<span style="background:rgba(255,255,255,0.2);padding:2px 4px;border-radius:4px;font-style:italic;">[Email Masked]</span>');
-                }
+            const myName = localStorage.getItem('userName') || 'Nash Arciaga';
+            const isUnderReview = chatData[currentConvoId].status === "Under Review";
 
-                row.innerHTML = `<div class="message-bubble-v2 msg-${msg.t === 'out' ? 'outbound' : 'inbound'}">${safeText}<div style="font-size: 0.65rem; margin-top: 5px; opacity: 0.7; text-align: right;">${msg.time}</div></div>`;
+            chatData[currentConvoId].messages.forEach((msg, index) => {
+                const row = document.createElement('div');
+                
+                if (msg.type === 'system') {
+                    row.className = "message-row";
+                    row.style.justifyContent = "center";
+                    row.style.margin = "20px 0";
+                    row.innerHTML = `
+                        <div style="background: #fee2e2; border: 1.5px solid #f87171; color: #991b1b; padding: 12px 20px; border-radius: 12px; font-size: 0.8rem; font-weight: 700; text-align: center; max-width: 85%; box-shadow: 0 4px 12px rgba(153,27,27,0.1);">
+                            <i class="fas fa-exclamation-triangle" style="margin-right: 8px;"></i>
+                            ${msg.m}
+                        </div>`;
+                } else if (msg.type === 'request') {
+                    row.className = "message-row" + (msg.t === 'out' ? ' sent' : '');
+                    const req = msg.details;
+                    const isLender = myName === req.lender;
+                    const isPending = req.status === 'PENDING';
+                    const isOverdue = req.status === 'OVERDUE';
+
+                    let statusText = req.status;
+                    let statusColor = "#64748b";
+                    let statusBg = "#f1f5f9";
+                    
+                    if (isPending) { statusBg = "#fff7ed"; statusColor = "#c2410c"; statusText = "PENDING DECISION"; }
+                    else if (req.status === 'ACCEPTED') { statusBg = "#dcfce7"; statusColor = "#166534"; }
+                    else if (isOverdue) { statusBg = "#fee2e2"; statusColor = "#dc2626"; statusText = "OVERDUE"; }
+
+                    const statusBadge = `<span class="status-badge-v2" style="background: ${statusBg}; color: ${statusColor}; font-weight: 800;">${statusText}</span>`;
+
+                    let actionButtons = '';
+                    if (!isUnderReview) {
+                        if (isLender && isPending) {
+                            actionButtons = `
+                                <div class="inline-action-group" style="display: flex; gap: 12px; padding-top: 15px; border-top: 1.5px dashed #fecaca; margin-top: 10px;">
+                                    <button onclick="handleRequest('Decline', this.parentElement, ${index})" style="flex: 1; padding: 12px; border-radius: 12px; border: 1.5px solid #fca5a5; background: #fff; color: #ef4444; font-weight: 800; font-size: 0.85rem; cursor: pointer; transition: 0.2s;">Decline</button>
+                                    <button onclick="handleRequest('Accept', this.parentElement, ${index})" style="flex: 1; padding: 12px; border-radius: 12px; border: none; background: #10b981; color: #fff; font-weight: 800; font-size: 0.85rem; cursor: pointer; box-shadow: 0 6px 15px rgba(16,185,129,0.25); transition: 0.2s;">Accept Request</button>
+                                </div>`;
+                        } else if (isOverdue) {
+                            actionButtons = `
+                                <div style="padding-top: 15px; border-top: 1.5px dashed #fecaca; margin-top: 10px;">
+                                    <button onclick="openReportModal('Non-Return')" style="width: 100%; padding: 12px; border-radius: 12px; border: none; background: #dc2626; color: #fff; font-weight: 800; font-size: 0.85rem; cursor: pointer; box-shadow: 0 6px 15px rgba(220,38,38,0.25);">Report Non-Return</button>
+                                </div>`;
+                        }
+                    }
+
+                    row.innerHTML = `
+                        <div class="message-bubble-v2 msg-inbound" style="border: 2px solid #800000; background: #fff5f5; width: 100%; max-width: 90%; border-radius: 20px; box-shadow: 0 10px 25px rgba(128,0,0,0.08); opacity: ${isUnderReview ? '0.7' : '1'}">
+                            <div style="display: flex; gap: 20px; align-items: start; margin-bottom: 15px;">
+                                <img src="${req.image}" style="width: 80px; height: 80px; border-radius: 15px; object-fit: cover; border: 2px solid #fee2e2;">
+                                <div style="flex: 1;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                                        <span style="font-size: 0.65rem; color: #800000; font-weight: 900; text-transform: uppercase; letter-spacing: 1px;">Transaction ID: ${req.txId}</span>
+                                        ${statusBadge}
+                                    </div>
+                                    <h4 style="margin: 0; font-size: 1.1rem; color: #1e293b; font-weight: 900;">${req.itemName}</h4>
+                                    <p style="margin: 5px 0; font-size: 0.85rem; color: #64748b; line-height: 1.4;">
+                                        Duration: <strong style="color: #334155;">${req.duration}</strong><br>
+                                        Total Price: <strong style="color: #800000;">₱${req.totalPrice}</strong><br>
+                                        Pickup: <strong style="color: #334155;">${req.pickup} at ${req.slot}</strong>
+                                    </p>
+                                </div>
+                            </div>
+                            ${actionButtons}
+                            <div style="margin-top: 15px; font-size: 0.75rem; color: #991b1b; font-weight: 600; display: flex; align-items: center; gap: 8px; opacity: 0.9;">
+                                <i class="fas fa-shield-alt"></i> institutional safety notice: Keep all communications within this thread.
+                            </div>
+                            <div style="font-size: 0.65rem; margin-top: 5px; opacity: 0.7; text-align: right; color: #64748b;">${msg.time}</div>
+                        </div>`;
+                } else {
+                    row.className = "message-row" + (msg.t === 'out' ? ' sent' : '');
+                    // Privacy Masking (Display level)
+                    let safeText = msg.m;
+                    const phoneRegex = /(?:\+63|0)\d{10}/g;
+                    const emailRegex = /[\w.-]+@[\w.-]+\.\w+/g;
+                    
+                    if(phoneRegex.test(safeText) || emailRegex.test(safeText)) {
+                        safeText = safeText.replace(phoneRegex, '<span style="background:rgba(255,255,255,0.2);padding:2px 4px;border-radius:4px;font-style:italic;">[Contact Masked]</span>');
+                        safeText = safeText.replace(emailRegex, '<span style="background:rgba(255,255,255,0.2);padding:2px 4px;border-radius:4px;font-style:italic;">[Email Masked]</span>');
+                    }
+
+                    row.innerHTML = `<div class="message-bubble-v2 msg-${msg.t === 'out' ? 'outbound' : 'inbound'}">${safeText}<div style="font-size: 0.65rem; margin-top: 5px; opacity: 0.7; text-align: right;">${msg.time}</div></div>`;
+                }
                 area.appendChild(row);
             });
             area.scrollTop = area.scrollHeight;
+
+            // Disable input if under review
+            const input = document.getElementById('msgInput');
+            const sendBtn = document.querySelector('button[onclick="sendMessage()"]');
+            if (isUnderReview) {
+                input.disabled = true;
+                input.placeholder = "Conversation disabled under review";
+                sendBtn.disabled = true;
+                sendBtn.style.opacity = '0.5';
+                sendBtn.style.cursor = 'not-allowed';
+            } else {
+                input.disabled = false;
+                input.placeholder = "Type a message...";
+                sendBtn.disabled = false;
+                sendBtn.style.opacity = '1';
+                sendBtn.style.cursor = 'pointer';
+            }
         }
 
-        function sendMessage() {
+        function sendMessage(textOverride) {
             const input = document.getElementById('msgInput');
-            let text = input.value.trim();
+            let text = textOverride || input.value.trim();
             if(!text) return;
             
             const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             chatData[currentConvoId].messages.push({ t: 'out', m: text, time: now });
+            
+            // Persist
+            localStorage.setItem('kitcycle_messages', JSON.stringify(chatData));
+            
             renderMessages();
-            input.value = '';
+            renderChatList(); // Update sidebar snippet
+            if (!textOverride) input.value = '';
         }
 
         function handleSearch(term) {
@@ -441,12 +525,101 @@
             });
         }
 
+        function handleRequest(action, btnGroup, msgIndex) {
+            const myName = localStorage.getItem('userName') || "Nash Arciaga"; 
+            const msg = chatData[currentConvoId].messages[msgIndex];
+            const request = msg.details;
+            
+            if (action === 'Accept') {
+                UIUtils.showToast("Request Accepted! Transaction status updated.", "success");
+                
+                // Update message status
+                request.status = 'ACCEPTED';
+                localStorage.setItem('kitcycle_unread_count', '0');
+                
+                // Update chatData for persistence
+                chatData[currentConvoId].status = "Awaiting Pickup";
+                chatData[currentConvoId].statusClass = "status-pending";
+                localStorage.setItem('kitcycle_messages', JSON.stringify(chatData));
+                
+                // Conversational Acceptance
+                sendMessage(`Great news! ${myName} has accepted your request for the ${request.itemName}. You two can now coordinate the best time and place for the handover!`);
+            } else {
+                UIUtils.showToast("Request Declined.", "info");
+                localStorage.setItem('kitcycle_unread_count', '0');
+                
+                // Update message status
+                request.status = 'DECLINED';
+
+                // Update chatData for persistence
+                chatData[currentConvoId].status = "Declined";
+                chatData[currentConvoId].statusClass = "status-active"; 
+                localStorage.setItem('kitcycle_messages', JSON.stringify(chatData));
+
+                // Conversational Decline
+                sendMessage(`Hi there! ${myName} isn't able to lend the ${request.itemName} right now, but don't worry—you can head back to the marketplace to find another one!`);
+            }
+            
+            renderMessages();
+            renderChatList();
+            if(window.AuthSystem && AuthSystem.updateBadges) AuthSystem.updateBadges();
+        }
+
         function updateSidebarNotif() {
             const badge = document.getElementById('sidebarNotifCount');
-            const navBadge = document.getElementById('navNotifBadge');
-            badge.innerText = unreadCount;
-            badge.style.display = unreadCount > 0 ? 'inline-block' : 'none';
-            navBadge.style.display = unreadCount > 0 ? 'block' : 'none';
+            const navBadge = document.getElementById('navMsgBadge');
+            const unreadCount = parseInt(localStorage.getItem('kitcycle_unread_count') || '0');
+            if(badge) {
+                badge.innerText = unreadCount;
+                badge.style.display = unreadCount > 0 ? 'inline-block' : 'none';
+            }
+            if(navBadge) {
+                navBadge.style.display = unreadCount > 0 ? 'block' : 'none';
+            }
+        }
+
+        function openReportModal(type) {
+            const modal = document.getElementById('reportModal');
+            const title = document.getElementById('reportTitle');
+            if (type === 'Non-Return') {
+                title.innerText = "Report Non-Return";
+                document.getElementById('reportReason').value = "Item not returned after rental period";
+            } else {
+                title.innerText = "Report Behavioral Issue";
+                document.getElementById('reportReason').value = "";
+            }
+            modal.style.display = 'flex';
+        }
+
+        function closeReportModal() {
+            document.getElementById('reportModal').style.display = 'none';
+        }
+
+        function submitReport() {
+            const reason = document.getElementById('reportReason').value;
+            if (!reason) {
+                alert("Please provide a reason for the report.");
+                return;
+            }
+
+            // Persistence
+            chatData[currentConvoId].status = "Under Review";
+            chatData[currentConvoId].statusClass = "status-active";
+            
+            const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            chatData[currentConvoId].messages.push({
+                type: 'system',
+                m: `AN OFFICIAL REPORT HAS BEEN FILED: "${reason}". This conversation is now under institutional review. All standard actions have been disabled.`,
+                time: now
+            });
+
+            localStorage.setItem('kitcycle_messages', JSON.stringify(chatData));
+            
+            closeReportModal();
+            UIUtils.showToast("Report submitted. WMSU KitCycle moderators have been notified.", "success");
+            
+            renderMessages();
+            renderChatList();
         }
 
         window.onload = function() {
@@ -455,17 +628,60 @@
                 document.getElementById('sidebar').classList.add('minimized');
                 document.getElementById('mainContent').classList.add('expanded');
             }
-            renderMessages();
+            
+            // Check for deep link to user
+            const urlParams = new URLSearchParams(window.location.search);
+            const targetUser = urlParams.get('user');
+            if (targetUser) {
+                const key = targetUser.toLowerCase().split(' ')[0];
+                if (chatData[key]) {
+                    currentConvoId = key;
+                }
+            }
+
+            renderChatList();
+            switchConvo(currentConvoId);
             updateSidebarNotif();
         };
 
         window.onclick = function(event) {
+            const reportModal = document.getElementById('reportModal');
+            if (event.target === reportModal) closeReportModal();
             if (!event.target.closest('.nav-notification-btn')) {
                 // Handled by auth.js
             }
         }
     </script>
 
-</body>
+    <!-- Report Modal -->
+    <div class="modal-overlay" id="reportModal" style="display: none;">
+        <div class="modal-card" style="max-width: 400px; padding: 2rem;">
+            <div style="text-align: center; margin-bottom: 1.5rem;">
+                <div style="width: 60px; height: 60px; background: #fee2e2; color: #dc2626; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 1.5rem;">
+                    <i class="fas fa-flag"></i>
+                </div>
+                <h3 id="reportTitle" style="font-size: 1.25rem; color: #111827; margin-bottom: 0.5rem;">Report Behavioral Issue</h3>
+                <p style="font-size: 0.85rem; color: #64748b;">This will notify WMSU KitCycle moderators immediately.</p>
+            </div>
 
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">Reason for Report</label>
+                <select id="reportReason" style="width: 100%; padding: 12px; border-radius: 8px; border: 1.5px solid #e2e8f0; font-size: 0.9rem; outline: none; margin-bottom: 1rem;">
+                    <option value="">Select a reason...</option>
+                    <option value="Inappropriate Language">Inappropriate Language</option>
+                    <option value="Suspicious Activity">Suspicious Activity</option>
+                    <option value="Harassment">Harassment</option>
+                    <option value="No-show at Meetup">No-show at Meetup</option>
+                    <option value="Other">Other</option>
+                </select>
+                <textarea placeholder="Additional details (optional)..." style="width: 100%; padding: 12px; border-radius: 8px; border: 1.5px solid #e2e8f0; font-size: 0.9rem; outline: none; height: 80px; resize: none;"></textarea>
+            </div>
+
+            <div style="display: flex; gap: 12px;">
+                <button onclick="closeReportModal()" style="flex: 1; padding: 12px; border-radius: 8px; border: 1.5px solid #e2e8f0; background: #fff; color: #4b5563; font-weight: 700; cursor: pointer;">Cancel</button>
+                <button onclick="submitReport()" style="flex: 1; padding: 12px; border-radius: 8px; border: none; background: #dc2626; color: #fff; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(220,38,38,0.2);">Submit Report</button>
+            </div>
+        </div>
+    </div>
+</body>
 </html>
