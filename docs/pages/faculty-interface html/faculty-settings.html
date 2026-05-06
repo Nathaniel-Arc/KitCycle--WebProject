@@ -7,7 +7,7 @@
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="../../css/style.css">
-    <link rel="stylesheet" href="../../css/student-interface/student-dashboard.css">
+    <link rel="stylesheet" href="../../css/faculty-interface/faculty-dashboard.css">
     <script src="../../script/ui-utils.js"></script>
     <script src="../../script/auth.js" defer></script>
     
@@ -168,9 +168,9 @@
             
             <ul class="sidebar-nav">
                 <li><a href="faculty-dashboard.html"><i class="fas fa-th-large"></i> <span>Dashboard</span></a></li>
-                <li><a href="faculty-verification.html"><i class="fas fa-user-check"></i> <span>Student Verification</span> <span class="nav-badge-v2" id="verifyBadge" style="display: inline-block;">4</span></a></li>
+                <li><a href="faculty-verification.html"><i class="fas fa-user-check"></i> <span>Student Verification</span> <span class="nav-badge-v2" id="verifyBadge">0</span></a></li>
                 <li><a href="faculty-moderation.html"><i class="fas fa-user-shield"></i> <span>Moderation</span></a></li>
-                <li><a href="faculty-approvals.html"><i class="fas fa-clipboard-check"></i> <span>Listing Verifications</span> <span class="nav-badge-v2" id="sidebarReqBadge" style="display: inline-block;">5</span></a></li>
+                <li><a href="faculty-approvals.html"><i class="fas fa-clipboard-check"></i> <span>Listing Verifications</span> <span class="nav-badge-v2" id="sidebarReqBadge">0</span></a></li>
                 <li><a href="faculty-messages.html"><i class="fas fa-comments"></i> <span>Messages</span></a></li>
                 <li><a href="faculty-reports.html"><i class="fas fa-chart-pie"></i> <span>Reports</span></a></li>
                 <li class="active"><a href="faculty-settings.html"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
@@ -323,7 +323,11 @@
 
             // Load existing data
             const currentName = localStorage.getItem('userName');
-            if(currentName) document.getElementById('editFullName').value = currentName;
+            if(currentName) {
+                document.getElementById('editFullName').value = currentName;
+                const sidebarName = document.getElementById('sidebarUserName');
+                if(sidebarName) sidebarName.textContent = currentName;
+            }
 
             const currentDepartment = localStorage.getItem('userDepartment');
             if(currentDepartment) document.getElementById('editDepartment').value = currentDepartment;
@@ -332,9 +336,26 @@
             if(currentBio) document.getElementById('editBio').value = currentBio;
 
             const currentPic = localStorage.getItem('userPic');
-            if(currentPic) {
-                const imgPath = currentPic.startsWith('data:') ? currentPic : '../../images/' + currentPic;
-                document.getElementById('avatarPreview').src = imgPath;
+            const imgPath = currentPic ? (currentPic.startsWith('data:') ? currentPic : '../../images/' + currentPic) : '../../images/Prof. Ace.jpg';
+            document.getElementById('avatarPreview').src = imgPath;
+            const sidebarImg = document.getElementById('sidebarProfileImg');
+            if(sidebarImg) sidebarImg.src = imgPath;
+
+            // Sync sidebar badges from localStorage
+            const verifications = JSON.parse(localStorage.getItem('facultyVerifications') || '[]');
+            const pendingVerifications = verifications.filter(v => v.status === 'Pending').length;
+            const verifyBadge = document.getElementById('verifyBadge');
+            if(verifyBadge) {
+                verifyBadge.textContent = pendingVerifications;
+                verifyBadge.style.display = pendingVerifications > 0 ? 'inline-block' : 'none';
+            }
+
+            const listings = JSON.parse(localStorage.getItem('studentListings') || '[]');
+            const pendingListings = listings.filter(l => l.status === 'Pending').length;
+            const reqBadge = document.getElementById('sidebarReqBadge');
+            if(reqBadge) {
+                reqBadge.textContent = pendingListings;
+                reqBadge.style.display = pendingListings > 0 ? 'inline-block' : 'none';
             }
         };
     </script>

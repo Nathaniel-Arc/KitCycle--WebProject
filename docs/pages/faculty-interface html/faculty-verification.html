@@ -173,9 +173,9 @@
 
             <ul class="sidebar-nav">
                 <li><a href="faculty-dashboard.html"><i class="fas fa-th-large"></i> <span>Dashboard</span></a></li>
-                <li class="active"><a href="faculty-verification.html"><i class="fas fa-user-check"></i> <span>Student Verification</span> <span class="nav-badge-v2" id="verifyBadge" style="display: inline-block;">4</span></a></li>
+                <li class="active"><a href="faculty-verification.html"><i class="fas fa-user-check"></i> <span>Student Verification</span> <span class="nav-badge-v2" id="verifyBadge">0</span></a></li>
                 <li><a href="faculty-moderation.html"><i class="fas fa-user-shield"></i> <span>Moderation</span></a></li>
-<li><a href="faculty-approvals.html"><i class="fas fa-clipboard-check"></i> <span>Listing Verifications</span> <span class="nav-badge-v2" id="sidebarReqBadge" style="display: inline-block;">5</span></a></li>
+<li><a href="faculty-approvals.html"><i class="fas fa-clipboard-check"></i> <span>Listing Verifications</span> <span class="nav-badge-v2" id="sidebarReqBadge">0</span></a></li>
                  <li><a href="faculty-messages.html"><i class="fas fa-comments"></i> <span>Messages</span></a></li>
                  <li><a href="faculty-reports.html"><i class="fas fa-chart-pie"></i> <span>Reports</span></a></li>
                 <li><a href="faculty-settings.html"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
@@ -340,7 +340,10 @@
             const pending = verifications.filter(v => v.status === 'Pending');
             document.getElementById('pendingCount').textContent = pending.length;
             const badge = document.getElementById('verifyBadge');
-            if (badge) badge.textContent = pending.length;
+            if (badge) {
+                badge.textContent = pending.length;
+                badge.style.display = pending.length > 0 ? 'inline-block' : 'none';
+            }
         }
 
         function loadHistory() {
@@ -539,7 +542,10 @@
                 const requests = FacultyActions._getRequests();
                 const pending = requests.filter(r => r.status === 'Pending');
                 const badge = document.getElementById('sidebarReqBadge');
-                if (badge) badge.textContent = pending.length;
+                if (badge) {
+                    badge.textContent = pending.length;
+                    badge.style.display = pending.length > 0 ? 'inline-block' : 'none';
+                }
             }
         });
     </script>
