@@ -45,7 +45,7 @@
         <div class="nav-right" style="display: flex; align-items: center; gap: 30px;">
             <ul class="nav-links" style="display: flex; list-style: none; gap: 25px; align-items: center; margin: 0;">
                 <li><a href="faculty-dashboard.html">Home</a></li>
-                <li><a href="../marketplace.html">Marketplace</a></li>
+                <li><a href="../marketplace.html">WMSU Market</a></li>
                 <li><a href="../howitworks.html">How It Works</a></li>
                 <li><a href="../safety.html">Safety</a></li>
             </ul>
@@ -68,13 +68,11 @@
 
             <ul class="sidebar-nav">
                 <li><a href="faculty-dashboard.html"><i class="fas fa-th-large"></i> <span>Dashboard</span></a></li>
-                <li><a href="faculty-verification.html"><i class="fas fa-user-check"></i> <span>Student Verification</span> <span class="nav-badge-v2" style="display: inline-block;">4</span></a></li>
+                <li><a href="faculty-verification.html"><i class="fas fa-user-check"></i> <span>Student Verification</span> <span class="nav-badge-v2" id="verifyBadge">0</span></a></li>
                 <li><a href="faculty-moderation.html"><i class="fas fa-user-shield"></i> <span>Moderation</span></a></li>
-                <li><a href="faculty-departmentgear.html"><i class="fas fa-boxes"></i> <span>Departmental Gear</span></a></li>
-                <li><a href="faculty-approvals.html"><i class="fas fa-clipboard-check"></i> <span>Approvals</span> <span class="nav-badge-v2" id="sidebarReqBadge" style="display: inline-block;">5</span></a></li>
-                <li><a href="faculty-messages.html"><i class="fas fa-comments"></i> <span>Messages</span></a></li>
-                <li><a href="faculty-rentals.html"><i class="fas fa-clock"></i> <span>Active Rentals</span></a></li>
-                <li class="active"><a href="faculty-reports.html"><i class="fas fa-chart-pie"></i> <span>Reports</span></a></li>
+<li><a href="faculty-approvals.html"><i class="fas fa-clipboard-check"></i> <span><span>Listing Verifications</span> <span class="nav-badge-v2" id="sidebarReqBadge">0</span></a></li>
+                 <li><a href="faculty-funds.html"><i class="fas fa-coins"></i> <span>Platform Funds</span></a></li>
+                 <li class="active"><a href="faculty-reports.html"><i class="fas fa-chart-pie"></i> <span>Reports</span></a></li>
                 <li><a href="faculty-settings.html"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
             </ul>
 
@@ -95,18 +93,12 @@
                         <h3 id="reportTotalEquip">0</h3>
                     </div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-numbers-only">
-                        <span class="stat-label">Active Rentals</span>
-                        <h3 class="info-text" id="reportActiveRentals">0</h3>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-numbers-only">
-                        <span class="stat-label">Completed (This Month)</span>
-                        <h3 class="success-text" id="reportCompleted">0</h3>
-                    </div>
-                </div>
+<div class="stat-card">
+                     <div class="stat-numbers-only">
+                         <span class="stat-label">Completed (This Month)</span>
+                         <h3 class="success-text" id="reportCompleted">0</h3>
+                     </div>
+                 </div>
                 <div class="stat-card">
                     <div class="stat-numbers-only">
                         <span class="stat-label">Utilization Rate</span>
@@ -288,6 +280,23 @@
                 document.getElementById('mainContent').classList.add('expanded');
             }
             FacultyActions.renderReports();
+
+            // Sync sidebar badges
+            const verifications = JSON.parse(localStorage.getItem('facultyVerifications') || '[]');
+            const pendingVerifications = verifications.filter(v => v.status === 'Pending').length;
+            const verifyBadge = document.getElementById('verifyBadge');
+            if(verifyBadge) {
+                verifyBadge.textContent = pendingVerifications;
+                verifyBadge.style.display = pendingVerifications > 0 ? 'inline-block' : 'none';
+            }
+
+            const listings = JSON.parse(localStorage.getItem('studentListings') || '[]');
+            const pendingListings = listings.filter(l => l.status === 'Pending').length;
+            const reqBadge = document.getElementById('sidebarReqBadge');
+            if(reqBadge) {
+                reqBadge.textContent = pendingListings;
+                reqBadge.style.display = pendingListings > 0 ? 'inline-block' : 'none';
+            }
         };
     </script>
 

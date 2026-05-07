@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Approvals Queue | WMSU KitCycle</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/admin-interface/admin-dashboard.css">
+    <link rel="stylesheet" href="../../css/admin-interface/admin-approvals.css">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="logo">WMSU <span>KitCycle</span></div>
+        <div class="nav-right">
+            <ul class="nav-links">
+                <li><a href="admin-dashboard.html">Dashboard</a></li>
+                <li><a href="../howitworks.html">How It Works</a></li>
+                <li><a href="../safety.html">Safety</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <span class="user-profile-nav"><i class="fas fa-user-shield"></i> Admin User</span>
+                <a href="../login.html" class="btn-login"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="dashboard-layout">
+        <aside class="sidebar">
+            <div class="sidebar-profile">
+                <div class="profile-avatar"><img id="sidebarProfileImg" src="../../images/nash_profile.png" alt="Profile"></div>
+                <div class="profile-info">
+                    <h4>Nash Arciaga</h4>
+                    <span>Admin</span>
+                </div>
+            </div>
+
+            <ul class="sidebar-nav">
+                <li><a href="admin-dashboard.html"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+                <li><a href="admin-analytics.html"><i class="fas fa-poll"></i> Analytics</a></li>
+                <li><a href="admin-disputes.html"><i class="fas fa-exclamation-triangle"></i> Dispute Management</a></li>
+                <li class="active"><a href="admin-approvals.html"><i class="fas fa-clipboard-check"></i> Approvals</a></li>
+                <li><a href="admin-settings.html"><i class="fas fa-cog"></i> Platform Settings</a></li>
+            </ul>
+
+            <a href="#" class="sidebar-logout"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
+        </aside>
+
+        <main class="dashboard-content">
+            <div class="dashboard-banner">
+                <h2><i class="fas fa-check-square"></i> Approval Queue</h2>
+                <p>Review and manage student equipment rental requests</p>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stat-cards-grid three-cols">
+                <div class="stat-card">
+                    <div class="stat-icon orange-light"><i class="fas fa-clock"></i></div>
+                    <div class="stat-numbers">
+                        <span class="stat-label">Pending Requests</span>
+                        <h3 class="warning-text">50</h3>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green-light"><i class="fas fa-check-circle"></i></div>
+                    <div class="stat-numbers">
+                        <span class="stat-label">Approved Today</span>
+                        <h3 class="success-text">2</h3>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon red-light"><i class="fas fa-times-circle"></i></div>
+                    <div class="stat-numbers">
+                        <span class="stat-label">Rejected Today</span>
+                        <h3 class="danger-text">1</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Approval Grid -->
+            <div class="content-card full-width-card">
+                <div class="card-header border-bottom">
+                    <div class="header-title-area">
+                        <h3>Pending Requests</h3>
+                        <span class="pill-badge warning-bg">50 Requests Found</span>
+                    </div>
+                    <div class="header-actions">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" placeholder="Search Student ID or Item...">
+                        </div>
+                        <button class="btn-subtle"><i class="fas fa-filter"></i> Filter</button>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="approval-grid">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox"></th>
+                                <th>Student Details</th>
+                                <th>Requested Item</th>
+                                <th>Duration</th>
+                                <th>Priority</th>
+                                <th>Requested Date</th>
+                                <th class="text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Row 1 -->
+                            <tr>
+                                <td><input type="checkbox"></td>
+                                <td>
+                                    <div class="student-info">
+                                        <span class="name">Maria Santos</span>
+                                        <span class="id">ID: 2024-12345</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="item-cell">
+                                        <span class="item-name">Engineering Microscope Set</span>
+                                        <span class="purpose">Purpose: Lab Project</span>
+                                    </div>
+                                </td>
+                                <td>3 Days</td>
+                                <td><span class="priority-badge high">High</span></td>
+                                <td>3/5/2026</td>
+                                <td>
+                                    <div class="grid-actions">
+                                        <button class="icon-btn approve" title="Approve"><i class="fas fa-check"></i></button>
+                                        <button class="icon-btn reject" title="Reject"><i class="fas fa-times"></i></button>
+                                        <button class="icon-btn view" title="View Details"><i class="fas fa-eye"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <!-- Row 2 -->
+                            <tr>
+                                <td><input type="checkbox"></td>
+                                <td>
+                                    <div class="student-info">
+                                        <span class="name">Juan Reyes</span>
+                                        <span class="id">ID: 2024-12346</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="item-cell">
+                                        <span class="item-name">Scientific Calculator</span>
+                                        <span class="purpose">Purpose: Calculus Exam</span>
+                                    </div>
+                                </td>
+                                <td>1 Week</td>
+                                <td><span class="priority-badge medium">Medium</span></td>
+                                <td>3/4/2026</td>
+                                <td>
+                                    <div class="grid-actions">
+                                        <button class="icon-btn approve"><i class="fas fa-check"></i></button>
+                                        <button class="icon-btn reject"><i class="fas fa-times"></i></button>
+                                        <button class="icon-btn view"><i class="fas fa-eye"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <!-- Row 3 -->
+                            <tr>
+                                <td><input type="checkbox"></td>
+                                <td>
+                                    <div class="student-info">
+                                        <span class="name">Anna Cruz</span>
+                                        <span class="id">ID: 2024-12347</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="item-cell">
+                                        <span class="item-name">Video Recording Equipment</span>
+                                        <span class="purpose">Purpose: Thesis Docu</span>
+                                    </div>
+                                </td>
+                                <td>2 Days</td>
+                                <td><span class="priority-badge high">High</span></td>
+                                <td>3/3/2026</td>
+                                <td>
+                                    <div class="grid-actions">
+                                        <button class="icon-btn approve"><i class="fas fa-check"></i></button>
+                                        <button class="icon-btn reject"><i class="fas fa-times"></i></button>
+                                        <button class="icon-btn view"><i class="fas fa-eye"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <!-- Row 4 -->
+<tr>
+    <td><input type="checkbox"></td>
+    <td>
+        <div class="student-info">
+            <span class="name">Liam Gabriel Torres</span>
+            <span class="id">ID: 2024-10552</span>
+        </div>
+    </td>
+    <td>
+        <div class="item-cell">
+            <span class="item-name">Arduino Ultimate Starter Kit</span>
+            <span class="purpose">Purpose: CPE101 Final Project</span>
+        </div>
+    </td>
+    <td>5 Days</td>
+    <td><span class="priority-badge high">High</span></td>
+    <td>3/3/2026</td>
+    <td>
+        <div class="grid-actions">
+            <button class="icon-btn approve" title="Approve"><i class="fas fa-check"></i></button>
+            <button class="icon-btn reject" title="Reject"><i class="fas fa-times"></i></button>
+            <button class="icon-btn view" title="View Details"><i class="fas fa-eye"></i></button>
+        </div>
+    </td>
+</tr>
+
+<!-- Row 5 -->
+<tr>
+    <td><input type="checkbox"></td>
+    <td>
+        <div class="student-info">
+            <span class="name">Sophia Isabelle Lim</span>
+            <span class="id">ID: 2024-20119</span>
+        </div>
+    </td>
+    <td>
+        <div class="item-cell">
+            <span class="item-name">Digital Multimeter</span>
+            <span class="purpose">Purpose: Electronics Lab</span>
+        </div>
+    </td>
+    <td>1 Day</td>
+    <td><span class="priority-badge low">Low</span></td>
+    <td>3/2/2026</td>
+    <td>
+        <div class="grid-actions">
+            <button class="icon-btn approve"><i class="fas fa-check"></i></button>
+            <button class="icon-btn reject"><i class="fas fa-times"></i></button>
+            <button class="icon-btn view"><i class="fas fa-eye"></i></button>
+        </div>
+    </td>
+</tr>
+
+<!-- Row 6 -->
+<tr>
+    <td><input type="checkbox"></td>
+    <td>
+        <div class="student-info">
+            <span class="name">Mateo Javier</span>
+            <span class="id">ID: 2025-00432</span>
+        </div>
+    </td>
+    <td>
+        <div class="item-cell">
+            <span class="item-name">External GPU Enclosure</span>
+            <span class="purpose">Purpose: Machine Learning Training</span>
+        </div>
+    </td>
+    <td>10 Days</td>
+    <td><span class="priority-badge medium">Medium</span></td>
+    <td>3/2/2026</td>
+    <td>
+        <div class="grid-actions">
+            <button class="icon-btn approve"><i class="fas fa-check"></i></button>
+            <button class="icon-btn reject"><i class="fas fa-times"></i></button>
+            <button class="icon-btn view"><i class="fas fa-eye"></i></button>
+        </div>
+    </td>
+</tr>
+
+<!-- Row 7 -->
+<tr>
+    <td><input type="checkbox"></td>
+    <td>
+        <div class="student-info">
+            <span class="name">Elena Rose Pineda</span>
+            <span class="id">ID: 2024-09881</span>
+        </div>
+    </td>
+    <td>
+        <div class="item-cell">
+            <span class="item-name">DSLR Camera (Canon)</span>
+            <span class="purpose">Purpose: Campus Journalism Event</span>
+        </div>
+    </td>
+    <td>2 Days</td>
+    <td><span class="priority-badge high">High</span></td>
+    <td>3/1/2026</td>
+    <td>
+        <div class="grid-actions">
+            <button class="icon-btn approve"><i class="fas fa-check"></i></button>
+            <button class="icon-btn reject"><i class="fas fa-times"></i></button>
+            <button class="icon-btn view"><i class="fas fa-eye"></i></button>
+        </div>
+    </td>
+</tr>
+
+<!-- Row 8 -->
+<tr>
+    <td><input type="checkbox"></td>
+    <td>
+        <div class="student-info">
+            <span class="name">Paolo Miguel Castro</span>
+            <span class="id">ID: 2024-11200</span>
+        </div>
+    </td>
+    <td>
+        <div class="item-cell">
+            <span class="item-name">Oscilloscope</span>
+            <span class="purpose">Purpose: Signal Processing Lab</span>
+        </div>
+    </td>
+    <td>4 Days</td>
+    <td><span class="priority-badge medium">Medium</span></td>
+    <td>3/1/2026</td>
+    <td>
+        <div class="grid-actions">
+            <button class="icon-btn approve"><i class="fas fa-check"></i></button>
+            <button class="icon-btn reject"><i class="fas fa-times"></i></button>
+            <button class="icon-btn view"><i class="fas fa-eye"></i></button>
+        </div>
+    </td>
+</tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    <p>Showing 9 of 50 pending requests</p>
+                    <div class="pagination">
+                        <button disabled><i class="fas fa-chevron-left"></i></button>
+                        <button class="active">1</button>
+                        <button>2</button>
+                        <button><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Decisions History -->
+            <div class="content-card full-width-card margin-top">
+                <div class="card-header border-bottom">
+                    <h3>Recent Decisions</h3>
+                </div>
+                <div class="history-grid-stack">
+                    <div class="history-row">
+                        <div class="history-main">
+                            <i class="fas fa-check-circle success-text"></i>
+                            <div>
+                                <strong>Carlos Ramos</strong> approved for <strong>Microscope Set</strong>
+                                <small>3/4/2026 • Processed by Admin</small>
+                            </div>
+                        </div>
+                        <span class="status-pill success">APPROVED</span>
+                    </div>
+                    <div class="history-row">
+                        <div class="history-main">
+                            <i class="fas fa-times-circle danger-text"></i>
+                            <div>
+                                <strong>Diana Lopez</strong> rejected for <strong>Video Camera</strong>
+                                <small>3/3/2026 • Reason: Maintenance</small>
+                            </div>
+                        </div>
+                        <span class="status-pill danger">REJECTED</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

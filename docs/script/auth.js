@@ -20,11 +20,20 @@ window.AuthSystem = {
     /* ── 1. Authenticate — validates email + password ──────── */
     authenticate: function (email, password) {
         const trimmedEmail = email.trim().toLowerCase();
-        const account = this._accounts.find(
+        // Check hardcoded accounts first
+        let account = this._accounts.find(
             a => a.email === trimmedEmail && a.password === password
         );
-        if (!account) return null;
-        return account;
+        if (account) return account;
+
+        // Check registered accounts from localStorage
+        const registered = JSON.parse(localStorage.getItem('kitcycle_accounts') || '[]');
+        account = registered.find(
+            a => a.email.toLowerCase() === trimmedEmail && a.password === password
+        );
+        if (account) return account;
+
+        return null;
     },
 
     /* ── 2. Login — saves session & redirects ──────────────── */
@@ -34,7 +43,7 @@ window.AuthSystem = {
         localStorage.setItem('userRole',   account.role);
         localStorage.setItem('userEmail',  account.email);
         localStorage.setItem('userPic',    account.profilePic || '');
-        localStorage.setItem('isVerified', 'true'); // Hardcoded accounts are verified by default
+        localStorage.setItem('isVerified', account.isVerified !== false ? 'true' : 'false');
 
         // Directive: Save currentUser JSON object
         const currentUser = {
@@ -399,12 +408,12 @@ document.addEventListener('DOMContentLoaded', () => {
         transform: scale(1.05);
     }
 
-    /* ── Messages & Notifications Icons ──────────── */
-    .nav-msg-container, .nav-notification-container {
+    /* ── Notifications Icon ──────────── */
+    .nav-notification-container {
         position: relative;
         margin-right: 5px;
     }
-    .nav-msg-btn, .nav-notification-btn {
+    .nav-notification-btn {
         width: 38px;
         height: 38px;
         border-radius: 12px;
@@ -418,44 +427,11 @@ document.addEventListener('DOMContentLoaded', () => {
         font-size: 1.1rem;
         transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .nav-msg-btn:hover, .nav-notification-btn:hover {
+    .nav-notification-btn:hover {
         background: #f8fafc;
         color: #800000;
         border-color: #800000;
         transform: translateY(-2px);
-    }
-
-    /* Message Badge (Crimson Circle) - Refactored Stack */
-    .msg-icon-stack {
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    .msg-icon-stack i {
-        font-size: 1.2rem;
-    }
-    .msg-badge {
-        position: absolute;
-        top: -5px;
-        right: -5px;
-        width: 10px;
-        height: 10px;
-        background: #800000; /* WMSU Crimson */
-        border: 1.5px solid #fff;
-        border-radius: 50%;
-        display: none;
-        z-index: 10;
-        box-shadow: 0 1px 3px rgba(128,0,0,0.3);
-    }
-    .msg-badge.active {
-        display: block;
-        animation: pulseBadge 2s infinite;
-    }
-    @keyframes pulseBadge {
-        0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(128,0,0,0.4); }
-        70% { transform: scale(1.2); box-shadow: 0 0 0 6px rgba(128,0,0,0); }
-        100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(128,0,0,0); }
     }
 
     /* ── Notification Dropdown (Stable & Smooth) ──── */

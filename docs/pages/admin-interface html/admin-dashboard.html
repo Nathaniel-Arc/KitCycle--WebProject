@@ -35,6 +35,72 @@
         .sidebar-is-minimized .sidebar-nav a { justify-content: center !important; padding: 12px 0 !important; }
         .sidebar-is-minimized .sidebar-nav i { font-size: 1.2rem !important; margin: 0 !important; }
         .sidebar-is-minimized .sidebar-profile { justify-content: center !important; padding-bottom: 1.5rem !important; }
+
+        /* Grid Layout for Verification Queue */
+        .verifications-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .verify-card {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .verify-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .verify-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .verify-card-user h4 {
+            margin: 0;
+            color: #1f2937;
+            font-size: 1.1rem;
+        }
+
+        .verify-card-user p {
+            margin: 2px 0;
+            font-size: 0.85rem;
+            color: #6b7280;
+        }
+
+        .verify-card-body {
+            margin-bottom: 1.5rem;
+        }
+
+        .verify-card-body .timestamp {
+            font-size: 0.75rem;
+            color: #9ca3af;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .verify-card-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .verify-card-actions .btn-subtle {
+            flex: 1;
+            padding: 8px;
+            font-size: 0.85rem;
+        }
     </style>
 </head>
 

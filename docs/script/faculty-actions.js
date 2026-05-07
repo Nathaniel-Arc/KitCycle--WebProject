@@ -729,33 +729,6 @@ window.FacultyActions = {
     },
 
     /* ── Listing Approvals ── */
-    viewListingDetails: function(listId) {
-        const listings = this._getStudentListings();
-        const l = listings.find(x => x.id === listId);
-        if (!l) return;
-
-        const overlay = document.createElement('div');
-        overlay.id = 'listing-details-overlay';
-        overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,23,42,0.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:10000;animation:fadeIn 0.2s ease;';
-        overlay.innerHTML = `
-            <div style="background:#fff;width:95%;max-width:480px;border-radius:20px;padding:25px;box-shadow:0 25px 50px rgba(0,0,0,0.25);animation:modalPop 0.3s cubic-bezier(0.175,0.885,0.32,1.275);max-height:90vh;overflow-y:auto;">
-                <h3 style="margin:0 0 5px;color:#1e293b;text-align:center;">${l.name}</h3>
-                <p style="text-align:center;color:#64748b;font-size:0.85rem;margin-bottom:15px;">Submitted by ${l.student}</p>
-                <div style="width:100%;height:180px;border-radius:12px;overflow:hidden;margin-bottom:15px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;">
-                    ${l.image ? `<img src="${l.image}" style="width:100%;height:100%;object-fit:cover;">` : '<i class="fas fa-camera" style="font-size:3rem;color:#94a3b8;"></i>'}
-                </div>
-                <div style="display:flex;flex-direction:column;gap:8px;">
-                    <div style="display:flex;justify-content:space-between;padding:8px;background:#f8fafc;border-radius:8px;font-size:0.85rem;"><strong>Category:</strong><span>${l.category}</span></div>
-                    <div style="display:flex;justify-content:space-between;padding:8px;background:#f8fafc;border-radius:8px;font-size:0.85rem;"><strong>Condition:</strong><span>${l.condition}</span></div>
-                    <div style="display:flex;justify-content:space-between;padding:8px;background:#f8fafc;border-radius:8px;font-size:0.85rem;"><strong>Price/Day:</strong><span style="color:#800000;font-weight:700;">₱${l.price}</span></div>
-                    <div style="padding:12px;background:#f8fafc;border-radius:8px;font-size:0.85rem;"><strong>Description:</strong><p style="margin:4px 0 0;color:#475569;">${l.description}</p></div>
-                </div>
-                <button onclick="document.getElementById('listing-details-overlay').remove();" style="margin-top:15px;width:100%;padding:10px;background:#f1f5f9;color:#4b5563;border:none;border-radius:8px;font-weight:700;cursor:pointer;">Close</button>
-            </div>
-        `;
-        document.body.appendChild(overlay);
-    },
-
     rejectListing: function(listId) {
         this._showRejectionForm(listId, 'listing');
     },
@@ -801,7 +774,7 @@ window.FacultyActions = {
         if (typeof UIUtils !== 'undefined' && UIUtils.showModal) {
             UIUtils.showModal({
                 title: 'Verify Student Listing',
-                message: `Mark "${listing.name}" owned by ${listing.student} as verified? This will make it visible in the Marketplace.`,
+                message: `Mark "${listing.name}" owned by ${listing.student} as verified? This will make it visible in the WMSU Market.`,
                 type: 'confirm',
                 onConfirm: (val) => {
                     if (val) {
@@ -934,70 +907,41 @@ window.FacultyActions = {
 
     /* ── Refresh Approvals UI ── */
     _refreshApprovals: function() {
-        const requests = this._getRequests();
-        const pending = requests.filter(r => r.status === 'Pending');
-        const approved = requests.filter(r => r.status === 'Approved');
-        const rejected = requests.filter(r => r.status === 'Rejected');
-
-        const requestsStack = document.querySelector('.requests-stack');
-        if (requestsStack) {
-            if (pending.length === 0) {
-                requestsStack.innerHTML = '<div style="text-align:center;padding:40px;color:#64748b;"><i class="fas fa-check-circle" style="font-size:3rem;color:#10b981;margin-bottom:15px;display:block;"></i><h4 style="color:#374151;margin-bottom:5px;">All Caught Up!</h4><p>No pending requests at this time.</p></div>';
+        const listings = this._getStudentListings();
+        const pendingListings = listings.filter(l => l.status === 'Pending');
+        
+        // Update listing verifications stack if on that page
+        const listingsStack = document.getElementById('listingsStack');
+        if (listingsStack) {
+            if (pendingListings.length === 0) {
+                listingsStack.innerHTML = '<div style="text-align:center;padding:40px;color:#64748b;grid-column:1/-1;"><i class="fas fa-box-open" style="font-size:3rem;color:#cbd5e1;margin-bottom:15px;display:block;"></i><h4 style="color:#374151;margin-bottom:5px;">No Listings to Verify</h4><p>No pending requests at this time.</p></div>';
             } else {
-                requestsStack.innerHTML = pending.map(r => `
-                    <div class="request-panel" id="${r.id}">
-                        <div class="panel-header">
-                            <div>
-                                <span class="priority-pill ${r.priority === 'HIGH' ? 'high' : r.priority === 'MEDIUM' ? 'medium' : 'low'}">${r.priority}</span>
-                                <span class="status-pill warning">Pending</span>
-                            </div>
+                listingsStack.innerHTML = pendingListings.map(l => `
+                    <div class="listing-card ${l.status === 'Approved' ? 'status-approved' : l.status === 'Rejected' ? 'status-rejected' : ''}">
+                        <div class="listing-card-header"><span class="status-pill ${l.status === 'Approved' ? 'approved-pill' : l.status === 'Rejected' ? 'rejected-pill' : 'warning'}">${l.status}</span></div>
+                        <div class="listing-card-body">
+                            <h4>${l.name}</h4>
+                            <p><strong>Student:</strong> ${l.student}</p>
+                            <p><strong>Category:</strong> ${l.category}</p>
+                            <p><strong>Condition:</strong> ${l.condition}</p>
+                            <p><strong>Price/Day:</strong> ₱${l.price}</p>
+                            <p class="timestamp"><i class="far fa-clock"></i> ${l.date}</p>
                         </div>
-                        <div class="panel-body">
-                            <div class="student-meta">
-                                <h4>${r.student}</h4>
-                                <p>Student ID: <span>${r.studentId}</span></p>
-                            </div>
-                            <div class="item-specs">
-                                <p><strong>Item:</strong> ${r.item}</p>
-                                <p><strong>Duration:</strong> ${r.duration}</p>
-                                <p><strong>Purpose:</strong> ${r.purpose}</p>
-                                <p class="timestamp"><i class="far fa-clock"></i> Requested on ${r.date}</p>
-                            </div>
-                        </div>
-                        <div class="panel-actions">
-                            <button class="btn-action-light" onclick="FacultyActions.viewEquipmentDetails('${r.id}')"><i class="far fa-eye"></i> View Details</button>
-                            <button class="btn-action-approve" onclick="FacultyActions.approveRequest('${r.id}')"><i class="fas fa-check"></i> Approve</button>
-                            <button class="btn-action-reject" onclick="FacultyActions.rejectRequest('${r.id}')"><i class="fas fa-times"></i> Reject</button>
+                        <div class="listing-card-actions">
+                            ${l.status === 'Pending' 
+                                ? `<button class="btn-action-light" onclick="FacultyActions.viewListingDetails('${l.id}')"><i class="far fa-eye"></i> View</button>
+                                       <button class="btn-action-approve" onclick="FacultyActions.approveListing('${l.id}')"><i class="fas fa-check"></i> Verify</button>
+                                       <button class="btn-action-reject" onclick="FacultyActions.rejectListing('${l.id}')"><i class="fas fa-times"></i> Reject</button>`
+                                : `<span style="font-size:0.75rem;color:#64748b;">Decided on ${l.date}</span>`}
                         </div>
                     </div>
                 `).join('');
             }
         }
-
-        const pendingCount = document.querySelector('.stat-cards-grid .stat-card:first-child h3');
-        if (pendingCount) pendingCount.textContent = pending.length;
-
-        const decisionsStack = document.querySelector('.decisions-stack');
-        if (decisionsStack) {
-            const recent = [...approved, ...rejected].slice(-5).reverse();
-            decisionsStack.innerHTML = recent.map(d => `
-                <div class="decision-log">
-                    <div class="log-info">
-                        <h4>${d.student} <span class="status-pill ${d.status === 'Approved' ? 'success' : 'danger'}">${d.status.toUpperCase()}</span></h4>
-                        <p>Item: ${d.item}</p>
-                        ${d.rejectReason ? `<span class="reason-note">Reason: ${d.rejectReason}</span>` : ''}
-                        <span class="timestamp">${d.date} • Decided by You</span>
-                    </div>
-                    <i class="fas fa-${d.status === 'Approved' ? 'check-circle success-text' : 'times-circle danger-text'} log-icon"></i>
-                </div>
-            `).join('') || '<p style="text-align:center;color:#9ca3af;padding:20px;">No decisions yet.</p>';
-        }
-
+        
+        // Update sidebar badge
         const badge = document.getElementById('sidebarReqBadge');
-        if (badge) badge.textContent = pending.length;
-
-        const renderFn = window.renderAllRequests;
-        if (typeof renderFn === 'function') renderFn();
+        if (badge) badge.textContent = pendingListings.length;
     },
 
     /* ── Render Equipment Grid ── */
@@ -1756,7 +1700,7 @@ window.FacultyActions = {
 
         if (activeStack) {
             if (active.length === 0) {
-                activeStack.innerHTML = '<div style="text-align:center;padding:40px;color:#64748b;"><i class="fas fa-box-open" style="font-size:3rem;color:#cbd5e1;margin-bottom:15px;display:block;"></i><h4 style="color:#374151;margin-bottom:5px;">No Active Rentals</h4><p>All equipment is currently in storage.</p></div>';
+                activeStack.innerHTML = '<div style="text-align:center;padding:40px;color:#64748b;"><i class="fas fa-box-open" style="font-size:3rem;color:#cbd5e1;margin-bottom:15px;display:block;"></i><h4 style="color:#374151;margin-bottom:5px;">No Equipment Active</h4><p>All equipment is currently in storage.</p></div>';
             } else {
                 const today = new Date();
                 activeStack.innerHTML = active.map(r => {
@@ -1869,6 +1813,59 @@ window.FacultyActions = {
 
     initDashboard: function() {
         this.renderDashboard();
+    },
+
+    renderDashboard: function() {
+        const equipment = this._getEquipment();
+        const listings = this._getStudentListings();
+        const requests = this._getRequests();
+        
+        // Calculate stats
+        const totalEquip = equipment.length;
+        const available = equipment.reduce((sum, eq) => sum + (eq.available || 0), 0);
+        const borrowed = equipment.reduce((sum, eq) => sum + (eq.borrowed || 0), 0);
+        const pendingVerifications = listings.filter(l => l.status === 'Pending').length;
+        
+        // Update stat cards
+        const el = (id) => document.getElementById(id);
+        if (el('statTotalEquip')) el('statTotalEquip').textContent = totalEquip;
+        if (el('statAvailable')) el('statAvailable').textContent = available;
+        if (el('statBorrowed')) el('statBorrowed').textContent = borrowed;
+        if (el('statPending')) el('statPending').textContent = pendingVerifications;
+        
+        // Update sidebar badge
+        const sidebarBadge = document.getElementById('sidebarReqBadge');
+        if (sidebarBadge) sidebarBadge.textContent = pendingVerifications;
+        
+        // Render recently borrowed gear
+        const recentBorrowed = requests.filter(r => ['Picked Up', 'Approved'].includes(r.status)).slice(0, 3);
+        const recentList = document.getElementById('recentBorrowedList');
+        if (recentList) {
+            if (recentBorrowed.length === 0) {
+                recentList.innerHTML = '<p style="text-align:center;padding:20px;color:#64748b;">No recently borrowed gear.</p>';
+            } else {
+                recentList.innerHTML = recentBorrowed.map(r => {
+                    const initial = r.student.charAt(0);
+                    const colors = ['#3b82f6', '#8b5cf6', '#f59e0b', '#10b981', '#ef4444'];
+                    const color = colors[Math.floor(Math.random() * colors.length)];
+                    const dueDate = r.dueDate || 'TBD';
+                    const status = r.status === 'Picked Up' ? 'Active' : 'Due Soon';
+                    const statusColor = r.status === 'Picked Up' ? '#10b981' : '#f59e0b';
+                    const statusBg = r.status === 'Picked Up' ? '#f0fdf4' : '#fffbeb';
+                    
+                    return `
+                        <div class="pending-request-mini">
+                            <div class="req-avatar" style="background:linear-gradient(135deg,${color},${color}88);">${initial}</div>
+                            <div class="req-info">
+                                <h4>${r.item}</h4>
+                                <p>${r.student} • Due: ${dueDate}</p>
+                            </div>
+                            <span style="font-size:0.75rem;font-weight:700;color:${statusColor};background:${statusBg};padding:4px 10px;border-radius:20px;">${status}</span>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
     }
 };
 
