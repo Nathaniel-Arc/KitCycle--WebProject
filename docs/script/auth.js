@@ -182,7 +182,7 @@ window.AuthSystem = {
             // Determine messages link based on role
             let messagesHref;
             if (userRole === 'faculty') {
-                messagesHref = pagesPrefix + 'faculty-interface html/faculty-messages.html';
+                messagesHref = pagesPrefix + 'student-interface html/student-messages.html';
             } else {
                 messagesHref = pagesPrefix + 'student-interface html/student-messages.html';
             }
