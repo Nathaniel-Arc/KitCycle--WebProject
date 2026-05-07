@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management | WMSU KitCycle</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/admin-interface/admin-common.css">
+    <link rel="stylesheet" href="../../css/admin-interface/pages/admin-directory.css">
+    <link rel="stylesheet" href="../../css/admin-interface/pages/admin-identity.css">
+    <script src="../../script/auth.js" defer></script>
+    <script src="../../script/user-loader.js" defer></script>
+    <script src="../../script/ui-utils.js" defer></script>
+    
+    <script>
+        (function() {
+            const isMinimized = localStorage.getItem('sidebarMinimized') === 'true';
+            if (isMinimized) {
+                document.documentElement.classList.add('sidebar-is-minimized');
+            }
+        })();
+    </script>
+    <style>
+        .sidebar-is-minimized .sidebar { width: 80px !important; padding: 2rem 0.5rem !important; transition: none !important; }
+        .sidebar-is-minimized .dashboard-content { margin-left: 80px !important; transition: none !important; }
+        .sidebar-is-minimized .profile-info, .sidebar-is-minimized .sidebar-nav span, .sidebar-is-minimized .sidebar-logout span { display: none !important; }
+        .sidebar-is-minimized .sidebar-nav a { justify-content: center !important; padding: 12px 0 !important; }
+        .sidebar-is-minimized .sidebar-nav i { font-size: 1.2rem !important; margin: 0 !important; }
+        .sidebar-is-minimized .sidebar-profile { justify-content: center !important; padding-bottom: 1.5rem !important; }
+        
+        .filter-tab {
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            color: #64748b;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: 0.2s;
+        }
+        .filter-tab.active {
+            background: #fff;
+            color: #800000;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .filter-tab:hover:not(.active) {
+            color: #1e293b;
+        }
+
+        .horizontal-queue {
+            display: flex;
+            overflow-x: auto;
+            gap: 15px;
+            padding-bottom: 10px;
+        }
+        .horizontal-queue::-webkit-scrollbar {
+            height: 8px;
+        }
+        .horizontal-queue::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .queue-card {
+            min-width: 280px;
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .queue-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .queue-card-header .name {
+            font-weight: 700;
+            color: #1e293b;
+            font-size: 0.95rem;
+        }
+        .queue-card-header .date {
+            font-size: 0.75rem;
+            color: #94a3b8;
+        }
+        .queue-card-body {
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="navbar">
+        <div class="nav-left-group">
+            <div class="sidebar-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></div>
+            <div class="logo">
+                <img src="../../images/wmsulogo.png" alt="WMSU Logo" class="nav-logo-img">
+                <div class="logo-text">WMSU<span>KitCycle</span></div>
+            </div>
+        </div>
+        <div class="nav-right" style="display: flex; align-items: center; gap: 30px;">
+            <ul class="nav-links">
+                <li><a href="../../index.html">Home</a></li>
+                <li><a href="../marketplace.html">Marketplace</a></li>
+                <li><a href="../howitworks.html">How It Works</a></li>
+                <li><a href="../safety.html">Safety</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <div class="user-nav-profile">
+                    <div class="user-meta">
+                        <span class="user-display-name" id="nav-name">Admin Officer</span>
+                        <span class="user-role-badge" id="nav-role">Admin</span>
+                    </div>
+                    <span class="user-avatar-circle">
+                        <img src="" id="nav-avatar" class="nav-profile-img-circle" style="display:none;">
+                        <i class="fas fa-user" id="nav-avatar-icon"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <div class="dashboard-layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-profile">
+                <div class="profile-avatar"><img id="sidebar-avatar" src="../../images/nash_profile.png" alt="Profile"></div>
+                <div class="profile-info">
+                    <h4 id="sidebar-name">Admin Office</h4>
+                    <span id="sidebar-role">System Administrator</span>
+                </div>
+            </div>
+
+            <ul class="sidebar-nav">
+                <li><a href="admin-dashboard.html"><i class="fas fa-th-large"></i> <span>Dashboard Summary</span></a></li>
+                <li class="active"><a href="admin-users.html"><i class="fas fa-users"></i> <span>User Management</span></a></li>
+                <li><a href="admin-incidents.html"><i class="fas fa-exclamation-triangle"></i> <span>Incident Reports</span></a></li>
+                <li><a href="admin-enforcement.html"><i class="fas fa-shield-alt"></i> <span>Institutional Enforcement</span></a></li>
+                <li><a href="admin-revenue.html"><i class="fas fa-piggy-bank"></i> <span>Departmental Revenue</span></a></li>
+            </ul>
+
+            <a href="javascript:void(0)" onclick="AuthSystem.confirmLogout(); return false;" class="sidebar-logout"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
+        </aside>
+
+        <main class="dashboard-content" id="mainContent" style="padding: 0; display: flex; flex-direction: column; background: #f4f7f6; min-height: 100vh;">
+            
+            <div style="padding: 25px 25px 0 25px;">
+                <div class="dashboard-banner">
+                    <div>
+                        <h2>User Management</h2>
+                        <p>Process verifications and manage registered platform users.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="flex: 1; padding: 25px; display: flex; flex-direction: column; gap: 25px;">
+
+                <!-- Summary Statistics & Quick Actions (Top) -->
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 25px;">
+                    <div class="content-card" style="display: flex; align-items: center; gap: 30px; margin-bottom: 0; background: #fff;">
+                        <div style="flex: 1;">
+                            <h3 style="font-size: 1.4rem; color: #1e293b; margin: 0 0 8px;">Platform Composition</h3>
+                            <p style="font-size: 1rem; color: #64748b; margin: 0; line-height: 1.6;">Distribution of verified Students, Faculty, and Administrators across the platform.</p>
+                            <div style="margin-top: 20px; display: flex; gap: 15px;">
+                                <div style="text-align: center;">
+                                    <div style="font-size: 1.2rem; font-weight: 800; color: #800000;">1,240</div>
+                                    <div style="font-size: 0.7rem; color: #64748b; text-transform: uppercase; font-weight: 700;">Students</div>
+                                </div>
+                                <div style="width: 1px; background: #e2e8f0;"></div>
+                                <div style="text-align: center;">
+                                    <div style="font-size: 1.2rem; font-weight: 800; color: #f59e0b;">85</div>
+                                    <div style="font-size: 0.7rem; color: #64748b; text-transform: uppercase; font-weight: 700;">Faculty</div>
+                                </div>
+                                <div style="width: 1px; background: #e2e8f0;"></div>
+                                <div style="text-align: center;">
+                                    <div style="font-size: 1.2rem; font-weight: 800; color: #64748b;">12</div>
+                                    <div style="font-size: 0.7rem; color: #64748b; text-transform: uppercase; font-weight: 700;">Staff</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="userCompositionChart" style="min-width: 280px; height: 200px;"></div>
+                    </div>
+
+                    <div class="content-card" style="background: #fafafa; margin-bottom: 0;">
+                        <h3 style="font-size: 1rem; color: #1e293b; margin: 0 0 15px;">Administrative Controls</h3>
+                        <div style="display: grid; grid-template-columns: 1fr; gap: 10px;">
+                            <button class="btn-admin-outline" style="text-align: left; padding: 12px; background: #fff; display: flex; align-items: center; gap: 10px;">
+                                <i class="fas fa-user-plus" style="color: #800000;"></i> 
+                                <div>
+                                    <div style="font-weight: 700; font-size: 0.85rem;">Manually Add User</div>
+                                    <div style="font-size: 0.7rem; color: #64748b;">Bypass verification queue</div>
+                                </div>
+                            </button>
+                            <button class="btn-admin-outline" style="text-align: left; padding: 12px; background: #fff; display: flex; align-items: center; gap: 10px;">
+                                <i class="fas fa-file-export" style="color: #64748b;"></i>
+                                <div>
+                                    <div style="font-weight: 700; font-size: 0.85rem;">Export Directory</div>
+                                    <div style="font-size: 0.7rem; color: #64748b;">Download CSV of all members</div>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pending Verification Section (Integrated White Background) -->
+                <div id="queueView" style="background: #fff; padding: 30px; border-radius: 15px; border: 1px solid #e2e8f0; margin-bottom: 0;">
+                    <div class="card-header" style="padding-bottom: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f1f5f9;">
+                        <div>
+                            <h3 style="margin: 0; color: #1e293b; font-size: 1.1rem;">Pending Verifications</h3>
+                            <p style="font-size: 0.85rem; color: #64748b; margin: 5px 0 0;">Review student ID submissions from new registrations.</p>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <div id="bulkActions" style="display: none; align-items: center; gap: 10px; background: #f8fafc; padding: 5px 15px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                                <span style="font-size: 0.8rem; font-weight: 700; color: #475569;"><span id="selectedCount">0</span> Selected</span>
+                                <button class="btn-admin" style="padding: 5px 12px; font-size: 0.75rem;" onclick="bulkVerify()">Bulk Verify</button>
+                            </div>
+                            <label style="display: flex; align-items: center; gap: 8px; font-size: 0.8rem; font-weight: 700; color: #64748b; cursor: pointer; background: #f8fafc; padding: 6px 12px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                                <input type="checkbox" id="selectAllQueue" onclick="toggleSelectAll(this.checked)"> Select All
+                            </label>
+                            <span style="background: #fff1f2; color: #800000; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 700;" id="queueCount">3 Actions Required</span>
+                        </div>
+                    </div>
+                    
+                    <div class="horizontal-queue" id="verificationQueueContainer">
+                        <!-- Injected by JS -->
+                    </div>
+                </div>
+
+                    <!-- Detail Verification Modal (Split-View) -->
+                    <div id="inspectionModal" class="modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); align-items: center; justify-content: center; z-index: 6000;">
+                        <div class="modal-card" style="background: #f4f7f6; padding: 0; border-radius: 20px; max-width: 1100px; width: 95%; height: 90vh; display: flex; flex-direction: column; overflow: hidden;">
+                            <!-- Modal Header -->
+                            <div style="background: #fff; padding: 20px 30px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <h3 style="margin: 0; color: #1e293b; font-size: 1.2rem;">Verification Workspace: <span id="modalNameTitle">Pedro Martinez</span></h3>
+                                    <p style="margin: 5px 0 0; font-size: 0.85rem; color: #64748b;">Compare uploaded evidence against system records.</p>
+                                </div>
+                                <i class="fas fa-times" style="cursor: pointer; font-size: 1.2rem; color: #94a3b8;" onclick="closeInspectionModal()"></i>
+                            </div>
+
+                            <!-- Modal Body (Split-View) -->
+                            <div style="flex: 1; display: grid; grid-template-columns: 1fr 1fr; overflow: hidden;">
+                                <!-- Left Column: Evidence -->
+                                <div style="padding: 30px; overflow-y: auto; background: #f8fafc; border-right: 1px solid #e2e8f0; display: flex; flex-direction: column; gap: 20px;">
+                                    <div class="id-inspection-card">
+                                        <div class="card-header" style="padding: 12px 20px; background: #fff; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center;">
+                                            <h3 style="font-size: 0.85rem; margin: 0; font-weight: 800; color: #475569;">Evidence 1: Student ID</h3>
+                                            <span style="font-size: 0.7rem; color: #64748b; font-weight: 600;"><i class="fas fa-search-plus"></i> Click for Fullscreen</span>
+                                        </div>
+                                        <div class="id-card-wrapper" style="background: #fff;">
+                                            <img src="" id="detailIDImage" class="id-card-img" alt="Student ID" onclick="openFullscreenImage(this.src)" style="cursor: pointer;">
+                                        </div>
+                                    </div>
+                                    <div class="id-inspection-card">
+                                        <div class="card-header" style="padding: 12px 20px; background: #fff; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center;">
+                                            <h3 style="font-size: 0.85rem; margin: 0; font-weight: 800; color: #475569;">Evidence 2: COR</h3>
+                                            <span style="font-size: 0.7rem; color: #64748b; font-weight: 600;"><i class="fas fa-search-plus"></i> Click for Fullscreen</span>
+                                        </div>
+                                        <div class="id-card-wrapper" style="background: #fff;">
+                                            <img src="" id="detailCORImage" class="id-card-img" alt="COR" onclick="openFullscreenImage(this.src)" style="cursor: pointer;">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Right Column: System Record -->
+                                <div style="padding: 30px; overflow-y: auto; background: #fff; display: flex; flex-direction: column; gap: 25px;">
+                                    <div class="system-record-card" style="box-shadow: none; border-color: #f1f5f9;">
+                                        <h4 style="margin: 0 0 20px; color: #1e293b; font-size: 0.95rem; border-left: 4px solid #800000; padding-left: 10px;">Institutional Profile</h4>
+                                        <div class="record-field">
+                                            <span class="record-label">Full Name</span>
+                                            <span class="record-value" id="detailName"></span>
+                                        </div>
+                                        <div class="record-field" style="display: flex; justify-content: space-between; align-items: center;">
+                                            <div>
+                                                <span class="record-label">ID Number</span>
+                                                <span class="record-value" id="detailIDNumber"></span>
+                                            </div>
+                                            <span id="duplicateWarning" style="color: #ef4444; font-size: 0.7rem; font-weight: 800; display: none; background: #fef2f2; padding: 4px 10px; border-radius: 6px; border: 1px solid #fee2e2;">
+                                                <i class="fas fa-exclamation-triangle"></i> DUPLICATE ID FOUND
+                                            </span>
+                                        </div>
+                                        <div class="record-field">
+                                            <span class="record-label">College</span>
+                                            <span class="record-value" id="detailCollege"></span>
+                                        </div>
+                                        <div class="record-field">
+                                            <span class="record-label">WMSU Email</span>
+                                            <span class="record-value" id="detailEmail"></span>
+                                        </div>
+                                        <div class="record-field">
+                                            <span class="record-label">Account Created</span>
+                                            <span class="record-value" id="detailCreatedDate"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="checklist-container" style="box-shadow: none; background: #f8fafc; border-color: #e2e8f0;">
+                                        <h4 style="margin: 0 0 15px; color: #1e293b; font-size: 0.85rem; font-weight: 800;">Compliance Audit Checklist</h4>
+                                        <label class="checklist-item"><input type="checkbox"> <span>Name matches Institutional ID</span></label>
+                                        <label class="checklist-item"><input type="checkbox"> <span>ID Number is valid/readable</span></label>
+                                        <label class="checklist-item"><input type="checkbox"> <span>Department matches profile</span></label>
+                                        <label class="checklist-item"><input type="checkbox"> <span>Document is for current AY</span></label>
+                                    </div>
+
+                                    <!-- Actions (Bottom of Right Column) -->
+                                    <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid #f1f5f9; display: flex; flex-direction: column; gap: 12px;">
+                                        <button class="btn-verdict-approve" onclick="processVerdict('Approved')" style="height: 50px; font-size: 1rem;">
+                                            <i class="fas fa-user-check"></i> One-Click Verify
+                                        </button>
+                                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                                            <button class="btn-admin-outline" style="border-color: #f59e0b; color: #b45309; background: #fff;" onclick="openRejectModal()">
+                                                <i class="fas fa-reply"></i> Re-upload
+                                            </button>
+                                            <button class="btn-admin" style="background: #1e293b; color: #fff;" onclick="processVerdict('Flagged (Fraud)')">
+                                                <i class="fas fa-ban"></i> Deny/Fraud
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                <!-- User Directory Table -->
+                <div style="padding: 0 25px 25px 25px;">
+                    <div class="content-card" id="directoryView" style="margin-top: 0;">
+                        <div class="card-header" style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; align-items: center;">
+                            <h3>Verified Members Directory</h3>
+                            <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+                                <div class="role-filter-group" style="display: flex; background: #f1f5f9; padding: 4px; border-radius: 10px; margin-right: 10px;">
+                                    <button class="filter-tab active" onclick="setRoleFilter('All', this)">All</button>
+                                    <button class="filter-tab" onclick="setRoleFilter('Student', this)">Students</button>
+                                    <button class="filter-tab" onclick="setRoleFilter('Faculty', this)">Faculty</button>
+                                </div>
+                                <input type="text" id="directorySearch" placeholder="Search by Name or ID..." onkeyup="handleSearch(this.value)" style="padding: 10px 15px; border-radius: 8px; border: 1px solid #e2e8f0; font-size: 0.85rem; width: 220px;">
+                                <button class="btn-admin" onclick="exportCSV()">Export CSV</button>
+                            </div>
+                        </div>
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Profile</th>
+                                    <th>ID Number</th>
+                                    <th>Trust Score</th>
+                                    <th>Engagement</th>
+                                    <th>Status</th>
+                                    <th>Controls</th>
+                                </tr>
+                            </thead>
+                            <tbody id="directoryTableBody">
+                                <!-- Injected by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+        </main>
+    </div>
+
+    <!-- Rejection Modal -->
+    <div id="rejectModal" class="modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); align-items: center; justify-content: center; z-index: 5000;">
+        <div class="modal-card" style="background: #fff; padding: 2rem; border-radius: 20px; max-width: 400px; width: 90%;">
+            <h3 style="margin: 0 0 15px; color: #1e293b;">Re-upload Request Reason</h3>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <button class="btn-admin-outline" style="text-align: left; padding: 12px;" onclick="confirmRejection('ID photo too blurry')">ID photo too blurry</button>
+                <button class="btn-admin-outline" style="text-align: left; padding: 12px;" onclick="confirmRejection('Back of ID missing')">Back of ID missing</button>
+                <button class="btn-admin-outline" style="text-align: left; padding: 12px;" onclick="confirmRejection('Incorrect ID Number')">Incorrect ID Number</button>
+                <button class="btn-admin-outline" style="text-align: left; padding: 12px;" onclick="confirmRejection('Incomplete Information')">Incomplete Information</button>
+                <button class="btn-admin-outline" style="text-align: left; padding: 12px;" onclick="confirmRejection('Invalid ID Type')">Invalid ID Type</button>
+            </div>
+            <button class="btn-admin" style="margin-top: 20px; width: 100%; background: #64748b;" onclick="closeRejectModal()">Cancel</button>
+        </div>
+    </div>
+
+    <!-- History Modal -->
+    <div id="historyModal" class="modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); align-items: center; justify-content: center; z-index: 5000;">
+        <div class="modal-card" style="background: #fff; padding: 2rem; border-radius: 20px; max-width: 600px; width: 95%;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h3 style="margin: 0; color: #1e293b;">Transaction History: <span id="historyUserName"></span></h3>
+                <i class="fas fa-times" style="cursor: pointer; color: #64748b;" onclick="closeHistoryModal()"></i>
+            </div>
+            <div style="max-height: 300px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 8px;">
+                <table class="admin-table" style="width: 100%; margin: 0;">
+                    <thead style="position: sticky; top: 0; background: #f8fafc; z-index: 10;">
+                        <tr>
+                            <th>Item Name</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Canon DSLR Camera</td><td><span style="color: #2563eb; font-weight: 700;">Lender</span></td><td><span style="color: #10b981; font-weight: 700;">Returned</span></td><td>May 01, 2026</td></tr>
+                        <tr><td>Arduino Starter Kit</td><td><span style="color: #059669; font-weight: 700;">Borrower</span></td><td><span style="color: #f59e0b; font-weight: 700;">Active</span></td><td>May 05, 2026</td></tr>
+                        <tr><td>T-Square 24"</td><td><span style="color: #059669; font-weight: 700;">Borrower</span></td><td><span style="color: #ef4444; font-weight: 700;">Overdue</span></td><td>April 28, 2026</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div style="display: flex; justify-content: flex-end; margin-top: 15px;">
+                <button class="btn-admin-outline" onclick="closeHistoryModal()">Close View</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fullscreen Image Modal -->
+    <div id="fullscreenImageModal" class="modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); align-items: center; justify-content: center; z-index: 9999;" onclick="closeFullscreenImage()">
+        <span style="position: absolute; top: 20px; right: 30px; color: #fff; font-size: 30px; cursor: pointer; font-weight: bold;">&times;</span>
+        <img id="fullscreenImg" src="" style="max-width: 90%; max-height: 90%; border-radius: 8px; box-shadow: 0 0 20px rgba(0,0,0,0.5);">
+    </div>
+
+    <script>
+        function openFullscreenImage(src) {
+            document.getElementById('fullscreenImg').src = src;
+            document.getElementById('fullscreenImageModal').style.display = 'flex';
+        }
+        function closeFullscreenImage() {
+            document.getElementById('fullscreenImageModal').style.display = 'none';
+        }
+
+        const verificationQueue = [
+            { id: 1, name: "Pedro Martinez", idNumber: "2024-15678", college: "Engineering", date: "May 5, 2026", createdDate: "May 1, 2026", email: "pedro@wmsu.edu.ph", idImg: "../../brain/9c6df319-e830-4da7-b1b1-76f7f8aab4b4/wmsu_student_id_demo_1778102771104.png", corImg: "../../brain/9c6df319-e830-4da7-b1b1-76f7f8aab4b4/wmsu_cor_demo_1778102785218.png" },
+            { id: 2, name: "Lisa Chen", idNumber: "2024-15679", college: "Science", date: "May 5, 2026", createdDate: "May 2, 2026", email: "lisa.chen@wmsu.edu.ph", idImg: "../../brain/9c6df319-e830-4da7-b1b1-76f7f8aab4b4/wmsu_student_id_demo_1778102771104.png", corImg: "../../brain/9c6df319-e830-4da7-b1b1-76f7f8aab4b4/wmsu_cor_demo_1778102785218.png" },
+            { id: 3, name: "Maria Santos", idNumber: "2021-00123", college: "ICS", date: "May 06, 2026", createdDate: "May 3, 2026", email: "maria.santos@wmsu.edu.ph", idImg: "../../brain/9c6df319-e830-4da7-b1b1-76f7f8aab4b4/wmsu_student_id_demo_1778102771104.png", corImg: "../../brain/9c6df319-e830-4da7-b1b1-76f7f8aab4b4/wmsu_cor_demo_1778102785218.png" }
+        ];
+
+        // Populate 20+ more students
+        const colleges = ["ICS", "Engineering", "Science", "Nursing", "CLA", "CBA"];
+        for(let i=4; i<=25; i++) {
+            verificationQueue.push({
+                id: i,
+                name: `Student ${i}`,
+                idNumber: `2024-${10000 + i}`,
+                college: colleges[i % colleges.length],
+                date: "May 06, 2026",
+                createdDate: "May 4, 2026",
+                email: `student${i}@wmsu.edu.ph`,
+                idImg: "../../brain/9c6df319-e830-4da7-b1b1-76f7f8aab4b4/wmsu_student_id_demo_1778102771104.png",
+                corImg: "../../brain/9c6df319-e830-4da7-b1b1-76f7f8aab4b4/wmsu_cor_demo_1778102785218.png"
+            });
+        }
+
+        const directoryUsers = [
+            { name: "Nash Arciaga", id: "2023-0102", role: "Student", college: "ICS", trust: "4.9", borrowed: 12, lent: 5, status: "Active", img: "../../images/nash_profile.png" },
+            { name: "Maria Santos", id: "2021-0012", role: "Student", college: "Engineering", trust: "4.7", borrowed: 3, lent: 1, status: "Active", img: "../../images/maria_profile.png" },
+            { name: "Juan Dela Cruz", id: "2022-0982", role: "Student", college: "Nursing", trust: "4.2", borrowed: 0, lent: 8, status: "Active", img: "../../images/juan_profile.png" },
+            { name: "Elena Rodriguez", id: "2023-4411", role: "Student", college: "Science", trust: "4.8", borrowed: 5, lent: 12, status: "Active", img: "../../images/elena_profile.png" },
+            { name: "Prof. Ace Lorenz Patongan", id: "F-2024-99", role: "Faculty", college: "Engineering", trust: "5.0", borrowed: 0, lent: 12, status: "Active", icon: "user" },
+            { name: "Ricardo Dalisay", id: "2021-0505", role: "Student", college: "ICS", trust: "4.5", borrowed: 4, lent: 2, status: "Active" },
+            { name: "Leni Robredo", id: "2021-0888", role: "Student", college: "Science", trust: "5.0", borrowed: 2, lent: 10, status: "Active" },
+            { name: "Jose Rizal", id: "2020-0001", role: "Student", college: "CLA", trust: "4.9", borrowed: 1, lent: 20, status: "Active" },
+            { name: "Andres Bonifacio", id: "2020-0002", role: "Student", college: "Engineering", trust: "4.8", borrowed: 0, lent: 15, status: "Active" },
+            { name: "Gabriela Silang", id: "2021-0303", role: "Student", college: "Nursing", trust: "4.7", borrowed: 8, lent: 0, status: "Active" },
+            { name: "Antonio Luna", id: "F-2024-55", role: "Faculty", college: "Science", trust: "4.9", borrowed: 0, lent: 25, status: "Active", icon: "user" },
+            { name: "Gregorio del Pilar", id: "2023-0077", role: "Student", college: "CBA", trust: "4.4", borrowed: 2, lent: 1, status: "Active" },
+            { name: "Melchora Aquino", id: "2020-0909", role: "Student", college: "Social Work", trust: "5.0", borrowed: 0, lent: 30, status: "Active" },
+            { name: "Manuel Quezon", id: "2021-1935", role: "Student", college: "CLA", trust: "4.6", borrowed: 5, lent: 3, status: "Active" },
+            { name: "Ramon Magsaysay", id: "2021-1953", role: "Student", college: "Agriculture", trust: "5.0", borrowed: 10, lent: 10, status: "Active" },
+            { name: "Corazon Aquino", id: "2022-1986", role: "Student", college: "CBA", trust: "4.8", borrowed: 1, lent: 5, status: "Active" },
+            { name: "Fidel Ramos", id: "2022-1992", role: "Student", college: "Engineering", trust: "4.7", borrowed: 3, lent: 8, status: "Active" }
+        ];
+
+        // Ensure sorted alphabetically
+        directoryUsers.sort((a, b) => a.name.localeCompare(b.name));
+        
+        let filteredUsers = [...directoryUsers];
+
+        let currentStudentIndex = -1;
+
+        function renderQueue() {
+            const container = document.getElementById('verificationQueueContainer');
+            container.innerHTML = verificationQueue.map((s, index) => `
+                <div class="queue-card" style="position: relative;">
+                    <input type="checkbox" class="queue-checkbox" style="position: absolute; top: 15px; left: 15px; width: 18px; height: 18px; accent-color: #800000; cursor: pointer;" onclick="updateBulkCount()">
+                    <div class="queue-card-header" style="margin-left: 25px;">
+                        <span class="name">${s.name}</span>
+                        <span class="date">${s.date}</span>
+                    </div>
+                    <div class="queue-card-body" style="margin-left: 25px;">
+                        <div>ID: ${s.idNumber}</div>
+                        <div>College: ${s.college}</div>
+                    </div>
+                    <button class="btn-admin-outline" style="margin-top: 5px; width: 100%; border-color: #800000; color: #800000;" onclick="inspectStudent(${index})">Inspect Evidence</button>
+                </div>
+            `).join('');
+            document.getElementById('queueCount').innerText = `${verificationQueue.length} Actions Required`;
+            updateBulkCount();
+        }
+
+        function toggleSelectAll(checked) {
+            document.querySelectorAll('.queue-checkbox').forEach(cb => cb.checked = checked);
+            updateBulkCount();
+        }
+
+        function updateBulkCount() {
+            const selected = document.querySelectorAll('.queue-checkbox:checked').length;
+            const bulkBar = document.getElementById('bulkActions');
+            const countSpan = document.getElementById('selectedCount');
+            if(selected > 0) {
+                bulkBar.style.display = 'flex';
+                countSpan.innerText = selected;
+            } else {
+                bulkBar.style.display = 'none';
+            }
+        }
+
+        function bulkVerify() {
+            const selectedCount = document.querySelectorAll('.queue-checkbox:checked').length;
+            if(confirm(`Are you sure you want to verify all ${selectedCount} selected students?`)) {
+                alert(`Bulk verified ${selectedCount} students successfully.`);
+                location.reload(); // Simple mock refresh
+            }
+        }
+
+        function inspectStudent(index) {
+            currentStudentIndex = index;
+            const s = verificationQueue[index];
+            
+            document.getElementById('modalNameTitle').innerText = s.name;
+            document.getElementById('detailName').innerText = s.name;
+            document.getElementById('detailIDNumber').innerText = s.idNumber;
+            document.getElementById('detailCollege').innerText = s.college;
+            document.getElementById('detailEmail').innerText = s.email;
+            document.getElementById('detailCreatedDate').innerText = s.createdDate + " (Registered 2 hours ago)";
+            document.getElementById('detailIDImage').src = s.idImg;
+            document.getElementById('detailCORImage').src = s.corImg || s.idImg;
+
+            if(s.name === "Lisa Chen") {
+                document.getElementById('duplicateWarning').style.display = 'block';
+            } else {
+                document.getElementById('duplicateWarning').style.display = 'none';
+            }
+
+            document.querySelectorAll('.checklist-item input').forEach(cb => cb.checked = false);
+            document.getElementById('inspectionModal').style.display = 'flex';
+        }
+
+        function closeInspectionModal() {
+            document.getElementById('inspectionModal').style.display = 'none';
+        }
+
+        function processVerdict(status) {
+            alert(`Student ${status} successfully.`);
+            verificationQueue.splice(currentStudentIndex, 1);
+            closeInspectionModal();
+            renderQueue();
+        }
+
+        function openRejectModal() { document.getElementById('rejectModal').style.display = 'flex'; }
+        function closeRejectModal() { document.getElementById('rejectModal').style.display = 'none'; }
+        function confirmRejection(reason) {
+            alert(`Rejected for: ${reason}`);
+            closeRejectModal();
+            processVerdict('Rejected');
+        }
+
+        function openHistoryModal(name) {
+            document.getElementById('historyUserName').innerText = name;
+            document.getElementById('historyModal').style.display = 'flex';
+        }
+        function closeHistoryModal() {
+            document.getElementById('historyModal').style.display = 'none';
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            const isMinimized = sidebar.classList.toggle('minimized');
+            mainContent.classList.toggle('expanded');
+            
+            if (isMinimized) {
+                document.documentElement.classList.add('sidebar-is-minimized');
+            } else {
+                document.documentElement.classList.remove('sidebar-is-minimized');
+            }
+            
+            localStorage.setItem('sidebarMinimized', isMinimized);
+        }
+
+        let currentRoleFilter = 'All';
+        let currentSearchQuery = '';
+
+        function setRoleFilter(role, btn) {
+            currentRoleFilter = role;
+            document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+            applyFilters();
+        }
+
+        function handleSearch(query) {
+            currentSearchQuery = query;
+            applyFilters();
+        }
+
+        function applyFilters() {
+            const q = currentSearchQuery.toLowerCase();
+            filteredUsers = directoryUsers.filter(u => {
+                const matchesRole = currentRoleFilter === 'All' || u.role === currentRoleFilter;
+                const matchesSearch = u.name.toLowerCase().includes(q) || u.id.toLowerCase().includes(q);
+                return matchesRole && matchesSearch;
+            });
+            renderDirectory();
+        }
+
+        function exportCSV() {
+            UIUtils.showToast("Compiling directory data...", "info");
+            setTimeout(() => {
+                UIUtils.showToast("WMSU_Member_Directory.csv ready.", "success");
+            }, 1200);
+        }
+
+        function renderDirectory() {
+            const tbody = document.getElementById('directoryTableBody');
+            tbody.innerHTML = filteredUsers.map(u => {
+                const roleColor = u.role === "Student" ? "#e0e7ff" : (u.role === "Faculty" ? "#fef3c7" : "#f1f5f9");
+                const roleTextColor = u.role === "Student" ? "#4338ca" : (u.role === "Faculty" ? "#b45309" : "#475569");
+                const statusColor = u.status === "Active" ? "#ecfdf5" : (u.status === "Warning" ? "#fffbeb" : "#fef2f2");
+                const statusTextColor = u.status === "Active" ? "#10b981" : (u.status === "Warning" ? "#f59e0b" : "#ef4444");
+
+                const engagementHTML = u.role === 'Faculty' 
+                    ? '<span style="color: #94a3b8; font-size: 0.75rem; font-weight: 600; font-style: italic;">Institutional Lead</span>' 
+                    : `<div style="font-size: 0.75rem; color: #64748b;">
+                        <span style="color: #059669; font-weight: 700;"><i class="fas fa-hand-holding"></i> ${u.borrowed} Borrowed</span><br>
+                        <span style="color: #2563eb; font-weight: 700;"><i class="fas fa-box-open"></i> ${u.lent} Lent</span>
+                      </div>`;
+
+                return `
+                    <tr>
+                        <td>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <div style="width: 32px; height: 32px; border-radius: 50%; background: #e2e8f0; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem; border: 2px solid #800000; overflow: hidden;">
+                                    ${u.img ? `<img src="${u.img}" style="width: 100%; height: 100%; object-fit: cover;">` : `<i class="fas fa-${u.icon || 'user'}" style="color: #94a3b8;"></i>`}
+                                </div>
+                                <div>
+                                    <div style="font-weight: 700; color: #1e293b;">${u.name}</div>
+                                    <div style="font-size: 0.7rem; color: #64748b; font-weight: 600;"><span style="background: ${roleColor}; color: ${roleTextColor}; padding: 2px 6px; border-radius: 4px;">${u.role}</span> | ${u.college}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td style="font-weight: 600; color: #475569;">${u.id}</td>
+                        <td>
+                            <div style="display: flex; align-items: center; gap: 5px;">
+                                <i class="fas fa-star" style="color: #fbbf24; font-size: 0.8rem;"></i>
+                                <span style="font-weight: 800; color: #1e293b;">${u.trust}</span><span style="font-size: 0.75rem; color: #94a3b8;">/5.0</span>
+                            </div>
+                        </td>
+                        <td>${engagementHTML}</td>
+                        <td><span class="status-badge" style="background: ${statusColor}; color: ${statusTextColor}; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700;">${u.status}</span></td>
+                        <td>
+                            <div style="display: flex; gap: 5px;">
+                                <button class="btn-admin-outline" style="padding: 5px 8px; font-size: 0.75rem;" onclick="openHistoryModal('${u.name}')"><i class="fas fa-history"></i> History</button>
+                                <button class="btn-admin-outline" style="padding: 5px 8px; font-size: 0.75rem; border-color: #f59e0b; color: #b45309;" onclick="UIUtils.showToast('User flagged for manual audit.', 'info')"><i class="fas fa-pause-circle"></i> Flag</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderQueue();
+            renderDirectory();
+
+            const options = {
+                series: [1240, 85, 12],
+                chart: {
+                    type: 'donut',
+                    height: 250,
+                    fontFamily: 'Inter, sans-serif'
+                },
+                labels: ['Students', 'Faculty', 'Staff'],
+                colors: ['#800000', '#f59e0b', '#64748b'],
+                plotOptions: {
+                    pie: {
+                        donut: {
+                            size: '65%',
+                            labels: {
+                                show: true,
+                                name: { fontSize: '0.8rem', color: '#64748b' },
+                                value: { fontSize: '1.5rem', fontWeight: 700, color: '#1e293b' },
+                                total: {
+                                    show: true, showAlways: true, label: 'Total Users', fontSize: '0.8rem', color: '#64748b',
+                                    formatter: function (w) { return w.globals.seriesTotals.reduce((a, b) => a + b, 0) }
+                                }
+                            }
+                        }
+                    }
+                },
+                dataLabels: { enabled: false },
+                legend: { position: 'bottom', fontSize: '13px', markers: { radius: 12 } },
+                stroke: { show: false }
+            };
+
+            const chart = new ApexCharts(document.querySelector("#userCompositionChart"), options);
+            chart.render();
+        });
+    </script>
+</body>
+</html>

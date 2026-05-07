@@ -1,0 +1,80 @@
+/* admin-support.css - Specific styles for the Support Inbox page */
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 5000;
+}
+
+.modal-card {
+    background: #fff;
+    padding: 0;
+    border-radius: 20px;
+    max-width: 600px;
+    width: 95%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    max-height: 80vh;
+}
+
+.modal-header-audit {
+    background: #800000;
+    color: #fff;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chat-history {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    background: #f8fafc;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.message-bubble {
+    max-width: 80%;
+}
+
+.message-sender {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: #64748b;
+    margin-bottom: 4px;
+}
+
+.message-text {
+    padding: 10px 15px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    border: 1px solid #e2e8f0;
+}
+
+.message-time {
+    font-size: 0.6rem;
+    color: #94a3b8;
+    margin-top: 4px;
+}
+
+.status-badge-sm {
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid;
+}
+
+.status-dispute { background: #fef2f2; color: #ef4444; border-color: #fecaca; }
+.status-id-verify { background: #fffbeb; color: #f59e0b; border-color: #fef3c7; }

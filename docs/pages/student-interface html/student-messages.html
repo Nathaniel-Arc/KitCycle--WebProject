@@ -331,12 +331,7 @@
             
             let saved = localStorage.getItem('kitcycle_messages');
             if (saved) {
-                const parsed = JSON.parse(saved);
-                // One-time clear for Maria and Juan as requested
-                parsed.juan.messages = [];
-                parsed.maria.messages = [];
-                localStorage.setItem('kitcycle_messages', JSON.stringify(parsed));
-                return parsed;
+                return JSON.parse(saved);
             }
             
             localStorage.setItem('kitcycle_messages', JSON.stringify(defaults));

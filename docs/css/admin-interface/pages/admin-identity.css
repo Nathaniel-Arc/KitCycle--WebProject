@@ -1,0 +1,193 @@
+.verification-workspace {
+    display: none;
+    gap: 20px;
+    animation: slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    margin-top: 10px;
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.evidence-panel {
+    flex: 1.1;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.profile-data-panel {
+    flex: 0.9;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Document Cards - Smaller Size */
+.id-inspection-card {
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+}
+
+.id-card-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1.8 / 1; /* Slightly wider/shorter */
+    overflow: hidden;
+    cursor: zoom-in;
+    background: #f8fafc;
+}
+
+.id-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.id-card-wrapper:hover .id-card-img {
+    transform: scale(2);
+}
+
+/* System Record Styles - Tightened */
+.system-record-card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e2e8f0;
+}
+
+.record-field {
+    margin-bottom: 12px;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.record-label {
+    font-size: 0.65rem;
+    font-weight: 800;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.record-value {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+/* Checklist - Tightened */
+.checklist-container {
+    background: #fff;
+    padding: 15px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e2e8f0;
+}
+
+.checklist-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+    padding: 8px;
+    border-radius: 8px;
+    transition: background 0.2s;
+    cursor: pointer;
+}
+
+.checklist-item:hover {
+    background: #f8fafc;
+}
+
+.checklist-item input {
+    width: 18px;
+    height: 18px;
+    accent-color: #800000;
+}
+
+.checklist-item span {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #475569;
+}
+
+/* Aesthetic Buttons */
+.btn-verdict-approve {
+    background: linear-gradient(135deg, #166534 0%, #15803d 100%);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 10px rgba(22, 101, 52, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-verdict-approve:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(22, 101, 52, 0.3);
+}
+
+.btn-verdict-reject {
+    background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 10px rgba(234, 179, 8, 0.2);
+}
+
+.btn-verdict-reject:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(234, 179, 8, 0.3);
+}
+
+.btn-verdict-fraud {
+    background: linear-gradient(135deg, #800000 0%, #a52a2a 100%);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 10px rgba(128, 0, 0, 0.2);
+}
+
+.btn-verdict-fraud:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(128, 0, 0, 0.3);
+}
+
+/* Verdict Actions Alignment */
+.verdict-actions-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e2e8f0;
+}

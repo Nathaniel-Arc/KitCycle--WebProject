@@ -1,16 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
- 
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard | WMSU KitCycle</title>
-    
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="../../css/style.css">
-    <link rel="stylesheet" href="../../css/admin-interface/admin-dashboard.css">
+    <link rel="stylesheet" href="../../css/admin-interface/admin-common.css">
+    <link rel="stylesheet" href="../../css/admin-interface/pages/admin-dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="../../script/auth.js" defer></script>
-
+    <script src="../../script/user-loader.js" defer></script>
+    <script src="../../script/admin-charts.js" defer></script>
+    <script src="../../script/admin-analytics.js" defer></script>
+    <script src="../../script/ui-utils.js" defer></script>
+    
     <!-- Instant Sidebar State Check -->
     <script>
         (function() {
@@ -21,6 +28,7 @@
         })();
     </script>
     <style>
+        /* Sidebar Persistence Fixes */
         .sidebar-is-minimized .sidebar { width: 80px !important; padding: 2rem 0.5rem !important; transition: none !important; }
         .sidebar-is-minimized .dashboard-content { margin-left: 80px !important; transition: none !important; }
         .sidebar-is-minimized .profile-info, .sidebar-is-minimized .sidebar-nav span, .sidebar-is-minimized .sidebar-logout span { display: none !important; }
@@ -29,9 +37,9 @@
         .sidebar-is-minimized .sidebar-profile { justify-content: center !important; padding-bottom: 1.5rem !important; }
     </style>
 </head>
- 
+
 <body>
- 
+
     <header class="navbar">
         <div class="nav-left-group">
             <div class="sidebar-toggle" onclick="toggleSidebar()">
@@ -44,363 +52,557 @@
         </div>
         <div class="nav-right" style="display: flex; align-items: center; gap: 30px;">
             <ul class="nav-links" style="display: flex; list-style: none; gap: 25px; align-items: center; margin: 0;">
-                <li><a href="admin-dashboard.html" class="active">Home</a></li>
+                <li><a href="../../index.html">Home</a></li>
                 <li><a href="../marketplace.html">Marketplace</a></li>
                 <li><a href="../howitworks.html">How It Works</a></li>
                 <li><a href="../safety.html">Safety</a></li>
             </ul>
             <div class="auth-buttons">
                 <!-- Injected by auth.js -->
+                <div class="user-nav-profile">
+                    <div class="user-meta">
+                        <span class="user-display-name" id="nav-name">Admin Officer</span>
+                        <span class="user-role-badge" id="nav-role">Admin</span>
+                    </div>
+                    <span class="user-avatar-circle">
+                        <img src="" id="nav-avatar" class="nav-profile-img-circle" style="display:none;">
+                        <i class="fas fa-user" id="nav-avatar-icon"></i>
+                    </span>
+                </div>
             </div>
         </div>
     </header>
- 
+
     <div class="dashboard-layout">
- 
+
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-profile">
-                <div class="profile-avatar"><img id="sidebarProfileImg" src="../../images/nash_profile.png" alt="Profile"></div>
+                <div class="profile-avatar"><img id="sidebar-avatar" src="../../images/nash_profile.png" alt="Profile"></div>
                 <div class="profile-info">
-                    <h4 id="sidebarUserName">Nash Arciaga</h4>
-                    <span id="sidebarUserRole">Admin</span>
+                    <h4 id="sidebar-name">Admin Office</h4>
+                    <span id="sidebar-role">System Administrator</span>
                 </div>
             </div>
- 
+
             <ul class="sidebar-nav">
-                <li class="active"><a href="#"><i class="fas fa-chart-line"></i> <span>Dashboard</span></a></li>
-                <li><a href="admin-analytics.html"><i class="fas fa-poll"></i> <span>Analytics</span></a></li>
-                <li><a href="admin-disputes.html"><i class="fas fa-exclamation-triangle"></i> <span>Disputes</span></a></li>
-                <li><a href="admin-approvals.html"><i class="fas fa-clipboard-check"></i> <span>Approvals</span></a></li>
-                <li><a href="admin-settings.html"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
+                <li class="active"><a href="admin-dashboard.html"><i class="fas fa-th-large"></i> <span>Dashboard Summary</span></a></li>
+                <li><a href="admin-users.html"><i class="fas fa-users"></i> <span>User Management</span></a></li>
+                <li><a href="admin-incidents.html"><i class="fas fa-exclamation-triangle"></i> <span>Incident Reports</span></a></li>
+                <li><a href="admin-enforcement.html"><i class="fas fa-shield-alt"></i> <span>Institutional Enforcement</span></a></li>
+                <li><a href="admin-revenue.html"><i class="fas fa-piggy-bank"></i> <span>Departmental Revenue</span></a></li>
             </ul>
 
             <a href="javascript:void(0)" onclick="AuthSystem.confirmLogout(); return false;" class="sidebar-logout"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
         </aside>
- 
+
         <main class="dashboard-content" id="mainContent">
- 
-            <!-- Banner -->
+
             <div class="dashboard-banner">
-                <h2>Admin Dashboard</h2>
-                <p>Comprehensive platform management and analytics overview.</p>
+                <div>
+                    <h2 id="bannerGreeting">Admin Control Room</h2>
+                    <p id="bannerSubtitle">Real-time system health and operation metrics.</p>
+                </div>
             </div>
- 
-            <!-- Stat Cards -->
-            <div class="stat-cards-grid">
-                <div class="stat-card">
-                    <div class="stat-icon blue-light"><i class="fas fa-users"></i></div>
-                    <div class="stat-numbers">
-                        <div class="stat-label">Total Users</div>
-                        <h3>1247</h3>
-                        <span class="trend success-text">+47 this month</span>
-                    </div>
+
+            <!-- UNIVERSAL CONTROLS -->
+            <div class="admin-controls-group">
+                <div style="flex: 1;">
+                    <h1 style="font-size: 1.5rem; font-weight: 900; color: #1e293b; margin: 0;">Operational Intelligence</h1>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon green-light"><i class="fas fa-handshake"></i></div>
-                    <div class="stat-numbers">
-                        <div class="stat-label">Active Rentals</div>
-                        <h3>89</h3>
-                        <span class="trend success-text">+12 this week</span>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon purple-light"><i class="fas fa-list-alt"></i></div>
-                    <div class="stat-numbers">
-                        <div class="stat-label">Items Listed</div>
-                        <h3>456</h3>
-                        <span class="trend success-text">+23 this week</span>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon orange-light"><i class="fas fa-user-clock"></i></div>
-                    <div class="stat-numbers">
-                        <div class="stat-label">Pending Verification</div>
-                        <h3>3</h3>
-                        <span class="trend warning-text">Needs attention</span>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon red-light"><i class="fas fa-exclamation-triangle"></i></div>
-                    <div class="stat-numbers">
-                        <div class="stat-label">Active Disputes</div>
-                        <h3>2</h3>
-                        <span class="trend danger-text">Urgent review</span>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon yellow-light"><i class="fas fa-chart-line"></i></div>
-                    <div class="stat-numbers">
-                        <div class="stat-label">Total Revenue</div>
-                        <h3>₱45,600</h3>
-                        <span class="trend success-text">+8% this month</span>
+                
+                <select class="dept-filter-select" id="deptFilter" onchange="updateDashboardByDept(this.value)">
+                    <option value="All WMSU">All WMSU</option>
+                    <option value="College of ICT">College of ICT</option>
+                    <option value="College of Engineering">College of Engineering</option>
+                    <option value="College of Science">College of Science</option>
+                    <option value="College of Nursing">College of Nursing</option>
+                </select>
+
+                <div id="searchPopup" class="registrar-popup">
+                    <div class="search-result-item">
+                        <div id="searchIcon" class="result-avatar"></div>
+                        <div class="result-info">
+                            <div id="searchText" class="result-name"></div>
+                            <div id="searchDetail" class="result-meta"></div>
+                        </div>
                     </div>
                 </div>
             </div>
- 
-            <!-- Split Row: Verification Queue + Side Widgets -->
-            <div class="split-row">
- 
-                <!-- LEFT: Verification + Disputes -->
-                <div class="main-column">
- 
-                    <!-- Verification Queue -->
-                    <div class="content-card" style="margin-bottom: 25px;">
-                        <div class="card-header">
-                            <h3>User Verification Queue</h3>
-                            <span class="badge orange-bg">3 Pending</span>
-                        </div>
- 
-                        <div class="verifications-stack">
- 
-                            <!-- Verify Item 1 -->
-                            <div class="verify-item">
-                                <div class="verify-top">
-                                    <div class="verify-user">
-                                        <h4>Pedro Martinez</h4>
-                                        <p>pedro.martinez@wmsu.edu.ph</p>
-                                        <p>Student ID: 2024-15678</p>
-                                    </div>
-                                    <span class="status-pill warning">Pending Review</span>
-                                </div>
-                                <div class="verify-bottom">
-                                    <span class="timestamp"><i class="far fa-clock" style="margin-right:4px;"></i>3/5/2026 &nbsp; 2 documents submitted</span>
-                                    <div class="verify-actions">
-                                        <button class="btn-subtle">Review Details</button>
-                                        <button class="btn-circle-success" title="Approve"><i class="fas fa-check"></i></button>
-                                        <button class="btn-circle-danger" title="Reject"><i class="fas fa-times"></i></button>
-                                    </div>
-                                </div>
-                            </div>
- 
-                            <!-- Verify Item 2 -->
-                            <div class="verify-item">
-                                <div class="verify-top">
-                                    <div class="verify-user">
-                                        <h4>Lisa Chen</h4>
-                                        <p>lisa.chen@wmsu.edu.ph</p>
-                                        <p>Student ID: 2024-15679</p>
-                                    </div>
-                                    <span class="status-pill warning">Pending Review</span>
-                                </div>
-                                <div class="verify-bottom">
-                                    <span class="timestamp"><i class="far fa-clock" style="margin-right:4px;"></i>3/4/2026 &nbsp; 2 documents submitted</span>
-                                    <div class="verify-actions">
-                                        <button class="btn-subtle">Review Details</button>
-                                        <button class="btn-circle-success" title="Approve"><i class="fas fa-check"></i></button>
-                                        <button class="btn-circle-danger" title="Reject"><i class="fas fa-times"></i></button>
-                                    </div>
-                                </div>
-                            </div>
- 
-                            <!-- Verify Item 3 -->
-                            <div class="verify-item">
-                                <div class="verify-top">
-                                    <div class="verify-user">
-                                        <h4>Mark Santos</h4>
-                                        <p>mark.santos@wmsu.edu.ph</p>
-                                        <p>Student ID: 2024-15680</p>
-                                    </div>
-                                    <span class="status-pill warning">Pending Review</span>
-                                </div>
-                                <div class="verify-bottom">
-                                    <span class="timestamp"><i class="far fa-clock" style="margin-right:4px;"></i>3/4/2026 &nbsp; 2 documents submitted</span>
-                                    <div class="verify-actions">
-                                        <button class="btn-subtle">Review Details</button>
-                                        <button class="btn-circle-success" title="Approve"><i class="fas fa-check"></i></button>
-                                        <button class="btn-circle-danger" title="Reject"><i class="fas fa-times"></i></button>
-                                    </div>
-                                </div>
-                            </div>
- 
-                        </div>
- 
-                        <a href="admin-verification.html" class="btn-block-outline">View All Verification Requests</a>
+
+            <!-- OPERATIONAL PULSE (The Four Pillars) -->
+            <div class="pillar-grid">
+                <!-- Pillar 1: Verification & Compliance -->
+                <div class="pillar-card">
+                    <div class="pillar-header">
+                        <span class="pillar-title">Verification & Compliance</span>
+                        <a href="admin-users.html" class="pillar-hotlink"><i class="fas fa-arrow-right"></i></a>
                     </div>
- 
-                    <!-- Active Disputes -->
-                    <div class="content-card">
-                        <div class="card-header">
-                            <h3>Active Disputes</h3>
-                            <span class="badge" style="background:#fee2e2; color:#b91c1c;">2 Active</span>
+                    <div class="pillar-metric-main">
+                        <div style="display: flex; align-items: baseline; gap: 10px;">
+                            <span class="pillar-val" id="val-pending-verif">12</span>
+                            <span class="urgency-badge" id="badge-verif">Urgent</span>
                         </div>
- 
-                        <div class="verifications-stack">
- 
-                            <!-- Dispute 1 -->
-                            <div class="verify-item">
-                                <div class="verify-top">
-                                    <div class="verify-user">
-                                        <h4>Canon EOS 90D DSLR</h4>
-                                        <p>Item returned with minor damage</p>
-                                        <p style="margin-top:4px; font-size:0.78rem; color:#6b7280;">Reporter: Maria Santos &nbsp;|&nbsp; Reportee: Juan Cruz</p>
-                                        <p style="font-size:0.78rem; color:#9ca3af;">Reported on 3/3/2026</p>
-                                    </div>
-                                    <span class="status-pill" style="background:#fee2e2; color:#b91c1c; font-size:0.7rem; font-weight:700; padding:4px 8px; border-radius:4px;">HIGH</span>
-                                </div>
-                                <div class="verify-bottom" style="padding-top:1rem; border-top:1px solid #f3f4f6;">
-                                    <div style="flex:1;">
-                                        <button class="btn-dispute-action" onclick="window.location.href='admin-disputes.html'">
-                                            <i class="fas fa-gavel" style="margin-right:6px;"></i>Review &amp; Take Action
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
- 
-                            <!-- Dispute 2 -->
-                            <div class="verify-item">
-                                <div class="verify-top">
-                                    <div class="verify-user">
-                                        <h4>Scientific Calculator</h4>
-                                        <p>Late return without notice</p>
-                                        <p style="margin-top:4px; font-size:0.78rem; color:#6b7280;">Reporter: Anna Reyes &nbsp;|&nbsp; Reportee: Pedro Garcia</p>
-                                        <p style="font-size:0.78rem; color:#9ca3af;">Reported on 3/2/2026</p>
-                                    </div>
-                                    <span class="status-pill" style="background:#fff7ed; color:#c2410c; font-size:0.7rem; font-weight:700; padding:4px 8px; border-radius:4px;">MEDIUM</span>
-                                </div>
-                                <div class="verify-bottom" style="padding-top:1rem; border-top:1px solid #f3f4f6;">
-                                    <div style="flex:1;">
-                                        <button class="btn-dispute-action" onclick="window.location.href='admin-disputes.html'">
-                                            <i class="fas fa-gavel" style="margin-right:6px;"></i>Review &amp; Take Action
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
- 
-                        </div>
- 
-                        <a href="admin-disputes.html" class="btn-block-outline">View All Disputes</a>
+                        <span class="pillar-subtext">Pending ID Verifications</span>
                     </div>
- 
-                </div><!-- /main-column -->
- 
-                <!-- RIGHT: Side Widgets -->
-                <div class="side-column">
- 
-                    <!-- User Growth -->
-                    <div class="content-card" style="margin-bottom: 20px;">
-                        <div class="card-header">
-                            <h3>User Growth</h3>
-                        </div>
-                        <div class="bar-chart-container">
-                            <div class="chart-row">
-                                <span class="month-lbl">Oct</span>
-                                <div class="chart-bar-track"><div class="chart-bar-fill" style="width:61%; background:#800000;"></div></div>
-                                <span class="chart-val">850</span>
-                            </div>
-                            <div class="chart-row">
-                                <span class="month-lbl">Nov</span>
-                                <div class="chart-bar-track"><div class="chart-bar-fill" style="width:68%; background:#800000;"></div></div>
-                                <span class="chart-val">950</span>
-                            </div>
-                            <div class="chart-row">
-                                <span class="month-lbl">Dec</span>
-                                <div class="chart-bar-track"><div class="chart-bar-fill" style="width:75%; background:#800000;"></div></div>
-                                <span class="chart-val">1050</span>
-                            </div>
-                            <div class="chart-row">
-                                <span class="month-lbl">Jan</span>
-                                <div class="chart-bar-track"><div class="chart-bar-fill" style="width:82%; background:#800000;"></div></div>
-                                <span class="chart-val">1150</span>
-                            </div>
-                            <div class="chart-row">
-                                <span class="month-lbl">Feb</span>
-                                <div class="chart-bar-track"><div class="chart-bar-fill" style="width:86%; background:#800000;"></div></div>
-                                <span class="chart-val">1200</span>
-                            </div>
-                            <div class="chart-row">
-                                <span class="month-lbl">Mar</span>
-                                <div class="chart-bar-track"><div class="chart-bar-fill" style="width:89%; background:#800000;"></div></div>
-                                <span class="chart-val">1247</span>
-                            </div>
-                        </div>
-                        <a href="admin-analytics.html" class="btn-block-outline" style="margin-top:1rem;">View Detailed Analytics</a>
+                    <div style="font-size: 0.7rem; color: #94a3b8; font-weight: 700;">Avg. Processing: <span style="color: #1e293b;">14.2 mins</span></div>
+                </div>
+
+                <!-- Pillar 2: Disputes & Mediation -->
+                <div class="pillar-card">
+                    <div class="pillar-header">
+                        <span class="pillar-title">Disputes & Mediation</span>
+                        <a href="admin-incidents.html" class="pillar-hotlink"><i class="fas fa-arrow-right"></i></a>
                     </div>
- 
-                    <!-- Items by Category -->
-                    <div class="content-card" style="margin-bottom: 20px;">
-                        <div class="card-header">
-                            <h3>Items by Category</h3>
+                    <div class="pillar-metric-main">
+                        <span class="pillar-val" id="val-active-cases">4</span>
+                        <span class="pillar-subtext">Active Incident Reports</span>
+                    </div>
+                    <div id="disputeSparkline" style="height: 30px;"></div>
+                </div>
+
+                <!-- Pillar 3: Enforcement Status -->
+                <div class="pillar-card">
+                    <div class="pillar-header">
+                        <span class="pillar-title">Enforcement Status</span>
+                        <a href="admin-enforcement.html" class="pillar-hotlink"><i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    <div class="pillar-metric-main">
+                        <span class="pillar-val" id="val-clearance-pct">88%</span>
+                        <span class="pillar-subtext">Clearance Progress</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-fill" style="width: 88%;"></div>
+                    </div>
+                </div>
+
+                <!-- Pillar 4: Revenue & Sustainability -->
+                <div class="pillar-card">
+                    <div class="pillar-header">
+                        <span class="pillar-title">Revenue & Sustainability</span>
+                        <a href="admin-revenue.html" class="pillar-hotlink"><i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    <div class="pillar-metric-main">
+                        <span class="pillar-val" id="val-revenue">₱14,250</span>
+                        <span class="pillar-subtext">10% Fund Total</span>
+                    </div>
+                    <div style="font-size: 0.7rem; color: #94a3b8; font-weight: 700;">Last Remitted: <span style="color: #1e293b;">2h ago</span></div>
+                </div>
+            </div>
+
+            <!-- DASHBOARD CONTENT -->
+            <div id="dashboardContent" class="animate-fade">
+                <div class="split-row" style="display: flex; gap: 20px;">
+                    <!-- Main Content Column -->
+                    <div style="flex: 2; display: flex; flex-direction: column; gap: 20px;">
+                        
+                        <!-- Visualization Row -->
+                        <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 20px;">
+                            <div class="content-card" style="height: 350px;">
+                                <div class="card-header">
+                                    <h3>Platform Activity (Strategic Metrics)</h3>
+                                    <div style="display: flex; gap: 15px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase;">
+                                        <span style="color: #980000;"><i class="fas fa-circle"></i> New Listings</span>
+                                        <span style="color: #3b82f6;"><i class="fas fa-circle"></i> Active Borrowing</span>
+                                        <span style="color: #10b981;"><i class="fas fa-circle"></i> Returns</span>
+                                    </div>
+                                </div>
+                                <div id="platformActivityChart" style="height: 280px;"></div>
+                            </div>
+                            
+                            <div class="content-card" style="height: 350px;">
+                                <div class="card-header">
+                                    <h3>Category Allocation</h3>
+                                </div>
+                                <div id="categoryAllocationChart" style="height: 240px;"></div>
+                                <div style="text-align: center; margin-top: 10px;">
+                                    <span class="pillar-subtext">Top Contributor:</span>
+                                    <span style="color: #980000; font-weight: 800; font-size: 0.85rem;" id="topContributor">College of ICT</span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="bar-chart-container">
-                            <div class="chart-row">
-                                <span class="month-lbl" style="width:110px; font-size:0.78rem;">Academic Tools</span>
-                                <div class="chart-bar-track"><div class="chart-bar-fill" style="width:75%; background:#f5c518;"></div></div>
-                                <span class="chart-val" style="width:60px; font-size:0.78rem;">142 items</span>
+
+                        <div class="content-card">
+                            <div class="card-header">
+                                <h3>System Operational Audit</h3>
+                                <div style="display: flex; gap: 10px; align-items: center;">
+                                    <span class="pulse-dot" id="livePulse"></span>
+                                    <button class="btn-admin-outline" id="btnLiveFeed" onclick="toggleLiveFeed()" style="font-size: 0.8rem; padding: 6px 12px;">Live Feed</button>
+                                    <button class="btn-admin" onclick="exportLogs()" style="font-size: 0.8rem; padding: 6px 12px; background: #980000;">Export Logs</button>
+                                </div>
                             </div>
-                            <div class="chart-row">
-                                <span class="month-lbl" style="width:110px; font-size:0.78rem;">Media Equip.</span>
-                                <div class="chart-bar-track"><div class="chart-bar-fill" style="width:52%; background:#f5c518;"></div></div>
-                                <span class="chart-val" style="width:60px; font-size:0.78rem;">98 items</span>
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Administrative Action</th>
+                                        <th>Target Entity</th>
+                                        <th>Verification Status</th>
+                                        <th>System Timestamp</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="font-weight: 600;">Clearance Enforcement</td>
+                                        <td>Registrar Office (Batch 2026)</td>
+                                        <td><span style="color: #10b981; font-weight: 700;">88% Completed</span></td>
+                                        <td>Just now</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 600;">10% Fund Payout</td>
+                                        <td>College of Nursing</td>
+                                        <td><span style="color: #f59e0b; font-weight: 700;">Pending Audit</span></td>
+                                        <td>1 hour ago</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 600;">Mediation Resolved</td>
+                                        <td>Case #INC-284 (Tech Dispute)</td>
+                                        <td><span style="color: #3b82f6; font-weight: 700;">Resolved</span></td>
+                                        <td>3 hours ago</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 600;">Compliance Alert</td>
+                                        <td>Universal Entity Finder: NASH-2023</td>
+                                        <td><span style="color: #980000; font-weight: 700;">Locked</span></td>
+                                        <td>5 hours ago</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Side column -->
+                    <div style="flex: 0.8; display: flex; flex-direction: column; gap: 20px;">
+                        
+                        <!-- Campus Trust Overview -->
+                        <div class="content-card">
+                            <div class="card-header">
+                                <h3>Campus Trust Index</h3>
                             </div>
-                            <div class="chart-row">
-                                <span class="month-lbl" style="width:110px; font-size:0.78rem;">Lab Equipment</span>
-                                <div class="chart-bar-track"><div class="chart-bar-fill" style="width:46%; background:#f5c518;"></div></div>
-                                <span class="chart-val" style="width:60px; font-size:0.78rem;">87 items</span>
+                            <div style="text-align: center; padding: 10px 0;">
+                                <div style="font-size: 2.2rem; font-weight: 900; color: #1e293b;" id="trustScore">92.4%</div>
+                                <div style="display: flex; justify-content: center; gap: 4px; color: #fbbf24; margin-bottom: 10px;">
+                                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                </div>
+                                <div class="progress-bar-container">
+                                    <div class="progress-bar-fill" style="width: 92.4%;"></div>
+                                </div>
+                                <div class="trust-formula">
+                                    Trust = (Successful / Total) × 100
+                                </div>
+                                <p style="font-size: 0.75rem; color: #64748b; margin-top: 10px; font-weight: 600;">Operational Health: Optimal</p>
                             </div>
-                            <div class="chart-row">
-                                <span class="month-lbl" style="width:110px; font-size:0.78rem;">Textbooks</span>
-                                <div class="chart-bar-track"><div class="chart-bar-fill" style="width:68%; background:#f5c518;"></div></div>
-                                <span class="chart-val" style="width:60px; font-size:0.78rem;">129 items</span>
+                        </div>
+
+                        <!-- Quick Action Stack -->
+                        <div class="content-card">
+                            <div class="card-header">
+                                <h3>Quick Controls</h3>
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 10px;">
+                                <button class="btn-admin" onclick="openBroadcastModal()" style="width: 100%; justify-content: center;"><i class="fas fa-broadcast-tower"></i> System Broadcast</button>
+                                <button class="btn-admin-outline" onclick="generateAudit()" style="width: 100%; justify-content: center;"><i class="fas fa-file-invoice-dollar"></i> Generate Audit</button>
+                                <button class="btn-admin-outline" style="width: 100%; justify-content: center; border-color: #ef4444; color: #ef4444;" onclick="triggerMaintenance()"><i class="fas fa-tools"></i> Global Maintenance</button>
                             </div>
                         </div>
                     </div>
- 
-                    <!-- Quick Actions -->
-                    <div class="content-card">
-                        <div class="card-header">
-                            <h3>Quick Actions</h3>
-                        </div>
-                        <div style="display:flex; flex-direction:column; gap:10px;">
-                            <a href="admin-verification.html" class="btn-quick-action btn-qa-yellow">
-                                <i class="fas fa-user-check"></i> Review Verifications
-                            </a>
-                            <a href="admin-disputes.html" class="btn-quick-action btn-qa-outline-red">
-                                <i class="fas fa-gavel"></i> Manage Disputes
-                            </a>
-                            <a href="admin-analytics.html" class="btn-quick-action btn-qa-outline-red">
-                                <i class="fas fa-chart-bar"></i> View Analytics
-                            </a>
-                            <a href="admin-settings.html" class="btn-quick-action btn-qa-ghost">
-                                <i class="fas fa-cog"></i> Platform Settings
-                            </a>
-                        </div>
-                    </div>
- 
-                </div><!-- /side-column -->
- 
-            </div><!-- /split-row -->
- 
+                </div>
+            </div>
+
         </main>
     </div>
- 
+
+    <!-- Modals -->
+    <div id="idModal" class="modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); align-items: center; justify-content: center; z-index: 5000;">
+        <div class="modal-card" style="background: #fff; padding: 2rem; border-radius: 20px; max-width: 500px; width: 90%;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3 id="modalUserName">Inspect Student ID</h3>
+                <i class="fas fa-times" style="cursor: pointer; color: #64748b;" onclick="closeModal()"></i>
+            </div>
+            <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 15px;">Student ID: <span id="modalUserID" style="font-weight: 800; color: #1e293b;"></span></p>
+            <img src="C:\Users\nasha\.gemini\antigravity\brain\9c6df319-e830-4da7-b1b1-76f7f8aab4b4\student_id_card_sample_1778095283290.png" style="width: 100%; border-radius: 12px; border: 1px solid #e2e8f0;">
+            <div style="margin-top: 20px; display: flex; justify-content: flex-end; gap: 10px;">
+                <button class="btn-admin-outline" onclick="closeModal()">Deny</button>
+                <button class="btn-admin" onclick="closeModal()">Approve Identity</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Broadcast Modal -->
+    <div id="broadcastModal" class="modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); align-items: center; justify-content: center; z-index: 5000;">
+        <div class="modal-card" style="background: #fff; padding: 2.5rem; border-radius: 24px; max-width: 550px; width: 90%;">
+            <div style="text-align: center; margin-bottom: 1.5rem;">
+                <div style="width: 70px; height: 70px; background: #fff1f2; color: #980000; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 1.8rem;">
+                    <i class="fas fa-broadcast-tower"></i>
+                </div>
+                <h3 style="font-size: 1.5rem; color: #1e293b;">System-Wide Broadcast</h3>
+                <p style="font-size: 0.9rem; color: #64748b;">Send an urgent notification to all active WMSU KitCycle users.</p>
+            </div>
+            
+            <label style="font-size: 0.85rem; font-weight: 700; color: #334155;">Broadcast Message</label>
+            <textarea id="broadcastMsg" class="broadcast-textarea" placeholder="Example: Scheduled maintenance at 10:00 PM. Please finalize your active handovers."></textarea>
+            
+            <div style="display: flex; gap: 12px; margin-top: 10px;">
+                <button class="btn-admin-outline" style="flex: 1; padding: 14px;" onclick="closeBroadcastModal()">Cancel</button>
+                <button class="btn-admin" style="flex: 1; padding: 14px; background: #980000;" onclick="sendBroadcast()">Send Broadcast</button>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // Global Chart Instances
+        let activityChart, allocationChart, disputeSparkline;
+        let isLiveFeedActive = false;
+        let liveFeedInterval;
+
         function toggleSidebar() {
-            document.documentElement.classList.remove('sidebar-is-minimized');
             const sidebar = document.getElementById('sidebar');
             const mainContent = document.getElementById('mainContent');
             const isMinimized = sidebar.classList.toggle('minimized');
             mainContent.classList.toggle('expanded');
+            
+            // Sync with persistent state class
+            if (isMinimized) {
+                document.documentElement.classList.add('sidebar-is-minimized');
+            } else {
+                document.documentElement.classList.remove('sidebar-is-minimized');
+            }
+            
             localStorage.setItem('sidebarMinimized', isMinimized);
         }
- 
-        function toggleNotifs() {
-            // Handled by auth.js
-        }
- 
-        window.onclick = function(event) {
-            if (!event.target.closest('.nav-notification-btn')) {
-                // Handled by auth.js
+
+        function handleUniversalSearch(value) {
+            const popup = document.getElementById('searchPopup');
+            const icon = document.getElementById('searchIcon');
+            const text = document.getElementById('searchText');
+            const detail = document.getElementById('searchDetail');
+
+            if (!value || value.length < 2) {
+                popup.style.display = 'none';
+                return;
+            }
+
+            popup.style.display = 'block';
+            
+            // Mock Data Finder - More Aesthetic
+            if (value.toUpperCase().includes('NASH') || value.includes('2023')) {
+                icon.innerHTML = '<img src="../../images/nash_profile.png" style="width: 100%; height: 100%; border-radius: 12px; object-fit: cover;">';
+                text.innerHTML = `Nash Arciaga <span class="result-badge" style="background: #dcfce7; color: #15803d;">Active Student</span>`;
+                detail.innerHTML = `
+                    <div style="margin-top: 5px;">
+                        <span style="font-weight: 700; color: #475569;">ID:</span> 2023-0102<br>
+                        <span style="font-weight: 700; color: #475569;">Dept:</span> College of ICT<br>
+                        <span style="font-weight: 700; color: #475569;">Status:</span> <span style="color: #10b981; font-weight: 800;">CLEAR</span>
+                    </div>
+                `;
+            } else if (value.toUpperCase().includes('CAM') || value.includes('DSLR')) {
+                icon.innerHTML = '<i class="fas fa-camera" style="color: #3b82f6;"></i>';
+                text.innerHTML = `Canon EOS 90D <span class="result-badge" style="background: #fff7ed; color: #c2410c;">Rented Out</span>`;
+                detail.innerHTML = `
+                    <div style="margin-top: 5px;">
+                        <span style="font-weight: 700; color: #475569;">Owner:</span> Juan Dela Cruz<br>
+                        <span style="font-weight: 700; color: #475569;">Borrower:</span> Elena Smith<br>
+                        <span style="font-weight: 700; color: #475569;">Return:</span> May 08, 2026
+                    </div>
+                `;
+            } else {
+                icon.innerHTML = '<i class="fas fa-search" style="color: #64748b;"></i>';
+                text.innerText = "No Exact Match";
+                detail.innerText = "Try Student ID (2023) or Category (Camera).";
             }
         }
- 
-        window.onload = function() {
-            const isMinimized = localStorage.getItem('sidebarMinimized') === 'true';
-            if (isMinimized) {
-                document.getElementById('sidebar').classList.add('minimized');
-                document.getElementById('mainContent').classList.add('expanded');
+
+        function updateDashboardByDept(dept) {
+            UIUtils.showToast(`Syncing Analytics: ${dept}`, "info");
+            
+            // Simulated Dynamic Metrics
+            const metrics = {
+                "All WMSU": { 
+                    pending: 12, cases: 4, clearance: "88%", revenue: "₱14,250", top: "College of ICT",
+                    activity: [[12, 18, 14, 22, 19, 28, 32], [45, 52, 48, 60, 55, 68, 72], [8, 12, 15, 20, 25, 30, 35]],
+                    allocation: [45, 25, 15, 15],
+                    trust: "92.4%"
+                },
+                "College of ICT": { 
+                    pending: 3, cases: 1, clearance: "92%", revenue: "₱4,800", top: "ICT (Self)",
+                    activity: [[5, 8, 4, 10, 7, 12, 15], [20, 25, 22, 30, 28, 35, 38], [4, 6, 8, 10, 12, 14, 18]],
+                    allocation: [80, 5, 5, 10],
+                    trust: "96.2%"
+                },
+                "College of Engineering": { 
+                    pending: 5, cases: 2, clearance: "85%", revenue: "₱5,200", top: "Engineering",
+                    activity: [[4, 6, 5, 8, 6, 10, 12], [15, 18, 16, 22, 20, 25, 28], [3, 5, 6, 8, 10, 12, 14]],
+                    allocation: [10, 70, 10, 10],
+                    trust: "89.5%"
+                },
+                "College of Science": { 
+                    pending: 2, cases: 0, clearance: "95%", revenue: "₱2,100", top: "Science",
+                    activity: [[2, 3, 2, 4, 3, 5, 6], [10, 12, 11, 15, 14, 18, 20], [2, 3, 4, 5, 6, 7, 8]],
+                    allocation: [5, 10, 75, 10],
+                    trust: "98.1%"
+                },
+                "College of Nursing": { 
+                    pending: 2, cases: 1, clearance: "80%", revenue: "₱2,150", top: "Nursing",
+                    activity: [[1, 2, 3, 2, 4, 3, 5], [5, 8, 7, 10, 9, 12, 14], [1, 2, 3, 4, 5, 6, 7]],
+                    allocation: [5, 5, 5, 85],
+                    trust: "82.3%"
+                }
+            };
+
+            const data = metrics[dept] || metrics["All WMSU"];
+            
+            // Text Updates
+            document.getElementById('val-pending-verif').innerText = data.pending;
+            document.getElementById('val-active-cases').innerText = data.cases;
+            document.getElementById('val-clearance-pct').innerText = data.clearance;
+            document.getElementById('val-revenue').innerText = data.revenue;
+            document.getElementById('topContributor').innerText = data.top;
+            document.getElementById('trustScore').innerText = data.trust;
+
+            // Chart Syncing
+            activityChart.updateSeries([
+                { name: 'New Listings', data: data.activity[0] },
+                { name: 'Active Borrowing', data: data.activity[1] },
+                { name: 'Returns', data: data.activity[2] }
+            ]);
+
+            allocationChart.updateSeries(data.allocation);
+
+            // Progress Bar Syncing
+            document.querySelector('.pillar-card:nth-child(3) .progress-bar-fill').style.width = data.clearance;
+            document.querySelector('.content-card .progress-bar-fill').style.width = data.trust;
+            
+            // Pulse Effect
+            const dot = document.getElementById('livePulse');
+            dot.style.animation = 'none';
+            setTimeout(() => dot.style.animation = 'pulse-green 2s infinite', 10);
+        }
+
+        // Button Control Functions
+        function toggleLiveFeed() {
+            isLiveFeedActive = !isLiveFeedActive;
+            const btn = document.getElementById('btnLiveFeed');
+            const table = document.querySelector('.admin-table tbody');
+            
+            if (isLiveFeedActive) {
+                btn.innerText = "Stop Feed";
+                btn.style.borderColor = "#980000";
+                btn.style.color = "#980000";
+                UIUtils.showToast("Live system monitoring activated.", "success");
+                
+                liveFeedInterval = setInterval(() => {
+                    const actions = ["Security Handshake", "Audit Log Created", "Payment Remitted", "Identity Flagged", "Resource Shared"];
+                    const targets = ["Juan D.", "Nash A.", "Laboratory B", "Engineering Hall", "College of ICT"];
+                    const action = actions[Math.floor(Math.random() * actions.length)];
+                    const target = targets[Math.floor(Math.random() * targets.length)];
+                    
+                    const newRow = `
+                        <tr class="live-feed-active animate-fade">
+                            <td style="font-weight: 600;">${action}</td>
+                            <td>${target}</td>
+                            <td><span style="color: #10b981; font-weight: 700;">LIVE</span></td>
+                            <td>Just now</td>
+                        </tr>
+                    `;
+                    table.insertAdjacentHTML('afterbegin', newRow);
+                    if (table.rows.length > 8) table.deleteRow(table.rows.length - 1);
+                }, 3000);
+            } else {
+                btn.innerText = "Live Feed";
+                btn.style.borderColor = "";
+                btn.style.color = "";
+                clearInterval(liveFeedInterval);
+                UIUtils.showToast("Monitoring paused.", "info");
             }
-        };
+        }
+
+        function exportLogs() {
+            UIUtils.showToast("Packaging system logs for Batch 2026...", "info");
+            setTimeout(() => {
+                UIUtils.showToast("Audit_Logs_WMSU_KitCycle.xlsx ready for download.", "success");
+            }, 1500);
+        }
+
+        function openBroadcastModal() {
+            document.getElementById('broadcastModal').style.display = 'flex';
+        }
+
+        function closeBroadcastModal() {
+            document.getElementById('broadcastModal').style.display = 'none';
+        }
+
+        function sendBroadcast() {
+            const msg = document.getElementById('broadcastMsg').value;
+            if (!msg) {
+                UIUtils.showToast("Please enter a message.", "error");
+                return;
+            }
+            UIUtils.showToast("Broadcasting to all active sessions...", "info");
+            setTimeout(() => {
+                UIUtils.showToast("Broadcast message sent successfully.", "success");
+                closeBroadcastModal();
+                document.getElementById('broadcastMsg').value = '';
+            }, 1500);
+        }
+
+        function generateAudit() {
+            UIUtils.showToast("Generating Forensic Financial Report...", "info");
+            setTimeout(() => {
+                UIUtils.showToast("Revenue_Report_Q2_2026.pdf generated.", "success");
+            }, 2000);
+        }
+
+        function triggerMaintenance() {
+            UIUtils.showModal({
+                title: "Global Maintenance Mode",
+                message: "Are you sure you want to suspend all KitCycle operations for WMSU? Active handovers will be flagged for manual review.",
+                type: "warning",
+                confirmText: "Activate Suspension",
+                onConfirm: (val) => {
+                    if (val) UIUtils.showToast("System-wide suspension activated.", "error");
+                }
+            });
+        }
+
+        window.onload = () => {
+            // Activity Trend Chart
+            activityChart = new ApexCharts(document.querySelector("#platformActivityChart"), {
+                series: [
+                    { name: 'New Listings', data: [12, 18, 14, 22, 19, 28, 32] },
+                    { name: 'Active Borrowing', data: [45, 52, 48, 60, 55, 68, 72] },
+                    { name: 'Returns', data: [8, 12, 15, 20, 25, 30, 35] }
+                ],
+                chart: { height: 280, type: 'area', fontFamily: 'Inter, sans-serif', toolbar: { show: false } },
+                colors: ['#980000', '#3b82f6', '#10b981'],
+                dataLabels: { enabled: false },
+                stroke: { curve: 'smooth', width: 3 },
+                fill: { type: 'gradient', gradient: { opacityFrom: 0.3, opacityTo: 0.0, stops: [0, 90, 100] } },
+                xaxis: { categories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] },
+                yaxis: { show: false },
+                grid: { borderColor: '#f1f5f9' },
+                legend: { show: false }
+            });
+            activityChart.render();
+
+            // Category Allocation
+            allocationChart = new ApexCharts(document.querySelector("#categoryAllocationChart"), {
+                series: [45, 25, 15, 15],
+                chart: { type: 'donut', height: 240 },
+                labels: ['ICT Gear', 'Engineering Tools', 'Lab Eq.', 'Others'],
+                colors: ['#980000', '#3b82f6', '#10b981', '#f59e0b'],
+                dataLabels: { enabled: false },
+                legend: { position: 'bottom', fontSize: '11px' },
+                plotOptions: { pie: { donut: { size: '75%', labels: { show: true, total: { show: true, label: 'Items', formatter: () => '428' } } } } }
+            });
+            allocationChart.render();
+
+            // Dispute Sparkline
+            disputeSparkline = new ApexCharts(document.querySelector("#disputeSparkline"), {
+                series: [{ data: [10, 15, 8, 12, 7, 5, 4] }],
+                chart: { type: 'line', height: 30, sparkline: { enabled: true } },
+                stroke: { curve: 'smooth', width: 2 },
+                colors: ['#3b82f6']
+            });
+            disputeSparkline.render();
+        }
     </script>
- 
 </body>
 </html>

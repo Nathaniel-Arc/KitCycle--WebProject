@@ -13,7 +13,7 @@ window.AuthSystem = {
         { email: 'maria@wmsu.edu.ph',   password: 'maria',   role: 'student', name: 'Maria Santos', profilePic: 'maria_profile.png' },
         { email: 'juan@wmsu.edu.ph',    password: 'student', role: 'student', name: 'Juan Dela Cruz', profilePic: 'juan_profile.png' },
         { email: 'elena@wmsu.edu.ph',   password: 'student', role: 'student', name: 'Elena Rodriguez', profilePic: 'elena_profile.png' },
-        { email: 'admin@wmsu.edu.ph',   password: 'admin',   role: 'admin',   name: 'Admin Officer',  profilePic: null },
+        { email: 'admin@wmsu.edu.ph',   password: 'admin',   role: 'admin',   name: 'Admin Officer',  profilePic: 'faculty_avatar.png' },
         { email: 'faculty@wmsu.edu.ph', password: 'faculty', role: 'faculty', name: 'Ace Lorenz C. Patongan',    profilePic: 'Prof. Ace.jpg' }
     ],
 
@@ -35,6 +35,14 @@ window.AuthSystem = {
         localStorage.setItem('userEmail',  account.email);
         localStorage.setItem('userPic',    account.profilePic || '');
         localStorage.setItem('isVerified', 'true'); // Hardcoded accounts are verified by default
+
+        // Directive: Save currentUser JSON object
+        const currentUser = {
+            name: account.name,
+            role: account.role,
+            profilePic: account.profilePic || 'default_avatar.png'
+        };
+        localStorage.setItem('currentUser', JSON.stringify(currentUser));
 
         // Build the correct path to the dashboard folders
         const isInPages = window.location.pathname.includes('/pages/');
@@ -178,7 +186,7 @@ window.AuthSystem = {
                 messagesHref = pagesPrefix + 'student-interface html/student-messages.html';
             }
 
-            authBtns.innerHTML = `
+            const messagesHtml = userRole !== 'admin' ? `
                 <!-- Messages Icon with Red Badge -->
                 <div class="nav-msg-container">
                     <button class="nav-msg-btn" onclick="window.location.href='${messagesHref}'" title="Secure Chat (Auto-masks Contact Info)">
@@ -188,6 +196,10 @@ window.AuthSystem = {
                         </span>
                     </button>
                 </div>
+            ` : '';
+
+            authBtns.innerHTML = `
+                ${messagesHtml}
 
                 <!-- Notifications -->
                 <div class="nav-notification-container">
@@ -215,12 +227,12 @@ window.AuthSystem = {
                 <div class="user-nav-profile" id="userNavProfile">
                     <a href="${dashboardHref}" class="user-avatar-link" title="Go to Dashboard">
                         <span class="user-avatar-circle">
-                            ${userPic ? `<img src="${imgPath}" alt="${userName}" class="nav-profile-img-circle">` : `<i class="fas fa-user"></i>`}
+                            ${userPic ? `<img src="${imgPath}" alt="${userName}" id="nav-avatar" class="nav-profile-img-circle">` : `<i class="fas fa-user" id="nav-avatar-icon"></i>`}
                         </span>
                     </a>
                     <div class="user-meta">
-                        <span class="user-display-name">Nash Arciaga${verifiedBadge}</span>
-                        <span class="user-role-badge">Student</span>
+                        <span class="user-display-name" id="nav-name">${userName}${verifiedBadge}</span>
+                        <span class="user-role-badge" id="nav-role">${userRole.charAt(0).toUpperCase() + userRole.slice(1)}</span>
                     </div>
                     <button id="logoutBtn" class="btn-logout-nav" title="Logout">
                         <i class="fas fa-sign-out-alt"></i>
@@ -248,9 +260,9 @@ window.AuthSystem = {
         }
 
             // --- Sidebar Profile Update ---
-            const sidebarName = document.getElementById('sidebarUserName');
-            const sidebarRole = document.getElementById('sidebarUserRole');
-            const sidebarImg = document.getElementById('sidebarProfileImg');
+            const sidebarName = document.getElementById('sidebar-name') || document.getElementById('sidebarUserName');
+            const sidebarRole = document.getElementById('sidebar-role') || document.getElementById('sidebarUserRole');
+            const sidebarImg = document.getElementById('sidebar-avatar') || document.getElementById('sidebarProfileImg');
             
             if (sidebarName) sidebarName.innerHTML = userName + verifiedBadge;
             if (sidebarRole) sidebarRole.textContent = userRole.charAt(0).toUpperCase() + userRole.slice(1);

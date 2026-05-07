@@ -113,7 +113,10 @@
                     <img src="images/camera.jpg" alt="Canon EOS 90D">
                 </div>
                 <div class="item-info">
-                    <a href="pages/item-details html/item-details.html?id=camera" style="text-decoration: none; color: inherit;"><h3>Canon EOS 90D DSLR</h3></a>
+                    <a href="pages/item-details html/item-details.html?id=camera"
+                        style="text-decoration: none; color: inherit;">
+                        <h3>Canon EOS 90D DSLR</h3>
+                    </a>
                     <div class="lender-info">
                         <span class="lender-name">Maria Santos</span>
                         <span class="verified-badge-small"><i class="fas fa-check"></i> Verified Student</span>
@@ -141,7 +144,10 @@
                     <img src="images/calculator.jpg" alt="Scientific Calculator">
                 </div>
                 <div class="item-info">
-                    <a href="pages/item-details html/item-details.html?id=calculator" style="text-decoration: none; color: inherit;"><h3>Scientific Calculator TI-84</h3></a>
+                    <a href="pages/item-details html/item-details.html?id=calculator"
+                        style="text-decoration: none; color: inherit;">
+                        <h3>Scientific Calculator TI-84</h3>
+                    </a>
                     <div class="lender-info">
                         <span class="lender-name">Juan Dela Cruz</span>
                         <span class="verified-badge-small"><i class="fas fa-check"></i> Verified Student</span>
@@ -169,7 +175,10 @@
                     <img src="images/books.jpeg" alt="Engineering Textbooks">
                 </div>
                 <div class="item-info">
-                    <a href="pages/item-details html/item-details.html?id=textbook" style="text-decoration: none; color: inherit;"><h3>Engineering Textbook Bundle</h3></a>
+                    <a href="pages/item-details html/item-details.html?id=textbook"
+                        style="text-decoration: none; color: inherit;">
+                        <h3>Engineering Textbook Bundle</h3>
+                    </a>
                     <div class="lender-info">
                         <span class="lender-name">Elena Rodriguez</span>
                         <span class="verified-badge-small"><i class="fas fa-check"></i> Verified Student</span>
@@ -315,8 +324,9 @@
                     <i class="fas fa-shield-alt"></i>
                 </div>
                 <h2>Join the Verified <br>WMSU Community</h2>
-                <p>Sign up with your student email to start borrowing gear today. Only verified WMSU students can access the full platform.</p>
-                
+                <p>Sign up with your student email to start borrowing gear today. Only verified WMSU students can access
+                    the full platform.</p>
+
                 <div class="guest-benefits-box">
                     <div class="benefit-line">
                         <i class="fas fa-check-circle"></i>
@@ -340,7 +350,7 @@
                         Login to Existing Account
                     </a>
                 </div>
-                
+
                 <div class="guest-modal-footer">
                     Verification takes 24-48 hours. Free for all WMSU students.
                 </div>
@@ -371,7 +381,7 @@
             rentButtons.forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     e.preventDefault();
-                    
+
                     // Check if user is already logged in
                     const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
                     if (isLoggedIn) {

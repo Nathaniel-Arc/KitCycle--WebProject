@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Departmental Revenue | WMSU KitCycle</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/admin-interface/admin-common.css">
+    <link rel="stylesheet" href="../../css/admin-interface/pages/admin-revenue.css">
+    <script src="../../script/auth.js" defer></script>
+    <script src="../../script/user-loader.js" defer></script>
+    <script src="../../script/ui-utils.js" defer></script>
+    
+    <script>
+        (function() {
+            const isMinimized = localStorage.getItem('sidebarMinimized') === 'true';
+            if (isMinimized) {
+                document.documentElement.classList.add('sidebar-is-minimized');
+            }
+        })();
+    </script>
+    <style>
+        .sidebar-is-minimized .sidebar { width: 80px !important; padding: 2rem 0.5rem !important; transition: none !important; }
+        .sidebar-is-minimized .dashboard-content { margin-left: 80px !important; transition: none !important; }
+        .sidebar-is-minimized .profile-info, .sidebar-is-minimized .sidebar-nav span, .sidebar-is-minimized .sidebar-logout span { display: none !important; }
+        .sidebar-is-minimized .sidebar-nav a { justify-content: center !important; padding: 12px 0 !important; }
+        .sidebar-is-minimized .sidebar-nav i { font-size: 1.2rem !important; margin: 0 !important; }
+        .sidebar-is-minimized .sidebar-profile { justify-content: center !important; padding-bottom: 1.5rem !important; }
+    </style>
+</head>
+
+<body>
+    <header class="navbar">
+        <div class="nav-left-group">
+            <div class="sidebar-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></div>
+            <div class="logo">
+                <img src="../../images/wmsulogo.png" alt="WMSU Logo" class="nav-logo-img">
+                <div class="logo-text">WMSU<span>KitCycle</span></div>
+            </div>
+        </div>
+        <div class="nav-right" style="display: flex; align-items: center; gap: 30px;">
+            <ul class="nav-links">
+                <li><a href="../../index.html">Home</a></li>
+                <li><a href="../marketplace.html">Marketplace</a></li>
+                <li><a href="../howitworks.html">How It Works</a></li>
+                <li><a href="../safety.html">Safety</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <div class="user-nav-profile">
+                    <div class="user-meta">
+                        <span class="user-display-name" id="nav-name">Admin Officer</span>
+                        <span class="user-role-badge" id="nav-role">Admin</span>
+                    </div>
+                    <span class="user-avatar-circle">
+                        <img src="" id="nav-avatar" class="nav-profile-img-circle" style="display:none;">
+                        <i class="fas fa-user" id="nav-avatar-icon"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <div class="dashboard-layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-profile">
+                <div class="profile-avatar"><img id="sidebar-avatar" src="../../images/nash_profile.png" alt="Profile"></div>
+                <div class="profile-info">
+                    <h4 id="sidebar-name">Admin Office</h4>
+                    <span id="sidebar-role">System Administrator</span>
+                </div>
+            </div>
+
+            <ul class="sidebar-nav">
+                <li><a href="admin-dashboard.html"><i class="fas fa-th-large"></i> <span>Dashboard Summary</span></a></li>
+                <li><a href="admin-users.html"><i class="fas fa-users"></i> <span>User Management</span></a></li>
+                <li><a href="admin-incidents.html"><i class="fas fa-exclamation-triangle"></i> <span>Incident Reports</span></a></li>
+                <li><a href="admin-enforcement.html"><i class="fas fa-shield-alt"></i> <span>Institutional Enforcement</span></a></li>
+                <li class="active"><a href="admin-revenue.html"><i class="fas fa-piggy-bank"></i> <span>Departmental Revenue</span></a></li>
+            </ul>
+
+            <a href="javascript:void(0)" onclick="AuthSystem.confirmLogout(); return false;" class="sidebar-logout"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
+        </aside>
+
+        <main class="dashboard-content" id="mainContent" style="padding: 0; display: flex; flex-direction: column; background: #f4f7f6; min-height: 100vh;">
+            
+            <div style="padding: 25px 25px 0 25px;">
+                <div class="dashboard-banner" style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <h2>Departmental Revenue</h2>
+                        <p>Track the 10% university commission fund and late fees.</p>
+                    </div>
+                    <button class="btn-admin" style="background: #166534; padding: 12px 24px; font-size: 0.95rem; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(22,101,52,0.2);" onclick="processPayout(this)">
+                        <i class="fas fa-university"></i> Payout to Dean's Office
+                    </button>
+                </div>
+            </div>
+
+            <!-- Revenue Overview Cards -->
+            <div style="padding: 25px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;">
+                <div class="content-card" style="margin-bottom: 0; border-left: 4px solid #10b981;">
+                    <div style="font-size: 0.75rem; color: #64748b; font-weight: 800; text-transform: uppercase;">Total Accumulation</div>
+                    <div style="font-size: 1.8rem; font-weight: 800; color: #1e293b;" id="totalFundDisplay">₱42,150.00</div>
+                </div>
+                <div class="content-card" style="margin-bottom: 0; border-left: 4px solid #2563eb;">
+                    <div style="font-size: 0.75rem; color: #64748b; font-weight: 800; text-transform: uppercase;">Late Fee Revenue</div>
+                    <div style="font-size: 1.8rem; font-weight: 800; color: #1e293b;">₱8,400.00</div>
+                </div>
+                <div class="content-card" style="margin-bottom: 0; border-left: 4px solid #f59e0b;">
+                    <div style="font-size: 0.75rem; color: #64748b; font-weight: 800; text-transform: uppercase;">System Tax (10%)</div>
+                    <div style="font-size: 1.8rem; font-weight: 800; color: #1e293b;">₱33,750.00</div>
+                </div>
+                <div class="content-card" style="margin-bottom: 0; border-left: 4px solid #64748b;">
+                    <div style="font-size: 0.75rem; color: #64748b; font-weight: 800; text-transform: uppercase;">Payouts Issued</div>
+                    <div style="font-size: 1.8rem; font-weight: 800; color: #1e293b;">02</div>
+                </div>
+            </div>
+
+            <div style="display: flex; flex: 1; flex-direction: row; padding: 0 25px 25px 25px; gap: 25px;">
+                <div style="flex: 1; display: flex; flex-direction: column; gap: 25px;">
+                    <div class="content-card">
+                        <div class="card-header" style="border-bottom: 1px solid #f1f5f9; padding-bottom: 15px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;">
+                            <h3 style="margin: 0; color: #1e293b;">Revenue Ledger</h3>
+                            <div style="display: flex; gap: 10px;">
+                                <input type="text" placeholder="Search Transactions..." style="padding: 8px 12px; border-radius: 8px; border: 1px solid #e2e8f0; font-size: 0.85rem;">
+                                <button class="btn-admin-outline" style="font-size: 0.85rem;"><i class="fas fa-file-export"></i> Export PDF</button>
+                            </div>
+                        </div>
+                        <table class="admin-table">
+                            <thead>
+                                <tr style="background: #f8fafc;">
+                                    <th>Date</th>
+                                    <th>Transaction ID</th>
+                                    <th>Source</th>
+                                    <th>Total Amount</th>
+                                    <th style="color: #10b981;">Commission</th>
+                                </tr>
+                            </thead>
+                            <tbody id="revenueLedgerBody">
+                                <!-- JS Injection -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            <!-- Column 3: Contextual Sidebar -->
+            <aside style="width: 350px; background: #fff; border-left: 1px solid #e2e8f0; padding: 25px; display: flex; flex-direction: column; gap: 25px;">
+                <div>
+                    <h3 style="font-size: 1rem; color: #1e293b; margin-top: 0; margin-bottom: 5px;">Fund Analytics</h3>
+                    <p style="font-size: 0.8rem; color: #64748b; margin: 0;">Semester accumulation view.</p>
+                </div>
+                
+                <div class="content-card" style="box-shadow: none; border: 1px solid #f1f5f9; padding: 15px;">
+                    <h4 style="font-size: 0.85rem; color: #475569; margin-top: 0; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 0.05em;">10% Fund Growth</h4>
+                    <div id="revenueAreaChart"></div>
+                </div>
+
+                <div class="content-card" style="box-shadow: none; border: 1px solid #f1f5f9; padding: 15px; background: #f0fdf4; border-left: 4px solid #10b981;">
+                    <h4 style="font-size: 0.85rem; color: #166534; margin-top: 0; margin-bottom: 10px;"><i class="fas fa-check-circle"></i> Next Scheduled Payout</h4>
+                    <p style="font-size: 0.8rem; color: #166534; margin: 0; line-height: 1.5;">End of Semester (May 31, 2026). Funds will be transferred to the central WMSU Accounting account.</p>
+                </div>
+            </aside>
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toastNotification" style="position: fixed; bottom: 30px; right: 30px; background: #166534; color: #fff; padding: 15px 25px; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); display: flex; align-items: center; gap: 15px; transform: translateY(150%); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); z-index: 9999;">
+        <i class="fas fa-money-bill-wave" style="color: #6ee7b7; font-size: 1.2rem;"></i>
+        <span id="toastMessage" style="font-size: 0.9rem; font-weight: 600;">Action completed.</span>
+    </div>
+
+    <script>
+        const transactions = [
+            { id: "TXN-2024-001", date: "May 5, 2026", source: "Late Fee (Canon 90D)", total: 500, commission: 500 },
+            { id: "TXN-2024-002", date: "May 4, 2026", source: "Rental: Arduino Kit", total: 1500, commission: 150 },
+            { id: "TXN-2024-003", date: "May 4, 2026", source: "Rental: MacBook Pro", total: 5000, commission: 500 },
+            { id: "TXN-2024-004", date: "May 3, 2026", source: "Late Fee (T-Square)", total: 100, commission: 100 }
+        ];
+
+        for(let i=5; i<=25; i++) {
+            const isLateFee = i % 4 === 0;
+            const amount = isLateFee ? 200 : (500 + Math.floor(Math.random() * 2000));
+            transactions.push({
+                id: `TXN-2024-${i.toString().padStart(3, '0')}`,
+                date: `May ${Math.max(1, 6 - Math.floor(i/5))}, 2026`,
+                source: isLateFee ? "Late Fee (Equipment)" : "Rental Commission",
+                total: amount,
+                commission: isLateFee ? amount : amount * 0.1
+            });
+        }
+
+        function renderRevenue() {
+            const tbody = document.getElementById('revenueLedgerBody');
+            tbody.innerHTML = transactions.map(t => `
+                <tr>
+                    <td style="color: #64748b; font-size: 0.85rem;">${t.date}</td>
+                    <td style="font-weight: 600; color: #1e293b; font-family: monospace;">${t.id}</td>
+                    <td style="font-size: 0.85rem;">${t.source}</td>
+                    <td>₱${t.total.toLocaleString()}</td>
+                    <td style="color: #10b981; font-weight: 800;">+ ₱${t.commission.toLocaleString()}</td>
+                </tr>
+            `).join('');
+            
+            const total = transactions.reduce((acc, curr) => acc + curr.commission, 0);
+            document.getElementById('totalFundDisplay').innerText = `₱${total.toLocaleString()}.00`;
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            const isMinimized = sidebar.classList.toggle('minimized');
+            mainContent.classList.toggle('expanded');
+            
+            if (isMinimized) {
+                document.documentElement.classList.add('sidebar-is-minimized');
+            } else {
+                document.documentElement.classList.remove('sidebar-is-minimized');
+            }
+            
+            localStorage.setItem('sidebarMinimized', isMinimized);
+        }
+
+        function processPayout(btnElem) {
+            btnElem.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Processing...`;
+            btnElem.disabled = true;
+
+            setTimeout(() => {
+                btnElem.innerHTML = `<i class="fas fa-university"></i> Payout Issued`;
+                btnElem.style.background = "#94a3b8";
+                showToast(`Payout of funds initiated to the Dean's Office.`);
+            }, 1500);
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toastNotification');
+            const msg = document.getElementById('toastMessage');
+            msg.innerText = message;
+            toast.style.transform = 'translateY(0)';
+            setTimeout(() => toast.style.transform = 'translateY(150%)', 4000);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderRevenue();
+            
+            new ApexCharts(document.querySelector("#revenueAreaChart"), {
+                series: [{ name: "10% Fund (₱)", data: [1500, 3200, 5800, 8900, 10500, 12450] }],
+                chart: { type: 'area', height: 250, toolbar: { show: false }, fontFamily: 'Inter, sans-serif' },
+                fill: { type: 'gradient', gradient: { shadeIntensity: 1, opacityFrom: 0.7, opacityTo: 0.1, stops: [0, 90, 100] } },
+                dataLabels: { enabled: false },
+                stroke: { curve: 'smooth', width: 3 },
+                colors: ['#10b981'],
+                xaxis: { categories: ['Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May'], labels: { style: { colors: '#64748b' } } },
+                grid: { borderColor: '#f1f5f9', strokeDashArray: 4 }
+            }).render();
+        });
+    </script>
+</body>
+</html>

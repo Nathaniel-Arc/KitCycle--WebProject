@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Incident Reports | WMSU KitCycle</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/admin-interface/admin-common.css">
+    <link rel="stylesheet" href="../../css/admin-interface/pages/admin-incidents.css">
+    <script src="../../script/auth.js" defer></script>
+    <script src="../../script/user-loader.js" defer></script>
+    <script src="../../script/ui-utils.js" defer></script>
+    
+    <script>
+        (function() {
+            const isMinimized = localStorage.getItem('sidebarMinimized') === 'true';
+            if (isMinimized) {
+                document.documentElement.classList.add('sidebar-is-minimized');
+            }
+        })();
+    </script>
+    <style>
+        .sidebar-is-minimized .sidebar { width: 80px !important; padding: 2rem 0.5rem !important; transition: none !important; }
+        .sidebar-is-minimized .dashboard-content { margin-left: 80px !important; transition: none !important; }
+        .sidebar-is-minimized .profile-info, .sidebar-is-minimized .sidebar-nav span, .sidebar-is-minimized .sidebar-logout span { display: none !important; }
+        .sidebar-is-minimized .sidebar-nav a { justify-content: center !important; padding: 12px 0 !important; }
+        .sidebar-is-minimized .sidebar-nav i { font-size: 1.2rem !important; margin: 0 !important; }
+        .sidebar-is-minimized .sidebar-profile { justify-content: center !important; padding-bottom: 1.5rem !important; }
+
+        @keyframes pulseBadge {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+
+        .modal-body-grid {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            flex: 1;
+            overflow: hidden; /* Header is fixed, children scroll */
+        }
+
+        .verdict-sidebar {
+            overflow-y: auto;
+            max-height: 100%;
+        }
+
+        @media (max-width: 1024px) {
+            .modal-body-grid {
+                grid-template-columns: 1fr;
+                overflow-y: auto;
+                display: block; /* Stack naturally */
+            }
+            .verdict-sidebar {
+                overflow-y: visible;
+                max-height: none;
+            }
+            .modal-card {
+                height: 95vh !important;
+            }
+            .verdict-sidebar {
+                border-left: none !important;
+                border-top: 1px solid #e2e8f0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .modal-header-actions {
+                flex-direction: column;
+                align-items: flex-start !important;
+                gap: 10px !important;
+            }
+            .evidence-grid {
+                grid-template-columns: 1fr !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="navbar">
+        <div class="nav-left-group">
+            <div class="sidebar-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></div>
+            <div class="logo">
+                <img src="../../images/wmsulogo.png" alt="WMSU Logo" class="nav-logo-img">
+                <div class="logo-text">WMSU<span>KitCycle</span></div>
+            </div>
+        </div>
+        <div class="nav-right" style="display: flex; align-items: center; gap: 30px;">
+            <ul class="nav-links">
+                <li><a href="../../index.html">Home</a></li>
+                <li><a href="../marketplace.html">Marketplace</a></li>
+                <li><a href="../howitworks.html">How It Works</a></li>
+                <li><a href="../safety.html">Safety</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <div class="user-nav-profile">
+                    <div class="user-meta">
+                        <span class="user-display-name" id="nav-name">Admin Officer</span>
+                        <span class="user-role-badge" id="nav-role">Admin</span>
+                    </div>
+                    <span class="user-avatar-circle">
+                        <img src="" id="nav-avatar" class="nav-profile-img-circle" style="display:none;">
+                        <i class="fas fa-user" id="nav-avatar-icon"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <div class="dashboard-layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-profile">
+                <div class="profile-avatar"><img id="sidebar-avatar" src="../../images/nash_profile.png" alt="Profile"></div>
+                <div class="profile-info">
+                    <h4 id="sidebar-name">Admin Office</h4>
+                    <span id="sidebar-role">System Administrator</span>
+                </div>
+            </div>
+
+            <ul class="sidebar-nav">
+                <li><a href="admin-dashboard.html"><i class="fas fa-th-large"></i> <span>Dashboard Summary</span></a></li>
+                <li><a href="admin-users.html"><i class="fas fa-users"></i> <span>User Management</span></a></li>
+                <li class="active"><a href="admin-incidents.html"><i class="fas fa-exclamation-triangle"></i> <span>Incident Reports</span></a></li>
+                <li><a href="admin-enforcement.html"><i class="fas fa-shield-alt"></i> <span>Institutional Enforcement</span></a></li>
+                <li><a href="admin-revenue.html"><i class="fas fa-piggy-bank"></i> <span>Departmental Revenue</span></a></li>
+            </ul>
+
+            <a href="javascript:void(0)" onclick="AuthSystem.confirmLogout(); return false;" class="sidebar-logout"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
+        </aside>
+
+        <main class="dashboard-content" id="mainContent" style="padding: 0; display: flex; flex-direction: column; background: #f4f7f6; min-height: 100vh;">
+            
+            <div style="padding: 25px 25px 0 25px;">
+                <div class="dashboard-banner">
+                    <div>
+                        <h2>Incident Reports</h2>
+                        <p>Arbitrate disputes between lenders and borrowers.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; flex: 1; flex-direction: row;">
+                <!-- Column 2: Main Content (Incident View) -->
+                <div style="flex: 1; padding: 25px; display: flex; flex-direction: column;">
+            <!-- Summary Header -->
+            <div style="padding: 25px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+                <div class="content-card" style="margin-bottom: 0; padding: 20px; display: flex; align-items: center; gap: 20px;">
+                    <div style="width: 50px; height: 50px; background: #fff1f2; color: #800000; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+                        <i class="fas fa-exclamation-circle"></i>
+                    </div>
+                    <div>
+                        <div style="font-size: 0.8rem; color: #64748b; font-weight: 700; text-transform: uppercase;">Open Cases</div>
+                        <div style="font-size: 1.5rem; font-weight: 800; color: #1e293b;">14</div>
+                    </div>
+                </div>
+                <div class="content-card" style="margin-bottom: 0; padding: 20px; display: flex; align-items: center; gap: 20px;">
+                    <div style="width: 50px; height: 50px; background: #fffbeb; color: #f59e0b; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div>
+                        <div style="font-size: 0.8rem; color: #64748b; font-weight: 700; text-transform: uppercase;">Under Review</div>
+                        <div style="font-size: 1.5rem; font-weight: 800; color: #1e293b;">8</div>
+                    </div>
+                </div>
+                <div class="content-card" style="margin-bottom: 0; padding: 20px; display: flex; align-items: center; gap: 20px;">
+                    <div style="width: 50px; height: 50px; background: #ecfdf5; color: #10b981; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+                        <i class="fas fa-check-double"></i>
+                    </div>
+                    <div>
+                        <div style="font-size: 0.8rem; color: #64748b; font-weight: 700; text-transform: uppercase;">Resolved (Month)</div>
+                        <div style="font-size: 1.5rem; font-weight: 800; color: #1e293b;">42</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="padding: 0 25px 25px 25px;">
+                <div class="content-card">
+                    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <div>
+                            <h3 style="margin: 0;">Mediation Queue</h3>
+                            <p style="font-size: 0.85rem; color: #64748b; margin: 5px 0 0;">Manage and arbitrate reported kit damage or theft.</p>
+                        </div>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" placeholder="Search by Case ID or Name..." style="padding: 10px 15px; border-radius: 8px; border: 1px solid #e2e8f0; font-size: 0.85rem; width: 250px;">
+                            <select style="padding: 10px; border-radius: 8px; border: 1px solid #e2e8f0; font-size: 0.85rem;">
+                                <option>All Severities</option>
+                                <option>Critical</option>
+                                <option>Major</option>
+                                <option>Minor</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Case ID</th>
+                                <th>Incident Type</th>
+                                <th>Severity</th>
+                                <th>Parties Involved</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="incidentTableBody">
+                            <!-- Injected by JS -->
+                        </tbody>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Case Examination Modal (High-Fidelity) -->
+    <div id="caseModal" class="modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); align-items: center; justify-content: center; z-index: 6000; overflow-y: auto; padding: 20px 0;">
+        <div class="modal-card" style="background: #f4f7f6; padding: 0; border-radius: 20px; max-width: 1200px; width: 95%; height: 90vh; display: flex; flex-direction: column; overflow: hidden;">
+            <!-- Modal Header -->
+            <div style="background: #fff; padding: 20px 30px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h3 style="margin: 0; color: #1e293b; font-size: 1.2rem;">Case Examination: <span id="modalCaseId">#INC-0024</span></h3>
+                    <p style="margin: 5px 0 0; font-size: 0.85rem; color: #64748b;" id="modalCaseSummary">Physical Damage: Canon EOS 90D</p>
+                </div>
+                <div class="modal-header-actions" style="display: flex; gap: 15px; align-items: center;">
+                    <div style="background: #fff1f2; border: 1px solid #fecaca; color: #991b1b; padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 800; display: flex; align-items: center; gap: 6px;">
+                        <i class="fas fa-map-marker-alt"></i> Item Status: <span id="modalItemStatus">Held at Faculty Office (Safe-Zone)</span>
+                    </div>
+                    <button class="btn-admin-outline" style="padding: 8px 15px; position: relative;" onclick="openChatAudit()">
+                        <i class="fas fa-comments"></i> Chat Audit Log
+                        <span style="position: absolute; top: -5px; right: -5px; width: 10px; height: 10px; background: #ef4444; border-radius: 50%; border: 2px solid #fff; animation: pulseBadge 2s infinite;"></span>
+                    </button>
+                    <i class="fas fa-times" style="cursor: pointer; font-size: 1.2rem; color: #94a3b8;" onclick="closeCaseModal()"></i>
+                </div>
+            </div>
+
+            <div class="modal-body-grid">
+                <!-- Left Area: Examination -->
+                <div style="padding: 30px; overflow-y: auto; display: flex; flex-direction: column; gap: 25px;">
+                    
+                    <!-- Institutional Context (Trust Scores) -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div class="content-card" style="margin: 0; border-left: 4px solid #2563eb;">
+                            <div style="font-size: 0.75rem; font-weight: 800; color: #2563eb; text-transform: uppercase; margin-bottom: 10px;">Lender (Claimant)</div>
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <div style="width: 40px; height: 40px; background: #e2e8f0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">MA</div>
+                                <div>
+                                    <div style="font-weight: 700; font-size: 0.9rem;" id="lenderName">Maria Santos</div>
+                                    <div style="font-size: 0.8rem; color: #64748b;">Trust Score: <span style="color: #059669; font-weight: 800;">4.9/5.0</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="content-card" style="margin: 0; border-left: 4px solid #f59e0b;">
+                            <div style="font-size: 0.75rem; font-weight: 800; color: #f59e0b; text-transform: uppercase; margin-bottom: 10px;">Borrower (Defendant)</div>
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <div style="width: 40px; height: 40px; background: #e2e8f0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">JC</div>
+                                <div>
+                                    <div style="font-weight: 700; font-size: 0.9rem;" id="borrowerName">Juan Cruz</div>
+                                    <div style="display: flex; flex-direction: column;">
+                                        <div style="display: flex; align-items: center; gap: 5px;">
+                                            <div style="font-size: 0.8rem; color: #64748b;">Trust Score: <span style="color: #ef4444; font-weight: 800;" id="borrowerTrust">2.2/5.0</span></div>
+                                            <span style="background: #fee2e2; color: #991b1b; padding: 2px 6px; border-radius: 4px; font-size: 0.65rem; font-weight: 800;">Serial Offender</span>
+                                        </div>
+                                        <span style="font-size: 0.65rem; color: #ef4444; font-weight: 600; margin-top: 2px;">(3rd Physical Damage Report in 6 months)</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Photo Evidence Comparison -->
+                    <div class="content-card" style="margin: 0;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+                            <h4 style="margin: 0; font-size: 0.9rem; color: #475569;"><i class="fas fa-camera"></i> Condition Comparison (1:1 Analysis)</h4>
+                            <div style="display: flex; gap: 10px; align-items: center;">
+                                <span style="font-size: 0.75rem; font-weight: 700; background: #f1f5f9; padding: 4px 10px; border-radius: 6px;">Duration: <span id="rentalDuration">2-day rental</span></span>
+                                <button class="btn-admin-outline" style="padding: 5px 12px; font-size: 0.7rem; border-color: #cbd5e1; color: #475569;" onclick="UIUtils.showToast('Redirecting to Listing Archive...', 'info')">View Original Listing</button>
+                            </div>
+                        </div>
+                        <div class="evidence-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                            <div>
+                                <div style="font-size: 0.7rem; font-weight: 800; color: #64748b; margin-bottom: 10px; text-transform: uppercase;">A: Handover Condition (Pre-Rental)</div>
+                                <div style="background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0; aspect-ratio: 16/10; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                                    <img src="../../brain/9c6df319-e830-4da7-b1b1-76f7f8aab4b4/student_id_card_sample_1778095283290.png" style="width: 100%; height: 100%; object-fit: cover;" id="handoverImg">
+                                </div>
+                                <p style="font-size: 0.75rem; color: #64748b; margin-top: 8px;">Verified by system: May 04, 09:15 AM</p>
+                            </div>
+                            <div>
+                                <div style="font-size: 0.7rem; font-weight: 800; color: #800000; margin-bottom: 10px; text-transform: uppercase;">B: Return Condition (Reported Damage)</div>
+                                <div style="background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0; aspect-ratio: 16/10; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                                    <img src="../../brain/9c6df319-e830-4da7-b1b1-76f7f8aab4b4/camera_damage_evidence_1778095298599.png" style="width: 100%; height: 100%; object-fit: cover;" id="returnImg">
+                                </div>
+                                <p style="font-size: 0.75rem; color: #64748b; margin-top: 8px;">Reported by Lender: May 05, 04:30 PM</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Incident Testimony -->
+                    <div class="content-card" style="margin: 0;">
+                        <h4 style="margin: 0 0 15px; font-size: 0.9rem; color: #475569;"><i class="fas fa-file-alt"></i> Incident Testimony</h4>
+                        <div style="background: #f8fafc; padding: 15px; border-radius: 10px; border-left: 4px solid #800000; margin-bottom: 15px;">
+                            <div style="font-weight: 700; font-size: 0.8rem; color: #800000; margin-bottom: 5px;">Lender's Statement:</div>
+                            <p style="font-size: 0.85rem; color: #1e293b; margin: 0;">"The borrower returned the camera with a visible scratch on the lens body. It was definitely not there when I handed it over."</p>
+                        </div>
+                        <div style="background: #f8fafc; padding: 15px; border-radius: 10px; border-left: 4px solid #64748b;">
+                            <div style="font-weight: 700; font-size: 0.8rem; color: #475569; margin-bottom: 5px;">Borrower's Statement:</div>
+                            <p style="font-size: 0.85rem; color: #1e293b; margin: 0;">"I used the item carefully. The scratch must have been there but unnoticed."</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Sidebar: Verdict Controls -->
+                <div class="verdict-sidebar" style="background: #fff; border-left: 1px solid #e2e8f0; padding: 30px; display: flex; flex-direction: column; gap: 30px;">
+                    <div>
+                        <h4 style="margin: 0 0 20px; font-size: 0.85rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em;">Mediation Verdict</h4>
+                        
+                        <!-- Trust Point Slider -->
+                        <div style="margin-bottom: 25px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                                <label style="font-size: 0.85rem; font-weight: 700;">Deduct Trust Points</label>
+                                <span id="trustDeductionValue" style="color: #ef4444; font-weight: 800;">-0.5</span>
+                            </div>
+                            <input type="range" min="0" max="5" step="0.1" value="0.5" style="width: 100%; accent-color: #800000; margin-bottom: 15px;" oninput="updateTrustDeduction(this.value)">
+                            
+                            <label style="font-size: 0.85rem; font-weight: 700; display: block; margin-bottom: 8px;">Impose Penalty Fee</label>
+                            <div style="position: relative;">
+                                <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-weight: 700; color: #64748b;">₱</span>
+                                <input type="number" id="repairFeeInput" placeholder="Repair Cost" style="width: 100%; padding: 10px 10px 10px 25px; border: 1.5px solid #e2e8f0; border-radius: 8px; font-weight: 700; font-size: 0.9rem;" value="2500">
+                            </div>
+                            <p style="font-size: 0.7rem; color: #64748b; margin-top: 5px;">This amount will be charged to the borrower's WMSU account.</p>
+                        </div>
+
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                            <button class="btn-admin-outline" style="width: 100%; padding: 12px; justify-content: center; border-color: #f59e0b; color: #b45309;" onclick="issueWarning()">
+                                <i class="fas fa-exclamation-triangle"></i> Issue Formal Warning
+                            </button>
+                            <button class="btn-admin-outline" style="width: 100%; padding: 12px; justify-content: center; border-color: #10b981; color: #059669;" onclick="resolveMediation()">
+                                <i class="fas fa-check-circle"></i> Mediation Resolved
+                            </button>
+                            
+                            <div style="height: 1px; background: #f1f5f9; margin: 10px 0;"></div>
+
+                            <button class="btn-admin" style="width: 100%; padding: 15px; background: #800000; display: flex; flex-direction: column; align-items: center; gap: 5px;" onclick="escalateToRegistrar()">
+                                <span style="font-size: 0.9rem; font-weight: 800;"><i class="fas fa-gavel"></i> ESCALATE TO REGISTRAR</span>
+                                <span style="font-size: 0.65rem; color: #fee2e2; font-weight: 400;">Action: Places a 'Hold' on 2nd Semester Enrollment</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div style="background: #fff8f1; border: 1px solid #ffedd5; padding: 15px; border-radius: 12px;">
+                        <h5 style="margin: 0 0 5px; color: #9a3412; font-size: 0.8rem;">Internal Admin Note</h5>
+                        <textarea style="width: 100%; background: transparent; border: none; font-size: 0.8rem; color: #9a3412; resize: none; min-height: 80px; outline: none;" placeholder="Type private notes for other faculty members..."></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toastNotification" style="position: fixed; bottom: 30px; right: 30px; background: #1e293b; color: #fff; padding: 15px 25px; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); display: flex; align-items: center; gap: 15px; transform: translateY(150%); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); z-index: 9999;">
+        <i class="fas fa-info-circle" style="color: #60a5fa; font-size: 1.2rem;"></i>
+        <span id="toastMessage" style="font-size: 0.9rem; font-weight: 600;">Action completed.</span>
+    </div>
+
+    <script>
+        const cases = [
+            { id: "INC-0024", type: "Physical Damage", severity: "Critical", lender: "Maria Santos", borrower: "Juan Cruz", status: "Under Review", item: "Canon EOS 90D", bTrust: "2.2", bIcon: "JC", lIcon: "MA" },
+            { id: "INC-0025", type: "Late Return", severity: "Minor", lender: "Pedro Martinez", borrower: "Lisa Chen", status: "New", item: "Arduino Kit", bTrust: "4.8", bIcon: "LC", lIcon: "PM" },
+            { id: "INC-0026", type: "Missing Accessory", severity: "Major", lender: "Nash Arciaga", borrower: "Student 5", status: "Awaiting Response", item: "Tripod 1.5m", bTrust: "3.5", bIcon: "S5", lIcon: "NA" },
+            { id: "INC-0027", type: "No-Show", severity: "Minor", lender: "Maria Clara", borrower: "User 12", status: "Resolved", item: "T-Square", bTrust: "4.1", bIcon: "U1", lIcon: "MC" },
+            { id: "INC-0028", type: "Stolen Gear", severity: "Critical", lender: "Prof. Ace Patongan", borrower: "User 20", status: "New", item: "MacBook Pro", bTrust: "1.5", bIcon: "U2", lIcon: "AP" }
+        ];
+
+        function renderIncidents() {
+            const tbody = document.getElementById('incidentTableBody');
+            if(!tbody) return;
+            tbody.innerHTML = cases.map((c, index) => {
+                const sevColor = c.severity === "Critical" ? "#ef4444" : (c.severity === "Major" ? "#f59e0b" : "#3b82f6");
+                const statColor = c.status === "Resolved" ? "#10b981" : (c.status === "New" ? "#ef4444" : "#f59e0b");
+                
+                return `
+                    <tr>
+                        <td style="font-weight: 700; color: #1e293b;">${c.id}</td>
+                        <td>${c.type}</td>
+                        <td><span class="status-badge" style="background: ${sevColor}20; color: ${sevColor}; border: 1px solid ${sevColor}40;">${c.severity}</span></td>
+                        <td>
+                            <div style="font-size: 0.8rem; color: #64748b;">
+                                <span style="color: #1e293b; font-weight: 600;">L:</span> ${c.lender}<br>
+                                <span style="color: #1e293b; font-weight: 600;">B:</span> ${c.borrower}
+                            </div>
+                        </td>
+                        <td><span style="color: ${statColor}; font-weight: 700;">${c.status}</span></td>
+                        <td><button class="btn-admin-outline" style="padding: 5px 12px; font-size: 0.75rem;" onclick="openCaseModal(${index})">Examine Case</button></td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        let activeCaseIndex = -1;
+
+        function openCaseModal(index) {
+            activeCaseIndex = index;
+            const c = cases[index];
+            document.getElementById('modalCaseId').innerText = c.id;
+            document.getElementById('modalCaseSummary').innerText = `${c.type}: ${c.item}`;
+            document.getElementById('lenderName').innerText = c.lender;
+            document.getElementById('borrowerName').innerText = c.borrower;
+            document.getElementById('borrowerTrust').innerText = `${c.bTrust}/5.0`;
+            
+            document.getElementById('caseModal').style.display = 'flex';
+        }
+
+        function closeCaseModal() {
+            document.getElementById('caseModal').style.display = 'none';
+        }
+
+        function updateTrustDeduction(val) {
+            document.getElementById('trustDeductionValue').innerText = `-${val}`;
+        }
+
+        function issueWarning() {
+            const c = cases[activeCaseIndex];
+            alert(`Formal Warning issued to ${c.borrower}. Automated email sent to WMSU account.`);
+        }
+
+        function resolveMediation() {
+            const c = cases[activeCaseIndex];
+            c.status = "Resolved";
+            renderIncidents();
+            closeCaseModal();
+            showToast(`Case ${c.id} marked as RESOLVED.`);
+        }
+
+        function escalateToRegistrar() {
+            const c = cases[activeCaseIndex];
+            if(confirm(`WARNING: This will lock ${c.borrower}'s university clearance and flag their profile for Registrar intervention. Proceed?`)) {
+                c.status = "Escalated";
+                renderIncidents();
+                closeCaseModal();
+                showToast(`Student ${c.borrower} escalated to Registrar Pillar.`);
+            }
+        }
+
+        function openChatAudit() {
+            alert("CHAT AUDIT LOG\n\n[09:15 AM] Lender: Hey, ready for handover at the library?\n[09:20 AM] Borrower: Yes, I'm here. I see you.\n[09:22 AM] SYSTEM: Condition Photos Uploaded.\n\n--- 2 Days Later ---\n\n[04:30 PM] Lender: Bro, the lens is scratched! What happened?\n[04:45 PM] Borrower: I didn't do anything. Maybe it was there before?");
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toastNotification');
+            const msg = document.getElementById('toastMessage');
+            msg.innerText = message;
+            toast.style.transform = 'translateY(0)';
+            setTimeout(() => toast.style.transform = 'translateY(150%)', 4000);
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            const isMinimized = sidebar.classList.toggle('minimized');
+            mainContent.classList.toggle('expanded');
+            
+            if (isMinimized) {
+                document.documentElement.classList.add('sidebar-is-minimized');
+            } else {
+                document.documentElement.classList.remove('sidebar-is-minimized');
+            }
+            
+            localStorage.setItem('sidebarMinimized', isMinimized);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderIncidents();
+            
+            const options = {
+                series: [{ name: 'Cases', data: [14, 8, 42] }],
+                chart: { type: 'bar', height: 250, toolbar: { show: false }, fontFamily: 'Inter, sans-serif' },
+                plotOptions: { bar: { borderRadius: 4, horizontal: false, columnWidth: '50%' } },
+                dataLabels: { enabled: false },
+                xaxis: { categories: ['Open', 'Under Review', 'Resolved'], labels: { style: { colors: '#64748b' } } },
+                colors: ['#ef4444', '#f59e0b', '#10b981'],
+                grid: { borderColor: '#f1f5f9' }
+            };
+
+            const chartArea = document.querySelector("#caseStatusChart");
+            if(chartArea) {
+                const chart = new ApexCharts(chartArea, options);
+                chart.render();
+            }
+        });
+    </script>
+</body>
+</html>

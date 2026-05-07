@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Institutional Enforcement | WMSU KitCycle</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/admin-interface/admin-common.css">
+    <link rel="stylesheet" href="../../css/admin-interface/pages/admin-registrar.css">
+    <link rel="stylesheet" href="../../css/admin-interface/pages/admin-clearance.css">
+    <script src="../../script/auth.js" defer></script>
+    <script src="../../script/user-loader.js" defer></script>
+    <script src="../../script/ui-utils.js" defer></script>
+    
+    <script>
+        (function() {
+            const isMinimized = localStorage.getItem('sidebarMinimized') === 'true';
+            if (isMinimized) {
+                document.documentElement.classList.add('sidebar-is-minimized');
+            }
+        })();
+    </script>
+    <style>
+        .sidebar-is-minimized .sidebar { width: 80px !important; padding: 2rem 0.5rem !important; transition: none !important; }
+        .sidebar-is-minimized .dashboard-content { margin-left: 80px !important; transition: none !important; }
+        .sidebar-is-minimized .profile-info, .sidebar-is-minimized .sidebar-nav span, .sidebar-is-minimized .sidebar-logout span { display: none !important; }
+        .sidebar-is-minimized .sidebar-nav a { justify-content: center !important; padding: 12px 0 !important; }
+        .sidebar-is-minimized .sidebar-nav i { font-size: 1.2rem !important; margin: 0 !important; }
+        .sidebar-is-minimized .sidebar-profile { justify-content: center !important; padding-bottom: 1.5rem !important; }
+    </style>
+</head>
+
+<body>
+    <header class="navbar">
+        <div class="nav-left-group">
+            <div class="sidebar-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></div>
+            <div class="logo">
+                <img src="../../images/wmsulogo.png" alt="WMSU Logo" class="nav-logo-img">
+                <div class="logo-text">WMSU<span>KitCycle</span></div>
+            </div>
+        </div>
+        <div class="nav-right" style="display: flex; align-items: center; gap: 30px;">
+            <ul class="nav-links">
+                <li><a href="../../index.html">Home</a></li>
+                <li><a href="../marketplace.html">Marketplace</a></li>
+                <li><a href="../howitworks.html">How It Works</a></li>
+                <li><a href="../safety.html">Safety</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <div class="user-nav-profile">
+                    <div class="user-meta">
+                        <span class="user-display-name" id="nav-name">Admin Officer</span>
+                        <span class="user-role-badge" id="nav-role">Admin</span>
+                    </div>
+                    <span class="user-avatar-circle">
+                        <img src="" id="nav-avatar" class="nav-profile-img-circle" style="display:none;">
+                        <i class="fas fa-user" id="nav-avatar-icon"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <div class="dashboard-layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-profile">
+                <div class="profile-avatar"><img id="sidebar-avatar" src="../../images/nash_profile.png" alt="Profile"></div>
+                <div class="profile-info">
+                    <h4 id="sidebar-name">Admin Office</h4>
+                    <span id="sidebar-role">System Administrator</span>
+                </div>
+            </div>
+
+            <ul class="sidebar-nav">
+                <li><a href="admin-dashboard.html"><i class="fas fa-th-large"></i> <span>Dashboard Summary</span></a></li>
+                <li><a href="admin-users.html"><i class="fas fa-users"></i> <span>User Management</span></a></li>
+                <li><a href="admin-incidents.html"><i class="fas fa-exclamation-triangle"></i> <span>Incident Reports</span></a></li>
+                <li class="active"><a href="admin-enforcement.html"><i class="fas fa-shield-alt"></i> <span>Institutional Enforcement</span></a></li>
+                <li><a href="admin-revenue.html"><i class="fas fa-piggy-bank"></i> <span>Departmental Revenue</span></a></li>
+            </ul>
+
+            <a href="javascript:void(0)" onclick="AuthSystem.confirmLogout(); return false;" class="sidebar-logout"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
+        </aside>
+
+        <main class="dashboard-content" id="mainContent" style="padding: 0; display: flex; flex-direction: column; background: #f4f7f6; min-height: 100vh;">
+            
+            <div style="padding: 25px 25px 0 25px;">
+                <div class="dashboard-banner">
+                    <div>
+                        <h2>Institutional Enforcement</h2>
+                        <p>Manage Registrar Negative List and Clearance Approvals.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Summary Stats at Top -->
+            <div style="padding: 15px 25px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px;">
+                <div class="content-card" style="margin-bottom: 0; padding: 15px; border-left: 4px solid #800000;">
+                    <div style="font-size: 0.7rem; color: #64748b; font-weight: 800; text-transform: uppercase;">Active Registrar Locks</div>
+                    <div style="font-size: 1.5rem; font-weight: 800; color: #1e293b;" id="totalLocks">24</div>
+                </div>
+                <div class="content-card" style="margin-bottom: 0; padding: 15px; border-left: 4px solid #f59e0b;">
+                    <div style="font-size: 0.7rem; color: #64748b; font-weight: 800; text-transform: uppercase;">Clearance on Hold</div>
+                    <div style="font-size: 1.5rem; font-weight: 800; color: #1e293b;" id="clearanceHold">12</div>
+                </div>
+                <div class="content-card" style="margin-bottom: 0; padding: 15px; border-left: 4px solid #10b981;">
+                    <div style="font-size: 0.7rem; color: #64748b; font-weight: 800; text-transform: uppercase;">Approved Today</div>
+                    <div style="font-size: 1.5rem; font-weight: 800; color: #1e293b;">42</div>
+                </div>
+                <div class="content-card" style="margin-bottom: 0; padding: 15px; border-left: 4px solid #2563eb;">
+                    <div style="font-size: 0.7rem; color: #64748b; font-weight: 800; text-transform: uppercase;">System Integrity</div>
+                    <div style="font-size: 1.5rem; font-weight: 800; color: #1e293b;">100%</div>
+                </div>
+            </div>
+
+            <div style="display: flex; flex: 1; flex-direction: row; padding: 0 25px 25px 25px; gap: 25px;">
+                <div style="flex: 1; display: flex; flex-direction: column; gap: 25px;">
+                    
+                    <!-- Registrar Negative List -->
+                    <div class="content-card" style="border-top: 4px solid #800000;">
+                        <div class="card-header" style="border-bottom: 1px solid #f1f5f9; padding-bottom: 15px; margin-bottom: 15px;">
+                            <div>
+                                <h3 style="margin: 0; color: #800000;">Registrar Negative List</h3>
+                                <p style="font-size: 0.85rem; color: #64748b; margin: 5px 0 0;">Blocked from graduation clearance and enrollment.</p>
+                            </div>
+                            <div style="display: flex; gap: 10px;">
+                                <input type="text" id="negativeSearch" placeholder="Search ID..." onkeyup="filterEnforcement(this.value)" style="padding: 8px 12px; border-radius: 8px; border: 1px solid #e2e8f0; font-size: 0.85rem; width: 180px;">
+                                <button class="btn-admin" style="background: #800000;" onclick="showAddModal()">Add Manually</button>
+                            </div>
+                        </div>
+                        
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Student ID</th>
+                                    <th>Name</th>
+                                    <th>Reason for Block</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="registrarTableBody">
+                                <!-- JS Injection -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Clearance Queue -->
+                    <div class="content-card">
+                        <div class="card-header" style="border-bottom: 1px solid #f1f5f9; padding-bottom: 15px; margin-bottom: 15px;">
+                            <div>
+                                <h3 style="margin: 0; color: #1e293b;">Clearance Approval Queue</h3>
+                                <p style="font-size: 0.85rem; color: #64748b; margin: 5px 0 0;">Liability audit for graduating/transferring students.</p>
+                            </div>
+                        </div>
+                        
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Student Name</th>
+                                    <th>ID Number</th>
+                                    <th>KitCycle Liability Audit</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="clearanceTableBody">
+                                <!-- JS Injection -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Sidebar Analytics -->
+                <aside style="width: 350px; display: flex; flex-direction: column; gap: 25px;">
+                    <div class="content-card" style="margin: 0;">
+                        <h4 style="font-size: 0.85rem; color: #475569; margin-top: 0; margin-bottom: 15px; text-transform: uppercase;">Violation Trend</h4>
+                        <div id="violationTrendChart"></div>
+                    </div>
+                    <div class="content-card" style="margin: 0; text-align: center;">
+                        <h4 style="font-size: 0.85rem; color: #475569; margin-top: 0; margin-bottom: 15px; text-transform: uppercase;">Clearance Progress</h4>
+                        <div id="clearanceGaugeChart"></div>
+                    </div>
+                </aside>
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toastNotification" style="position: fixed; bottom: 30px; right: 30px; background: #166534; color: #fff; padding: 15px 25px; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); display: flex; align-items: center; gap: 15px; transform: translateY(150%); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); z-index: 9999;">
+        <i class="fas fa-check-circle" style="color: #6ee7b7; font-size: 1.2rem;"></i>
+        <span id="toastMessage" style="font-size: 0.9rem; font-weight: 600;">Action completed.</span>
+    </div>
+
+    <script>
+        const negativeList = [
+            { id: "2021-0982", name: "Juan Cruz", reason: "Unresolved Damage #DS-882", date: "May 5, 2026" },
+            { id: "2022-4411", name: "Elena Rodriguez", reason: "Repeated Non-Returns", date: "April 12, 2026" },
+            { id: "2023-1102", name: "Nash Arciaga", reason: "Late Fees Exceeded Limit", date: "May 6, 2026" }
+        ];
+
+        for(let i=1; i<=17; i++) {
+            negativeList.push({
+                id: `2024-${1000 + i}`,
+                name: `Enforced Student ${i}`,
+                reason: i % 3 === 0 ? "Lost Equipment" : "Agreement Violation",
+                date: "May 2026"
+            });
+        }
+
+        const clearanceQueue = [
+            { name: "Nash Arciaga", id: "2023-1102", college: "ICS" },
+            { name: "Maria Clara", id: "2022-0012", college: "CLA" },
+            { name: "Juan Cruz", id: "2021-0982", college: "Engineering" }
+        ];
+
+        for(let i=1; i<=20; i++) {
+            clearanceQueue.push({
+                name: `Graduating Student ${i}`,
+                id: `2021-${3000 + i}`,
+                college: ["ICS", "CBA", "Engineering", "Science"][i % 4]
+            });
+        }
+
+        function renderEnforcement() {
+            const nBody = document.getElementById('registrarTableBody');
+            const cBody = document.getElementById('clearanceTableBody');
+            
+            const nIds = negativeList.map(s => s.id);
+
+            nBody.innerHTML = negativeList.map(s => `
+                <tr style="vertical-align: middle;">
+                    <td style="font-weight: 700; color: #800000; padding: 12px 15px;">${s.id}</td>
+                    <td style="font-weight: 600;">${s.name}</td>
+                    <td style="font-size: 0.85rem; color: #64748b;">${s.reason}</td>
+                    <td>
+                        <span style="background: #800000; color: #fff; padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 800; display: inline-flex; align-items: center; gap: 5px; line-height: 1;">
+                            <i class="fas fa-lock" style="font-size: 0.6rem;"></i> LOCKED
+                        </span>
+                    </td>
+                    <td><button class="btn-admin-outline" style="font-size: 0.7rem; padding: 5px 12px; border-color: #cbd5e1;" onclick="liftHold('${s.id}')">Lift Hold</button></td>
+                </tr>
+            `).join('');
+
+            cBody.innerHTML = clearanceQueue.map(s => {
+                const isLocked = nIds.includes(s.id);
+                return `
+                    <tr style="${isLocked ? 'background: #fffafb;' : ''}">
+                        <td style="font-weight: 600;">${s.name}</td>
+                        <td style="color: #64748b;">${s.id}</td>
+                        <td>
+                            ${isLocked 
+                                ? '<span style="background: #fef2f2; border: 1px solid #fecaca; color: #ef4444; font-weight: 700; font-size: 0.75rem; padding: 4px 10px; border-radius: 20px;"><i class="fas fa-exclamation-triangle"></i> Hold: Outstanding Item</span>' 
+                                : '<span style="color: #10b981; font-weight: 700; font-size: 0.85rem;"><i class="fas fa-check-circle"></i> Clear</span>'}
+                        </td>
+                        <td>
+                            ${isLocked 
+                                ? '<button class="btn-admin" disabled style="opacity: 0.5; background: #94a3b8; cursor: not-allowed; font-size: 0.75rem;">Locked</button>'
+                                : `<button class="btn-admin" style="background: #166534; font-size: 0.75rem;" onclick="approveClearance('${s.name}', this)">Approve</button>`}
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            document.getElementById('totalLocks').innerText = negativeList.length;
+            document.getElementById('clearanceHold').innerText = clearanceQueue.filter(s => nIds.includes(s.id)).length;
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            const isMinimized = sidebar.classList.toggle('minimized');
+            mainContent.classList.toggle('expanded');
+            
+            if (isMinimized) {
+                document.documentElement.classList.add('sidebar-is-minimized');
+            } else {
+                document.documentElement.classList.remove('sidebar-is-minimized');
+            }
+            
+            localStorage.setItem('sidebarMinimized', isMinimized);
+        }
+
+        function filterEnforcement(q) {
+            // Simulated search logic
+            renderEnforcement();
+        }
+
+        function showAddModal() {
+            UIUtils.showModal({
+                title: 'Add Manual Registrar Lock',
+                content: `
+                    <div style="display: flex; flex-direction: column; gap: 15px;">
+                        <div>
+                            <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 5px;">Student ID</label>
+                            <input type="text" id="manualId" placeholder="e.g. 2021-0001" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                        </div>
+                        <div>
+                            <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 5px;">Reason for Lock</label>
+                            <textarea id="manualReason" placeholder="Describe the violation..." style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #e2e8f0; min-height: 80px;"></textarea>
+                        </div>
+                    </div>
+                `,
+                confirmText: 'Enforce Lock',
+                onConfirm: () => {
+                    const id = document.getElementById('manualId').value;
+                    const reason = document.getElementById('manualReason').value;
+                    if(id && reason) {
+                        negativeList.unshift({ id, name: "Manually Added Student", reason, date: "May 2026" });
+                        renderEnforcement();
+                        UIUtils.showToast("Registrar lock enforced successfully.", "success");
+                    }
+                }
+            });
+        }
+
+        function liftHold(studentId) {
+            const index = negativeList.findIndex(s => s.id === studentId);
+            if(index !== -1) {
+                UIUtils.showModal({
+                    title: 'Lift Registrar Hold?',
+                    content: `<p>Are you sure you want to lift the graduation/enrollment hold for <strong>${studentId}</strong>? This action will be logged.</p>`,
+                    confirmText: 'Yes, Lift Hold',
+                    onConfirm: () => {
+                        negativeList.splice(index, 1);
+                        renderEnforcement();
+                        UIUtils.showToast(`Hold lifted for ${studentId}.`, "success");
+                    }
+                });
+            }
+        }
+
+        function approveClearance(studentName, btnElem) {
+            btnElem.innerText = "Approved";
+            btnElem.style.background = "#94a3b8";
+            btnElem.disabled = true;
+            showToast(`Clearance approved for ${studentName}.`);
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toastNotification');
+            const msg = document.getElementById('toastMessage');
+            msg.innerText = message;
+            toast.style.transform = 'translateY(0)';
+            setTimeout(() => toast.style.transform = 'translateY(150%)', 4000);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderEnforcement();
+            
+            new ApexCharts(document.querySelector("#violationTrendChart"), {
+                series: [{ name: "Violations", data: [2, 5, 3, 8, 4, 1] }],
+                chart: { type: 'line', height: 200, toolbar: { show: false }, fontFamily: 'Inter, sans-serif' },
+                stroke: { curve: 'smooth', width: 3 },
+                colors: ['#800000'],
+                xaxis: { categories: ['Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May'], labels: { style: { colors: '#64748b' } } },
+                dataLabels: { enabled: false },
+                grid: { borderColor: '#f1f5f9', strokeDashArray: 4 }
+            }).render();
+
+            new ApexCharts(document.querySelector("#clearanceGaugeChart"), {
+                series: [78],
+                chart: { type: 'radialBar', height: 200, fontFamily: 'Inter, sans-serif' },
+                plotOptions: {
+                    radialBar: {
+                        startAngle: -135, endAngle: 135,
+                        hollow: { size: '60%' },
+                        dataLabels: {
+                            show: true,
+                            name: { offsetY: 20, color: '#64748b', fontSize: '0.75rem' },
+                            value: { offsetY: -10, color: '#1e293b', fontSize: '1.5rem', fontWeight: 700, show: true }
+                        }
+                    }
+                },
+                colors: ['#047857'],
+                labels: ['Cleared'],
+            }).render();
+        });
+    </script>
+</body>
+</html>

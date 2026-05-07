@@ -679,23 +679,36 @@
                 const currentMessages = JSON.parse(localStorage.getItem('kitcycle_messages') || '{}');
                 const lenderKey = currentItem.lender.toLowerCase().split(' ')[0]; // Simple keying: 'maria', 'juan', etc.
                 
-                if (currentMessages[lenderKey]) {
-                    const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                    
-                    // Update the thread context to match this request
-                    currentMessages[lenderKey].item = currentItem.name;
-                    currentMessages[lenderKey].img = currentItem.image;
-                    currentMessages[lenderKey].status = "Awaiting Pickup";
-                    currentMessages[lenderKey].statusClass = "status-pending";
-
-                    currentMessages[lenderKey].messages.push({
-                        t: 'out',
-                        type: 'request',
-                        details: requestDetails,
-                        time: now
-                    });
-                    localStorage.setItem('kitcycle_messages', JSON.stringify(currentMessages));
+                if (!currentMessages[lenderKey]) {
+                    // Create a new conversation entry if it doesn't exist
+                    currentMessages[lenderKey] = {
+                        name: currentItem.lender,
+                        role: "Lender",
+                        profileImg: currentItem.lenderPic || "../../images/nash_profile.png",
+                        item: currentItem.name,
+                        status: "Awaiting Pickup",
+                        statusClass: "status-pending",
+                        img: currentItem.image,
+                        location: currentItem.location,
+                        messages: []
+                    };
                 }
+                
+                const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                
+                // Update the thread context to match this request
+                currentMessages[lenderKey].item = currentItem.name;
+                currentMessages[lenderKey].img = currentItem.image;
+                currentMessages[lenderKey].status = "Awaiting Pickup";
+                currentMessages[lenderKey].statusClass = "status-pending";
+
+                currentMessages[lenderKey].messages.push({
+                    t: 'out',
+                    type: 'request',
+                    details: requestDetails,
+                    time: now
+                });
+                localStorage.setItem('kitcycle_messages', JSON.stringify(currentMessages));
                 
                 // Detailed Summary Modal with OK and Close options
                 UIUtils.showModal({
