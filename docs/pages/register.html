@@ -211,17 +211,28 @@
                     <i class="fas fa-check-circle"></i>
                 </div>
                 <div class="success-content">
-                    <h2>Application Submitted!</h2>
-                    <p>Your credentials are being reviewed by the WMSU KitCycle team. You can now browse the
-                        marketplace, but renting and listing will be unlocked once your status is confirmed.</p>
-                    <a href="marketplace.html" class="btn-continue btn-outline-crimson"
-                        style="text-decoration: none; display: block; text-align: center;">Go to WMSU Market</a>
+                    <h2>Registration Successful!</h2>
+                    <p>Welcome to WMSU KitCycle. Your account is ready and you can now start browsing, renting, and listing equipment.</p>
+                    <a href="student-interface html/student-dashboard.html" class="btn-continue btn-crimson"
+                        style="text-decoration: none; display: block; text-align: center;">Go to My Dashboard</a>
                 </div>
             </div>
         </div>
     </main>
 
     <script>
+        // Redirect to dashboard if already logged in
+        if (localStorage.getItem('isLoggedIn') === 'true') {
+            const role = localStorage.getItem('userRole');
+            if (role === 'student') {
+                window.location.href = 'student-interface html/student-dashboard.html';
+            } else if (role === 'faculty') {
+                window.location.href = 'faculty-interface html/faculty-dashboard.html';
+            } else if (role === 'admin') {
+                window.location.href = 'admin-interface html/admin-dashboard.html';
+            }
+        }
+
         // Step Navigation Logic
         const steps = document.querySelectorAll('.registration-step');
         const indicatorSteps = document.querySelectorAll('.indicator-step');
@@ -294,6 +305,59 @@
         // Step 3 to Step 4
         document.getElementById('btn-submit-docs').addEventListener('click', () => {
             showStep(4);
+
+            // Save registration data and set login session
+            const form1 = document.getElementById('form-step-1');
+            const inputs = form1.querySelectorAll('input, select');
+            let firstName = '', lastName = '', email = '', studentId = '', course = '', age = '', year = '';
+            inputs.forEach(input => {
+                const ph = input.placeholder || '';
+                if (ph.includes('First')) firstName = input.value;
+                else if (ph.includes('Last')) lastName = input.value;
+                else if (ph.includes('@')) email = input.value;
+                else if (ph.includes('202')) studentId = input.value;
+            });
+            const courseSelect = document.getElementById('regCourse');
+            const yearSelect = document.getElementById('regYear');
+            if (courseSelect) course = courseSelect.value;
+            if (yearSelect) year = yearSelect.value;
+
+            const fullName = firstName.trim() + ' ' + lastName.trim();
+
+            // Save to localStorage accounts
+            const accounts = JSON.parse(localStorage.getItem('kitcycle_accounts') || '[]');
+            const existingIndex = accounts.findIndex(a => a.email === email);
+            const newAccount = {
+                email: email,
+                password: studentId, // default password is student ID
+                role: 'student',
+                name: fullName,
+                profilePic: '',
+                studentId: studentId,
+                course: course,
+                age: age,
+                year: year,
+                isVerified: false
+            };
+            if (existingIndex >= 0) {
+                accounts[existingIndex] = newAccount;
+            } else {
+                accounts.push(newAccount);
+            }
+            localStorage.setItem('kitcycle_accounts', JSON.stringify(accounts));
+
+            // Set login session
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('userName', fullName);
+            localStorage.setItem('userRole', 'student');
+            localStorage.setItem('userEmail', email);
+            localStorage.setItem('userPic', '');
+            localStorage.setItem('isVerified', 'false');
+
+            // Auto-redirect to dashboard after 2 seconds
+            setTimeout(() => {
+                window.location.href = 'student-interface html/student-dashboard.html';
+            }, 2000);
         });
 
         // OTP Input Auto-focus

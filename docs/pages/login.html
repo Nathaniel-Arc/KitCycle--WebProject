@@ -135,6 +135,18 @@
     </div>
 
     <script>
+        // Redirect to dashboard if already logged in
+        if (localStorage.getItem('isLoggedIn') === 'true') {
+            const role = localStorage.getItem('userRole');
+            if (role === 'student') {
+                window.location.href = 'student-interface html/student-dashboard.html';
+            } else if (role === 'faculty') {
+                window.location.href = 'faculty-interface html/faculty-dashboard.html';
+            } else if (role === 'admin') {
+                window.location.href = 'admin-interface html/admin-dashboard.html';
+            }
+        }
+
         // Login form handler
         document.getElementById('loginForm').addEventListener('submit', function (e) {
             e.preventDefault();

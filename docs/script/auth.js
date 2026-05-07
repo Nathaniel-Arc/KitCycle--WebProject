@@ -20,11 +20,20 @@ window.AuthSystem = {
     /* ── 1. Authenticate — validates email + password ──────── */
     authenticate: function (email, password) {
         const trimmedEmail = email.trim().toLowerCase();
-        const account = this._accounts.find(
+        // Check hardcoded accounts first
+        let account = this._accounts.find(
             a => a.email === trimmedEmail && a.password === password
         );
-        if (!account) return null;
-        return account;
+        if (account) return account;
+
+        // Check registered accounts from localStorage
+        const registered = JSON.parse(localStorage.getItem('kitcycle_accounts') || '[]');
+        account = registered.find(
+            a => a.email.toLowerCase() === trimmedEmail && a.password === password
+        );
+        if (account) return account;
+
+        return null;
     },
 
     /* ── 2. Login — saves session & redirects ──────────────── */
@@ -34,7 +43,7 @@ window.AuthSystem = {
         localStorage.setItem('userRole',   account.role);
         localStorage.setItem('userEmail',  account.email);
         localStorage.setItem('userPic',    account.profilePic || '');
-        localStorage.setItem('isVerified', 'true'); // Hardcoded accounts are verified by default
+        localStorage.setItem('isVerified', account.isVerified !== false ? 'true' : 'false');
 
         // Build the correct path to the dashboard folders
         const isInPages = window.location.pathname.includes('/pages/');
