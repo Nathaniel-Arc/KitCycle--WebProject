@@ -112,6 +112,20 @@
             gap: 4px;
         }
 
+        .btn-action-report { background: #fef3c7; border: 1px solid #f59e0b; color: #92400e; }
+        .btn-action-report:hover { background: #fde68a; }
+
+        .btn-action-penalty { background: #fee2e2; border: 1px solid #ef4444; color: #991b1b; }
+        .btn-action-penalty:hover { background: #fecaca; }
+
+        .btn-action-deactivate { background: #800000; color: #fff; }
+        .btn-action-deactivate:hover { background: #600000; }
+
+        .penalty-options { display: flex; flex-direction: column; gap: 10px; }
+        .penalty-option { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #4b5563; cursor: pointer; padding: 8px; border-radius: 6px; transition: background 0.2s; }
+        .penalty-option:hover { background: #f1f5f9; }
+        .penalty-option input { cursor: pointer; }
+
 
         .stat-cards-grid.three-cols {
             display: grid;
@@ -455,6 +469,9 @@
                         <div class="moderation-card-actions">
                             <button class="btn-action-light" data-action="view" data-id="${item.id}"><i class="far fa-eye"></i> View</button>
                             ${item.status !== 'Resolved' ? `
+                            <button class="btn-action-report" data-action="report" data-id="${item.id}"><i class="fas fa-flag"></i> Report</button>
+                            <button class="btn-action-penalty" data-action="penalty" data-id="${item.id}"><i class="fas fa-gavel"></i> Penalty</button>
+                            <button class="btn-action-deactivate" data-action="deactivate" data-id="${item.id}"><i class="fas fa-ban"></i> Deactivate</button>
                             <button class="btn-action-approve" data-action="resolve" data-id="${item.id}"><i class="fas fa-check"></i> Resolve</button>
                             <button class="btn-action-reject" data-action="dismiss" data-id="${item.id}"><i class="fas fa-times"></i> Dismiss</button>
                             ` : `<span style="font-size:0.75rem;color:#64748b;">Resolved on ${item.date}</span>`}
@@ -468,6 +485,9 @@
                         const action = this.getAttribute('data-action');
                         const id = this.getAttribute('data-id');
                         if (action === 'view') viewModerationDetails(id);
+                        else if (action === 'report') reportUser(id);
+                        else if (action === 'penalty') givePenalty(id);
+                        else if (action === 'deactivate') deactivateAccount(id);
                         else if (action === 'resolve') resolveModeration(id);
                         else if (action === 'dismiss') dismissModeration(id);
                     });
@@ -640,6 +660,266 @@
 
             loadModeration();
             document.getElementById('dismiss-overlay')?.remove();
+        }
+
+        function reportUser(id) {
+            const items = JSON.parse(localStorage.getItem('facultyModeration') || '[]');
+            const item = items.find(i => i.id === id);
+            if (!item) return;
+
+            const existing = document.getElementById('report-overlay');
+            if (existing) existing.remove();
+
+            const overlay = document.createElement('div');
+            overlay.id = 'report-overlay';
+            overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,23,42,0.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:10000;animation:fadeIn 0.2s ease;';
+
+            overlay.innerHTML = `
+                <div style="background:#fff;width:95%;max-width:500px;border-radius:20px;padding:30px;box-shadow:0 25px 50px rgba(0,0,0,0.25);animation:modalPop 0.3s cubic-bezier(0.175,0.885,0.32,1.275);">
+                    <div style="text-align:center;margin-bottom:20px;">
+                        <div style="width:60px;height:60px;background:#fef3c7;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;">
+                            <i class="fas fa-flag" style="font-size:1.5rem;color:#f59e0b;"></i>
+                        </div>
+                        <h3 style="margin:0 0 8px;color:#1e293b;font-size:1.2rem;">File Formal Report</h3>
+                        <p style="margin:0;font-size:0.9rem;color:#64748b;">Against: ${item.reportedUser}</p>
+                    </div>
+                    <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:20px;margin-bottom:20px;">
+                        <p style="margin:0 0 12px;font-size:0.9rem;font-weight:700;color:#475569;">Report Category:</p>
+                        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:15px;">
+                            <label class="penalty-option">
+                                <input type="radio" name="reportCategory" value="policy_violation">
+                                <span>Policy Violation</span>
+                            </label>
+                            <label class="penalty-option">
+                                <input type="radio" name="reportCategory" value="academic_misconduct">
+                                <span>Academic Misconduct</span>
+                            </label>
+                            <label class="penalty-option">
+                                <input type="radio" name="reportCategory" value="harassment">
+                                <span>Harassment or Bullying</span>
+                            </label>
+                            <label class="penalty-option">
+                                <input type="radio" name="reportCategory" value="fraud">
+                                <span>Fraud or Deception</span>
+                            </label>
+                            <label class="penalty-option">
+                                <input type="radio" name="reportCategory" value="other">
+                                <span>Other</span>
+                            </label>
+                        </div>
+                        <p style="margin:12px 0 8px;font-size:0.9rem;font-weight:700;color:#475569;">Additional Notes:</p>
+                        <textarea id="reportNotes" rows="3" style="width:100%;padding:10px;border:1px solid #e2e8f0;border-radius:8px;font-size:0.85rem;resize:vertical;outline:none;" placeholder="Provide additional context for this report..."></textarea>
+                    </div>
+                    <div style="display:flex;gap:10px;">
+                        <button onclick="document.getElementById('report-overlay').remove()" style="flex:1;padding:12px;border:1px solid #e2e8f0;background:#fff;color:#64748b;font-weight:700;border-radius:10px;cursor:pointer;font-size:0.9rem;">Cancel</button>
+                        <button onclick="confirmReport('${id}')" style="flex:1;padding:12px;background:#f59e0b;color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-size:0.9rem;">Submit Report</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+            overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
+        }
+
+        function confirmReport(id) {
+            const selectedCategory = document.querySelector('input[name="reportCategory"]:checked');
+            if (!selectedCategory) {
+                if (typeof UIUtils !== 'undefined' && UIUtils.showToast) {
+                    UIUtils.showToast('Please select a report category', 'warning');
+                } else {
+                    alert('Please select a report category');
+                }
+                return;
+            }
+
+            const notes = document.getElementById('reportNotes')?.value || '';
+            const items = JSON.parse(localStorage.getItem('facultyModeration') || '[]');
+            const item = items.find(i => i.id === id);
+            
+            if (item) {
+                item.reportCategory = selectedCategory.value;
+                item.reportNotes = notes;
+                item.reportFiled = new Date().toISOString();
+                localStorage.setItem('facultyModeration', JSON.stringify(items));
+            }
+
+            if (typeof UIUtils !== 'undefined' && UIUtils.showToast) {
+                UIUtils.showToast('Report filed successfully against ' + item.reportedUser, 'success');
+            } else {
+                alert('Report filed successfully!');
+            }
+
+            document.getElementById('report-overlay')?.remove();
+        }
+
+        function givePenalty(id) {
+            const items = JSON.parse(localStorage.getItem('facultyModeration') || '[]');
+            const item = items.find(i => i.id === id);
+            if (!item) return;
+
+            const existing = document.getElementById('penalty-overlay');
+            if (existing) existing.remove();
+
+            const overlay = document.createElement('div');
+            overlay.id = 'penalty-overlay';
+            overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,23,42,0.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:10000;animation:fadeIn 0.2s ease;';
+
+            overlay.innerHTML = `
+                <div style="background:#fff;width:95%;max-width:500px;border-radius:20px;padding:30px;box-shadow:0 25px 50px rgba(0,0,0,0.25);animation:modalPop 0.3s cubic-bezier(0.175,0.885,0.32,1.275);">
+                    <div style="text-align:center;margin-bottom:20px;">
+                        <div style="width:60px;height:60px;background:#fee2e2;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;">
+                            <i class="fas fa-gavel" style="font-size:1.5rem;color:#ef4444;"></i>
+                        </div>
+                        <h3 style="margin:0 0 8px;color:#1e293b;font-size:1.2rem;">Issue Penalty</h3>
+                        <p style="margin:0;font-size:0.9rem;color:#64748b;">Student: ${item.reportedUser}</p>
+                    </div>
+                    <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:20px;margin-bottom:20px;">
+                        <p style="margin:0 0 12px;font-size:0.9rem;font-weight:700;color:#475569;">Select Penalty Type:</p>
+                        <div class="penalty-options">
+                            <label class="penalty-option">
+                                <input type="radio" name="penaltyType" value="warning">
+                                <span>Official Warning</span>
+                            </label>
+                            <label class="penalty-option">
+                                <input type="radio" name="penaltyType" value="suspension_temp">
+                                <span>Temporary Suspension (7 days)</span>
+                            </label>
+                            <label class="penalty-option">
+                                <input type="radio" name="penaltyType" value="suspension_long">
+                                <span>Extended Suspension (30 days)</span>
+                            </label>
+                            <label class="penalty-option">
+                                <input type="radio" name="penaltyType" value="listing_removal">
+                                <span>Remove All Listings</span>
+                            </label>
+                            <label class="penalty-option">
+                                <input type="radio" name="penaltyType" value="privilege_restriction">
+                                <span>Restrict Platform Privileges</span>
+                            </label>
+                        </div>
+                        <p style="margin:12px 0 8px;font-size:0.9rem;font-weight:700;color:#475569;">Penalty Justification:</p>
+                        <textarea id="penaltyReason" rows="3" style="width:100%;padding:10px;border:1px solid #e2e8f0;border-radius:8px;font-size:0.85rem;resize:vertical;outline:none;" placeholder="Explain the reason for this penalty..."></textarea>
+                    </div>
+                    <div style="display:flex;gap:10px;">
+                        <button onclick="document.getElementById('penalty-overlay').remove()" style="flex:1;padding:12px;border:1px solid #e2e8f0;background:#fff;color:#64748b;font-weight:700;border-radius:10px;cursor:pointer;font-size:0.9rem;">Cancel</button>
+                        <button onclick="confirmPenalty('${id}')" style="flex:1;padding:12px;background:#ef4444;color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-size:0.9rem;">Apply Penalty</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+            overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
+        }
+
+        function confirmPenalty(id) {
+            const selectedPenalty = document.querySelector('input[name="penaltyType"]:checked');
+            if (!selectedPenalty) {
+                if (typeof UIUtils !== 'undefined' && UIUtils.showToast) {
+                    UIUtils.showToast('Please select a penalty type', 'warning');
+                } else {
+                    alert('Please select a penalty type');
+                }
+                return;
+            }
+
+            const reason = document.getElementById('penaltyReason')?.value || '';
+            if (!reason.trim()) {
+                if (typeof UIUtils !== 'undefined' && UIUtils.showToast) {
+                    UIUtils.showToast('Please provide a justification for the penalty', 'warning');
+                } else {
+                    alert('Please provide a justification for the penalty');
+                }
+                return;
+            }
+
+            const items = JSON.parse(localStorage.getItem('facultyModeration') || '[]');
+            const item = items.find(i => i.id === id);
+            
+            if (item) {
+                item.penaltyType = selectedPenalty.value;
+                item.penaltyReason = reason;
+                item.penaltyDate = new Date().toISOString();
+                item.status = 'Resolved';
+                localStorage.setItem('facultyModeration', JSON.stringify(items));
+            }
+
+            if (typeof UIUtils !== 'undefined' && UIUtils.showToast) {
+                UIUtils.showToast('Penalty applied to ' + item.reportedUser, 'success');
+            } else {
+                alert('Penalty applied successfully!');
+            }
+
+            document.getElementById('penalty-overlay')?.remove();
+            loadModeration();
+        }
+
+        function deactivateAccount(id) {
+            const items = JSON.parse(localStorage.getItem('facultyModeration') || '[]');
+            const item = items.find(i => i.id === id);
+            if (!item) return;
+
+            const existing = document.getElementById('deactivate-overlay');
+            if (existing) existing.remove();
+
+            const overlay = document.createElement('div');
+            overlay.id = 'deactivate-overlay';
+            overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,23,42,0.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:10000;animation:fadeIn 0.2s ease;';
+
+            overlay.innerHTML = `
+                <div style="background:#fff;width:95%;max-width:500px;border-radius:20px;padding:30px;box-shadow:0 25px 50px rgba(0,0,0,0.25);animation:modalPop 0.3s cubic-bezier(0.175,0.885,0.32,1.275);">
+                    <div style="text-align:center;margin-bottom:20px;">
+                        <div style="width:60px;height:60px;background:#fee2e2;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;">
+                            <i class="fas fa-ban" style="font-size:1.5rem;color:#800000;"></i>
+                        </div>
+                        <h3 style="margin:0 0 8px;color:#1e293b;font-size:1.2rem;">Deactivate Student Account</h3>
+                        <p style="margin:0;font-size:0.9rem;color:#64748b;">This action will immediately suspend access for <strong>${item.reportedUser}</strong></p>
+                    </div>
+                    <div style="background:#fef2f2;border:1px solid #fecaca;border-radius:12px;padding:16px;margin-bottom:20px;">
+                        <p style="margin:0 0 8px;font-size:0.85rem;color:#991b1b;font-weight:600;"><i class="fas fa-exclamation-triangle"></i> Warning: This action cannot be easily undone.</p>
+                        <p style="margin:0;font-size:0.8rem;color:#b91c1c;">The student will lose access to all platform features until reactivated by a faculty member.</p>
+                    </div>
+                    <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:20px;margin-bottom:20px;">
+                        <p style="margin:0 0 12px;font-size:0.9rem;font-weight:700;color:#475569;">Reason for Deactivation:</p>
+                        <textarea id="deactivateReason" rows="3" style="width:100%;padding:10px;border:1px solid #e2e8f0;border-radius:8px;font-size:0.85rem;resize:vertical;outline:none;" placeholder="Provide a detailed reason for account deactivation..."></textarea>
+                    </div>
+                    <div style="display:flex;gap:10px;">
+                        <button onclick="document.getElementById('deactivate-overlay').remove()" style="flex:1;padding:12px;border:1px solid #e2e8f0;background:#fff;color:#64748b;font-weight:700;border-radius:10px;cursor:pointer;font-size:0.9rem;">Cancel</button>
+                        <button onclick="confirmDeactivate('${id}')" style="flex:1;padding:12px;background:#800000;color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-size:0.9rem;">Deactivate Account</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+            overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
+        }
+
+        function confirmDeactivate(id) {
+            const reason = document.getElementById('deactivateReason')?.value || '';
+            if (!reason.trim()) {
+                if (typeof UIUtils !== 'undefined' && UIUtils.showToast) {
+                    UIUtils.showToast('Please provide a reason for deactivation', 'warning');
+                } else {
+                    alert('Please provide a reason for deactivation');
+                }
+                return;
+            }
+
+            const items = JSON.parse(localStorage.getItem('facultyModeration') || '[]');
+            const item = items.find(i => i.id === id);
+            
+            if (item) {
+                item.accountDeactivated = true;
+                item.deactivateReason = reason;
+                item.deactivateDate = new Date().toISOString();
+                item.status = 'Resolved';
+                localStorage.setItem('facultyModeration', JSON.stringify(items));
+            }
+
+            if (typeof UIUtils !== 'undefined' && UIUtils.showToast) {
+                UIUtils.showToast('Account deactivated for ' + item.reportedUser, 'success');
+            } else {
+                alert('Account has been deactivated!');
+            }
+
+            document.getElementById('deactivate-overlay')?.remove();
+            loadModeration();
         }
 
         function toggleSidebar() {
